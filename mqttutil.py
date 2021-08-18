@@ -1,4 +1,4 @@
-topic_name = "world"
+topic_name = "gazpar"
 def on_disconnect(client, userdata, rc):
     if rc != 0:
         print("Unexpected disconnection: {}".format(rc) )
