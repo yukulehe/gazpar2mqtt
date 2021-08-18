@@ -39,4 +39,4 @@ client.connect(broker_address, broker_port)
 # Publish
 print("Publication to broker")
 if mqtt_connected :
-    client.publish(topic+"/status", "true")
+    client.publish(topic, "true")
