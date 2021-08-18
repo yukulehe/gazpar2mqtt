@@ -33,6 +33,7 @@ client.on_disconnect = mqttutil.on_disconnect
 # Connect
 print("Connexion to broker")
 client.connect(mqttutil.mqtt_host["hostname"], mqttutil.mqtt_host["port"], 60)
+print("on_connect: " + mqtt.connack_string(rc))
 
 # Publish
 if mqtt_connected :
