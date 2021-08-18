@@ -7,7 +7,7 @@ client = mqtt.Client(mqttutil.broker_client)
 
 # Connect
 print("Connexion to broker")
-client.connect(mqttutil.broker_address, mqttutil.broker_port, 60)
+client.connect(mqttutil.broker_address, mqttutil.broker_port)
 
 # Publish
 client.publish("gazpar/status","ON")
