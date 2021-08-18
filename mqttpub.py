@@ -1,13 +1,17 @@
 import paho.mqtt.client as mqtt
-import mqttutil
+
+broker_address = "mosquitto" #'172.28.0.3
+broker_port = 1883
+broker_client = "gazou"
 
 # Create instance
 print("Create mqtt instance")
-client = mqtt.Client(mqttutil.broker_client)
+client = mqtt.Client(broker_client)
 
 # Connect
-print("Connexion to broker: %s : %s", mqttutil.broker_address, mqttutil.broker_port)
-client.connect(mqttutil.broker_address, mqttutil.broker_port)
+print("Connexion to broker: %s : %s", broker_address, broker_port)
+client.connect(broker_address, broker_port)
 
 # Publish
+print("Publication to broker)
 client.publish("gazpar/status","ON")
