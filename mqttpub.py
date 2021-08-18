@@ -2,7 +2,7 @@ import paho.mqtt.client as mqtt
 import mqttutil
 
 # Broker settings
-broker_address = "mosquitto" #'172.28.0.3
+broker_address = "mosquitto" # or <ip_adress>
 broker_port = 1883
 broker_client = "gazou"
 
