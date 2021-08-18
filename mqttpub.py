@@ -40,6 +40,6 @@ if mqtt_connected :
     client.publish(mqttutil.topic_name, "Hello world")
     time.sleep(3)
 
-" Stop
+# Stop
 time.sleep(2)
 client.loop_stop()
