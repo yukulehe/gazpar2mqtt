@@ -5,9 +5,6 @@ import time
 # Broker settings
 broker_client = "gazou"
 
-# Topic settings
-topic = "gazpar"
-
 # Initialize variables
 mqtt_connected = False
 
@@ -40,4 +37,5 @@ client.loop_start()
 # Publish
 if mqtt_connected :
     print("Publication to broker")
-    client.publish(topic, "Hello world")
+    client.publish(mqttutil.topic_name, "Hello world")
+    time.sleep(3)
