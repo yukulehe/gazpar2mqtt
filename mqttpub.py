@@ -40,6 +40,9 @@ if mqtt_connected :
     client.publish(mqttutil.topic_name, "Hello world")
     time.sleep(3)
 
-# Stop
-time.sleep(2)
+# Stop loop
 client.loop_stop()
+
+# Disconnect
+print("Disconnexion")
+client.disconnect
