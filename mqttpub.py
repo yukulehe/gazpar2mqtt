@@ -2,8 +2,6 @@ import paho.mqtt.client as mqtt
 import mqttutil
 
 # Broker settings
-broker_address = "mosquitto" # or <ip_adress>
-broker_port = 1883
 broker_client = "gazou"
 
 # Topic settings
@@ -33,8 +31,8 @@ client.on_publish = mqttutil.on_publish
 client.on_disconnect = mqttutil.on_disconnect
 
 # Connect
-print("Connexion to broker: %s %s", broker_address, broker_port)
-client.connect(broker_address, broker_port)
+print("Connexion to broker)
+client.connect(util.mqtt_host["hostname"], util.mqtt_host["port"], 60)
 
 # Publish
 if mqtt_connected :
