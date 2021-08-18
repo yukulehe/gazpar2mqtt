@@ -6,7 +6,7 @@ print("Create mqtt instance")
 client = mqtt.Client(mqttutil.broker_client)
 
 # Connect
-print("Connexion to broker")
+print("Connexion to broker: %s : %s", mqttutil.broker_address, mqttutil.broker_port)
 client.connect(mqttutil.broker_address, mqttutil.broker_port)
 
 # Publish
