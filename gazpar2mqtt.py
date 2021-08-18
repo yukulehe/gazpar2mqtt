@@ -21,5 +21,50 @@ from envparse import env
 
 
 PFILE = "/.params"
-DOCKER_MANDATORY_VARENV=['GRDF_USERNAME','GRDF_PASSWORD','MQTT_HOSTNAME','MQTT_PORT']
-DOCKER_OPTIONAL_VARENV=['MQTT_CLIENTID','MQTT_QOS', 'MQTT_TOPIC', 'MQTT_RETAIN']
+DOCKER_MANDATORY_VARENV=['GRDF_USERNAME','GRDF_PASSWORD','MQTT_HOST']
+DOCKER_OPTIONAL_VARENV=['MQTT_PORT','MQTT_CLIENTID','MQTT_QOS', 'MQTT_TOPIC', 'MQTT_RETAIN']
+
+
+# Sub to return format wanted by linky.py
+def _dayToStr(date):
+    return date.strftime("%d/%m/%Y")
+  
+# Open file with params for mqtt broker and GRDF API
+def _openParams(pfile):
+    
+    # Try to load environment variables
+    if set(DOCKER_MANDATORY_VARENV).issubset(set(os.environ)):
+        return {'grdf': {'username': env(DOCKER_MANDATORY_VARENV[0]),
+                         'password': env(DOCKER_MANDATORY_VARENV[1])},
+                'mqtt': {'host': env(DOCKER_MANDATORY_VARENV[2]),
+                           'port': env.int(DOCKER_OPTIONAL_VARENV[0], default=1883),
+                           'clientId': env(DOCKER_MANDATORY_VARENV[1], default='gazpar2mqtt'),
+                           'qos': env(DOCKER_MANDATORY_VARENV[2],default=1),
+                           'topic': env(DOCKER_MANDATORY_VARENV[3], default='gazpar'),
+                           'retain': env(DOCKER_MANDATORY_VARENV[3], default=False)}
+    
+    # Try to load .params then programs_dir/.params
+    elif os.path.isfile(os.getcwd() + pfile):
+        p = os.getcwd() + pfile
+    elif os.path.isfile(os.path.dirname(os.path.realpath(__file__)) + pfile):
+        p = os.path.dirname(os.path.realpath(__file__)) + pfile
+    else:
+        if (os.getcwd() + pfile != os.path.dirname(os.path.realpath(__file__)) + pfile):
+            logging.error('file %s or %s not exist', os.path.realpath(os.getcwd() + pfile) , os.path.dirname(os.path.realpath(__file__)) + pfile)
+        else:
+            logging.error('file %s not exist', os.getcwd() + pfile )
+        sys.exit(1)
+    try:
+        f = open(p, 'r')
+        try:
+            array = json.load(f)
+        except ValueError as e:
+            logging.error('decoding JSON has failed', e)
+            sys.exit(1)
+    except IOError:
+        logging.error('cannot open %s', p)
+        sys.exit(1)
+    else:
+        f.close()
+        return array
+
