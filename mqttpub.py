@@ -1,18 +1,17 @@
-# Import
 import paho.mqtt.client as mqtt
 
-# Broker settings
-broker_address="192.168.1.184" 
+# Mqtt broker
+broker_address = "192.168.1.184"
+broker_port = "1883"
+broker_client = "gazou"
 
-# Create mqtt instance
-print("creating new instance")
-client = mqtt.Client("P1") #create new instance
+# Create instance
+print("Create mqtt instance")
+client = mqtt.Client(broker_client)
 
-# Connexion to mqtt
-print("connecting to broker")
-client.connect(broker_address) #connect to broker
-print("Subscribing to topic","house/bulbs/bulb1")
+# Connect
+print("Connexion to broker")
+client.connect(broker_address, broker_port, 60)
 
-# Publish message
-print("Publishing message to topic","house/bulbs/bulb1")
-client.publish("house/bulbs/bulb1","OFF")
+# Publish
+client.publish("gazpar/status","ON")
