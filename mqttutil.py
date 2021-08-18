@@ -1,5 +1,5 @@
-mqtt_host = dict({ "hostname": "test.mosquitto.org", "port": 1883 })
-topic_name = "world"
+mqtt_host = dict({ "hostname": "192.168.1.18", "port": 1883 })
+topic_name = "gazpar"
 
 def on_disconnect(client, userdata, rc):
     if rc != 0:
