@@ -1,9 +1,5 @@
 import paho.mqtt.client as mqtt
-
-# Mqtt broker
-broker_address = "192.168.1.184"
-broker_port = "1883"
-broker_client = "gazou"
+import mqttutil
 
 # Create instance
 print("Create mqtt instance")
