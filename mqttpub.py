@@ -1,28 +1,18 @@
 # Import
-import mqttutil
 import paho.mqtt.client as mqtt
-import time
 
+# Broker settings
+broker_address="192.168.1.184" 
 
-mqtt_connected = False
+# Create mqtt instance
+print("creating new instance")
+client = mqtt.Client("P1") #create new instance
 
-def on_connect(client, userdata, flags, rc):
-    global mqtt_connected
-    print("on_connect: " + mqtt.connack_string(rc))
-    mqtt_connected = True
-    
-client = mqtt.Client("pub-client-id")
-client.on_connect = on_connect
-client.on_message = util.on_message
-client.on_publish = util.on_publish
-client.on_disconnect = util.on_disconnect
-client.connect(util.mqtt_host["hostname"], util.mqtt_host["port"], 60)
-client.loop_start()
+# Connexion to mqtt
+print("connecting to broker")
+client.connect(broker_address) #connect to broker
+print("Subscribing to topic","house/bulbs/bulb1")
 
-def loopX() :
-    global mqtt_connected
-    while 1:
-        if mqtt_connected :
-            client.publish(util.topic_name, "Hello from a publish call")
-            time.sleep(3)
-loopX()
+# Publish message
+print("Publishing message to topic","house/bulbs/bulb1")
+client.publish("house/bulbs/bulb1","OFF")
