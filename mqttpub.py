@@ -31,7 +31,7 @@ client.on_publish = mqttutil.on_publish
 client.on_disconnect = mqttutil.on_disconnect
 
 # Connect
-print("Connexion to broker)
+print("Connexion to broker")
 client.connect(util.mqtt_host["hostname"], util.mqtt_host["port"], 60)
 
 # Publish
