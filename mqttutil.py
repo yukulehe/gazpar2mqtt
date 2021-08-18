@@ -1,3 +1,4 @@
+mqtt_host = dict({ "hostname": "mosquitto", "port": 1883 })
 topic_name = "gazpar"
 def on_disconnect(client, userdata, rc):
     if rc != 0:
