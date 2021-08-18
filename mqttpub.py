@@ -5,6 +5,9 @@ broker_address = "mosquitto" #'172.28.0.3
 broker_port = 1883
 broker_client = "gazou"
 
+# Topic settings
+topic = "gazpar"
+
 # Initialize variables
 mqtt_connected = False
 
@@ -29,9 +32,10 @@ client.on_publish = mqttutil.on_publish
 client.on_disconnect = mqttutil.on_disconnect
 
 # Connect
-print("Connexion to broker: %s : %s", broker_address, broker_port)
+print("Connexion to broker: %s %s", broker_address, broker_port)
 client.connect(broker_address, broker_port)
 
 # Publish
 print("Publication to broker")
-client.publish("gazpar/status","ON")
+if mqtt_connected :
+    client.publish(topic+"/status", "true")
