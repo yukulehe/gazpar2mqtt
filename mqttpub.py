@@ -13,5 +13,5 @@ print("Connexion to broker: %s : %s", broker_address, broker_port)
 client.connect(broker_address, broker_port)
 
 # Publish
-print("Publication to broker)
+print("Publication to broker")
 client.publish("gazpar/status","ON")
