@@ -97,7 +97,7 @@ def main():
     
     # Disconnect mqtt broker
     mqtt.disconnect(client)
-    logging.info("Mqtt broker disconnected)
+    logging.info("Mqtt broker disconnected")
     
     
                 
