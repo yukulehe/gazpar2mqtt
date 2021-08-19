@@ -55,7 +55,7 @@ def _dayToStr(date):
 
 # Sub to return format wanted
 def _dateTimeToStr(datetime):
-    return datetime.strftime("%d/%m/%Y - %HH:%MM:%SS")
+    return datetime.strftime("%d/%m/%Y - %H:%M:%S")
 
   
 # Open file with params for mqtt broker and GRDF API
@@ -227,14 +227,12 @@ def main():
 if __name__ == "__main__":
     
     parser = argparse.ArgumentParser()
-    parser.add_argument("-d",  "--days",    type=int,
-                        help="Number of days from now to download", default=1)
-    parser.add_argument("-l",  "--last",    action="store_true",
-                        help="Check from InfluxDb the number of missing days", default=False)
+    
     parser.add_argument("-v",  "--verbose", action="store_true",
                         help="More verbose", default=False)
     parser.add_argument(
         "-s", "--schedule",   help="Schedule the launch of the script at hh:mm everyday")
+    
     args = parser.parse_args()
 
     pp = pprint.PrettyPrinter(indent=4)
