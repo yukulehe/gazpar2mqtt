@@ -155,7 +155,7 @@ def main():
         mqtt.publish(client, prefixTopic + statusDateTopic, _dayToStr(datetime.date.today()), params['mqtt']['qos'], params['mqtt']['retain'])
         mqtt.publish(client, prefixTopic + statusValueTopic, "Error", params['mqtt']['qos'], params['mqtt']['retain'])
         
-    else
+    else:
         # Publish current values
         mqtt.publish(client, prefixTopic + currentValueDateTopic, d['date'], params['mqtt']['qos'], params['mqtt']['retain'])
         mqtt.publish(client, prefixTopic + currentValueKwhTopic, d['kwh'], params['mqtt']['qos'], params['mqtt']['retain'])
