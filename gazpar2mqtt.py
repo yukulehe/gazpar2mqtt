@@ -68,3 +68,42 @@ def _openParams(pfile):
         f.close()
         return array
 
+                
+
+# Let's start here !
+
+def main():
+    
+    # Get params from environment OS
+    params = _openParams(PFILE)
+                
+    logging.info("GRDF config : username = %s, password = %s", params[grdf][username], params[grdf][password])
+    logging.info("MQTT config : host = %s, port = %s, clientId = %s, qos = %s, topic = %s, retain = %s", \
+                 params[mqtt][host], params[mqtt][clientId], params[mqtt][qos],params[mqtt][topic],params[mqtt][retain])
+                
+                
+                
+if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-d",  "--days",    type=int,
+                        help="Number of days from now to download", default=1)
+    parser.add_argument("-l",  "--last",    action="store_true",
+                        help="Check from InfluxDb the number of missing days", default=False)
+    parser.add_argument("-v",  "--verbose", action="store_true",
+                        help="More verbose", default=False)
+    parser.add_argument(
+        "-s", "--schedule",   help="Schedule the launch of the script at hh:mm everyday")
+    args = parser.parse_args()
+
+    pp = pprint.PrettyPrinter(indent=4)
+    logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
+
+    if args.schedule:
+        logging.info(args.schedule)
+        schedule.every().day.at(args.schedule).do(main)
+        while True:
+            schedule.run_pending()
+            time.sleep(1)
+    else:
+        main()
