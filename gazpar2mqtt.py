@@ -115,8 +115,8 @@ def main():
     # Loop on results
     logging.info("Number of values : %s", len(resGrdf))
     for d in resGrdf:
-        t = datetime.datetime.strptime(d['date'] + " 12:00", '%d-%m-%Y %H:%M')
-        logging.info("%s : Kwh = %s, Mcube = %s",t,d['kwh'], d['mcube'])
+        #t = datetime.datetime.strptime(d['date'] + " 12:00", '%d-%m-%Y %H:%M')
+        logging.info("%s : Kwh = %s, Mcube = %s",d['date'],d['kwh'], d['mcube'])
     
     
     # Create mqtt client
