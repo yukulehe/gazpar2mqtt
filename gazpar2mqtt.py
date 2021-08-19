@@ -112,7 +112,11 @@ def main():
         logging.error("unable to get data from GRDF")
         sys.exit(1)
         
-        
+    # Loop on results
+    for d in resGrdf:
+        t = datetime.datetime.strptime(d['date'] + " 12:00", '%d-%m-%Y %H:%M')
+        logging.info("%s : Kwh = %s, Mcube = %s,t,d['kwh'], d['mcube']
+    
     # Create mqtt client
     #client = mqtt.create_client(params['mqtt']['clientId'])
     logging.info("Mqtt client instantiated")
@@ -123,8 +127,8 @@ def main():
     
     # Publsh payload
     #payload = "Hello world"
-    mqtt.publish(client, params['mqtt']['topic'], payload, params['mqtt']['qos'], params['mqtt']['retain'])
-    #logging.info("Message published")
+    #mqtt.publish(client, params['mqtt']['topic'], payload, params['mqtt']['qos'], params['mqtt']['retain'])
+    logging.info("Message published")
     
     # Disconnect mqtt broker
     #mqtt.disconnect(client)
