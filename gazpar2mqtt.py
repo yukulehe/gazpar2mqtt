@@ -188,7 +188,7 @@ def main():
         if dCount == 1 or mCount == 1:
 
             ## Publish status values
-            mqtt.publish(client, prefixTopic + statusDateTopic, _dayToStr(datetime.date.today()), params['mqtt']['qos'], params['mqtt']['retain'])
+            mqtt.publish(client, prefixTopic + statusDateTopic, _dateTimeToStr(datetime.date.now()), params['mqtt']['qos'], params['mqtt']['retain'])
             mqtt.publish(client, prefixTopic + statusValueTopic, "Error", params['mqtt']['qos'], params['mqtt']['retain'])
 
         else:
