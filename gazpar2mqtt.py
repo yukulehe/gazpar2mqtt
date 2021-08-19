@@ -24,6 +24,9 @@ PFILE = "/.params"
 DOCKER_MANDATORY_VARENV=['GRDF_USERNAME','GRDF_PASSWORD','MQTT_HOST']
 DOCKER_OPTIONAL_VARENV=['MQTT_PORT','MQTT_CLIENTID','MQTT_QOS', 'MQTT_TOPIC', 'MQTT_RETAIN']
 
+# Sub to get StartDate depending today - daysNumber
+def _getStartDate(today, daysNumber):
+    return _dayToStr(today - relativedelta(days=daysNumber))
 
 # Sub to return format wanted by linky.py
 def _dayToStr(date):
