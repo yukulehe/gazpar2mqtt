@@ -55,5 +55,4 @@ Note : you can replace default topic prefix (*gazpar*) by another filling enviro
 
 > gazpar/status/value
 
-## Repository status
-Work in progress....
+
