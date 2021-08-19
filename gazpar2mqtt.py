@@ -27,14 +27,14 @@ DOCKER_OPTIONAL_VARENV=['MQTT_PORT','MQTT_CLIENTID','MQTT_QOS', 'MQTT_TOPIC', 'M
 # Sensors topics
 
 ## Daily
-dayValueDateTopic = "/day/date"
-dayValueKwhTopic = "/day/kwh"
-dayValueMcubeTopic = "/day/mcube"
+dailyValueDateTopic = "/daily/date"
+dailyValueKwhTopic = "/daily/kwh"
+dailyValueMcubeTopic = "/daily/mcube"
 
 ## Monthly
-monthValueDateTopic = "/month/date"
-monthValueKwhTopic = "/month/kwh"
-monthValueMcubeTopic = "/month/mcube"
+monthlyValueDateTopic = "/monthly/month"
+monthlyValueKwhTopic = "/monthly/kwh"
+monthlyValueMcubeTopic = "/monthly/mcube"
 
 ## Status
 statusDateTopic = "/status/date"
@@ -196,14 +196,14 @@ def main():
         else:
 
             # Publish daily values
-            mqtt.publish(client, prefixTopic + dayValueDateTopic, d['date'], params['mqtt']['qos'], params['mqtt']['retain'])
-            mqtt.publish(client, prefixTopic + dayValueKwhTopic, d['kwh'], params['mqtt']['qos'], params['mqtt']['retain'])
-            mqtt.publish(client, prefixTopic + dayValueMcubeTopic, d['mcube'], params['mqtt']['qos'], params['mqtt']['retain'])
+            mqtt.publish(client, prefixTopic + dailyValueDateTopic, d['date'], params['mqtt']['qos'], params['mqtt']['retain'])
+            mqtt.publish(client, prefixTopic + dailyValueKwhTopic, d['kwh'], params['mqtt']['qos'], params['mqtt']['retain'])
+            mqtt.publish(client, prefixTopic + dailyValueMcubeTopic, d['mcube'], params['mqtt']['qos'], params['mqtt']['retain'])
 
             # Publish monthly values
-            mqtt.publish(client, prefixTopic + monthValueDateTopic, m['date'], params['mqtt']['qos'], params['mqtt']['retain'])
-            mqtt.publish(client, prefixTopic + monthValueKwhTopic, m['kwh'], params['mqtt']['qos'], params['mqtt']['retain'])
-            mqtt.publish(client, prefixTopic + monthValueMcubeTopic, m['mcube'], params['mqtt']['qos'], params['mqtt']['retain'])
+            mqtt.publish(client, prefixTopic + monthlyValueDateTopic, m['date'], params['mqtt']['qos'], params['mqtt']['retain'])
+            mqtt.publish(client, prefixTopic + monthlyValueKwhTopic, m['kwh'], params['mqtt']['qos'], params['mqtt']['retain'])
+            mqtt.publish(client, prefixTopic + monthlyValueMcubeTopic, m['mcube'], params['mqtt']['qos'], params['mqtt']['retain'])
 
             ## Publish status values
             mqtt.publish(client, prefixTopic + statusDateTopic, _dateTimeToStr(datetime.now(tz=None)), params['mqtt']['qos'], params['mqtt']['retain'])
