@@ -103,8 +103,8 @@ def _openParams(pfile):
 
 def main():
     
-    # Test
-    maintenant = str(datetime.datetime.now())
+    # Store time now
+    dtn = _dateTimeToStr(datetime.datetime.now())
     
     # Get params from environment OS
     params = _openParams(PFILE)
@@ -191,7 +191,7 @@ def main():
         if dCount == 1 or mCount == 1:
 
             ## Publish status values
-            mqtt.publish(client, prefixTopic + statusDateTopic, maintenant, params['mqtt']['qos'], params['mqtt']['retain'])
+            mqtt.publish(client, prefixTopic + statusDateTopic, dtn, params['mqtt']['qos'], params['mqtt']['retain'])
             mqtt.publish(client, prefixTopic + statusValueTopic, "Error", params['mqtt']['qos'], params['mqtt']['retain'])
 
         # Looks good ...
@@ -208,7 +208,7 @@ def main():
             mqtt.publish(client, prefixTopic + monthlyValueMcubeTopic, m['mcube'], params['mqtt']['qos'], params['mqtt']['retain'])
 
             ## Publish status values
-            mqtt.publish(client, prefixTopic + statusDateTopic, maintenant, params['mqtt']['qos'], params['mqtt']['retain'])
+            mqtt.publish(client, prefixTopic + statusDateTopic, dtn, params['mqtt']['qos'], params['mqtt']['retain'])
             mqtt.publish(client, prefixTopic + statusValueTopic, "Success", params['mqtt']['qos'], params['mqtt']['retain'])
     
     except:
