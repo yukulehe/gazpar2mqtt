@@ -10,6 +10,7 @@ The project has been inspired by job done by [empierre](https://github.com/empie
 ## MQTT publication topics
 
 GRDF's values are published in the MQTT broker following topics.
+
 Note : you can replace default topic prefix (*gazpar*) by another filling environnement variable **TOPIC**.
 
 ### Daily values :
