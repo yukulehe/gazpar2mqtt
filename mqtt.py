@@ -75,6 +75,6 @@ def disconnect(client):
 def publish(client,topic,payload,qos,retain):
     
     print("Publish payload")
-    #client.publish(topic, payload=payload, qos=qos, retain=retain)
-    client.publish(topic, payload=payload, qos=qos, retain=True)
+    client.publish(topic, payload=payload, qos=qos, retain=retain)
+    #client.publish(topic, payload=payload, qos=qos, retain=False)
     time.sleep(1)
