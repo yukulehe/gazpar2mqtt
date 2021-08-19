@@ -152,7 +152,11 @@ def main():
         
         # Display daily results
         dCount = len(resDay)
-        logging.info("Number of daily values : %s", dCount)
+        if dCount < 2:
+            logging.info("Daily values from GRDF seems wrong...")
+        else:
+            logging.info("Number of daily values : %s", dCount)
+        
         for d in resDay:
             logging.info("%s : Kwh = %s, Mcube = %s",d['date'],d['kwh'], d['mcube'])
                 
@@ -168,15 +172,32 @@ def main():
         # Set period (5 months ago)
         startDate = _getMonthOfssetDate(datetime.date.today(), 5)
         endDate = _dayToStr(datetime.date.today())
-                     
-        # Get result from GRDF by day
-        resMonth = gazpar.get_data_per_month(token, startDate, endDate)
         
-        # Display monthly results
-        mCount = len(resMonth)
-        logging.info("Number of monthly values : %s", mCount)
+        # Get data and retry when failed
+        i= 1
+        mCount = 0
+        
+        while i < 6 or mCount < 2:
+        
+            # Get result from GRDF by day
+            logging.info("Try number %s", str(i))
+            resMonth = gazpar.get_data_per_month(token, startDate, endDate)
+            
+            # Update loop conditions
+            i = i + 1
+            mCount = len(resMonth)
+
+        # Display infos
+        if mCount < 2:
+            logging.warning("Monthly values from GRDF seems wrong...")
+        else:
+            logging.info("Number of monthly values retrieved : %s", mCount)
+        
+        # Display results
         for m in resMonth:
             logging.info("%s : Kwh = %s, Mcube = %s",m['date'],m['kwh'], m['mcube'])
+            
+            
                 
     except:
         logging.error("Unable to get monthly data from GRDF")
