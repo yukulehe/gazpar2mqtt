@@ -25,9 +25,18 @@ DOCKER_MANDATORY_VARENV=['GRDF_USERNAME','GRDF_PASSWORD','MQTT_HOST']
 DOCKER_OPTIONAL_VARENV=['MQTT_PORT','MQTT_CLIENTID','MQTT_QOS', 'MQTT_TOPIC', 'MQTT_RETAIN']
 
 # Sensors topics
-currentValueDateTopic = "/current/date"
-currentValueKwhTopic = "/current/kwh"
-currentValueMcubeTopic = "/current/mcube"
+
+## Daily
+dayValueDateTopic = "/day/date"
+dayValueKwhTopic = "/day/kwh"
+dayValueMcubeTopic = "/day/mcube"
+
+## Monthly
+monthValueDateTopic = "/month/date"
+monthValueKwhTopic = "/month/kwh"
+monthValueMcubeTopic = "/month/mcube"
+
+## Status
 statusDateTopic = "/status/date"
 statusValueTopic = "/status/value"
 
@@ -170,21 +179,30 @@ def main():
    
     # We publish only the last input from grdf
     d = resDay[dCount-1]
-    
-    
+    m = resDay[mCount-1]
     prefixTopic = params['mqtt']['topic']
     
-    if d['date'] == "0":
+    if dCount == 1 || mCount == 1:
         
         ## Publish status values
         mqtt.publish(client, prefixTopic + statusDateTopic, _dayToStr(datetime.date.today()), params['mqtt']['qos'], params['mqtt']['retain'])
         mqtt.publish(client, prefixTopic + statusValueTopic, "Error", params['mqtt']['qos'], params['mqtt']['retain'])
         
     else:
-        # Publish current values
-        mqtt.publish(client, prefixTopic + currentValueDateTopic, d['date'], params['mqtt']['qos'], params['mqtt']['retain'])
-        mqtt.publish(client, prefixTopic + currentValueKwhTopic, d['kwh'], params['mqtt']['qos'], params['mqtt']['retain'])
-        mqtt.publish(client, prefixTopic + currentValueMcubeTopic, d['mcube'], params['mqtt']['qos'], params['mqtt']['retain'])
+        
+        # Publish daily values
+        mqtt.publish(client, prefixTopic + dayValueDateTopic, d['date'], params['mqtt']['qos'], params['mqtt']['retain'])
+        mqtt.publish(client, prefixTopic + dayValueKwhTopic, d['kwh'], params['mqtt']['qos'], params['mqtt']['retain'])
+        mqtt.publish(client, prefixTopic + dayValueMcubeTopic, d['mcube'], params['mqtt']['qos'], params['mqtt']['retain'])
+        
+        # Publish monthly values
+        mqtt.publish(client, prefixTopic + monthValueDateTopic, m['date'], params['mqtt']['qos'], params['mqtt']['retain'])
+        mqtt.publish(client, prefixTopic + monthValueKwhTopic, m['kwh'], params['mqtt']['qos'], params['mqtt']['retain'])
+        mqtt.publish(client, prefixTopic + monthValueMcubeTopic, m['mcube'], params['mqtt']['qos'], params['mqtt']['retain'])
+        
+        ## Publish status values
+        mqtt.publish(client, prefixTopic + statusDateTopic, _dayToStr(datetime.date.today()), params['mqtt']['qos'], params['mqtt']['retain'])
+        mqtt.publish(client, prefixTopic + statusValueTopic, "Success", params['mqtt']['qos'], params['mqtt']['retain'])
        
     
     # Disconnect mqtt broker
@@ -194,26 +212,5 @@ def main():
     
                 
 if __name__ == "__main__":
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-d",  "--days",    type=int,
-                        help="Number of days from now to download", default=1)
-    parser.add_argument("-l",  "--last",    action="store_true",
-                        help="Check from InfluxDb the number of missing days", default=False)
-    parser.add_argument("-v",  "--verbose", action="store_true",
-                        help="More verbose", default=False)
-    parser.add_argument(
-        "-s", "--schedule",   help="Schedule the launch of the script at hh:mm everyday")
-    args = parser.parse_args()
-
-    pp = pprint.PrettyPrinter(indent=4)
-    logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
-
-    if args.schedule:
-        logging.info(args.schedule)
-        schedule.every().day.at(args.schedule).do(main)
-        while True:
-            schedule.run_pending()
-            time.sleep(1)
-    else:
+    
         main()
