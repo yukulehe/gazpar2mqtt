@@ -149,7 +149,7 @@ def main():
     
     prefixTopic = params['mqtt']['topic']
     
-    if d['date'] = 0:
+    if d['date'] == 0:
         
         ## Publish status values
         mqtt.publish(client, prefixTopic + statusDateTopic, _dayToStr(datetime.date.today()), params['mqtt']['qos'], params['mqtt']['retain'])
