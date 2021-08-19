@@ -17,6 +17,13 @@ The project has been inspired by job done by [empierre](https://github.com/empie
 
 If you want to debug, please set level=logging.INFO to level=logging.DEBUG
 
+## GRDF Gazpar API
+
+Verify you have gazpar data available on [GRDF Portal](https://monespace.grdf.fr/monespace/connexion)
+
+Please also remember data provided is per day and per month.
+
+Remember, kWh provided is conversion factor dependant. Please verify it's coherent with your provider bills.
 
 # MQTT publication topics
 
