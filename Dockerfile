@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM python:3.9-buster
 
 WORKDIR /usr/src/app
 ADD https://certigna.tbs-certificats.com/wildca.crt /usr/local/share/ca-certificates
