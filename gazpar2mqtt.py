@@ -6,7 +6,7 @@
 import os
 import sys
 import datetime
-#import schedule
+import schedule
 import time
 import locale
 from dateutil.relativedelta import relativedelta
@@ -99,8 +99,7 @@ def _openParams(pfile):
 
                 
 
-# Let's start here !
-
+# Main program
 def main():
     
     # Store time now
@@ -115,20 +114,29 @@ def main():
                  params['mqtt']['qos'],params['mqtt']['topic'],params['mqtt']['retain'])
     
     
-    # Create mqtt client
-    client = mqtt.create_client(params['mqtt']['clientId'])
-    logging.info("Mqtt client instantiated")
+    # Log to MQTT broker
+    try:
+        
+        # Construct mqtt client
+        client = mqtt.create_client(params['mqtt']['clientId'])
+        logging.info("Mqtt client instantiated")
     
-    # Connect mqtt brocker
-    mqtt.connect(client,params['mqtt']['host'],params['mqtt']['port'])
-    logging.info("Mqtt broker connected")
+        # Connect mqtt brocker
+        mqtt.connect(client,params['mqtt']['host'],params['mqtt']['port'])
+        logging.info("Mqtt broker connected")
+        
+     except:
+        logging.error("Unable to connect to mqtt broker)
+                      sys.exit(1)
     
     
     # Log to GRDF API
     try:
+                      
         logging.info("logging in GRDF URI %s...", gazpar.API_BASE_URI)
         token = gazpar.login(params['grdf']['username'], params['grdf']['password'])
         logging.info("logged in successfully!")
+                      
     except:
         logging.error("unable to login on %s", gazpar.API_BASE_URI)
         sys.exit(1)
@@ -147,16 +155,31 @@ def main():
         startDate = _getDayOfssetDate(datetime.date.today(), 5)
         endDate = _dayToStr(datetime.date.today())
         
-        # Get result from GRDF by day
-        resDay = gazpar.get_data_per_day(token, startDate, endDate)
+        # Get data and retry when failed
+        i= 1
+        dCount = 0
         
-        # Display daily results
-        dCount = len(resDay)
+        while i < 6 and dCount < 2:
+        
+            if i > 1:
+                logging.info("Failed. Please wait for next try")
+                time.sleep(10)
+                
+            # Get result from GRDF by day
+            logging.info("Try number %s", str(i))
+            resDay = gazpar.get_data_per_day(token, startDate, endDate)
+            
+            # Update loop conditions
+            i = i + 1
+            dCount = len(resDay)
+
+        # Display infos
         if dCount < 2:
-            logging.info("Daily values from GRDF seems wrong...")
+            logging.warning("Daily values from GRDF seems wrong...")
         else:
-            logging.info("Number of daily values : %s", dCount)
+            logging.info("Number of daily values retrieved : %s", dCount)
         
+        # Display results
         for d in resDay:
             logging.info("%s : Kwh = %s, Mcube = %s",d['date'],d['kwh'], d['mcube'])
                 
@@ -199,9 +222,7 @@ def main():
         
         # Display results
         for m in resMonth:
-            logging.info("%s : Kwh = %s, Mcube = %s",m['date'],m['kwh'], m['mcube'])
-            
-            
+            logging.info("%s : Kwh = %s, Mcube = %s",m['date'],m['kwh'], m['mcube'])         
                 
     except:
         logging.error("Unable to get monthly data from GRDF")
@@ -244,10 +265,15 @@ def main():
         sys.exit(1)
     
     # Disconnect mqtt broker
-    mqtt.disconnect(client)
-    logging.info("Mqtt broker disconnected")
+    try:
+        mqtt.disconnect(client)
+        logging.info("Mqtt broker disconnected")
+    except:
+        logging.error("Unable to disconnect mqtt broker")
+        sys.exit(1)          
     
-    
+    " Game over
+    logging.info("End of gazpar2mqtt. See u...")
                 
 if __name__ == "__main__":
     
