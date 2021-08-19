@@ -76,5 +76,5 @@ def publish(client,topic,payload,qos,retain):
     
     print("Publish payload")
     #client.publish(topic, payload=payload, qos=qos, retain=retain)
-    client.publish(topic, payload="Hello world", qos=1, retain=True)
+    client.publish(topic, payload=payload, qos=qos, retain=True)
     time.sleep(1)
