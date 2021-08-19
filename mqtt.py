@@ -19,16 +19,16 @@ def on_disconnect(client, userdata, rc):
         print("Unexpected disconnection: {}".format(rc) )
 
 # Callback on_message
-def on_message(client, userdata, msg):
+#def on_message(client, userdata, msg):
     #print("onMessageArrived: " + msg.topic + " " + str(msg.payload))
 
 # Callback on_subscribe
-def on_subscribe(client, userdata, mid, granted_qos):
-    #print("Subscribed: mid=" + str(mid) + " QoS=" + str(granted_qos))
+#def on_subscribe(client, userdata, mid, granted_qos):
+    print("Subscribed: mid=" + str(mid) + " QoS=" + str(granted_qos))
 
 # Callback on_publish
-def on_publish(client, userdata, mid):
-    #print("Published: mid=" + str(mid) )
+#def on_publish(client, userdata, mid):
+    print("Published: mid=" + str(mid) )
 
 
 # Sub create client
@@ -47,8 +47,8 @@ def connect(client,host,port):
     # Activate callbacks
     print("Activate callback")
     client.on_connect = on_connect
-    client.on_message = on_message
-    client.on_publish = on_publish
+    #client.on_message = on_message
+    #client.on_publish = on_publish
     client.on_disconnect = on_disconnect
     
     # Connect
