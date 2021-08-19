@@ -113,27 +113,41 @@ def main():
         sys.exit(1)
         
     # Loop on results
-    logging.info("Number of values : %s", len(resGrdf))
+    c = len(resGrdf)
+    logging.info("Number of values : %s", c)
     for d in resGrdf:
         #t = datetime.datetime.strptime(d['date'] + " 12:00", '%d-%m-%Y %H:%M')
         logging.info("%s : Kwh = %s, Mcube = %s",d['date'],d['kwh'], d['mcube'])
     
     
     # Create mqtt client
-    #client = mqtt.create_client(params['mqtt']['clientId'])
+    client = mqtt.create_client(params['mqtt']['clientId'])
     logging.info("Mqtt client instantiated")
     
     # Connect mqtt brocker
-    #mqtt.connect(client,params['mqtt']['host'],params['mqtt']['port'])
+    mqtt.connect(client,params['mqtt']['host'],params['mqtt']['port'])
     logging.info("Mqtt broker connected")
+   
+    # We publish only the last input from grdf
+    d = resGrdf[c-1]
+    
+    currentValueDateTopic = params['mqtt']['topic']+"/currentValueDate"
+    currentValueKwhTopic = params['mqtt']['topic']+"/currentValueKwh"
+    currentValueMcubeTopic = params['mqtt']['topic']+"/currentValueMcube"
+    updateDateTopic = params['mqtt']['topic']+"/updateDate"
+    
+    mqtt.publish(client, currentValueDateTopic, d['date'], params['mqtt']['qos'], params['mqtt']['retain'])
+    mqtt.publish(client, currentValueKwhTopic, d['kwh'], params['mqtt']['qos'], params['mqtt']['retain'])
+    mqtt.publish(client, currentValueMcubeTopic, d['mcube'], params['mqtt']['qos'], params['mqtt']['retain'])
+    mqtt.publish(client, updateDateTopic, datetime.date.today(), params['mqtt']['qos'], params['mqtt']['retain'])
+
     
     # Publsh payload
-    #payload = "Hello world"
-    #mqtt.publish(client, params['mqtt']['topic'], payload, params['mqtt']['qos'], params['mqtt']['retain'])
+    mqtt.publish(client, params['mqtt']['topic'], payload, params['mqtt']['qos'], params['mqtt']['retain'])
     logging.info("Message published")
     
     # Disconnect mqtt broker
-    #mqtt.disconnect(client)
+    mqtt.disconnect(client)
     logging.info("Mqtt broker disconnected")
     
     
