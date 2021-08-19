@@ -105,8 +105,11 @@ def main():
         if (args.verbose):
             pp.pprint(resGrdf)
                 
-    logging.info(resGrdf)
-    
+    except:
+        logging.error("unable to get data from GRDF")
+        sys.exit(1)
+        
+        
     # Create mqtt client
     #client = mqtt.create_client(params['mqtt']['clientId'])
     logging.info("Mqtt client instantiated")
