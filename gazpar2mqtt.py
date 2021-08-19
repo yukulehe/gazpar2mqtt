@@ -19,10 +19,18 @@ import logging
 import pprint
 from envparse import env
 
-
+# OS environment variables
 PFILE = "/.params"
 DOCKER_MANDATORY_VARENV=['GRDF_USERNAME','GRDF_PASSWORD','MQTT_HOST']
 DOCKER_OPTIONAL_VARENV=['MQTT_PORT','MQTT_CLIENTID','MQTT_QOS', 'MQTT_TOPIC', 'MQTT_RETAIN']
+
+# Sensors topics
+currentValueDateTopic = "/current/date"
+currentValueKwhTopic = "/current/kwh"
+currentValueMcubeTopic = "/current/mcube"
+statusDateTopic = "/status/date"
+statusValueTopic = "/status/value"
+
 
 # Sub to get StartDate depending today - daysNumber
 def _getStartDate(today, daysNumber):
@@ -77,6 +85,7 @@ def _openParams(pfile):
 
 def main():
     
+    
     # Get params from environment OS
     params = _openParams(PFILE)
                 
@@ -85,6 +94,12 @@ def main():
                  params['mqtt']['host'], params['mqtt']['port'], params['mqtt']['clientId'], \
                  params['mqtt']['qos'],params['mqtt']['topic'],params['mqtt']['retain'])
     
+    # Set topics
+    currentValueDateTopic = params['mqtt']['topic'] + currentValueDateTopic
+    currentValueKwhTopic = params['mqtt']['topic'] + currentValueKwhTopic
+    currentValueMcubeTopic = params['mqtt']['topic'] + currentValueMcubeTopic
+    statusDateTopic = params['mqtt']['topic'] + statusDateTopic
+    statusValueTopic = params['mqtt']['topic'] + statusValueTopic
     
     # Log to GRDF API
     try:
@@ -131,22 +146,21 @@ def main():
     # We publish only the last input from grdf
     d = resGrdf[c-1]
     
-    currentValueDateTopic = params['mqtt']['topic']+"/currentValueDate"
-    currentValueKwhTopic = params['mqtt']['topic']+"/currentValueKwh"
-    currentValueMcubeTopic = params['mqtt']['topic']+"/currentValueMcube"
-    refreshDateTopic = params['mqtt']['topic']+"/refreshDate"
-    refreshStatusTopic = params['mqtt']['topic']+"/refreshStatus"
     
-    mqtt.publish(client, currentValueDateTopic, d['date'], params['mqtt']['qos'], params['mqtt']['retain'])
-    mqtt.publish(client, currentValueKwhTopic, d['kwh'], params['mqtt']['qos'], params['mqtt']['retain'])
-    mqtt.publish(client, currentValueMcubeTopic, d['mcube'], params['mqtt']['qos'], params['mqtt']['retain'])
-    mqtt.publish(client, refreshDateTopic, datetime.date.today(), params['mqtt']['qos'], params['mqtt']['retain'])
-    mqtt.publish(client, refreshStatusTopic, "Success", params['mqtt']['qos'], params['mqtt']['retain'])
-
+    prefixTopic = params['mqtt']['topic']
     
-    # Publsh payload
-    mqtt.publish(client, params['mqtt']['topic'], payload, params['mqtt']['qos'], params['mqtt']['retain'])
-    logging.info("Message published")
+    if d['date'] = 0:
+        
+        ## Publish status values
+        mqtt.publish(client, prefixTopic + statusDateTopic, _dayToStr(datetime.date.today()), params['mqtt']['qos'], params['mqtt']['retain'])
+        mqtt.publish(client, prefixTopic + statusValueTopic, "Error", params['mqtt']['qos'], params['mqtt']['retain'])
+        
+    else
+        # Publish current values
+        mqtt.publish(client, prefixTopic + currentValueDateTopic, d['date'], params['mqtt']['qos'], params['mqtt']['retain'])
+        mqtt.publish(client, prefixTopic + currentValueKwhTopic, d['kwh'], params['mqtt']['qos'], params['mqtt']['retain'])
+        mqtt.publish(client, prefixTopic + currentValueMcubeTopic, d['mcube'], params['mqtt']['qos'], params['mqtt']['retain'])
+       
     
     # Disconnect mqtt broker
     mqtt.disconnect(client)
