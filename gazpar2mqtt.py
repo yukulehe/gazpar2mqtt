@@ -81,22 +81,47 @@ def main():
     logging.info("MQTT config : host = %s, port = %s, clientId = %s, qos = %s, topic = %s, retain = %s", \
                  params['mqtt']['host'], params['mqtt']['port'], params['mqtt']['clientId'], \
                  params['mqtt']['qos'],params['mqtt']['topic'],params['mqtt']['retain'])
+    
+    
+    # Log to GRDF API
+    try:
+        logging.info("logging in GRDF URI %s...", gazpar.API_BASE_URI)
+        token = gazpar.login(params['grdf']['username'], params['grdf']['password'])
+        logging.info("logged in successfully!")
+    except:
+        logging.error("unable to login on %s", gazpar.API_BASE_URI)
+        sys.exit(1)
+    
+    # Get data from GRDF API
+    startDate = _getStartDate(datetime.date.today(), args.days)
+    endDate = _dayToStr(datetime.date.today())
+    
+    resGrdf = gazpar.get_data_per_day(token, startDate, endDate)
+    try:
+        logging.info("get Data from GRDF from {0} to {1}".format(startDate, endDate))
+        # Get result from GRDF by day
+        resGrdf = gazpar.get_data_per_day(token, startDate, endDate)
+
+        if (args.verbose):
+            pp.pprint(resGrdf)
                 
+    logging.info(resGrdf)
+    
     # Create mqtt client
-    client = mqtt.create_client(params['mqtt']['clientId'])
+    #client = mqtt.create_client(params['mqtt']['clientId'])
     logging.info("Mqtt client instantiated")
     
     # Connect mqtt brocker
-    mqtt.connect(client,params['mqtt']['host'],params['mqtt']['port'])
+    #mqtt.connect(client,params['mqtt']['host'],params['mqtt']['port'])
     logging.info("Mqtt broker connected")
     
     # Publsh payload
-    payload = "Hello world"
+    #payload = "Hello world"
     mqtt.publish(client, params['mqtt']['topic'], payload, params['mqtt']['qos'], params['mqtt']['retain'])
-    logging.info("Message published")
+    #logging.info("Message published")
     
     # Disconnect mqtt broker
-    mqtt.disconnect(client)
+    #mqtt.disconnect(client)
     logging.info("Mqtt broker disconnected")
     
     
