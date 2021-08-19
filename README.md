@@ -14,9 +14,9 @@ Note : you can replace default topic prefix (*gazpar*) by filling environnement 
 
 ### Daily values :
 > gazpar/daily/date
-> 
+
 > gazpar/daily/kwh
-> 
+
 > gazpar/daily/mcube
 
 ### Monthly values :
@@ -27,8 +27,9 @@ Note : you can replace default topic prefix (*gazpar*) by filling environnement 
 > gazpar/monthly/mcube
 
 ### Status values :
-- gazpar/status/date
-- gazpar/status/value
+> gazpar/status/date
+
+> gazpar/status/value
 
 ## Repository status
 Work in progress....
