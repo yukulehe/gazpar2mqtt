@@ -79,7 +79,8 @@ def main():
                 
     logging.info("GRDF config : username = %s, password = %s", params['grdf']['username'], params['grdf']['password'])
     logging.info("MQTT config : host = %s, port = %s, clientId = %s, qos = %s, topic = %s, retain = %s", \
-                 params['mqtt']['host'], params['mqtt']['clientId'], params['mqtt']['qos'],params['mqtt']['topic'],params['mqtt']['retain'])
+                 params['mqtt']['host'], params['mqtt']['port'], params['mqtt']['clientId'], \
+                 params['mqtt']['qos'],params['mqtt']['topic'],params['mqtt']['retain'])
                 
                 
                 
