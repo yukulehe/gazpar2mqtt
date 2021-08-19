@@ -2,7 +2,6 @@ requests
 lxml
 python-dateutil
 argparse
-fake_useragent
 envparse
 schedule
 paho-mqtt
