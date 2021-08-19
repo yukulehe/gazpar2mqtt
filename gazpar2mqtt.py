@@ -82,7 +82,10 @@ def main():
                  params['mqtt']['host'], params['mqtt']['port'], params['mqtt']['clientId'], \
                  params['mqtt']['qos'],params['mqtt']['topic'],params['mqtt']['retain'])
                 
-                
+    # Create mqtt client
+    client = mqttpub.create_client(params['mqtt']['clientId'])
+    logging.info("Mqtt client instantiated)
+    
                 
 if __name__ == "__main__":
 
