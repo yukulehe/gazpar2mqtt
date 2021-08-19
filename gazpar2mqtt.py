@@ -39,7 +39,7 @@ def _openParams(pfile):
                 'mqtt': {'host': env(DOCKER_MANDATORY_VARENV[2]),
                            'port': env.int(DOCKER_OPTIONAL_VARENV[0], default=1883),
                            'clientId': env(DOCKER_OPTIONAL_VARENV[1], default='gazpar2mqtt'),
-                           'qos': env(DOCKER_OPTIONAL_VARENV[2],default=1),
+                           'qos': env.int(DOCKER_OPTIONAL_VARENV[2]),default=1),
                            'topic': env(DOCKER_OPTIONAL_VARENV[3], default='gazpar'),
                            'retain': env(DOCKER_OPTIONAL_VARENV[4], default=False)}}
     
