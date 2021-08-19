@@ -240,25 +240,33 @@ def main():
         if dCount == 1 or mCount == 1:
 
             ## Publish status values
+            logging.info("Publishing status values...")
             mqtt.publish(client, prefixTopic + statusDateTopic, dtn, params['mqtt']['qos'], params['mqtt']['retain'])
             mqtt.publish(client, prefixTopic + statusValueTopic, "Error", params['mqtt']['qos'], params['mqtt']['retain'])
+            logging.info("Status values published")
 
         # Looks good ...
         else:
 
             # Publish daily values
+            logging.info("Publishing daily values...")
             mqtt.publish(client, prefixTopic + dailyValueDateTopic, d['date'], params['mqtt']['qos'], params['mqtt']['retain'])
             mqtt.publish(client, prefixTopic + dailyValueKwhTopic, d['kwh'], params['mqtt']['qos'], params['mqtt']['retain'])
             mqtt.publish(client, prefixTopic + dailyValueMcubeTopic, d['mcube'], params['mqtt']['qos'], params['mqtt']['retain'])
+            logging.info("Daily values published")
 
             # Publish monthly values
+            logging.info("Publishing monthly values...")
             mqtt.publish(client, prefixTopic + monthlyValueDateTopic, m['date'], params['mqtt']['qos'], params['mqtt']['retain'])
             mqtt.publish(client, prefixTopic + monthlyValueKwhTopic, m['kwh'], params['mqtt']['qos'], params['mqtt']['retain'])
             mqtt.publish(client, prefixTopic + monthlyValueMcubeTopic, m['mcube'], params['mqtt']['qos'], params['mqtt']['retain'])
+            logging.info("Monthly values published")
 
             ## Publish status values
+            logging.info("Publishing status values...")
             mqtt.publish(client, prefixTopic + statusDateTopic, dtn, params['mqtt']['qos'], params['mqtt']['retain'])
             mqtt.publish(client, prefixTopic + statusValueTopic, "Success", params['mqtt']['qos'], params['mqtt']['retain'])
+            logging.info("Status values published")
     
     except:
         logging.error("Unable to publish value to mqtt broker")
