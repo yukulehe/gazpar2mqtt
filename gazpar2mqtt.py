@@ -179,6 +179,10 @@ def main():
         
         while i < 6 or mCount < 2:
         
+            if i > 1:
+                logging.info("Please wait for next try")
+                time.sleep(10)
+                
             # Get result from GRDF by day
             logging.info("Try number %s", str(i))
             resMonth = gazpar.get_data_per_month(token, startDate, endDate)
