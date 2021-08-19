@@ -47,9 +47,9 @@ def connect(client,host,port):
     # Activate callbacks
     print("Activate callback")
     client.on_connect = on_connect
-    client.on_message = mqttutil.on_message
-    client.on_publish = mqttutil.on_publish
-    client.on_disconnect = mqttutil.on_disconnect
+    client.on_message = on_message
+    client.on_publish = on_publish
+    client.on_disconnect = on_disconnect
     
     # Connect
     print("Connexion to broker")
