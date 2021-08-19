@@ -183,27 +183,27 @@ def main():
     prefixTopic = params['mqtt']['topic']
     
     try:
-    if dCount == 1 or mCount == 1:
-        
-        ## Publish status values
-        mqtt.publish(client, prefixTopic + statusDateTopic, _dayToStr(datetime.date.today()), params['mqtt']['qos'], params['mqtt']['retain'])
-        mqtt.publish(client, prefixTopic + statusValueTopic, "Error", params['mqtt']['qos'], params['mqtt']['retain'])
-        
-    else:
-        
-        # Publish daily values
-        mqtt.publish(client, prefixTopic + dayValueDateTopic, d['date'], params['mqtt']['qos'], params['mqtt']['retain'])
-        mqtt.publish(client, prefixTopic + dayValueKwhTopic, d['kwh'], params['mqtt']['qos'], params['mqtt']['retain'])
-        mqtt.publish(client, prefixTopic + dayValueMcubeTopic, d['mcube'], params['mqtt']['qos'], params['mqtt']['retain'])
-        
-        # Publish monthly values
-        mqtt.publish(client, prefixTopic + monthValueDateTopic, m['date'], params['mqtt']['qos'], params['mqtt']['retain'])
-        mqtt.publish(client, prefixTopic + monthValueKwhTopic, m['kwh'], params['mqtt']['qos'], params['mqtt']['retain'])
-        mqtt.publish(client, prefixTopic + monthValueMcubeTopic, m['mcube'], params['mqtt']['qos'], params['mqtt']['retain'])
-        
-        ## Publish status values
-        mqtt.publish(client, prefixTopic + statusDateTopic, _dayToStr(datetime.date.today()), params['mqtt']['qos'], params['mqtt']['retain'])
-        mqtt.publish(client, prefixTopic + statusValueTopic, "Success", params['mqtt']['qos'], params['mqtt']['retain'])
+        if dCount == 1 or mCount == 1:
+
+            ## Publish status values
+            mqtt.publish(client, prefixTopic + statusDateTopic, _dayToStr(datetime.date.today()), params['mqtt']['qos'], params['mqtt']['retain'])
+            mqtt.publish(client, prefixTopic + statusValueTopic, "Error", params['mqtt']['qos'], params['mqtt']['retain'])
+
+        else:
+
+            # Publish daily values
+            mqtt.publish(client, prefixTopic + dayValueDateTopic, d['date'], params['mqtt']['qos'], params['mqtt']['retain'])
+            mqtt.publish(client, prefixTopic + dayValueKwhTopic, d['kwh'], params['mqtt']['qos'], params['mqtt']['retain'])
+            mqtt.publish(client, prefixTopic + dayValueMcubeTopic, d['mcube'], params['mqtt']['qos'], params['mqtt']['retain'])
+
+            # Publish monthly values
+            mqtt.publish(client, prefixTopic + monthValueDateTopic, m['date'], params['mqtt']['qos'], params['mqtt']['retain'])
+            mqtt.publish(client, prefixTopic + monthValueKwhTopic, m['kwh'], params['mqtt']['qos'], params['mqtt']['retain'])
+            mqtt.publish(client, prefixTopic + monthValueMcubeTopic, m['mcube'], params['mqtt']['qos'], params['mqtt']['retain'])
+
+            ## Publish status values
+            mqtt.publish(client, prefixTopic + statusDateTopic, _dayToStr(datetime.date.today()), params['mqtt']['qos'], params['mqtt']['retain'])
+            mqtt.publish(client, prefixTopic + statusValueTopic, "Success", params['mqtt']['qos'], params['mqtt']['retain'])
     
     except:
         logging.error("Unable to publish value to mqtt broker")
