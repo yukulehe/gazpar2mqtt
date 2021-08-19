@@ -13,8 +13,10 @@ GRDF's values are published in the MQTT broker following topics.
 Note : you can replace default topic prefix (*gazpar*) by filling environnement variable **TOPIC**.
 
 ### Daily values :
-> gazpar/daily/date >
-> gazpar/daily/kwh >
+> gazpar/daily/date
+> 
+> gazpar/daily/kwh
+> 
 > gazpar/daily/mcube
 
 ### Monthly values :
