@@ -92,7 +92,7 @@ def main():
     
     # Publsh payload
     payload = "Hello world"
-    mqttpub.publish(client,payload,params['mqtt']['topic'],params['mqtt']['qos'],params['mqtt']['retain'])
+    mqttpub.publish(client, params['mqtt']['topic'], payload, params['mqtt']['qos'], params['mqtt']['retain'])
     
     
                 
