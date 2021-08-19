@@ -33,7 +33,7 @@ def on_publish(client, userdata, mid):
 
 
 # Sub create client
-def create_client(clientId)
+def create_client(clientId):
     
     # Create instance
     print("Instance mqtt client")
@@ -72,7 +72,7 @@ def disconnect(client):
     client.disconnect
   
 # Sub publish
-def publish(client,topic,payload,qos,retain)
+def publish(client,topic,payload,qos,retain):
     
     print("Publish payload")
     client.publish(topic, payload=payload, qos=qos, retain=retain)
