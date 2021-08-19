@@ -177,10 +177,10 @@ def main():
         i= 1
         mCount = 0
         
-        while i < 6 or mCount < 2:
+        while i < 6 and mCount < 2:
         
             if i > 1:
-                logging.info("Please wait for next try")
+                logging.info("Failed. Please wait for next try")
                 time.sleep(10)
                 
             # Get result from GRDF by day
