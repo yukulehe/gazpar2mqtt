@@ -41,7 +41,7 @@ def _openParams(pfile):
                            'clientId': env(DOCKER_OPTIONAL_VARENV[1], default='gazpar2mqtt'),
                            'qos': env(DOCKER_OPTIONAL_VARENV[2],default=1),
                            'topic': env(DOCKER_OPTIONAL_VARENV[3], default='gazpar'),
-                           'retain': env(DOCKER_MANDATORY_VARENV[4], default=False)}}
+                           'retain': env(DOCKER_OPTIONAL_VARENV[4], default=False)}}
     
     # Try to load .params then programs_dir/.params
     elif os.path.isfile(os.getcwd() + pfile):
