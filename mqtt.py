@@ -59,6 +59,6 @@ def disconnect(client):
 # Sub publish
 def publish(client,topic,payload,qos,retain):
     
-    logging.info("Mqtt publish : publication..."))
+    logging.info("Mqtt publish : publication...")
     client.publish(topic, payload=payload, qos=qos, retain=retain)
     time.sleep(1)
