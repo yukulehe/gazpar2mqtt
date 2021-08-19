@@ -134,6 +134,9 @@ def main():
         sys.exit(1)
     
     
+    # Wait
+    time.sleep(2)
+    
     # Get data from GRDF API
     
     ## Get daily data
