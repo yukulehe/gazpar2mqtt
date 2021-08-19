@@ -93,9 +93,11 @@ def main():
     # Publsh payload
     payload = "Hello world"
     mqtt.publish(client, params['mqtt']['topic'], payload, params['mqtt']['qos'], params['mqtt']['retain'])
+    logging.info("Message published")
     
     # Disconnect mqtt broker
     mqtt.disconnect(client)
+    logging.info("Mqtt broker disconnected)
     
     
                 
