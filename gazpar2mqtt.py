@@ -104,7 +104,7 @@ def _openParams(pfile):
 def main():
     
     # Test
-    maintenant = str(datetime.now())
+    maintenant = str(datetime.datetime.now())
     
     # Get params from environment OS
     params = _openParams(PFILE)
