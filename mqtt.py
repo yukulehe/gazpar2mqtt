@@ -1,5 +1,4 @@
 import paho.mqtt.client as mqtt
-import mqttutil
 import time
 
 # Broker settings
