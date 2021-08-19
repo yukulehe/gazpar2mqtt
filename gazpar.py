@@ -131,6 +131,9 @@ def get_data_per_day(session, start_date, end_date):
     """Retreives daily energy consumption data."""
     return _get_data(session, 'jour', start_date, end_date)
 
+def get_data_per_month(session, start_date, end_date):
+    """Retreives monthly energy consumption data."""
+    return _get_data(session, 'Mois', start_date, end_date)
 
 def _get_data(session, resource_id, start_date=None, end_date=None):
 
