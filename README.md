@@ -28,7 +28,8 @@ Remember, kWh provided is conversion factor dependant. Please verify it's cohere
 ## MQTT broker
 
 A MQTT broker is required. Please check its configuration (hostname, port, remote access allowed if needed).
-By default, retain flag is set to false, QOS is set to 1. You can update corresponding environment variables.
+
+By default, retain flag is set to false, QOS is set to 1. You can update corresponding environment variables (**RETAIN** and **QOS**).
 
 # MQTT publication topics
 
