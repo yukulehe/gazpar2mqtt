@@ -86,13 +86,16 @@ def main():
     client = mqttpub.create_client(params['mqtt']['clientId'])
     logging.info("Mqtt client instantiated")
     
-    # Connect to mqtt brocker
+    # Connect mqtt brocker
     mqttpub.connect(client,params['mqtt']['host'],params['mqtt']['port'])
     logging.info("Mqtt broker connected")
     
     # Publsh payload
     payload = "Hello world"
     mqttpub.publish(client, params['mqtt']['topic'], payload, params['mqtt']['qos'], params['mqtt']['retain'])
+    
+    # Disconnect mqtt broker
+    mqttpub.disconnect(client)
     
     
                 
