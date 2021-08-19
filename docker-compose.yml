@@ -1,1 +1,19 @@
-# Work in progress
+version: "3.7"
+services:
+  gazpar2mqtt:
+    container_name: gazpar2mqtt
+    image: yukulehe/gazpar2mqtt:latest
+    build:
+      context: .
+    restart: unless-stopped
+    environment:
+      - GRDF_USERNAME=gazou@email.com
+      - GRDF_PASSWORD=password
+      - MQTT_HOST=host
+      - REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+      - TZ=Europe/Paris
+      # Optional:
+      #- MQTT_PORT=1883
+      #- MQTT_CLIENTID=gazou
+      #- MQTT_QOS=1
+      #- MQTT_RETAIN=False
