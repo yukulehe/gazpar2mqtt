@@ -182,7 +182,8 @@ def main():
     m = resDay[mCount-1]
     prefixTopic = params['mqtt']['topic']
     
-    if dCount == 1 || mCount == 1:
+    try:
+    if dCount == 1 or mCount == 1:
         
         ## Publish status values
         mqtt.publish(client, prefixTopic + statusDateTopic, _dayToStr(datetime.date.today()), params['mqtt']['qos'], params['mqtt']['retain'])
@@ -203,7 +204,10 @@ def main():
         ## Publish status values
         mqtt.publish(client, prefixTopic + statusDateTopic, _dayToStr(datetime.date.today()), params['mqtt']['qos'], params['mqtt']['retain'])
         mqtt.publish(client, prefixTopic + statusValueTopic, "Success", params['mqtt']['qos'], params['mqtt']['retain'])
-       
+    
+    except:
+        logging.error("Unable to publish value to mqtt broker")
+        sys.exit(1)
     
     # Disconnect mqtt broker
     mqtt.disconnect(client)
