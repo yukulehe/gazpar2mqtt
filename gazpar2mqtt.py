@@ -54,8 +54,8 @@ def _dayToStr(date):
     return date.strftime("%d/%m/%Y")
 
 # Sub to return format wanted
-def _dateTimeToStr(date):
-    return date.strftime("%d/%m/%Y - %hh:%mm:%ss")
+def _dateTimeToStr(datetime):
+    return datetime.strftime("%d/%m/%Y - %HH:%MM:%SS")
 
   
 # Open file with params for mqtt broker and GRDF API
@@ -144,6 +144,12 @@ def main():
         
         # Get result from GRDF by day
         resDay = gazpar.get_data_per_day(token, startDate, endDate)
+        
+        # Display daily results
+        dCount = len(resDay)
+        logging.info("Number of daily values : %s", dCount)
+        for d in resDay:
+            logging.info("%s : Kwh = %s, Mcube = %s",d['date'],d['kwh'], d['mcube'])
                 
     except:
         logging.error("Unable to get daily data from GRDF")
@@ -159,38 +165,34 @@ def main():
         endDate = _dayToStr(datetime.date.today())
                      
         # Get result from GRDF by day
-        resMonth = gazpar.get_data_per_month(token, startDate, endDate)           
+        resMonth = gazpar.get_data_per_month(token, startDate, endDate)
+        
+        # Display monthly results
+        mCount = len(resMonth)
+        logging.info("Number of monthly values : %s", mCount)
+        for m in resMonth:
+            logging.info("%s : Kwh = %s, Mcube = %s",m['date'],m['kwh'], m['mcube'])
                 
     except:
         logging.error("Unable to get monthly data from GRDF")
         sys.exit(1)
     
-    # Display daily results
-    dCount = len(resDay)
-    logging.info("Number of daily values : %s", dCount)
-    for d in resDay:
-        logging.info("%s : Kwh = %s, Mcube = %s",d['date'],d['kwh'], d['mcube'])
     
-    # Display monthly results
-    mCount = len(resMonth)
-    logging.info("Number of monthly values : %s", mCount)
-    for m in resMonth:
-        logging.info("%s : Kwh = %s, Mcube = %s",m['date'],m['kwh'], m['mcube'])
-    
-    
-   
     # We publish only the last input from grdf
     d = resDay[dCount-1]
-    m = resDay[mCount-1]
+    m = resMonth[mCount-1]
     prefixTopic = params['mqtt']['topic']
     
     try:
+        
+        # Unfortunately, GRDF date are not correct
         if dCount == 1 or mCount == 1:
 
             ## Publish status values
             mqtt.publish(client, prefixTopic + statusDateTopic, _dateTimeToStr(datetime.date.now()), params['mqtt']['qos'], params['mqtt']['retain'])
             mqtt.publish(client, prefixTopic + statusValueTopic, "Error", params['mqtt']['qos'], params['mqtt']['retain'])
 
+        # Looks good ...
         else:
 
             # Publish daily values
