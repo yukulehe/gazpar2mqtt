@@ -20,22 +20,22 @@ def on_disconnect(client, userdata, rc):
 
 # Callback on_message
 def on_message(client, userdata, msg):
-    print("onMessageArrived: " + msg.topic + " " + str(msg.payload))
+    #print("onMessageArrived: " + msg.topic + " " + str(msg.payload))
 
 # Callback on_subscribe
 def on_subscribe(client, userdata, mid, granted_qos):
-    print("Subscribed: mid=" + str(mid) + " QoS=" + str(granted_qos))
+    #print("Subscribed: mid=" + str(mid) + " QoS=" + str(granted_qos))
 
 # Callback on_publish
 def on_publish(client, userdata, mid):
-    print("Published: mid=" + str(mid) )
+    #print("Published: mid=" + str(mid) )
 
 
 # Sub create client
 def create_client(clientId):
     
     # Create instance
-    print("Instance mqtt client")
+    #print("Instance mqtt client")
     client = mqtt.Client(clientId)
     
     return client
