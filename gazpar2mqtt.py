@@ -41,18 +41,21 @@ statusDateTopic = "/status/date"
 statusValueTopic = "/status/value"
 
 
-# Sub to get StartDate depending today - daysNumber
+# Sub to get date with day offset
 def _getDayOfssetDate(day, number):
     return _dayToStr(day - relativedelta(days=number))
 
-# Sub to get StartDate depending today - daysNumber
+# Sub to get date with month offset
 def _getMonthOfssetDate(day, number):
     return _dayToStr(day - relativedelta(months=number))
 
-# Sub to return format wanted by linky.py
+# Sub to return format wanted
 def _dayToStr(date):
     return date.strftime("%d/%m/%Y")
 
+# Sub to return format wanted
+def _dateTimeToStr(date):
+    return date.strftime("%d/%m/%Y - %hh:%mm:%ss")
 
   
 # Open file with params for mqtt broker and GRDF API
@@ -201,7 +204,7 @@ def main():
             mqtt.publish(client, prefixTopic + monthValueMcubeTopic, m['mcube'], params['mqtt']['qos'], params['mqtt']['retain'])
 
             ## Publish status values
-            mqtt.publish(client, prefixTopic + statusDateTopic, _dayToStr(datetime.date.today()), params['mqtt']['qos'], params['mqtt']['retain'])
+            mqtt.publish(client, prefixTopic + statusDateTopic, _dateTimeToStr(datetime.date.now()), params['mqtt']['qos'], params['mqtt']['retain'])
             mqtt.publish(client, prefixTopic + statusValueTopic, "Success", params['mqtt']['qos'], params['mqtt']['retain'])
     
     except:
