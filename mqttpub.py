@@ -8,11 +8,29 @@ broker_client = "gazou"
 # Initialize variables
 mqtt_connected = False
 
-# on_connect
+# Callback on_connect
 def on_connect(client, userdata, flags, rc):
     global mqtt_connected
     print("on_connect: " + mqtt.connack_string(rc))
     mqtt_connected = True
+
+# Callback on_disconnect
+def on_disconnect(client, userdata, rc):
+    if rc != 0:
+        print("Unexpected disconnection: {}".format(rc) )
+
+# Callback on_message
+def on_message(client, userdata, msg):
+    print("onMessageArrived: " + msg.topic + " " + str(msg.payload))
+
+# Callback on_subscribe
+def on_subscribe(client, userdata, mid, granted_qos):
+    print("Subscribed: mid=" + str(mid) + " QoS=" + str(granted_qos))
+
+# Callback on_publish
+def on_publish(client, userdata, mid):
+    print("Published: mid=" + str(mid) )
+
 
 # Sub create client
 def create_client(clientId)
@@ -22,6 +40,7 @@ def create_client(clientId)
     client = mqtt.Client(clientId)
     
     return client
+
 
 # Sub connect
 def connect(client,host,port):
@@ -40,6 +59,7 @@ def connect(client,host,port):
     
     # Start loop
     client.loop_start()
+
     
 # Sub disconnect
 def disconnect(client):
