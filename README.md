@@ -7,5 +7,22 @@ Python script to fetch GRDF data and publish data to a mqtt broker
 ## Externals/Thanks
 The project has been inspired by job done by [empierre](https://github.com/empierre/domoticz_gaspar) on project domoticz_gazpar and [beufanet](https://github.com/beufanet/gazpar) on project gazinflux availables on Github. I modified a bit the code to work and fit my needs.
 
+## MQTT publication topics
+Set topic prefix in environment variable "TOPIC". Default value = gazpar
+
+###Daily values :
+- gazpar/daily/date
+- gazpar/daily/kwh
+- gazpar/daily/mcube
+
+###Monthly values :
+- gazpar/monthly/date
+- gazpar/monthly/kwh
+- gazpar/monthly/mcube
+
+###Status values :
+- gazpar/status/date
+- gazpar/status/value
+
 ## Repository status
 Work in progress....
