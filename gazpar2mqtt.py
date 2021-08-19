@@ -108,7 +108,7 @@ def main():
     startDate = _getStartDate(datetime.date.today(), args.days)
     endDate = _dayToStr(datetime.date.today())
     
-    resGrdf = gazpar.get_data_per_day(token, startDate, endDate)
+    #resGrdf = gazpar.get_data_per_day(token, startDate, endDate)
     try:
         logging.info("get Data from GRDF from {0} to {1}".format(startDate, endDate))
         # Get result from GRDF by day
