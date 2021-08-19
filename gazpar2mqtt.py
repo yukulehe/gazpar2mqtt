@@ -33,12 +33,18 @@ statusValueTopic = "/status/value"
 
 
 # Sub to get StartDate depending today - daysNumber
-def _getStartDate(today, daysNumber):
-    return _dayToStr(today - relativedelta(days=daysNumber))
+def _getDayOfssetDate(day, number):
+    return _dayToStr(day - relativedelta(days=number))
+
+# Sub to get StartDate depending today - daysNumber
+def _getMonthOfssetDate(day, number):
+    return _dayToStr(day - relativedelta(months=number))
 
 # Sub to return format wanted by linky.py
 def _dayToStr(date):
     return date.strftime("%d/%m/%Y")
+
+
   
 # Open file with params for mqtt broker and GRDF API
 def _openParams(pfile):
@@ -95,6 +101,15 @@ def main():
                  params['mqtt']['qos'],params['mqtt']['topic'],params['mqtt']['retain'])
     
     
+    # Create mqtt client
+    client = mqtt.create_client(params['mqtt']['clientId'])
+    logging.info("Mqtt client instantiated")
+    
+    # Connect mqtt brocker
+    mqtt.connect(client,params['mqtt']['host'],params['mqtt']['port'])
+    logging.info("Mqtt broker connected")
+    
+    
     # Log to GRDF API
     try:
         logging.info("logging in GRDF URI %s...", gazpar.API_BASE_URI)
@@ -104,41 +119,57 @@ def main():
         logging.error("unable to login on %s", gazpar.API_BASE_URI)
         sys.exit(1)
     
-    # Get data from GRDF API
-    startDate = _getStartDate(datetime.date.today(), args.days)
-    endDate = _dayToStr(datetime.date.today())
     
-    #resGrdf = gazpar.get_data_per_day(token, startDate, endDate)
+    # Get data from GRDF API
+    
+    ## Get daily data
     try:
-        logging.info("get Data from GRDF from {0} to {1}".format(startDate, endDate))
+        logging.info("Get daily data from GRDF)
+                     
+        # Set period (5 days ago)
+        startDate = _getDayOfssetDate(datetime.date.today(), 5)
+        endDate = _dayToStr(datetime.date.today())
+        
         # Get result from GRDF by day
-        resGrdf = gazpar.get_data_per_day(token, startDate, endDate)
-
-        if (args.verbose):
-            pp.pprint(resGrdf)
+        resDay = gazpar.get_data_per_day(token, startDate, endDate)
+        
+        
                 
     except:
-        logging.error("unable to get data from GRDF")
+        logging.error("Unable to get daily data from GRDF")
         sys.exit(1)
+                 
+    ## Get monthly data
+    try:
+        logging.info("Get monthly data from GRDF)
         
-    # Loop on results
-    c = len(resGrdf)
-    logging.info("Number of values : %s", c)
-    for d in resGrdf:
-        #t = datetime.datetime.strptime(d['date'] + " 12:00", '%d-%m-%Y %H:%M')
+        # Set period (5 months ago)
+        startDate = _getMonthOfssetDate(datetime.date.today(), 5)
+        endDate = _dayToStr(datetime.date.today())
+                     
+        # Get result from GRDF by day
+        resMonth = gazpar.get_data_per_day(token, startDate, endDate)           
+                
+    except:
+        logging.error("Unable to get monthly data from GRDF")
+        sys.exit(1)
+    
+    # Display daily results
+    dCount = len(resDay)
+    logging.info("Number of daily values : %s", dCount)
+    for d in resDay:
         logging.info("%s : Kwh = %s, Mcube = %s",d['date'],d['kwh'], d['mcube'])
     
+    # Display monthly results
+    mCount = len(resMonth)
+    logging.info("Number of monthly values : %s", mCount)
+    for m in resMonth:
+        logging.info("%s : Kwh = %s, Mcube = %s",m['date'],m['kwh'], m['mcube'])
     
-    # Create mqtt client
-    client = mqtt.create_client(params['mqtt']['clientId'])
-    logging.info("Mqtt client instantiated")
     
-    # Connect mqtt brocker
-    mqtt.connect(client,params['mqtt']['host'],params['mqtt']['port'])
-    logging.info("Mqtt broker connected")
    
     # We publish only the last input from grdf
-    d = resGrdf[c-1]
+    d = resDay[dCount-1]
     
     
     prefixTopic = params['mqtt']['topic']
