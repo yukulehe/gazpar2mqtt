@@ -8,4 +8,4 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY *.py ./
-CMD ["python3", "./gazinflux.py", "--schedule", "06:00"]
+CMD ["python3", "./gazpar2mqtt.py", "--schedule", "06:00"]
