@@ -86,6 +86,10 @@ def main():
     client = mqttpub.create_client(params['mqtt']['clientId'])
     logging.info("Mqtt client instantiated")
     
+    # Connect to mqtt brocker
+    mqttpub.connect(client,params['mqtt']['host'],params['mqtt']['port'])
+    logging.info("Mqtt broker connected")
+    
                 
 if __name__ == "__main__":
 
