@@ -11,7 +11,7 @@ import time
 import locale
 from dateutil.relativedelta import relativedelta
 import gazpar
-import mqttpub
+import mqtt
 import json
 
 import argparse
@@ -83,19 +83,19 @@ def main():
                  params['mqtt']['qos'],params['mqtt']['topic'],params['mqtt']['retain'])
                 
     # Create mqtt client
-    client = mqttpub.create_client(params['mqtt']['clientId'])
+    client = mqtt.create_client(params['mqtt']['clientId'])
     logging.info("Mqtt client instantiated")
     
     # Connect mqtt brocker
-    mqttpub.connect(client,params['mqtt']['host'],params['mqtt']['port'])
+    mqtt.connect(client,params['mqtt']['host'],params['mqtt']['port'])
     logging.info("Mqtt broker connected")
     
     # Publsh payload
     payload = "Hello world"
-    mqttpub.publish(client, params['mqtt']['topic'], payload, params['mqtt']['qos'], params['mqtt']['retain'])
+    mqtt.publish(client, params['mqtt']['topic'], payload, params['mqtt']['qos'], params['mqtt']['retain'])
     
     # Disconnect mqtt broker
-    mqttpub.disconnect(client)
+    mqtt.disconnect(client)
     
     
                 
