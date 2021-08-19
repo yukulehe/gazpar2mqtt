@@ -124,7 +124,7 @@ def main():
     
     ## Get daily data
     try:
-        logging.info("Get daily data from GRDF)
+        logging.info("Get daily data from GRDF")
                      
         # Set period (5 days ago)
         startDate = _getDayOfssetDate(datetime.date.today(), 5)
@@ -141,7 +141,7 @@ def main():
                  
     ## Get monthly data
     try:
-        logging.info("Get monthly data from GRDF)
+        logging.info("Get monthly data from GRDF")
         
         # Set period (5 months ago)
         startDate = _getMonthOfssetDate(datetime.date.today(), 5)
