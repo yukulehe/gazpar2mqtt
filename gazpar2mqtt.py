@@ -90,6 +90,11 @@ def main():
     mqttpub.connect(client,params['mqtt']['host'],params['mqtt']['port'])
     logging.info("Mqtt broker connected")
     
+    # Publsh payload
+    payload = "Hello world"
+    mqttpub.publish(client,payload,params['mqtt']['topic'],params['mqtt']['qos'],params['mqtt']['retain'])
+    
+    
                 
 if __name__ == "__main__":
 
