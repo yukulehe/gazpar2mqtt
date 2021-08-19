@@ -141,13 +141,12 @@ def main():
         
         # Get result from GRDF by day
         resDay = gazpar.get_data_per_day(token, startDate, endDate)
-        
-        
                 
     except:
         logging.error("Unable to get daily data from GRDF")
         sys.exit(1)
                  
+    
     ## Get monthly data
     try:
         logging.info("Get monthly data from GRDF")
@@ -157,7 +156,7 @@ def main():
         endDate = _dayToStr(datetime.date.today())
                      
         # Get result from GRDF by day
-        resMonth = gazpar.get_data_per_day(token, startDate, endDate)           
+        resMonth = gazpar.get_data_per_month(token, startDate, endDate)           
                 
     except:
         logging.error("Unable to get monthly data from GRDF")
