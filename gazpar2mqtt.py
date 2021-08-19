@@ -94,12 +94,6 @@ def main():
                  params['mqtt']['host'], params['mqtt']['port'], params['mqtt']['clientId'], \
                  params['mqtt']['qos'],params['mqtt']['topic'],params['mqtt']['retain'])
     
-    # Set topics
-    currentValueDateTopic = params['mqtt']['topic'] + currentValueDateTopic
-    currentValueKwhTopic = params['mqtt']['topic'] + currentValueKwhTopic
-    currentValueMcubeTopic = params['mqtt']['topic'] + currentValueMcubeTopic
-    statusDateTopic = params['mqtt']['topic'] + statusDateTopic
-    statusValueTopic = params['mqtt']['topic'] + statusValueTopic
     
     # Log to GRDF API
     try:
