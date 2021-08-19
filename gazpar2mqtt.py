@@ -125,9 +125,9 @@ def main():
         mqtt.connect(client,params['mqtt']['host'],params['mqtt']['port'])
         logging.info("Mqtt broker connected")
         
-     except:
+    except:
         logging.error("Unable to connect to mqtt broker)
-                      sys.exit(1)
+        sys.exit(1)
     
     
     # Log to GRDF API
