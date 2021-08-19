@@ -117,12 +117,14 @@ def main():
     # Log to MQTT broker
     try:
         
+        logging.info("Connection to Mqtt borker...")
+        
         # Construct mqtt client
         client = mqtt.create_client(params['mqtt']['clientId'])
-        logging.info("Mqtt client instantiated")
     
         # Connect mqtt brocker
         mqtt.connect(client,params['mqtt']['host'],params['mqtt']['port'])
+        
         logging.info("Mqtt broker connected")
         
     except:
@@ -133,9 +135,9 @@ def main():
     # Log to GRDF API
     try:
                       
-        logging.info("logging in GRDF URI %s...", gazpar.API_BASE_URI)
+        logging.info("Logging in GRDF URI %s...", gazpar.API_BASE_URI)
         token = gazpar.login(params['grdf']['username'], params['grdf']['password'])
-        logging.info("logged in successfully!")
+        logging.info("Logged in successfully!")
                       
     except:
         logging.error("unable to login on %s", gazpar.API_BASE_URI)
