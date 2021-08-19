@@ -10,17 +10,17 @@ The project has been inspired by job done by [empierre](https://github.com/empie
 ## MQTT publication topics
 Set topic prefix in environment variable "TOPIC". Default value = gazpar
 
-###Daily values :
+### Daily values :
 - gazpar/daily/date
 - gazpar/daily/kwh
 - gazpar/daily/mcube
 
-###Monthly values :
+### Monthly values :
 - gazpar/monthly/date
 - gazpar/monthly/kwh
 - gazpar/monthly/mcube
 
-###Status values :
+### Status values :
 - gazpar/status/date
 - gazpar/status/value
 
