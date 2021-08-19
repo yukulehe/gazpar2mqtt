@@ -134,12 +134,14 @@ def main():
     currentValueDateTopic = params['mqtt']['topic']+"/currentValueDate"
     currentValueKwhTopic = params['mqtt']['topic']+"/currentValueKwh"
     currentValueMcubeTopic = params['mqtt']['topic']+"/currentValueMcube"
-    updateDateTopic = params['mqtt']['topic']+"/updateDate"
+    refreshDateTopic = params['mqtt']['topic']+"/refreshDate"
+    refreshStatusTopic = params['mqtt']['topic']+"/refreshStatus"
     
     mqtt.publish(client, currentValueDateTopic, d['date'], params['mqtt']['qos'], params['mqtt']['retain'])
     mqtt.publish(client, currentValueKwhTopic, d['kwh'], params['mqtt']['qos'], params['mqtt']['retain'])
     mqtt.publish(client, currentValueMcubeTopic, d['mcube'], params['mqtt']['qos'], params['mqtt']['retain'])
-    mqtt.publish(client, updateDateTopic, datetime.date.today(), params['mqtt']['qos'], params['mqtt']['retain'])
+    mqtt.publish(client, refreshDateTopic, datetime.date.today(), params['mqtt']['qos'], params['mqtt']['retain'])
+    mqtt.publish(client, refreshStatusTopic, "Success", params['mqtt']['qos'], params['mqtt']['retain'])
 
     
     # Publsh payload
