@@ -126,7 +126,7 @@ def main():
         logging.info("Mqtt broker connected")
         
     except:
-        logging.error("Unable to connect to mqtt broker)
+        logging.error("Unable to connect to mqtt broker")
         sys.exit(1)
     
     
