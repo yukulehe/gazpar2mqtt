@@ -272,7 +272,7 @@ def main():
         logging.error("Unable to disconnect mqtt broker")
         sys.exit(1)          
     
-    " Game over
+    # Game over
     logging.info("End of gazpar2mqtt. See u...")
                 
 if __name__ == "__main__":
