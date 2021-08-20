@@ -174,11 +174,12 @@ def main():
                 logging.info("Failed. Please wait %s seconds for next try",GRDF_API_WAIT_BTW_RETRIES)
                 time.sleep(GRDF_API_WAIT_BTW_RETRIES)
                 
+            logging.info("Try number %s", str(i))
+            
             # Log to Grdf
             token = _log_to_Grdf(params['grdf']['username'], params['grdf']['password'])
             
             # Get result from GRDF by day
-            logging.info("Try number %s", str(i))
             resDay = gazpar.get_data_per_day(token, startDate, endDate)
             
             # Update loop conditions
@@ -204,7 +205,7 @@ def main():
     if dCount > GRDF_API_ERRONEOUS_COUNT:
         
         ## Get monthly data
-        ## Note : we reuse the successful token used for daily data ;-)
+        
         try:
             logging.info("Get monthly data from GRDF")
 
@@ -222,8 +223,11 @@ def main():
                     logging.info("Failed. Please wait %s seconds for next try",GRDF_API_WAIT_BTW_RETRIES)
                     time.sleep(GRDF_API_WAIT_BTW_RETRIES)
 
-                # Get result from GRDF by day
                 logging.info("Try number %s", str(i))
+                
+                ## Note : no need to relog to Grdf, we reuse the successful token used for daily data ;-)
+                
+                # Get result from GRDF by day
                 resMonth = gazpar.get_data_per_month(token, startDate, endDate)
 
                 # Update loop conditions
