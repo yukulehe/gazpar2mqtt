@@ -9,7 +9,9 @@ def on_connect(client, userdata, flags, rc):
 # Callback on_disconnect
 def on_disconnect(client, userdata, rc):
     if rc != 0:
-        logging.error("Mqtt on_disconnect : unexpected disconnection %s", mqtt.connack_string(rc))
+        logging.debug("Mqtt on_disconnect : unexpected disconnection %s", mqtt.connack_string(rc))
+        logging.error("MQTT broker has been disconnected unexpectly")
+        sys.exit(0)
 
 # Callback on_publish
 def on_publish(client, userdata, mid):
