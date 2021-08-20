@@ -3,8 +3,7 @@ services:
   gazpar2mqtt:
     container_name: gazpar2mqtt
     image: yukulehe/gazpar2mqtt:latest
-    build:
-      context: .
+    tty: true
     restart: unless-stopped
     environment:
       - GRDF_USERNAME=gazou@email.com
