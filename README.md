@@ -29,7 +29,9 @@ Remember, kWh provided is conversion factor dependant. Please verify it's cohere
 
 A MQTT broker is required. Please check its configuration (hostname, port, remote access allowed if needed).
 
-By default, retain flag is set to false, QOS is set to 1. You can update corresponding environment variables (**MQTT_RETAIN** and **MQTT_QOS**).
+Fill the mandatory environment **MQTT_HOST** to indicates the MQTT broker hostname or IP adress.
+
+By default, port is set to 1883, prefix topic is *gazpar*, retain flag is set to false, QOS is set to 1. You can modify those values by updating environment variables (**MQTT_PORT**, **MQTT_TOPIC**, **MQTT_RETAIN** and **MQTT_QOS**).
 
 # Usage
 
@@ -56,7 +58,7 @@ docker run -e GRDF_USERNAME=gazou@email.com -e GRDF_PASSWORD=password -e MQTT_HO
 
 Please note that only GRDF's **last values** are published in the MQTT broker in the topics bellow.
 
-Note : you can replace default topic prefix (*gazpar*) by another filling environnement variable **MQTT_TOPIC**.
+Note : you can replace the default topic prefix *gazpar* (see mqtt broker requirements chapter)
 
 ### Daily values :
 > gazpar/daily/date
