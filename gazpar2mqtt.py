@@ -256,7 +256,7 @@ def main():
         if dCount <= GRDF_API_ERRONEOUS_COUNT or mCount <= GRDF_API_ERRONEOUS_COUNT:
 
             ## Publish status values
-            logging.info("Publishing status values...")
+            logging.info("Publishing to Mqtt status values...")
             mqtt.publish(client, prefixTopic + TOPIC_STATUS_DATE, dtn, params['mqtt']['qos'], params['mqtt']['retain'])
             mqtt.publish(client, prefixTopic + TOPIC_STATUS_VALUE, "Failed, please retry later", params['mqtt']['qos'], params['mqtt']['retain'])
             logging.info("Status values published")
@@ -265,21 +265,21 @@ def main():
         else:
 
             # Publish daily values
-            logging.info("Publishing daily values...")
+            logging.info("Publishing to Mqtt the last daily values...")
             mqtt.publish(client, prefixTopic + TOPIC_DAILY_DATE, d['date'], params['mqtt']['qos'], params['mqtt']['retain'])
             mqtt.publish(client, prefixTopic + TOPIC_DAILY_KWH, d['kwh'], params['mqtt']['qos'], params['mqtt']['retain'])
             mqtt.publish(client, prefixTopic + TOPIC_DAILY_MCUBE, d['mcube'], params['mqtt']['qos'], params['mqtt']['retain'])
             logging.info("Daily values published")
 
             # Publish monthly values
-            logging.info("Publishing monthly values...")
+            logging.info("Publishing to Mqtt the last monthly values...")
             mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_DATE, m['date'], params['mqtt']['qos'], params['mqtt']['retain'])
             mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_KWH, m['kwh'], params['mqtt']['qos'], params['mqtt']['retain'])
             mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_MCUBE, m['mcube'], params['mqtt']['qos'], params['mqtt']['retain'])
             logging.info("Monthly values published")
 
             ## Publish status values
-            logging.info("Publishing status values...")
+            logging.info("Publishing to Mqtt status values...")
             mqtt.publish(client, prefixTopic + TOPIC_STATUS_DATE, dtn, params['mqtt']['qos'], params['mqtt']['retain'])
             mqtt.publish(client, prefixTopic + TOPIC_STATUS_VALUE, "Success", params['mqtt']['qos'], params['mqtt']['retain'])
             logging.info("Status values published")
