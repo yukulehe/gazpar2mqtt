@@ -253,26 +253,28 @@ def main():
     
     
     # STEP 4 : We publish only the last input from grdf
-    if mqtt.MQTT_IS_CONNECTED:
-    
-        d = resDay[dCount-1]
-        m = resMonth[mCount-1]
-        prefixTopic = params['mqtt']['topic']
+    if mqtt.MQTT_IS_CONNECTED:   
 
         try:
 
-            # Unfortunately, GRDF date are not correct
-            if dCount <= GRDF_API_ERRONEOUS_COUNT or mCount <= GRDF_API_ERRONEOUS_COUNT:
+            # Prepare topic
+            prefixTopic = params['mqtt']['topic']
+            
+            if dCount <= GRDF_API_ERRONEOUS_COUNT: # Unfortunately, GRDF date are not correct
 
                 ## Publish status values
                 logging.info("Publishing to Mqtt status values...")
                 mqtt.publish(client, prefixTopic + TOPIC_STATUS_DATE, dtn, params['mqtt']['qos'], params['mqtt']['retain'])
-                mqtt.publish(client, prefixTopic + TOPIC_STATUS_VALUE, "Failed, please retry later", params['mqtt']['qos'], params['mqtt']['retain'])
+                mqtt.publish(client, prefixTopic + TOPIC_STATUS_VALUE, "Failed", params['mqtt']['qos'], params['mqtt']['retain'])
                 logging.info("Status values published !")
 
-            # Looks good ...
-            else:
+            
+            else: # Looks good ...
 
+                # Get GRDF last values
+                d = resDay[dCount-1]
+                m = resMonth[mCount-1]
+                
                 # Publish daily values
                 logging.info("Publishing to Mqtt the last daily values...")
                 mqtt.publish(client, prefixTopic + TOPIC_DAILY_DATE, d['date'], params['mqtt']['qos'], params['mqtt']['retain'])
@@ -300,6 +302,7 @@ def main():
     else:
         logging.error("Unable to publish value to mqtt broker cause it seems to be disconnected")
         sys.exit(1)
+    
     
     # STEP 5 : Disconnect mqtt broker
     if mqtt.MQTT_IS_CONNECTED:
