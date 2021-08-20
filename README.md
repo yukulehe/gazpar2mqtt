@@ -15,7 +15,6 @@ The project has been inspired by job done by [empierre](https://github.com/empie
 
 ` pip install -r requirements.txt `
 
-If you want to debug, please set level=logging.INFO to level=logging.DEBUG
 
 ## GRDF Gazpar API
 
