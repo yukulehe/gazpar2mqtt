@@ -102,7 +102,19 @@ def _openParams(pfile):
         f.close()
         return array
 
-                
+def _log_to_Grdf()
+    
+    # Log to GRDF API
+    try:
+                      
+        logging.info("Logging in GRDF URI %s...", gazpar.API_BASE_URI)
+        token = gazpar.login(params['grdf']['username'], params['grdf']['password'])
+        logging.info("Logged in successfully!")
+        return token
+                      
+    except:
+        logging.error("unable to login on %s", gazpar.API_BASE_URI)
+        sys.exit(1)
 
 # Main program
 def main():
@@ -137,16 +149,6 @@ def main():
         sys.exit(1)
     
     
-    # Log to GRDF API
-    try:
-                      
-        logging.info("Logging in GRDF URI %s...", gazpar.API_BASE_URI)
-        token = gazpar.login(params['grdf']['username'], params['grdf']['password'])
-        logging.info("Logged in successfully!")
-                      
-    except:
-        logging.error("unable to login on %s", gazpar.API_BASE_URI)
-        sys.exit(1)
     
     
     # Wait
@@ -172,6 +174,9 @@ def main():
                 logging.info("Failed. Please wait %s seconds for next try",GRDF_API_WAIT_BTW_RETRIES)
                 time.sleep(GRDF_API_WAIT_BTW_RETRIES)
                 
+            # Log to Grdf
+            token = _log_to_Grdf()
+            
             # Get result from GRDF by day
             logging.info("Try number %s", str(i))
             resDay = gazpar.get_data_per_day(token, startDate, endDate)
