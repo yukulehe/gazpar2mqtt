@@ -13,7 +13,7 @@ The project has been inspired by job done by [empierre](https://github.com/empie
 
 **python3** with its dependencies:
 
-> pip install -r requirements.txt
+` pip install -r requirements.txt `
 
 If you want to debug, please set level=logging.INFO to level=logging.DEBUG
 
@@ -39,11 +39,11 @@ By default, port is set to 1883, prefix topic is *gazpar*, retain flag is set to
 
 Test it manually :
 
-` # python3 gazpar2mqtt.py `
+` python3 gazpar2mqtt.py `
 
 Schedule it manually :
 
-` # python3 gazpar2mqtt.py --schedule 04:00 `
+` python3 gazpar2mqtt.py --schedule 04:00 `
 
 ## Docker
 
