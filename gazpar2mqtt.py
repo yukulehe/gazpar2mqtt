@@ -27,6 +27,7 @@ DOCKER_OPTIONAL_VARENV=['MQTT_PORT','MQTT_CLIENTID','MQTT_QOS', 'MQTT_TOPIC', 'M
 # Grdf API constants
 GRDF_API_MAX_RETRIES = 5 # number of retries max to get accurate data from GRDF
 GRDF_API_WAIT_BTW_RETRIES = 10 # number of seconds between two tries
+GRDF_API_ERRONEOUS_COUNT = 1 # Erroneous number of results send by GRDF 
 
 # Sensors topics
 
@@ -165,10 +166,10 @@ def main():
         i= 1
         dCount = 0
         
-        while i <= GRDF_API_MAX_RETRIES and dCount < 2:
+        while i <= GRDF_API_MAX_RETRIES and dCount == GRDF_API_ERRONEOUS_COUNT:
         
             if i > 1:
-                logging.info("Failed. Please wait for next try")
+                logging.info("Failed. Please wait %s seconds for next try",GRDF_API_WAIT_BTW_RETRIES)
                 time.sleep(GRDF_API_WAIT_BTW_RETRIES)
                 
             # Get result from GRDF by day
@@ -180,7 +181,7 @@ def main():
             dCount = len(resDay)
 
         # Display infos
-        if dCount < 2:
+        if dCount == GRDF_API_ERRONEOUS_COUNT:
             logging.warning("Daily values from GRDF seems wrong...")
         else:
             logging.info("Number of daily values retrieved : %s", dCount)
@@ -206,10 +207,10 @@ def main():
         i= 1
         mCount = 0
         
-        while i <= GRDF_API_MAX_RETRIES and mCount < 2:
+        while i <= GRDF_API_MAX_RETRIES and mCount == GRDF_API_ERRONEOUS_COUNT:
         
             if i > 1:
-                logging.info("Failed. Please wait for next try")
+                logging.info("Failed. Please wait %s seconds for next try",GRDF_API_WAIT_BTW_RETRIES)
                 time.sleep(GRDF_API_WAIT_BTW_RETRIES)
                 
             # Get result from GRDF by day
@@ -221,7 +222,7 @@ def main():
             mCount = len(resMonth)
 
         # Display infos
-        if mCount < 2:
+        if mCount == GRDF_API_ERRONEOUS_COUNT:
             logging.warning("Monthly values from GRDF seems wrong...")
         else:
             logging.info("Number of monthly values retrieved : %s", mCount)
@@ -243,7 +244,7 @@ def main():
     try:
         
         # Unfortunately, GRDF date are not correct
-        if dCount == 1 or mCount == 1:
+        if dCount == GRDF_API_ERROR_COUNT or mCount == GRDF_API_ERRONEOUS_COUNT:
 
             ## Publish status values
             logging.info("Publishing status values...")
