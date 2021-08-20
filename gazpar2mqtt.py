@@ -244,7 +244,7 @@ def main():
     try:
         
         # Unfortunately, GRDF date are not correct
-        if dCount <= GRDF_API_ERROR_COUNT or mCount <= GRDF_API_ERRONEOUS_COUNT:
+        if dCount <= GRDF_API_ERRONEOUS_COUNT or mCount <= GRDF_API_ERRONEOUS_COUNT:
 
             ## Publish status values
             logging.info("Publishing status values...")
