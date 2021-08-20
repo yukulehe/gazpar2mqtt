@@ -3,15 +3,22 @@ import time
 import logging
 import sys
 
+MQTT_IS_CONNECTED = False
+
 # Callback on_connect
 def on_connect(client, userdata, flags, rc):
+    global MQTT_IS_CONNECTED
     logging.debug("Mqtt on_connect : %s", mqtt.connack_string(rc))
+    MQTT_IS_CONNECTED = True
+    
 
 # Callback on_disconnect
 def on_disconnect(client, userdata, rc):
+    global MQTT_IS_CONNECTED
     if rc != 0:
         logging.debug("Mqtt on_disconnect : unexpected disconnection %s", mqtt.connack_string(rc))
         logging.error("MQTT broker has been disconnected unexpectly")
+        MQTT_IS_CONNECTED = False
         sys.exit(1)
 
 # Callback on_publish
