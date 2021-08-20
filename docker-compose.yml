@@ -10,7 +10,6 @@ services:
       - GRDF_USERNAME=gazou@email.com
       - GRDF_PASSWORD=password
       - MQTT_HOST=host
-      - REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
       - TZ=Europe/Paris
       # Optional:
       #- MQTT_PORT=1883
