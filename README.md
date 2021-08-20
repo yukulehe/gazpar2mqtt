@@ -41,7 +41,7 @@ Test it manualy :
 
 Schedule it manualy :
 
-` # python3 gazpar2mqtt --schedule 04:00 `
+` # python3 gazpar2mqtt.py --schedule 04:00 `
 
 ## MQTT publication topics
 
