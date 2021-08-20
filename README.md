@@ -36,9 +36,11 @@ By default, retain flag is set to false, QOS is set to 1. You can update corresp
 ## Running script
 
 Test it manualy :
+
 ` # python3 gazpar2mqtt.py `
 
 Schedule it manualy :
+
 ` # python3 gazpar2mqtt --schedule 04:00 `
 
 ## MQTT publication topics
