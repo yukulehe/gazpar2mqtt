@@ -329,7 +329,7 @@ if __name__ == "__main__":
     logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
 
     if args.schedule:
-        logging.info("qazpar2mqtt run is scheduled at %s:",args.schedule)
+        logging.info("qazpar2mqtt run is scheduled at %s everyday",args.schedule)
         schedule.every().day.at(args.schedule).do(main)
         while True:
             schedule.run_pending()
