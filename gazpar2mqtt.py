@@ -186,7 +186,7 @@ def main():
             dCount = len(resDay)
 
         # Display infos
-        if dCount == GRDF_API_ERRONEOUS_COUNT:
+        if dCount <= GRDF_API_ERRONEOUS_COUNT:
             logging.warning("Daily values from GRDF seems wrong...")
         else:
             logging.info("Number of daily values retrieved : %s", dCount)
@@ -200,45 +200,49 @@ def main():
         sys.exit(1)
                  
     
-    ## Get monthly data
-    try:
-        logging.info("Get monthly data from GRDF")
+    ## When daily data are ok
+    if dCount > GRDF_API_ERRONEOUS_COUNT:
         
-        # Set period (5 months ago)
-        startDate = _getMonthOfssetDate(datetime.date.today(), 5)
-        endDate = _dayToStr(datetime.date.today())
-        
-        # Get data and retry when failed
-        i= 1
-        mCount = 0
-        
-        while i <= GRDF_API_MAX_RETRIES and mCount <= GRDF_API_ERRONEOUS_COUNT:
-        
-            if i > 1:
-                logging.info("Failed. Please wait %s seconds for next try",GRDF_API_WAIT_BTW_RETRIES)
-                time.sleep(GRDF_API_WAIT_BTW_RETRIES)
-                
-            # Get result from GRDF by day
-            logging.info("Try number %s", str(i))
-            resMonth = gazpar.get_data_per_month(token, startDate, endDate)
-            
-            # Update loop conditions
-            i = i + 1
-            mCount = len(resMonth)
+        ## Get monthly data
+        ## Note : we reuse the successful token used for daily data ;-)
+        try:
+            logging.info("Get monthly data from GRDF")
 
-        # Display infos
-        if mCount == GRDF_API_ERRONEOUS_COUNT:
-            logging.warning("Monthly values from GRDF seems wrong...")
-        else:
-            logging.info("Number of monthly values retrieved : %s", mCount)
-        
-        # Display results
-        for m in resMonth:
-            logging.info("%s : Kwh = %s, Mcube = %s",m['date'],m['kwh'], m['mcube'])         
-                
-    except:
-        logging.error("Unable to get monthly data from GRDF")
-        sys.exit(1)
+            # Set period (5 months ago)
+            startDate = _getMonthOfssetDate(datetime.date.today(), 5)
+            endDate = _dayToStr(datetime.date.today())
+
+            # Get data and retry when failed
+            i= 1
+            mCount = 0
+
+            while i <= GRDF_API_MAX_RETRIES and mCount <= GRDF_API_ERRONEOUS_COUNT:
+
+                if i > 1:
+                    logging.info("Failed. Please wait %s seconds for next try",GRDF_API_WAIT_BTW_RETRIES)
+                    time.sleep(GRDF_API_WAIT_BTW_RETRIES)
+
+                # Get result from GRDF by day
+                logging.info("Try number %s", str(i))
+                resMonth = gazpar.get_data_per_month(token, startDate, endDate)
+
+                # Update loop conditions
+                i = i + 1
+                mCount = len(resMonth)
+
+            # Display infos
+            if mCount <= GRDF_API_ERRONEOUS_COUNT:
+                logging.warning("Monthly values from GRDF seems wrong...")
+            else:
+                logging.info("Number of monthly values retrieved : %s", mCount)
+
+            # Display results
+            for m in resMonth:
+                logging.info("%s : Kwh = %s, Mcube = %s",m['date'],m['kwh'], m['mcube'])         
+
+        except:
+            logging.error("Unable to get monthly data from GRDF")
+            sys.exit(1)
     
     
     # We publish only the last input from grdf
