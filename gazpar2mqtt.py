@@ -251,6 +251,11 @@ def main():
     
     
     # We publish only the last input from grdf
+    
+    # Test
+    logging.info("Mqtt connexion status : %s",mqtt.MQTT_IS_CONNECTED)
+    
+    
     d = resDay[dCount-1]
     m = resMonth[mCount-1]
     prefixTopic = params['mqtt']['topic']
