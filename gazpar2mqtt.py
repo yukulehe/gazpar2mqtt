@@ -142,16 +142,16 @@ def main():
         # Connect mqtt brocker
         mqtt.connect(client,params['mqtt']['host'],params['mqtt']['port'])
         
-        # Wait mqtt callback (connexion confirmation)
+        # Wait mqtt callback (connection confirmation)
         time.sleep(2)
         
-        if mqtt.mqtt.MQTT_IS_CONNECTED:
+        if mqtt.MQTT_IS_CONNECTED:
             logging.info("Mqtt broker connected")
         else:
             sys.exit(1)
         
     except:
-        logging.error("Unable to connect to mqtt broker. Please check broker configuration.")
+        logging.error("Unable to connect to mqtt broker. Please check that broker is running, or check broker configuration.")
         sys.exit(1)
     
     
