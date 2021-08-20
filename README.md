@@ -43,6 +43,13 @@ Schedule it manually :
 
 ` # python3 gazpar2mqtt.py --schedule 04:00 `
 
+## Docker
+
+Docker run command :
+
+` docker run -e GRDF_USERNAME=gazou@email.com -e GRDF_PASSWORD=password -e MQTT_HOST=192.168.1.99 -e MQTT_CLIENTID=gazou -e MQTT_QOS=1 -e MQTT_RETAIN=False -e gazpar2mqtt:latest `
+
+
 ## MQTT publication topics
 
 Please note that only GRDF's **last values** are published in the MQTT broker in the topics bellow.
