@@ -113,7 +113,7 @@ def main():
     # Get params from environment OS
     params = _openParams(PFILE)
                 
-    logging.info("GRDF config : username = %s, password = %s", params['grdf']['username'], params['grdf']['password'])
+    logging.info("GRDF config : username = %s, password = %s", params['grdf']['username'], "******")
     logging.info("MQTT config : host = %s, port = %s, clientId = %s, qos = %s, topic = %s, retain = %s", \
                  params['mqtt']['host'], params['mqtt']['port'], params['mqtt']['clientId'], \
                  params['mqtt']['qos'],params['mqtt']['topic'],params['mqtt']['retain'])
@@ -244,12 +244,12 @@ def main():
     try:
         
         # Unfortunately, GRDF date are not correct
-        if dCount == GRDF_API_ERROR_COUNT or mCount == GRDF_API_ERRONEOUS_COUNT:
+        if dCount <= GRDF_API_ERROR_COUNT or mCount <= GRDF_API_ERRONEOUS_COUNT:
 
             ## Publish status values
             logging.info("Publishing status values...")
             mqtt.publish(client, prefixTopic + TOPIC_STATUS_DATE, dtn, params['mqtt']['qos'], params['mqtt']['retain'])
-            mqtt.publish(client, prefixTopic + TOPIC_STATUS_VALUE, "Error", params['mqtt']['qos'], params['mqtt']['retain'])
+            mqtt.publish(client, prefixTopic + TOPIC_STATUS_VALUE, "Failed, please retry later", params['mqtt']['qos'], params['mqtt']['retain'])
             logging.info("Status values published")
 
         # Looks good ...
@@ -275,9 +275,9 @@ def main():
             mqtt.publish(client, prefixTopic + TOPIC_STATUS_VALUE, "Success", params['mqtt']['qos'], params['mqtt']['retain'])
             logging.info("Status values published")
     
-    except:
-        logging.error("Unable to publish value to mqtt broker")
-        sys.exit(1)
+    #except:
+    #    logging.error("Unable to publish value to mqtt broker")
+    #    sys.exit(1)
     
     # Disconnect mqtt broker
     try:
