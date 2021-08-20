@@ -33,7 +33,7 @@ By default, retain flag is set to false, QOS is set to 1. You can update corresp
 
 # MQTT publication topics
 
-Please note that only GRDF's **last values** are published in the MQTT broker following topics.
+Please note that only GRDF's **last values** are published in the MQTT broker in the topics bellow.
 
 Note : you can replace default topic prefix (*gazpar*) by another filling environnement variable **TOPIC**.
 
