@@ -102,7 +102,7 @@ def _openParams(pfile):
         f.close()
         return array
 
-def _log_to_Grdf()
+def _log_to_Grdf():
     
     # Log to GRDF API
     try:
