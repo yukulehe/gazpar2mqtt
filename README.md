@@ -48,7 +48,7 @@ Schedule it manually :
 Docker run command :
 
 ``` 
-docker run -e GRDF_USERNAME=gazou@email.com -e GRDF_PASSWORD=password -e MQTT_HOST=192.168.1.99 -e MQTT_CLIENTID=gazou -e MQTT_QOS=1 -e MQTT_RETAIN=False -e gazpar2mqtt:latest 
+docker run -e GRDF_USERNAME=gazou@email.com -e GRDF_PASSWORD=password -e MQTT_HOST=192.168.1.99 e MQTT_PORT=1883 -e MQTT_CLIENTID=gazou -e MQTT_QOS=1 -e MQTT_TOPIC=gazpar -e MQTT_RETAIN=False -e gazpar2mqtt:latest 
 ```
 
 
