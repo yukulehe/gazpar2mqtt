@@ -122,7 +122,7 @@ def main():
     # Store time now
     dtn = _dateTimeToStr(datetime.datetime.now())
     
-    # Get params from environment OS
+    # STEP 1 : Get params from environment OS
     params = _openParams(PFILE)
                 
     logging.info("GRDF config : username = %s, password = %s", params['grdf']['username'], "******")
@@ -131,7 +131,7 @@ def main():
                  params['mqtt']['qos'],params['mqtt']['topic'],params['mqtt']['retain'])
     
     
-    # Log to MQTT broker
+    # STEP 2 : Log to MQTT broker
     try:
         
         logging.info("Connection to Mqtt borker...")
@@ -142,22 +142,23 @@ def main():
         # Connect mqtt brocker
         mqtt.connect(client,params['mqtt']['host'],params['mqtt']['port'])
         
-        logging.info("Mqtt broker connected")
+        # Wait mqtt callback (connexion confirmation)
+        time.sleep(2)
+        
+        if mqtt.mqtt.MQTT_IS_CONNECTED:
+            logging.info("Mqtt broker connected")
+        else:
+            sys.exit(1)
         
     except:
         logging.error("Unable to connect to mqtt broker. Please check broker configuration.")
         sys.exit(1)
     
     
-    # Test
-    logging.info("Mqtt connexion status : %s",mqtt.MQTT_IS_CONNECTED)
     
-    # Wait
-    time.sleep(1)
+    # STEP 3 : Get data from GRDF API
     
-    # Get data from GRDF API
-    
-    ## Get daily data
+    ## STEP 3A : Get daily data
     try:
         logging.info("Get daily data from GRDF")
                      
@@ -205,7 +206,7 @@ def main():
     ## When daily data are ok
     if dCount > GRDF_API_ERRONEOUS_COUNT:
         
-        ## Get monthly data
+        ## STEP 3B : Get monthly data
         
         try:
             logging.info("Get monthly data from GRDF")
@@ -250,61 +251,64 @@ def main():
             sys.exit(1)
     
     
-    # We publish only the last input from grdf
     
-    # Test
-    logging.info("Mqtt connexion status : %s",mqtt.MQTT_IS_CONNECTED)
+    # STEP 4 : We publish only the last input from grdf
+    if mqtt.MQTT_IS_CONNECTED:
     
-    
-    d = resDay[dCount-1]
-    m = resMonth[mCount-1]
-    prefixTopic = params['mqtt']['topic']
-    
-    try:
-        
-        # Unfortunately, GRDF date are not correct
-        if dCount <= GRDF_API_ERRONEOUS_COUNT or mCount <= GRDF_API_ERRONEOUS_COUNT:
+        d = resDay[dCount-1]
+        m = resMonth[mCount-1]
+        prefixTopic = params['mqtt']['topic']
 
-            ## Publish status values
-            logging.info("Publishing to Mqtt status values...")
-            mqtt.publish(client, prefixTopic + TOPIC_STATUS_DATE, dtn, params['mqtt']['qos'], params['mqtt']['retain'])
-            mqtt.publish(client, prefixTopic + TOPIC_STATUS_VALUE, "Failed, please retry later", params['mqtt']['qos'], params['mqtt']['retain'])
-            logging.info("Status values published")
+        try:
 
-        # Looks good ...
-        else:
+            # Unfortunately, GRDF date are not correct
+            if dCount <= GRDF_API_ERRONEOUS_COUNT or mCount <= GRDF_API_ERRONEOUS_COUNT:
 
-            # Publish daily values
-            logging.info("Publishing to Mqtt the last daily values...")
-            mqtt.publish(client, prefixTopic + TOPIC_DAILY_DATE, d['date'], params['mqtt']['qos'], params['mqtt']['retain'])
-            mqtt.publish(client, prefixTopic + TOPIC_DAILY_KWH, d['kwh'], params['mqtt']['qos'], params['mqtt']['retain'])
-            mqtt.publish(client, prefixTopic + TOPIC_DAILY_MCUBE, d['mcube'], params['mqtt']['qos'], params['mqtt']['retain'])
-            logging.info("Daily values published")
+                ## Publish status values
+                logging.info("Publishing to Mqtt status values...")
+                mqtt.publish(client, prefixTopic + TOPIC_STATUS_DATE, dtn, params['mqtt']['qos'], params['mqtt']['retain'])
+                mqtt.publish(client, prefixTopic + TOPIC_STATUS_VALUE, "Failed, please retry later", params['mqtt']['qos'], params['mqtt']['retain'])
+                logging.info("Status values published")
 
-            # Publish monthly values
-            logging.info("Publishing to Mqtt the last monthly values...")
-            mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_DATE, m['date'], params['mqtt']['qos'], params['mqtt']['retain'])
-            mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_KWH, m['kwh'], params['mqtt']['qos'], params['mqtt']['retain'])
-            mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_MCUBE, m['mcube'], params['mqtt']['qos'], params['mqtt']['retain'])
-            logging.info("Monthly values published")
+            # Looks good ...
+            else:
 
-            ## Publish status values
-            logging.info("Publishing to Mqtt status values...")
-            mqtt.publish(client, prefixTopic + TOPIC_STATUS_DATE, dtn, params['mqtt']['qos'], params['mqtt']['retain'])
-            mqtt.publish(client, prefixTopic + TOPIC_STATUS_VALUE, "Success", params['mqtt']['qos'], params['mqtt']['retain'])
-            logging.info("Status values published")
-    
-    except:
-        logging.error("Unable to publish value to mqtt broker")
+                # Publish daily values
+                logging.info("Publishing to Mqtt the last daily values...")
+                mqtt.publish(client, prefixTopic + TOPIC_DAILY_DATE, d['date'], params['mqtt']['qos'], params['mqtt']['retain'])
+                mqtt.publish(client, prefixTopic + TOPIC_DAILY_KWH, d['kwh'], params['mqtt']['qos'], params['mqtt']['retain'])
+                mqtt.publish(client, prefixTopic + TOPIC_DAILY_MCUBE, d['mcube'], params['mqtt']['qos'], params['mqtt']['retain'])
+                logging.info("Daily values published")
+
+                # Publish monthly values
+                logging.info("Publishing to Mqtt the last monthly values...")
+                mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_DATE, m['date'], params['mqtt']['qos'], params['mqtt']['retain'])
+                mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_KWH, m['kwh'], params['mqtt']['qos'], params['mqtt']['retain'])
+                mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_MCUBE, m['mcube'], params['mqtt']['qos'], params['mqtt']['retain'])
+                logging.info("Monthly values published")
+
+                ## Publish status values
+                logging.info("Publishing to Mqtt status values...")
+                mqtt.publish(client, prefixTopic + TOPIC_STATUS_DATE, dtn, params['mqtt']['qos'], params['mqtt']['retain'])
+                mqtt.publish(client, prefixTopic + TOPIC_STATUS_VALUE, "Success", params['mqtt']['qos'], params['mqtt']['retain'])
+                logging.info("Status values published")
+
+        except:
+            logging.error("Unable to publish value to mqtt broker")
+            sys.exit(1)
+            
+    else:
+        logging.error("Unable to publish value to mqtt broker cause it seems to be disconnected")
         sys.exit(1)
     
-    # Disconnect mqtt broker
-    try:
-        mqtt.disconnect(client)
-        logging.info("Mqtt broker disconnected")
-    except:
-        logging.error("Unable to disconnect mqtt broker")
-        sys.exit(1)          
+    # STEP 5 : Disconnect mqtt broker
+    if mqtt.MQTT_IS_CONNECTED:
+        try:
+            mqtt.disconnect(client)
+            logging.info("Mqtt broker disconnected")
+        except:
+            logging.error("Unable to disconnect mqtt broker")
+            sys.exit(1)
     
     # Game over
     logging.info("End of gazpar2mqtt. See u...")
