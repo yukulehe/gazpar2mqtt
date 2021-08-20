@@ -24,21 +24,25 @@ PFILE = "/.params"
 DOCKER_MANDATORY_VARENV=['GRDF_USERNAME','GRDF_PASSWORD','MQTT_HOST']
 DOCKER_OPTIONAL_VARENV=['MQTT_PORT','MQTT_CLIENTID','MQTT_QOS', 'MQTT_TOPIC', 'MQTT_RETAIN']
 
+# Grdf API constants
+GRDF_API_MAX_RETRIES = 5 # number of retries max to get accurate data from GRDF
+GRDF_API_WAIT_BTW_RETRIES = 10 # number of seconds between two tries
+
 # Sensors topics
 
 ## Daily
-dailyValueDateTopic = "/daily/date"
-dailyValueKwhTopic = "/daily/kwh"
-dailyValueMcubeTopic = "/daily/mcube"
+TOPIC_DAILY_DATE = "/daily/date"
+TOPIC_DAILY_KWH = "/daily/kwh"
+TOPIC_DAILY_MCUBE = "/daily/mcube"
 
 ## Monthly
-monthlyValueDateTopic = "/monthly/month"
-monthlyValueKwhTopic = "/monthly/kwh"
-monthlyValueMcubeTopic = "/monthly/mcube"
+TOPIC_MONTHLY_DATE = "/monthly/month"
+TOPIC_MONTHLY_KWH = "/monthly/kwh"
+TOPIC_MONTHLY_MCUBE = "/monthly/mcube"
 
 ## Status
-statusDateTopic = "/status/date"
-statusValueTopic = "/status/value"
+TOPIC_STATUS_DATE = "/status/date"
+TOPIC_STATUS_VALUE = "/status/value"
 
 
 # Sub to get date with day offset
@@ -161,11 +165,11 @@ def main():
         i= 1
         dCount = 0
         
-        while i < 6 and dCount < 2:
+        while i <= GRDF_API_MAX_RETRIES and dCount < 2:
         
             if i > 1:
                 logging.info("Failed. Please wait for next try")
-                time.sleep(10)
+                time.sleep(GRDF_API_WAIT_BTW_RETRIES)
                 
             # Get result from GRDF by day
             logging.info("Try number %s", str(i))
@@ -202,11 +206,11 @@ def main():
         i= 1
         mCount = 0
         
-        while i < 6 and mCount < 2:
+        while i <= GRDF_API_MAX_RETRIES and mCount < 2:
         
             if i > 1:
                 logging.info("Failed. Please wait for next try")
-                time.sleep(10)
+                time.sleep(GRDF_API_WAIT_BTW_RETRIES)
                 
             # Get result from GRDF by day
             logging.info("Try number %s", str(i))
@@ -243,8 +247,8 @@ def main():
 
             ## Publish status values
             logging.info("Publishing status values...")
-            mqtt.publish(client, prefixTopic + statusDateTopic, dtn, params['mqtt']['qos'], params['mqtt']['retain'])
-            mqtt.publish(client, prefixTopic + statusValueTopic, "Error", params['mqtt']['qos'], params['mqtt']['retain'])
+            mqtt.publish(client, prefixTopic + TOPIC_STATUS_DATE, dtn, params['mqtt']['qos'], params['mqtt']['retain'])
+            mqtt.publish(client, prefixTopic + TOPIC_STATUS_VALUE, "Error", params['mqtt']['qos'], params['mqtt']['retain'])
             logging.info("Status values published")
 
         # Looks good ...
@@ -252,22 +256,22 @@ def main():
 
             # Publish daily values
             logging.info("Publishing daily values...")
-            mqtt.publish(client, prefixTopic + dailyValueDateTopic, d['date'], params['mqtt']['qos'], params['mqtt']['retain'])
-            mqtt.publish(client, prefixTopic + dailyValueKwhTopic, d['kwh'], params['mqtt']['qos'], params['mqtt']['retain'])
-            mqtt.publish(client, prefixTopic + dailyValueMcubeTopic, d['mcube'], params['mqtt']['qos'], params['mqtt']['retain'])
+            mqtt.publish(client, prefixTopic + TOPIC_DAILY_DATE, d['date'], params['mqtt']['qos'], params['mqtt']['retain'])
+            mqtt.publish(client, prefixTopic + TOPIC_DAILY_KWH, d['kwh'], params['mqtt']['qos'], params['mqtt']['retain'])
+            mqtt.publish(client, prefixTopic + TOPIC_DAILY_MCUBE, d['mcube'], params['mqtt']['qos'], params['mqtt']['retain'])
             logging.info("Daily values published")
 
             # Publish monthly values
             logging.info("Publishing monthly values...")
-            mqtt.publish(client, prefixTopic + monthlyValueDateTopic, m['date'], params['mqtt']['qos'], params['mqtt']['retain'])
-            mqtt.publish(client, prefixTopic + monthlyValueKwhTopic, m['kwh'], params['mqtt']['qos'], params['mqtt']['retain'])
-            mqtt.publish(client, prefixTopic + monthlyValueMcubeTopic, m['mcube'], params['mqtt']['qos'], params['mqtt']['retain'])
+            mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_DATE, m['date'], params['mqtt']['qos'], params['mqtt']['retain'])
+            mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_KWH, m['kwh'], params['mqtt']['qos'], params['mqtt']['retain'])
+            mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_MCUBE, m['mcube'], params['mqtt']['qos'], params['mqtt']['retain'])
             logging.info("Monthly values published")
 
             ## Publish status values
             logging.info("Publishing status values...")
-            mqtt.publish(client, prefixTopic + statusDateTopic, dtn, params['mqtt']['qos'], params['mqtt']['retain'])
-            mqtt.publish(client, prefixTopic + statusValueTopic, "Success", params['mqtt']['qos'], params['mqtt']['retain'])
+            mqtt.publish(client, prefixTopic + TOPIC_STATUS_DATE, dtn, params['mqtt']['qos'], params['mqtt']['retain'])
+            mqtt.publish(client, prefixTopic + TOPIC_STATUS_VALUE, "Success", params['mqtt']['qos'], params['mqtt']['retain'])
             logging.info("Status values published")
     
     except:
