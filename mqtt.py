@@ -1,6 +1,7 @@
 import paho.mqtt.client as mqtt
 import time
 import logging
+import sys
 
 # Callback on_connect
 def on_connect(client, userdata, flags, rc):
