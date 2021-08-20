@@ -31,7 +31,17 @@ A MQTT broker is required. Please check its configuration (hostname, port, remot
 
 By default, retain flag is set to false, QOS is set to 1. You can update corresponding environment variables (**RETAIN** and **QOS**).
 
-# MQTT publication topics
+# Usage
+
+## Running script
+
+Test it manualy :
+> python3 gazpar2mqtt.py
+
+Schedule it manualy :
+> python3 gazpar2mqtt --schedule 04:00
+
+## MQTT publication topics
 
 Please note that only GRDF's **last values** are published in the MQTT broker in the topics bellow.
 
