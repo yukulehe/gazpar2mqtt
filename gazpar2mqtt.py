@@ -320,18 +320,16 @@ if __name__ == "__main__":
     
     parser = argparse.ArgumentParser()
     
-    parser.add_argument("-v",  "--verbose", action="store_true",
-                        help="More verbose", default=False)
     parser.add_argument(
         "-s", "--schedule",   help="Schedule the launch of the script at hh:mm everyday")
     
     args = parser.parse_args()
 
-    pp = pprint.PrettyPrinter(indent=4)
+    #pp = pprint.PrettyPrinter(indent=4)
     logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
 
     if args.schedule:
-        logging.info(args.schedule)
+        logging.info("qazpar2mqtt run is scheduled at %s:"args.schedule)
         schedule.every().day.at(args.schedule).do(main)
         while True:
             schedule.run_pending()
