@@ -102,13 +102,13 @@ def _openParams(pfile):
         f.close()
         return array
 
-def _log_to_Grdf():
+def _log_to_Grdf(username,password):
     
     # Log to GRDF API
     try:
                       
         logging.info("Logging in GRDF URI %s...", gazpar.API_BASE_URI)
-        token = gazpar.login(params['grdf']['username'], params['grdf']['password'])
+        token = gazpar.login(username, password)
         logging.info("Logged in successfully!")
         return token
                       
@@ -175,7 +175,7 @@ def main():
                 time.sleep(GRDF_API_WAIT_BTW_RETRIES)
                 
             # Log to Grdf
-            token = _log_to_Grdf()
+            token = _log_to_Grdf(params['grdf']['username'], params['grdf']['password'])
             
             # Get result from GRDF by day
             logging.info("Try number %s", str(i))
