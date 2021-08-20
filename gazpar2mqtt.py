@@ -166,7 +166,7 @@ def main():
         i= 1
         dCount = 0
         
-        while i <= GRDF_API_MAX_RETRIES and dCount == GRDF_API_ERRONEOUS_COUNT:
+        while i <= GRDF_API_MAX_RETRIES and dCount <= GRDF_API_ERRONEOUS_COUNT:
         
             if i > 1:
                 logging.info("Failed. Please wait %s seconds for next try",GRDF_API_WAIT_BTW_RETRIES)
@@ -207,7 +207,7 @@ def main():
         i= 1
         mCount = 0
         
-        while i <= GRDF_API_MAX_RETRIES and mCount == GRDF_API_ERRONEOUS_COUNT:
+        while i <= GRDF_API_MAX_RETRIES and mCount <= GRDF_API_ERRONEOUS_COUNT:
         
             if i > 1:
                 logging.info("Failed. Please wait %s seconds for next try",GRDF_API_WAIT_BTW_RETRIES)
