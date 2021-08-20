@@ -275,9 +275,9 @@ def main():
             mqtt.publish(client, prefixTopic + TOPIC_STATUS_VALUE, "Success", params['mqtt']['qos'], params['mqtt']['retain'])
             logging.info("Status values published")
     
-    #except:
-    #    logging.error("Unable to publish value to mqtt broker")
-    #    sys.exit(1)
+    except:
+        logging.error("Unable to publish value to mqtt broker")
+        sys.exit(1)
     
     # Disconnect mqtt broker
     try:
