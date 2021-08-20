@@ -149,10 +149,11 @@ def main():
         sys.exit(1)
     
     
-    
+    # Test
+    logging.info("Mqtt connexion status : %s",mqtt.MQTT_IS_CONNECTED)
     
     # Wait
-    time.sleep(2)
+    time.sleep(1)
     
     # Get data from GRDF API
     
