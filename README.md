@@ -20,7 +20,7 @@ The project has been inspired by job done by [empierre](https://github.com/empie
 
 Verify you have gazpar data available on [GRDF Portal](https://monespace.grdf.fr/monespace/connexion)
 
-Data provided is per day and per month.
+Data provided is the last day and last month consumptions.
 
 Remember, kWh provided is conversion factor dependant. Please verify it's coherent with your provider bills.
 
@@ -28,9 +28,23 @@ Remember, kWh provided is conversion factor dependant. Please verify it's cohere
 
 A MQTT broker is required. Please check its configuration (hostname, port, remote access allowed if needed).
 
-Fill the mandatory environment **MQTT_HOST** to indicates the MQTT broker hostname or IP adress.
+## Parameters
 
-By default, port is set to 1883, prefix topic is *gazpar*, retain flag is set to false, QOS is set to 1. You can modify those values by updating environment variables (**MQTT_PORT**, **MQTT_TOPIC**, **MQTT_RETAIN** and **MQTT_QOS**).
+Currently, parameters can be provided by filling the OS's environment variables. I'm working on it to provide alternatives...
+
+Mandatory :
+
+* **GRDF_LOGIN** : your GRDF login (ex : myemail@email.com)
+* **GRDF_PASSWORD** : your GRDF password
+* **MQTT_HOST** : hostname or ip adress of the MQTT broker.
+
+Optionnal :
+
+* **MQTT_PORT** : port of the MQTT broker, default *1883*
+* **MQTT_TOPIC** : topic used as prefix, default *gazpar*
+* **MQTT_CLIENTID** : client id to be used for connexion to the MQTT broker, default *gazou*
+* **MQTT_QOS** : QOS for message publishing (0, 1 or 2), default *1*
+* **MQTT_RETAIN** : Retain flag, default False.
 
 # Usage
 
