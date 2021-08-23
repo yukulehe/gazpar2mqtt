@@ -34,7 +34,7 @@ Currently, parameters can be provided by filling the OS's environment variables.
 
 Mandatory :
 
-* **GRDF_LOGIN** : your GRDF login (ex : myemail@email.com)
+* **GRDF_USERNAME** : your GRDF login (ex : myemail@email.com)
 * **GRDF_PASSWORD** : your GRDF password
 * **MQTT_HOST** : hostname or ip adress of the MQTT broker.
 
