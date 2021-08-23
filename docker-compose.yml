@@ -12,6 +12,7 @@ services:
       - TZ=Europe/Paris
       # Optional:
       #- MQTT_PORT=1883
+      #- MQTT_TOPIC = gazpar
       #- MQTT_CLIENTID=gazou
       #- MQTT_QOS=1
       #- MQTT_RETAIN=False
