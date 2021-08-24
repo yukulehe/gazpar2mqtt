@@ -130,9 +130,9 @@ def main():
     if args.grdf_username is not None: params['grdf']['username']=args.grdf_username
     if args.grdf_password is not None: params['grdf']['password']=args.grdf_password
     if args.mqtt_host is not None: params['mqtt']['host']=args.mqtt_host
-    if args.mqtt_port is not None: params['mqtt']['port']=args.mqtt_port
+    if args.mqtt_port is not None: params['mqtt']['port']=int(args.mqtt_port)
     if args.mqtt_clientId is not None: params['mqtt']['clientId']=args.mqtt_clientId
-    if args.mqtt_qos is not None: params['mqtt']['qos']=args.mqtt_qos
+    if args.mqtt_qos is not None: params['mqtt']['qos']=int(args.mqtt_qos)
     if args.mqtt_topic is not None: params['mqtt']['topic']=args.mqtt_topic
     if args.mqtt_retain is not None: params['mqtt']['retain']=args.mqtt_retain
     
