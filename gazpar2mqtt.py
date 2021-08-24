@@ -66,6 +66,7 @@ def _dateTimeToStr(datetime):
 # Open file with params for mqtt broker and GRDF API
 def _openParams(pfile):
     
+    # Try from args
     # Try to load environment variables
     if set(DOCKER_MANDATORY_VARENV).issubset(set(os.environ)):
         return {'grdf': {'username': env(DOCKER_MANDATORY_VARENV[0]),
@@ -124,6 +125,17 @@ def main():
     
     # STEP 1 : Get params from environment OS
     params = _openParams(PFILE)
+    
+    ## Overwrite for declared args
+    if args.grdf_username params['grdf']['username']=args.grdf_username
+    if args.grdf_password params['grdf']['password']=args.grdf_password
+    if args.mqtt_host params['mqtt']['host']=args.mqtt_host
+    if args.mqtt_port params['mqtt']['port']=args.mqtt_port
+    if args.mqtt_clientId params['mqtt']['clientId']=args.mqtt_clientId
+    if args.mqtt_qos params['mqtt']['qos']=args.mqtt_qos
+    if args.mqtt_topic params['mqtt']['topic']=args.mqtt_topic
+    if args.mqtt_retain params['mqtt']['retain']=args.mqtt_retain
+    
                 
     logging.info("GRDF config : username = %s, password = %s", params['grdf']['username'], "******")
     logging.info("MQTT config : host = %s, port = %s, clientId = %s, qos = %s, topic = %s, retain = %s", \
@@ -320,11 +332,13 @@ if __name__ == "__main__":
     
     parser = argparse.ArgumentParser()
     
-    # Schedule
+    # Get args :
+    
+    ## Schedule
     parser.add_argument(
         "-s", "--schedule",   help="Schedule the launch of the script at hh:mm everyday")
     
-    # Parameters :
+    ## Parameters :
     parser.add_argument(
         "--grdf_username",   help="GRDF user name, ex : myemail@email.com")
     parser.add_argument(
@@ -332,7 +346,9 @@ if __name__ == "__main__":
     parser.add_argument(
         "--mqtt_host",   help="Hostname or ip adress of the Mqtt broker")
     parser.add_argument(
-        "--mqtt_clientid",   help="Client id to connect to the Mqtt broker")
+        "--mqtt_port",   help="Port of the Mqtt broker")
+    parser.add_argument(
+        "--mqtt_clientId",   help="Client Id to connect to the Mqtt broker")
     parser.add_argument(
         "--mqtt_qos",   help="QOS of the messages to be published to the Mqtt broker")
     parser.add_argument(
