@@ -146,7 +146,7 @@ def main():
     # STEP 2 : Log to MQTT broker
     try:
         
-        logging.info("Connection to Mqtt borker...")
+        logging.info("Connection to Mqtt broker...")
         
         # Construct mqtt client
         client = mqtt.create_client(params['mqtt']['clientId'])
