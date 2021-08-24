@@ -57,10 +57,10 @@ Run it manually :
 python3 gazpar2mqtt.py
 ``` 
 
-Run it manually with arguments overwritting parameters :
+Run it manually with a selection of arguments overwritting parameters :
 
 ``` 
-python3 garpar2mqtt.py --grdf_username=myemail@email.com --grdf_password=mypassword --mqtt_host=myhost --mqtt_port=1883 --mqtt_clientId=gazou --mqtt_qos=1 --mqtt_topic=gazpar --mqtt_retain=True
+python3 gazpar2mqtt.py --grdf_username=myemail@email.com --grdf_password=mypassword --mqtt_host=myhost --mqtt_clientId=gazou --mqtt_retain=True
 ``` 
 
 Schedule it manually :
