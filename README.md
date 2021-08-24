@@ -13,8 +13,9 @@ The project has been inspired by job done by [empierre](https://github.com/empie
 
 **python3** with its dependencies:
 
-` pip install -r requirements.txt `
-
+``` 
+pip install -r requirements.txt
+``` 
 
 ## GRDF Gazpar API
 
@@ -30,7 +31,7 @@ A MQTT broker is required. Please check its configuration (hostname, port, remot
 
 ## Parameters
 
-Currently, parameters can be provided by filling the OS's environment variables. I'm working on it to provide alternatives...
+Currently, parameters can be provided by command's arguments or by the OS's environment variables.
 
 Mandatory :
 
@@ -50,13 +51,31 @@ Optionnal :
 
 ## Running script
 
-Test it manually :
+Run it manually :
 
-` python3 gazpar2mqtt.py `
+``` 
+python3 gazpar2mqtt.py
+``` 
+
+Run it manually with arguments overwritting parameters :
+
+``` 
+python3 garpar2mqtt.py --grdf_username=myemail@email.com --grdf_password=mypassword --mqtt_host=myhost --mqtt_port=1883 --mqtt_clientId=gazou --mqtt_qos=1 --mqtt_topic=gazpar --mqtt_retain=True
+``` 
 
 Schedule it manually :
 
-` python3 gazpar2mqtt.py --schedule 04:00 `
+``` 
+python3 gazpar2mqtt.py --schedule 04:00
+``` 
+
+Full list of arguments  :
+
+``` 
+python3 gazpar2mqtt.py --help
+``` 
+
+
 
 ## Docker
 
