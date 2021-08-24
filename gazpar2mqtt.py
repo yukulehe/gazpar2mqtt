@@ -66,6 +66,7 @@ def _dateTimeToStr(datetime):
 # Open file with params for mqtt broker and GRDF API
 def _openParams(pfile):
     
+    # Try from args
     # Try to load environment variables
     if set(DOCKER_MANDATORY_VARENV).issubset(set(os.environ)):
         return {'grdf': {'username': env(DOCKER_MANDATORY_VARENV[0]),
@@ -75,7 +76,7 @@ def _openParams(pfile):
                            'clientId': env(DOCKER_OPTIONAL_VARENV[1], default='gazpar2mqtt'),
                            'qos': env.int(DOCKER_OPTIONAL_VARENV[2],default=1),
                            'topic': env(DOCKER_OPTIONAL_VARENV[3], default='gazpar'),
-                           'retain': env(DOCKER_OPTIONAL_VARENV[4], default=False).lower in ("true","True","TRUE","1","false","False","FALSE","0") }}
+                           'retain': env(DOCKER_OPTIONAL_VARENV[4], default='False')}}
     
     # Try to load .params then programs_dir/.params
     elif os.path.isfile(os.getcwd() + pfile):
@@ -124,6 +125,17 @@ def main():
     
     # STEP 1 : Get params from environment OS
     params = _openParams(PFILE)
+    
+    ## Overwrite for declared args
+    if args.grdf_username is not None: params['grdf']['username']=args.grdf_username
+    if args.grdf_password is not None: params['grdf']['password']=args.grdf_password
+    if args.mqtt_host is not None: params['mqtt']['host']=args.mqtt_host
+    if args.mqtt_port is not None: params['mqtt']['port']=int(args.mqtt_port)
+    if args.mqtt_clientId is not None: params['mqtt']['clientId']=args.mqtt_clientId
+    if args.mqtt_qos is not None: params['mqtt']['qos']=int(args.mqtt_qos)
+    if args.mqtt_topic is not None: params['mqtt']['topic']=args.mqtt_topic
+    if args.mqtt_retain is not None: params['mqtt']['retain']=args.mqtt_retain
+    
                 
     logging.info("GRDF config : username = %s, password = %s", params['grdf']['username'], "******")
     logging.info("MQTT config : host = %s, port = %s, clientId = %s, qos = %s, topic = %s, retain = %s", \
@@ -134,7 +146,7 @@ def main():
     # STEP 2 : Log to MQTT broker
     try:
         
-        logging.info("Connection to Mqtt borker...")
+        logging.info("Connection to Mqtt broker...")
         
         # Construct mqtt client
         client = mqtt.create_client(params['mqtt']['clientId'])
@@ -320,8 +332,29 @@ if __name__ == "__main__":
     
     parser = argparse.ArgumentParser()
     
+    # Get args :
+    
+    ## Schedule
     parser.add_argument(
         "-s", "--schedule",   help="Schedule the launch of the script at hh:mm everyday")
+    
+    ## Parameters :
+    parser.add_argument(
+        "--grdf_username",   help="GRDF user name, ex : myemail@email.com")
+    parser.add_argument(
+        "--grdf_password",   help="GRDF password")
+    parser.add_argument(
+        "--mqtt_host",   help="Hostname or ip adress of the Mqtt broker")
+    parser.add_argument(
+        "--mqtt_port",   help="Port of the Mqtt broker")
+    parser.add_argument(
+        "--mqtt_clientId",   help="Client Id to connect to the Mqtt broker")
+    parser.add_argument(
+        "--mqtt_qos",   help="QOS of the messages to be published to the Mqtt broker")
+    parser.add_argument(
+        "--mqtt_topic",   help="Topic prefix of the messages to be published to the Mqtt broker")
+    parser.add_argument(
+        "--mqtt_retain",   help="Retain flag of the messages to be published to the Mqtt broker, possible values : True or False")
     
     args = parser.parse_args()
 
