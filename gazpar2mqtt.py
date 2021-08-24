@@ -320,8 +320,25 @@ if __name__ == "__main__":
     
     parser = argparse.ArgumentParser()
     
+    # Schedule
     parser.add_argument(
         "-s", "--schedule",   help="Schedule the launch of the script at hh:mm everyday")
+    
+    # Parameters :
+    parser.add_argument(
+        "--grdf_username",   help="GRDF user name, ex : myemail@email.com")
+    parser.add_argument(
+        "--grdf_password",   help="GRDF password")
+    parser.add_argument(
+        "--mqtt_host",   help="Hostname or ip adress of the Mqtt broker")
+    parser.add_argument(
+        "--mqtt_clientid",   help="Client id to connect to the Mqtt broker")
+    parser.add_argument(
+        "--mqtt_qos",   help="QOS of the messages to be published to the Mqtt broker")
+    parser.add_argument(
+        "--mqtt_topic",   help="Topic prefix of the messages to be published to the Mqtt broker")
+    parser.add_argument(
+        "--mqtt_retain",   help="Retain flag of the messages to be published to the Mqtt broker, possible values : True or False")
     
     args = parser.parse_args()
 
