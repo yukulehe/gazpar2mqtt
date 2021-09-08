@@ -1,0 +1,22 @@
+FROM python:3.9-slim-buster
+
+WORKDIR /usr/src/app
+
+RUN apt-get update
+
+RUN pip install --no-cache-dir requests
+RUN pip install --no-cache-dir lxml
+RUN pip install --no-cache-dir python-dateutil
+RUN pip install --no-cache-dir argparse
+RUN pip install --no-cache-dir envparse
+RUN pip install --no-cache-dir schedule
+RUN pip install --no-cache-dir paho-mqtt
+
+RUN apt-get install -y git
+RUN git clone https://github.com/yukulehe/gazpar2mqtt.git
+RUN apt-get remove -y git
+RUN apt-get purge -y git
+
+WORKDIR /usr/src/app/gazpar2mqtt
+
+CMD ["python3", "./gazpar2mqtt.py"]
