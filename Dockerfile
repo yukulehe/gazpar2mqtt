@@ -1,9 +1,8 @@
 FROM python:3.9-slim-buster
 
-WORKDIR /usr/src/app
+COPY ./app /app
 
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+RUN mkdir -p /data
+RUN pip install -r /app/requirement.txt
 
-COPY *.py ./
-CMD ["python3", "./gazpar2mqtt.py", "--schedule", "04:00"]
+CMD ["python3", "./gazpar2mqtt.py"]
