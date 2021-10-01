@@ -2,6 +2,7 @@ FROM python:3.9-slim-buster
 
 COPY ./app /app
 
+RUN apt-get update
 RUN mkdir -p /data
 RUN pip install -r /app/requirement.txt
 
