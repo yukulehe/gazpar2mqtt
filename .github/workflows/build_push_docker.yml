@@ -1,14 +1,5 @@
-name: Push latest
+name: Push to Docker.io
 on: workflow_dispatch
-
-#on:
-  #push:
-  #  branches:
-  #    - '*'
-  #    - '**'
-  #    - '*/*'
-  #    - '!master'
-
 
 jobs:
   install:
