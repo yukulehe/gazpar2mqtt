@@ -1,12 +1,5 @@
 name: Push latest
-
-on:
-  push:
-    branches:
-      - '*'
-      - '**'
-      - '*/*'
-      - '!master'
+on: workflow_dispatch
 
 jobs:
   install:
