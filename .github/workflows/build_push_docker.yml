@@ -1,52 +1,69 @@
-# This is a basic workflow to help you get started with Actions
+name: Push latest
 
-name: CI to Docker Hub
-
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches:
+      - '*'
+      - '**'
+      - '*/*'
+      - '!master'
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+  install:
+    name: Build & Deploy in docker.io
+    runs-on: [ ubuntu-latest ]
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
 
-      # Login to Docker Hub
-      - name: Login to Docker Hub
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
-      # Set up Docker Buildx
-      - name: Set up Docker Buildx
-        id: buildx
-        uses: docker/setup-buildx-action@v1
-        
-      # Build and push
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+
+      - name: Get version
+        id: vars
+        run: echo ::set-output name=version::$(cat VERSION)
+
+      - name: Check Tag
+        id: check-tag
+        run: |
+          if [[ ${{ steps.vars.outputs.version }} =~ .*\-dev$ ]]; then
+            echo "::set-output name=dev::true"
+          else
+            echo "::set-output name=dev::false"
+          fi
+          
       - name: Build and push
-        id: docker_build
         uses: docker/build-push-action@v2
+        if: steps.check-tag.outputs.dev == 'false'
         with:
-          context: ./
-          file: ./Dockerfile
+          context: .
+          platforms: linux/amd64,linux/arm64,linux/arm/v6,linux/arm/v7
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/simplewhale:latest
-
-      # Image digest
-      - name: Image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}
+          tags: |
+            yukulehe/gazpar2mqtt:latest
+            yukulehe/gazpar2mqtt:${{ steps.vars.outputs.version }}
+            
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        if: steps.check-tag.outputs.dev == 'true'
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64,linux/arm/v6,linux/arm/v7
+          push: true
+          tags: |
+            yukulehe/gazpar2mqtt:${{ steps.vars.outputs.version }}
