@@ -1,6 +1,5 @@
 requests
 lxml
-libxml2
 python-dateutil
 argparse
 envparse
