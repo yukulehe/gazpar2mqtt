@@ -78,55 +78,55 @@ def _getEnvParams():
         logging.error("Environement variable 'GRDF_USERNAME' is mandatory")
         quit()
     else:
-        params['grdf']['password'] = os.environ['GRDF_PASSWORD']
+        params['grdf','password'] = os.environ['GRDF_PASSWORD']
         
     if not "MQTT_HOST" in os.environ:
         logging.error("Environement variable 'MQTT_HOST' is mandatory")
         quit()
     else:
-        params['mqtt']['host'] = os.environ['MQTT_HOST']
+        params['mqtt','host'] = os.environ['MQTT_HOST']
         
     # Check and get optional environment parameters
     
     if not "SCHEDULE_TIME" in os.environ:
-        params['schedule']['time'] = '04:00'
+        params['schedule','time'] = '04:00'
     else:
-        params['schedule']['time'] = os.environ['SCHEDULE_TIME']
+        params['schedule','time'] = os.environ['SCHEDULE_TIME']
         
     if not "MQTT_PORT" in os.environ:
-        params['mqtt']['port'] = 1883
+        params['mqtt','port'] = 1883
     else:
-        params['mqtt']['port'] = int(os.environ['MQTT_PORT'])
+        params['mqtt','port'] = int(os.environ['MQTT_PORT'])
         
     if not "MQTT_CLIENTID" in os.environ:
-        params['mqtt']['clientId'] = 'gazpar2mqtt'
+        params['mqtt','clientId'] = 'gazpar2mqtt'
     else:
-        params['mqtt']['clientId'] = os.environ['MQTT_CLIENTID']
+        params['mqtt','clientId'] = os.environ['MQTT_CLIENTID']
     
     if not "MQTT_USERNAME" in os.environ:
-        params['mqtt']['username'] = ''
+        params['mqtt','username'] = ''
     else:
-        params['mqtt']['username'] = os.environ['MQTT_USERNAME']
+        params['mqtt','username'] = os.environ['MQTT_USERNAME']
     
     if not "MQTT_PASSWORD" in os.environ:
-        params['mqtt']['password'] = ''
+        params['mqtt','password'] = ''
     else:
-        params['mqtt']['password'] = os.environ['MQTT_PASSWORD']
+        params['mqtt','password'] = os.environ['MQTT_PASSWORD']
         
     if not "MQTT_QOS" in os.environ:
-        params['mqtt']['qos'] = 1
+        params['mqtt','qos'] = 1
     else:
-        params['mqtt']['qos'] = int(os.environ['MQTT_QOS'])
+        params['mqtt','qos'] = int(os.environ['MQTT_QOS'])
         
     if not "MQTT_TOPIC" in os.environ:
-        params['mqtt']['topic'] = 'gazpar'
+        params['mqtt','topic'] = 'gazpar'
     else:
-        params['mqtt']['topic'] = os.environ['MQTT_TOPIC']
+        params['mqtt','topic'] = os.environ['MQTT_TOPIC']
         
     if not "MQTT_RETAIN" in os.environ:
-        params['mqtt']['retain'] = 'False'
+        params['mqtt','retain'] = 'False'
     else:
-        params['mqtt']['retain'] = os.environ['MQTT_RETAIN']
+        params['mqtt','retain'] = os.environ['MQTT_RETAIN']
     
     return params
 
@@ -157,10 +157,10 @@ def run(params):
         logging.info("Connection to Mqtt broker...")
         
         # Construct mqtt client
-        client = mqtt.create_client(params['mqtt']['clientId'],params['mqtt']['username'],params['mqtt']['password'])
+        client = mqtt.create_client(params['mqtt','clientId'],params['mqtt','username'],params['mqtt','password'])
     
         # Connect mqtt brocker
-        mqtt.connect(client,params['mqtt']['host'],params['mqtt']['port'])
+        mqtt.connect(client,params['mqtt','host'],params['mqtt','port'])
         
         # Wait mqtt callback (connection confirmation)
         time.sleep(2)
@@ -199,7 +199,7 @@ def run(params):
             logging.info("Try number %s", str(i))
             
             # Log to Grdf
-            token = _log_to_Grdf(params['grdf']['username'], params['grdf']['password'])
+            token = _log_to_Grdf(params['grdf','username'], params['grdf','password'])
             
             # Get result from GRDF by day
             resDay = gazpar.get_data_per_day(token, startDate, endDate)
@@ -278,14 +278,14 @@ def run(params):
         try:
 
             # Prepare topic
-            prefixTopic = params['mqtt']['topic']
+            prefixTopic = params['mqtt','topic']
             
             if dCount <= GRDF_API_ERRONEOUS_COUNT: # Unfortunately, GRDF date are not correct
 
                 ## Publish status values
                 logging.info("Publishing to Mqtt status values...")
-                mqtt.publish(client, prefixTopic + TOPIC_STATUS_DATE, dtn, params['mqtt']['qos'], params['mqtt']['retain'])
-                mqtt.publish(client, prefixTopic + TOPIC_STATUS_VALUE, "Failed", params['mqtt']['qos'], params['mqtt']['retain'])
+                mqtt.publish(client, prefixTopic + TOPIC_STATUS_DATE, dtn, params['mqtt','qos'], params['mqtt','retain'])
+                mqtt.publish(client, prefixTopic + TOPIC_STATUS_VALUE, "Failed", params['mqtt','qos'], params['mqtt','retain'])
                 logging.info("Status values published !")
 
             
@@ -297,22 +297,22 @@ def run(params):
                 
                 # Publish daily values
                 logging.info("Publishing to Mqtt the last daily values...")
-                mqtt.publish(client, prefixTopic + TOPIC_DAILY_DATE, d['date'], params['mqtt']['qos'], params['mqtt']['retain'])
-                mqtt.publish(client, prefixTopic + TOPIC_DAILY_KWH, d['kwh'], params['mqtt']['qos'], params['mqtt']['retain'])
-                mqtt.publish(client, prefixTopic + TOPIC_DAILY_MCUBE, d['mcube'], params['mqtt']['qos'], params['mqtt']['retain'])
+                mqtt.publish(client, prefixTopic + TOPIC_DAILY_DATE, d['date'], params['mqtt','qos'], params['mqtt','retain'])
+                mqtt.publish(client, prefixTopic + TOPIC_DAILY_KWH, d['kwh'], params['mqtt','qos'], params['mqtt','retain'])
+                mqtt.publish(client, prefixTopic + TOPIC_DAILY_MCUBE, d['mcube'], params['mqtt','qos'], params['mqtt','retain'])
                 logging.info("Daily values published !")
 
                 # Publish monthly values
                 logging.info("Publishing to Mqtt the last monthly values...")
-                mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_DATE, m['date'], params['mqtt']['qos'], params['mqtt']['retain'])
-                mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_KWH, m['kwh'], params['mqtt']['qos'], params['mqtt']['retain'])
-                mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_MCUBE, m['mcube'], params['mqtt']['qos'], params['mqtt']['retain'])
+                mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_DATE, m['date'], params['mqtt','qos'], params['mqtt','retain'])
+                mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_KWH, m['kwh'], params['mqtt','qos'], params['mqtt','retain'])
+                mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_MCUBE, m['mcube'], params['mqtt','qos'], params['mqtt','retain'])
                 logging.info("Monthly values published !")
 
                 ## Publish status values
                 logging.info("Publishing to Mqtt status values...")
-                mqtt.publish(client, prefixTopic + TOPIC_STATUS_DATE, dtn, params['mqtt']['qos'], params['mqtt']['retain'])
-                mqtt.publish(client, prefixTopic + TOPIC_STATUS_VALUE, "Success", params['mqtt']['qos'], params['mqtt']['retain'])
+                mqtt.publish(client, prefixTopic + TOPIC_STATUS_DATE, dtn, params['mqtt','qos'], params['mqtt','retain'])
+                mqtt.publish(client, prefixTopic + TOPIC_STATUS_VALUE, "Success", params['mqtt','qos'], params['mqtt','retain'])
                 logging.info("Status values published !")
 
         except:
@@ -376,27 +376,27 @@ if __name__ == "__main__":
     
     
     # STEP 3 :  Overwrite for declared args
-    if args.grdf_username is not None: params['grdf']['username']=args.grdf_username
-    if args.grdf_password is not None: params['grdf']['password']=args.grdf_password
-    if args.mqtt_host is not None: params['mqtt']['host']=args.mqtt_host
-    if args.mqtt_port is not None: params['mqtt']['port']=int(args.mqtt_port)
-    if args.mqtt_clientId is not None: params['mqtt']['clientId']=args.mqtt_clientId
-    if args.mqtt_username is not None: params['mqtt']['username']=args.mqtt_username
-    if args.mqtt_password is not None: params['mqtt']['password']=args.mqtt_password
-    if args.mqtt_qos is not None: params['mqtt']['qos']=int(args.mqtt_qos)
-    if args.mqtt_topic is not None: params['mqtt']['topic']=args.mqtt_topic
-    if args.mqtt_retain is not None: params['mqtt']['retain']=args.mqtt_retain
+    if args.grdf_username is not None: params['grdf','username']=args.grdf_username
+    if args.grdf_password is not None: params['grdf','password']=args.grdf_password
+    if args.mqtt_host is not None: params['mqtt','host']=args.mqtt_host
+    if args.mqtt_port is not None: params['mqtt','port']=int(args.mqtt_port)
+    if args.mqtt_clientId is not None: params['mqtt','clientId']=args.mqtt_clientId
+    if args.mqtt_username is not None: params['mqtt','username']=args.mqtt_username
+    if args.mqtt_password is not None: params['mqtt','password']=args.mqtt_password
+    if args.mqtt_qos is not None: params['mqtt','qos']=int(args.mqtt_qos)
+    if args.mqtt_topic is not None: params['mqtt','topic']=args.mqtt_topic
+    if args.mqtt_retain is not None: params['mqtt','retain']=args.mqtt_retain
     
     # STEP 4 : Log params info         
-    logging.info("GRDF config : username = %s, password = %s", params['grdf']['username'], "******")
+    logging.info("GRDF config : username = %s, password = %s", params['grdf','username'], "******")
     logging.info("MQTT config : host = %s, port = %s, clientId = %s, qos = %s, topic = %s, retain = %s", \
-                 params['mqtt']['host'], params['mqtt']['port'], params['mqtt']['clientId'], \
-                 params['mqtt']['qos'],params['mqtt']['topic'],params['mqtt']['retain'])
+                 params['mqtt','host'], params['mqtt','port'], params['mqtt','clientId'], \
+                 params['mqtt','qos'],params['mqtt','topic'],params['mqtt','retain'])
 
     # STEP 5 : Run
-    if params['mqtt']['host'] is not None:
-        logging.info("qazpar2mqtt run is scheduled at %s everyday",params['schedule']['time'])
-        schedule.every().day.at(params['schedule']['time']).do(run(params))
+    if params['mqtt','host'] is not None:
+        logging.info("qazpar2mqtt run is scheduled at %s everyday",params['schedule','time'])
+        schedule.every().day.at(params['schedule','time']).do(run(params))
         while True:
             schedule.run_pending()
             time.sleep(1)
