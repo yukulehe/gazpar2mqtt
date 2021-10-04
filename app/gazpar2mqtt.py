@@ -389,6 +389,7 @@ if __name__ == "__main__":
     
     # STEP 4 : Log params info         
     logging.info("GRDF config : username = %s, password = %s", params['grdf','username'], "******")
+    logging.info("Schedule : time = %s", params['schedule','time'])
     logging.info("MQTT config : host = %s, port = %s, clientId = %s, qos = %s, topic = %s, retain = %s", \
                  params['mqtt','host'], params['mqtt','port'], params['mqtt','clientId'], \
                  params['mqtt','qos'],params['mqtt','topic'],params['mqtt','retain'])
@@ -396,7 +397,7 @@ if __name__ == "__main__":
     # STEP 5 : Run
     if params['mqtt','host'] is not None:
         logging.info("qazpar2mqtt run is scheduled at %s everyday",params['schedule','time'])
-        schedule.every().day.at(params['schedule','time']).do(run(params))
+        schedule.every().day.at(params['schedule','time']).do(run,params)
         while True:
             schedule.run_pending()
             time.sleep(1)
