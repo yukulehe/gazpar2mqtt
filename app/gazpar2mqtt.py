@@ -22,7 +22,7 @@ from envparse import env
 # OS environment variables
 PFILE = "/.params"
 DOCKER_MANDATORY_VARENV=['GRDF_USERNAME','GRDF_PASSWORD','MQTT_HOST']
-DOCKER_OPTIONAL_VARENV=['MQTT_PORT','MQTT_CLIENTID','MQTT_QOS', 'MQTT_TOPIC', 'MQTT_RETAIN']
+DOCKER_OPTIONAL_VARENV=['MQTT_PORT','MQTT_CLIENTID','MQTT_USERNAME','MQTT_PASSWORD','MQTT_QOS', 'MQTT_TOPIC', 'MQTT_RETAIN']
 
 # Grdf API constants
 GRDF_API_MAX_RETRIES = 5 # number of retries max to get accurate data from GRDF
@@ -74,9 +74,11 @@ def _openParams(pfile):
                 'mqtt': {'host': env(DOCKER_MANDATORY_VARENV[2]),
                            'port': env.int(DOCKER_OPTIONAL_VARENV[0], default=1883),
                            'clientId': env(DOCKER_OPTIONAL_VARENV[1], default='gazpar2mqtt'),
-                           'qos': env.int(DOCKER_OPTIONAL_VARENV[2],default=1),
-                           'topic': env(DOCKER_OPTIONAL_VARENV[3], default='gazpar'),
-                           'retain': env(DOCKER_OPTIONAL_VARENV[4], default='False')}}
+                           'username': env(DOCKER_OPTIONAL_VARENV[2], default=''),
+                           'password': env(DOCKER_OPTIONAL_VARENV[3], default=''),
+                           'qos': env.int(DOCKER_OPTIONAL_VARENV[4],default=1),
+                           'topic': env(DOCKER_OPTIONAL_VARENV[5], default='gazpar'),
+                           'retain': env(DOCKER_OPTIONAL_VARENV[6], default='False')}}
     
     # Try to load .params then programs_dir/.params
     elif os.path.isfile(os.getcwd() + pfile):
@@ -132,6 +134,8 @@ def main():
     if args.mqtt_host is not None: params['mqtt']['host']=args.mqtt_host
     if args.mqtt_port is not None: params['mqtt']['port']=int(args.mqtt_port)
     if args.mqtt_clientId is not None: params['mqtt']['clientId']=args.mqtt_clientId
+    if args.mqtt_username is not None: params['mqtt']['username']=args.mqtt_username
+    if args.mqtt_password is not None: params['mqtt']['password']=args.mqtt_password
     if args.mqtt_qos is not None: params['mqtt']['qos']=int(args.mqtt_qos)
     if args.mqtt_topic is not None: params['mqtt']['topic']=args.mqtt_topic
     if args.mqtt_retain is not None: params['mqtt']['retain']=args.mqtt_retain
@@ -149,7 +153,7 @@ def main():
         logging.info("Connection to Mqtt broker...")
         
         # Construct mqtt client
-        client = mqtt.create_client(params['mqtt']['clientId'])
+        client = mqtt.create_client(params['mqtt']['clientId'],params['mqtt']['username'],params['mqtt']['password'])
     
         # Connect mqtt brocker
         mqtt.connect(client,params['mqtt']['host'],params['mqtt']['port'])
@@ -349,6 +353,10 @@ if __name__ == "__main__":
         "--mqtt_port",   help="Port of the Mqtt broker")
     parser.add_argument(
         "--mqtt_clientId",   help="Client Id to connect to the Mqtt broker")
+    parser.add_argument(
+        "--mqtt_username",   help="Username to connect to the Mqtt broker")
+    parser.add_argument(
+        "--mqtt_password",   help="Password to connect to the Mqtt broker")
     parser.add_argument(
         "--mqtt_qos",   help="QOS of the messages to be published to the Mqtt broker")
     parser.add_argument(
