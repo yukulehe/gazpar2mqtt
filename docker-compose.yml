@@ -11,8 +11,11 @@ services:
       - MQTT_HOST=host
       - TZ=Europe/Paris
       # Optional:
+      #- SCHEDULE_TIME=04:00
       #- MQTT_PORT=1883
       #- MQTT_TOPIC = gazpar
       #- MQTT_CLIENTID=gazou
+      #- MQTT_USERNAME=myMqttUsername
+      #- MQTT_PASSWORD=myMqttPassword
       #- MQTT_QOS=1
-      #- MQTT_RETAIN=False
+      #- MQTT_RETAIN=True
