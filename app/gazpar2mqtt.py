@@ -335,9 +335,12 @@ def run(params):
     
     # Game over
     if params['schedule','time'] is not None: 
-        logging.info("qazpar2mqtt next run scheduled at %s",)
+        logging.info("gazpar2mqtt next run scheduled every day at %s",params['schedule','time'])
     else: 
         logging.info("End of gazpar2mqtt. See u...")
+        
+        
+        
                 
 if __name__ == "__main__":
     
@@ -400,7 +403,7 @@ if __name__ == "__main__":
 
     # STEP 5 : Run
     if params['schedule','time'] is not None:
-        logging.info("qazpar2mqtt next run scheduled at %s everyday",params['schedule','time'])
+        logging.info("gazpar2mqtt next run scheduled every day at %s",params['schedule','time'])
         schedule.every().day.at(params['schedule','time']).do(run,params)
         while True:
             schedule.run_pending()
