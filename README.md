@@ -41,9 +41,12 @@ Mandatory :
 
 Optionnal :
 
+* **SCHEDULE_TIME** : time for refreshing data everydar, default *04:00*
 * **MQTT_PORT** : port of the MQTT broker, default *1883*
 * **MQTT_TOPIC** : topic used as prefix, default *gazpar*
 * **MQTT_CLIENTID** : client id to be used for connexion to the MQTT broker, default *gazou*
+* **MQTT_USERNAME** : username to be used for connexion to the MQTT broker
+* **MQTT_PASSWORD** : password to be used for connexion to the MQTT broker
 * **MQTT_QOS** : QOS for message publishing (0, 1 or 2), default *1*
 * **MQTT_RETAIN** : Retain flag, default False.
 
