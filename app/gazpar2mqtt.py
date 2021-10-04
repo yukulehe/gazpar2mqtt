@@ -62,48 +62,42 @@ def _dayToStr(date):
 def _dateTimeToStr(datetime):
     return datetime.strftime("%d/%m/%Y - %H:%M:%S")
 
-  
-# Open file with params for mqtt broker and GRDF API
-def _openParams(pfile):
+# Get environment parameters
+def _getEnvParams():
     
-    # Try from args
-    # Try to load environment variables
-    if set(DOCKER_MANDATORY_VARENV).issubset(set(os.environ)):
-        return {'grdf': {'username': env(DOCKER_MANDATORY_VARENV[0]),
-                         'password': env(DOCKER_MANDATORY_VARENV[1])},
-                'mqtt': {'host': env(DOCKER_MANDATORY_VARENV[2]),
-                           'port': env.int(DOCKER_OPTIONAL_VARENV[0], default=1883),
-                           'clientId': env(DOCKER_OPTIONAL_VARENV[1], default='gazpar2mqtt'),
-                           'username': env(DOCKER_OPTIONAL_VARENV[2], default=''),
-                           'password': env(DOCKER_OPTIONAL_VARENV[3], default=''),
-                           'qos': env.int(DOCKER_OPTIONAL_VARENV[4],default=1),
-                           'topic': env(DOCKER_OPTIONAL_VARENV[5], default='gazpar'),
-                           'retain': env(DOCKER_OPTIONAL_VARENV[6], default='False')}}
+    # Check manadatory environment parameters
+    if not "GRDF_USERNAME" in os.environ:
+        logging.error("Environement variable 'GRDF_USERNAME' is mandatory")
+        quit()
+    if not "GRDF_PASSWORD" in os.environ:
+        logging.error("Environement variable 'GRDF_USERNAME' is mandatory")
+        quit()
+    if not "MQTT_HOST" in os.environ:
+        logging.error("Environement variable 'MQTT_HOST' is mandatory")
+        quit()
+        
+    # Get environment variables
+    params = {'grdf': {'username': os.environ['GRDF_USERNAME'],
+                         'password': os.environ['GRDF_PASSWORD']},
+                'mqtt': {'host': os.environ['MQTT_HOST'],
+                           'port': int(os.environ['MQTT_HOST']),
+                           'clientId': os.environ['MQTT_CLIENTID'],
+                           'username': os.environ['MQTT_USERNAME'],
+                           'password': os.environ['MQTT_PASSWORD'],
+                           'qos': int(os.environ['MQTT_QOS']),
+                           'topic': os.environ['MQTT_TOPIC'],
+                           'retain': os.environ['MQTT_RETAIN']}}
     
-    # Try to load .params then programs_dir/.params
-    elif os.path.isfile(os.getcwd() + pfile):
-        p = os.getcwd() + pfile
-    elif os.path.isfile(os.path.dirname(os.path.realpath(__file__)) + pfile):
-        p = os.path.dirname(os.path.realpath(__file__)) + pfile
-    else:
-        if (os.getcwd() + pfile != os.path.dirname(os.path.realpath(__file__)) + pfile):
-            logging.error('file %s or %s not exist', os.path.realpath(os.getcwd() + pfile) , os.path.dirname(os.path.realpath(__file__)) + pfile)
-        else:
-            logging.error('file %s not exist', os.getcwd() + pfile )
-        sys.exit(1)
-    try:
-        f = open(p, 'r')
-        try:
-            array = json.load(f)
-        except ValueError as e:
-            logging.error('decoding JSON has failed', e)
-            sys.exit(1)
-    except IOError:
-        logging.error('cannot open %s', p)
-        sys.exit(1)
-    else:
-        f.close()
-        return array
+    # Set default value when missing in environment
+    if params['mqtt']['port'] is None: params['mqtt']['port'] = 1883
+    if params['mqtt']['clientId'] is None: params['mqtt']['clientId'] = 'gazpar2mqtt'
+    if params['mqtt']['username'] is None: params['mqtt']['username'] = ''
+    if params['mqtt']['password'] is None: params['mqtt']['password'] = ''
+    if params['mqtt']['qos'] is None: params['mqtt']['qos'] = 1
+    if params['mqtt']['topic'] is None: params['mqtt']['topic'] = 'gazpar'
+    if params['mqtt']['retain'] is None: params['mqtt']['retain'] = 'False'
+    
+    return params
 
 def _log_to_Grdf(username,password):
     
@@ -126,10 +120,10 @@ def main():
     dtn = _dateTimeToStr(datetime.datetime.now())
     
     # STEP 1 : Get params from environment OS
-    params = _openParams(PFILE)
+    params = _getEnvParams()
     
     ## Overwrite for declared args
-    if args.grdf_username is not None: params['grdf']['username']=args.grdf_username
+    if args.grdf_username is not: params['grdf']['username']=args.grdf_username
     if args.grdf_password is not None: params['grdf']['password']=args.grdf_password
     if args.mqtt_host is not None: params['mqtt']['host']=args.mqtt_host
     if args.mqtt_port is not None: params['mqtt']['port']=int(args.mqtt_port)
