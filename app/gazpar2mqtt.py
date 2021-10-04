@@ -65,42 +65,71 @@ def _dateTimeToStr(datetime):
 # Get environment parameters
 def _getEnvParams():
     
-    # Check manadatory environment parameters
+    # Check and get manadatory environment parameters
+    
     if not "GRDF_USERNAME" in os.environ:
         logging.error("Environement variable 'GRDF_USERNAME' is mandatory")
         quit()
+    else:
+        params['grdf']['username'] = os.environ['GRDF_USERNAME']
+        
     if not "GRDF_PASSWORD" in os.environ:
         logging.error("Environement variable 'GRDF_USERNAME' is mandatory")
         quit()
+    else
+        params['grdf']['password'] = os.environ['GRDF_PASSWORD']
+        
     if not "MQTT_HOST" in os.environ:
         logging.error("Environement variable 'MQTT_HOST' is mandatory")
         quit()
+    else:
+        params['mqtt']['host'] = os.environ['MQTT_HOST']
         
-    # Get environment variables
-    params = {'grdf': {'username': os.environ['GRDF_USERNAME'],
-                         'password': os.environ['GRDF_PASSWORD']},
-              'schedule': {'time': os.environ['SCHEDULE_TIME']},
-              'mqtt': {'host': os.environ['MQTT_HOST'],
-                         'port': int(os.environ['MQTT_HOST']),
-                         'clientId': os.environ['MQTT_CLIENTID'],
-                         'username': os.environ['MQTT_USERNAME'],
-                         'password': os.environ['MQTT_PASSWORD'],
-                         'qos': int(os.environ['MQTT_QOS']),
-                         'topic': os.environ['MQTT_TOPIC'],
-                         'retain': os.environ['MQTT_RETAIN']}}
+    # Check and get optional environment parameters
     
-    # Set default value when missing in environment
-    if params['schedule']['time'] is None: params['schedule']['time'] = '04:00'
-    if params['mqtt']['port'] is None: params['mqtt']['port'] = 1883
-    if params['mqtt']['clientId'] is None: params['mqtt']['clientId'] = 'gazpar2mqtt'
-    if params['mqtt']['username'] is None: params['mqtt']['username'] = ''
-    if params['mqtt']['password'] is None: params['mqtt']['password'] = ''
-    if params['mqtt']['qos'] is None: params['mqtt']['qos'] = 1
-    if params['mqtt']['topic'] is None: params['mqtt']['topic'] = 'gazpar'
-    if params['mqtt']['retain'] is None: params['mqtt']['retain'] = 'False'
+    if not "SCHEDULE_TIME" in os.environ:
+        params['schedule']['time'] = '04:00'
+    else:
+        params['schedule']['time'] = os.environ['SCHEDULE_TIME']
+        
+    if not "MQTT_PORT" in os.environ:
+        params['mqtt']['port'] = 1883
+    else:
+        params['mqtt']['port'] = int(os.environ['MQTT_PORT'])
+        
+    if not "MQTT_CLIENTID" in os.environ:
+        params['mqtt']['clientId'] = 'gazpar2mqtt'
+    else:
+        params['mqtt']['clientId'] = os.environ['MQTT_CLIENTID']
+    
+    if not "MQTT_USERNAME" in os.environ:
+        params['mqtt']['username'] = ''
+    else:
+        params['mqtt']['username'] = os.environ['MQTT_USERNAME']
+    
+    if not "MQTT_PASSWORD" in os.environ:
+        params['mqtt']['password'] = ''
+    else:
+        params['mqtt']['password'] = os.environ['MQTT_PASSWORD']
+        
+    if not "MQTT_QOS" in os.environ:
+        params['mqtt']['qos'] = 1
+    else:
+        params['mqtt']['qos'] = int(os.environ['MQTT_QOS'])
+        
+    if not "MQTT_TOPIC" in os.environ:
+        params['mqtt']['topic'] = 'gazpar'
+    else:
+        params['mqtt']['topic'] = os.environ['MQTT_TOPIC']
+        
+    if not "MQTT_RETAIN" in os.environ:
+        params['mqtt']['retain'] = 'False'
+    else:
+        params['mqtt']['retain'] = os.environ['MQTT_RETAIN']
     
     return params
 
+# Log to GRDF
 def _log_to_Grdf(username,password):
     
     # Log to GRDF API
