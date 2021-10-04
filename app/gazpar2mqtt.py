@@ -335,7 +335,7 @@ def run(params):
     
     # Game over
     if params['schedule','time'] is not None: 
-        logging.info("gazpar2mqtt next run scheduled every day at %s",params['schedule','time'])
+        logging.info("gazpar2mqtt next run scheduled at %s",params['schedule','time'])
     else: 
         logging.info("End of gazpar2mqtt. See u...")
         
@@ -396,14 +396,14 @@ if __name__ == "__main__":
     
     # STEP 4 : Log params info         
     logging.info("GRDF config : username = %s, password = %s", params['grdf','username'], "******")
-    logging.info("Schedule : time = %s", params['schedule','time'])
+    logging.info("Schedule : time = %s every day", params['schedule','time'])
     logging.info("MQTT config : host = %s, port = %s, clientId = %s, qos = %s, topic = %s, retain = %s", \
                  params['mqtt','host'], params['mqtt','port'], params['mqtt','clientId'], \
                  params['mqtt','qos'],params['mqtt','topic'],params['mqtt','retain'])
 
     # STEP 5 : Run
     if params['schedule','time'] is not None:
-        logging.info("gazpar2mqtt next run scheduled every day at %s",params['schedule','time'])
+        logging.info("gazpar2mqtt next run scheduled at %s",params['schedule','time'])
         schedule.every().day.at(params['schedule','time']).do(run,params)
         while True:
             schedule.run_pending()
