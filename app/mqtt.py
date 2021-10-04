@@ -26,10 +26,14 @@ def on_publish(client, userdata, mid):
     logging.debug("Mqtt on_publish : message published")
 
 # Sub constructor
-def create_client(clientId):
+def create_client(clientId,username,password):
     
     # Create instance
-    client = mqtt.Client(clientId)    
+    client = mqtt.Client(clientId)
+    
+    if username != "" and password != "":
+        client.username_pw_set(username, password)
+    
     return client
 
 # Sub connect
