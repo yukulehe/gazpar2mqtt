@@ -14,7 +14,7 @@ The project has been inspired by job done by [empierre](https://github.com/empie
 **python3** with its dependencies:
 
 ``` 
-pip3 install -r requirements.txt
+pip3 install -r app/requirements.txt
 ``` 
 
 ## GRDF Gazpar API
@@ -41,7 +41,7 @@ Mandatory :
 
 Optionnal :
 
-* **SCHEDULE_TIME** : time for refreshing data everydar, default *04:00*
+* **SCHEDULE_TIME** : time for refreshing data everyday, default *04:00*
 * **MQTT_PORT** : port of the MQTT broker, default *1883*
 * **MQTT_TOPIC** : topic used as prefix, default *gazpar*
 * **MQTT_CLIENTID** : client id to be used for connexion to the MQTT broker, default *gazou*
@@ -57,25 +57,25 @@ Optionnal :
 Run it manually :
 
 ``` 
-python3 gazpar2mqtt.py
+python3 app/gazpar2mqtt.py
 ``` 
 
 Run it manually with a selection of arguments overwritting parameters :
 
 ``` 
-python3 gazpar2mqtt.py --grdf_username=myemail@email.com --grdf_password=mypassword --mqtt_host=myhost --mqtt_clientId=gazou --mqtt_retain=True
+python3 app/gazpar2mqtt.py --grdf_username=myemail@email.com --grdf_password=mypassword --mqtt_host=myhost --mqtt_clientId=gazou --mqtt_retain=True
 ``` 
 
 Schedule it manually :
 
 ``` 
-python3 gazpar2mqtt.py --schedule 04:00
+python3 app/gazpar2mqtt.py --schedule 04:00
 ``` 
 
 Full list of arguments  :
 
 ``` 
-python3 gazpar2mqtt.py --help
+python3 app/gazpar2mqtt.py --help
 ``` 
 
 
@@ -85,7 +85,7 @@ python3 gazpar2mqtt.py --help
 Example of docker run command with environment variables :
 
 ``` 
-docker run --name gazpar2mqtt -e GRDF_USERNAME=gazou@email.com -e GRDF_PASSWORD=password -e MQTT_HOST=192.168.1.99 -e MQTT_PORT=1883 -e MQTT_CLIENTID=gazou -e MQTT_QOS=1 -e MQTT_TOPIC=gazpar -e MQTT_RETAIN=False --tty yukulehe/gazpar2mqtt:latest
+docker run --name app/gazpar2mqtt -e GRDF_USERNAME=gazou@email.com -e GRDF_PASSWORD=password -e MQTT_HOST=192.168.1.99 -e MQTT_PORT=1883 -e MQTT_CLIENTID=gazou -e MQTT_QOS=1 -e MQTT_TOPIC=gazpar -e MQTT_RETAIN=False --tty yukulehe/gazpar2mqtt:latest
 ```
 
 
