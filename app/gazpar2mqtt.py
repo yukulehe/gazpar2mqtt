@@ -397,10 +397,11 @@ if __name__ == "__main__":
 
     # STEP 5 : Run
     if params['schedule','time'] is not None:
-        logging.info("qazpar2mqtt run is scheduled at %s everyday",params['schedule','time'])
+        logging.info("qazpar2mqtt next scheduled at %s everyday",params['schedule','time'])
         schedule.every().day.at(params['schedule','time']).do(run,params)
         while True:
             schedule.run_pending()
+            logging.info("qazpar2mqtt next scheduled at %s everyday",params['schedule','time'])
             time.sleep(1)
     else:
         run(params)
