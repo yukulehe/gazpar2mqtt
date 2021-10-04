@@ -76,7 +76,7 @@ def _getEnvParams():
     if not "GRDF_PASSWORD" in os.environ:
         logging.error("Environement variable 'GRDF_USERNAME' is mandatory")
         quit()
-    else
+    else:
         params['grdf']['password'] = os.environ['GRDF_PASSWORD']
         
     if not "MQTT_HOST" in os.environ:
