@@ -14,7 +14,7 @@ The project has been inspired by job done by [empierre](https://github.com/empie
 **python3** with its dependencies:
 
 ``` 
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ``` 
 
 ## GRDF Gazpar API
