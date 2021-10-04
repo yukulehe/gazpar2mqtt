@@ -27,7 +27,7 @@ Remember, kWh provided is conversion factor dependant. Please verify it's cohere
 
 ## MQTT broker
 
-A MQTT broker is required. Please check its configuration (hostname, port, remote access allowed if needed).
+A MQTT broker is required. Please check its configuration (hostname, port, remote access allowed, username & password if needed).
 
 ## Parameters
 
