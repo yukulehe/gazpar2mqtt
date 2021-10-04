@@ -73,7 +73,7 @@ def _getEnvParams():
         quit()
     else:
         #params['grdf']['username'] = os.environ['GRDF_USERNAME']
-        params.put('grdf_username') = os.environ['GRDF_USERNAME']
+        params['grdf_username'] = os.environ['GRDF_USERNAME']
         
     if not "GRDF_PASSWORD" in os.environ:
         logging.error("Environement variable 'GRDF_USERNAME' is mandatory")
