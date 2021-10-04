@@ -89,7 +89,7 @@ def _getEnvParams():
     # Check and get optional environment parameters
     
     if not "SCHEDULE_TIME" in os.environ:
-        # nothing to do
+        params['schedule','time'] = None
     else:
         params['schedule','time'] = os.environ['SCHEDULE_TIME']
         
