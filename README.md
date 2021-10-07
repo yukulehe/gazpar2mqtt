@@ -119,4 +119,4 @@ Note : you can replace the default topic prefix *gazpar* (see mqtt broker requir
 | Topic | Description |
 | --- | --- |
 | gazpar/status/date | Last execution date time of gazpar2mqtt |
-| gazpar/status/value | Last execution date time status of  gazpar2mqtt |
+| gazpar/status/value | Last execution status of  gazpar2mqtt |
