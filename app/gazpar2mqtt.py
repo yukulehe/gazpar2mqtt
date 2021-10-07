@@ -35,11 +35,13 @@ GRDF_API_ERRONEOUS_COUNT = 1 # Erroneous number of results send by GRDF
 TOPIC_DAILY_DATE = "/daily/date"
 TOPIC_DAILY_KWH = "/daily/kwh"
 TOPIC_DAILY_MCUBE = "/daily/mcube"
+TOPIC_DAILY_DELTA = "/daily/delta"
 
 ## Monthly
 TOPIC_MONTHLY_DATE = "/monthly/month"
 TOPIC_MONTHLY_KWH = "/monthly/kwh"
 TOPIC_MONTHLY_MCUBE = "/monthly/mcube"
+TOPIC_MONTHLY_DELTA = "/monthly/delta"
 
 ## Status
 TOPIC_STATUS_DATE = "/status/date"
@@ -280,7 +282,7 @@ def run(params):
             # Prepare topic
             prefixTopic = params['mqtt','topic']
             
-            if dCount <= GRDF_API_ERRONEOUS_COUNT: # Unfortunately, GRDF date are not correct
+            if dCount <= GRDF_API_ERRONEOUS_COUNT and dCount > 1: # Unfortunately, GRDF date are not correct
 
                 ## Publish status values
                 logging.info("Publishing to Mqtt status values...")
@@ -291,22 +293,39 @@ def run(params):
             
             else: # Looks good ...
 
-                # Get GRDF last values
-                d = resDay[dCount-1]
-                m = resMonth[mCount-1]
+                # Get GRDF -1 values
+                d1 = resDay[dCount-1]
+                m1 = resMonth[mCount-1]
+                
+                # Get GRDF -2 values
+                d2 = resDay[dCount-2]
+                m2 = resMonth[mCount-2]
+                
+                # Calculate delta in %
+                if d2['mcube'] is None or d2['mcube'] == '0':
+                    d1['delta'] = 0
+                else:
+                    d1['delta'] = (( d1['mcube'] - d2['mcube'] ) / d2['mcube']) * 100
+                if m2['mcube'] is None or m2['mcube'] == '0':
+                    m1['delta'] = 0
+                else:
+                    m1['delta'] = (( m1['mcube'] - m2['mcube'] ) / m2['mcube']) * 100
+                
                 
                 # Publish daily values
                 logging.info("Publishing to Mqtt the last daily values...")
-                mqtt.publish(client, prefixTopic + TOPIC_DAILY_DATE, d['date'], params['mqtt','qos'], params['mqtt','retain'])
-                mqtt.publish(client, prefixTopic + TOPIC_DAILY_KWH, d['kwh'], params['mqtt','qos'], params['mqtt','retain'])
-                mqtt.publish(client, prefixTopic + TOPIC_DAILY_MCUBE, d['mcube'], params['mqtt','qos'], params['mqtt','retain'])
+                mqtt.publish(client, prefixTopic + TOPIC_DAILY_DATE, d1['date'], params['mqtt','qos'], params['mqtt','retain'])
+                mqtt.publish(client, prefixTopic + TOPIC_DAILY_KWH, d1['kwh'], params['mqtt','qos'], params['mqtt','retain'])
+                mqtt.publish(client, prefixTopic + TOPIC_DAILY_MCUBE, d1['mcube'], params['mqtt','qos'], params['mqtt','retain'])
+                mqtt.publish(client, prefixTopic + TOPIC_DAILY_DELTA, d1['delta'], params['mqtt','qos'], params['mqtt','retain'])
                 logging.info("Daily values published !")
 
                 # Publish monthly values
                 logging.info("Publishing to Mqtt the last monthly values...")
-                mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_DATE, m['date'], params['mqtt','qos'], params['mqtt','retain'])
-                mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_KWH, m['kwh'], params['mqtt','qos'], params['mqtt','retain'])
-                mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_MCUBE, m['mcube'], params['mqtt','qos'], params['mqtt','retain'])
+                mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_DATE, m1['date'], params['mqtt','qos'], params['mqtt','retain'])
+                mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_KWH, m1['kwh'], params['mqtt','qos'], params['mqtt','retain'])
+                mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_MCUBE, m1['mcube'], params['mqtt','qos'], params['mqtt','retain'])
+                mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_DELTA, m1['delta'], params['mqtt','qos'], params['mqtt','retain'])
                 logging.info("Monthly values published !")
 
                 ## Publish status values
