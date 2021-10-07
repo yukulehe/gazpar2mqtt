@@ -410,7 +410,7 @@ if __name__ == "__main__":
     
     # STEP 4 : Log params info         
     logging.info("GRDF config : username = %s, password = %s", params['grdf','username'], "******")
-    logging.info("Schedule : time = %s every day", params['schedule','time'])
+    logging.info("Schedule : time = %s", params['schedule','time'])
     logging.info("MQTT config : host = %s, port = %s, clientId = %s, qos = %s, topic = %s, retain = %s", \
                  params['mqtt','host'], params['mqtt','port'], params['mqtt','clientId'], \
                  params['mqtt','qos'],params['mqtt','topic'],params['mqtt','retain'])
