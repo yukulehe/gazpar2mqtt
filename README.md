@@ -82,7 +82,7 @@ python3 app/gazpar2mqtt.py --help
 
 ## Docker
 
-[Docker repository] (https://hub.docker.com/repository/docker/yukulehe/gazpar2mqtt) 
+[Docker repository](https://hub.docker.com/repository/docker/yukulehe/gazpar2mqtt) 
 
 Example of docker run command with environment variables :
 
