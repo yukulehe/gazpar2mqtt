@@ -19,11 +19,6 @@ import logging
 import pprint
 from envparse import env
 
-# OS environment variables
-PFILE = "/.params"
-DOCKER_MANDATORY_VARENV=['GRDF_USERNAME','GRDF_PASSWORD','MQTT_HOST']
-DOCKER_OPTIONAL_VARENV=['MQTT_PORT','MQTT_CLIENTID','MQTT_USERNAME','MQTT_PASSWORD','MQTT_QOS', 'MQTT_TOPIC', 'MQTT_RETAIN']
-
 # Grdf API constants
 GRDF_API_MAX_RETRIES = 5 # number of retries max to get accurate data from GRDF
 GRDF_API_WAIT_BTW_RETRIES = 10 # number of seconds between two tries
