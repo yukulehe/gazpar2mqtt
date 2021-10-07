@@ -114,9 +114,7 @@ Note : you can replace the default topic prefix *gazpar* (see mqtt broker requir
 | gazpar/monthly/delta | Variation in percentage between the last and the previous monthly statement  |
 
 ### Status values :
-> gazpar/status/date
 
-> gazpar/status/value
 
 | Topic | Description |
 | --- | --- |
