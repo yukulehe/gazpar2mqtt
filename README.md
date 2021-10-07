@@ -96,22 +96,29 @@ Please note that only GRDF's **last values** are published in the MQTT broker in
 Note : you can replace the default topic prefix *gazpar* (see mqtt broker requirements chapter)
 
 ### Daily values :
-> gazpar/daily/date
 
-> gazpar/daily/kwh
-
-> gazpar/daily/mcube
+| Topic | Description |
+| --- | --- |
+| gazpar/daily/date | Date of the last daily statement |
+| gazpar/daily/kwh | Consumption in kwh of the last daily statement |
+| gazpar/daily/mcube | Consumption in cube meter of the last daily statement  |
+| gazpar/daily/delta | Variation in percentage between the last and the previous daily statement  |
 
 ### Monthly values :
-> gazpar/monthly/date
 
-> gazpar/monthly/kwh
-
-> gazpar/monthly/mcube
+| Topic | Description |
+| --- | --- |
+| gazpar/monthly/date | Month of the last monthly statement |
+| gazpar/monthly/kwh | Consumption in kwh of the last monthly statement |
+| gazpar/monthly/mcube | Consumption in cube meter of the last monthly statement  |
+| gazpar/monthly/delta | Variation in percentage between the last and the previous monthly statement  |
 
 ### Status values :
 > gazpar/status/date
 
 > gazpar/status/value
 
-
+| Topic | Description |
+| --- | --- |
+| gazpar/status/date | Last execution date time of gazpar2mqtt |
+| gazpar/status/value | Last execution date time status of  gazpar2mqtt |
