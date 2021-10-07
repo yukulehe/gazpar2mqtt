@@ -300,7 +300,7 @@ def run(params):
                 if d2['mcube'] is None or d2['mcube'] == '0':
                     d1['delta'] = 0
                 else:
-                    d1['delta'] = round((( d1['mcube'] - d2['mcube'] ) / d2['mcube']) * 100),2)
+                    d1['delta'] = round((( d1['mcube'] - d2['mcube'] ) / d2['mcube']) * 100,2)
                 if m2['mcube'] is None or m2['mcube'] == '0':
                     m1['delta'] = 0
                 else:
