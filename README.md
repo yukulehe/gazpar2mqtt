@@ -35,11 +35,11 @@ Currently, parameters can be provided by command's arguments or by the OS's envi
 
 Mandatory :
 
-| Variable | Description | Default value |
+| Variable | Description |
 | --- | --- | --- |
-| **GRDF_USERNAME** | Your GRDF login (ex : myemail@email.com) | |
-| **GRDF_PASSWORD** | Your GRDF password | |
-| **MQTT_HOST** | Hostname or ip adress of the MQTT broker | |
+| **GRDF_USERNAME** | Your GRDF login (ex : myemail@email.com) |
+| **GRDF_PASSWORD** | Your GRDF password |
+| **MQTT_HOST** | Hostname or ip adress of the MQTT broker |
 
 Optionnal :
 
