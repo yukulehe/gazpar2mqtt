@@ -35,20 +35,25 @@ Currently, parameters can be provided by command's arguments or by the OS's envi
 
 Mandatory :
 
-* **GRDF_USERNAME** : your GRDF login (ex : myemail@email.com)
-* **GRDF_PASSWORD** : your GRDF password
-* **MQTT_HOST** : hostname or ip adress of the MQTT broker.
+| Variable | Description | Default value |
+| --- | --- | --- |
+| **GRDF_USERNAME** | Your GRDF login (ex : myemail@email.com) | |
+| **GRDF_PASSWORD** | Your GRDF password | |
+| **MQTT_HOST** | Hostname or ip adress of the MQTT broker | |
 
 Optionnal :
 
-* **SCHEDULE_TIME** : time for refreshing data everyday, default *04:00*
-* **MQTT_PORT** : port of the MQTT broker, default *1883*
-* **MQTT_TOPIC** : topic used as prefix, default *gazpar*
-* **MQTT_CLIENTID** : client id to be used for connexion to the MQTT broker, default *gazou*
-* **MQTT_USERNAME** : username to be used for connexion to the MQTT broker
-* **MQTT_PASSWORD** : password to be used for connexion to the MQTT broker
-* **MQTT_QOS** : QOS for message publishing (0, 1 or 2), default *1*
-* **MQTT_RETAIN** : Retain flag, default False.
+| Variable | Description | Default value |
+| --- | --- | --- |
+| **SCHEDULE_TIME** | Time for refreshing data everyday | 04:00 |
+| **MQTT_PORT** | Port of the MQTT broker | 1883 |
+| **MQTT_TOPIC** | Topic used as prefix | gazpar |
+| **MQTT_CLIENTID** | Client id to be used for connexion to the MQTT broker | gazou |
+| **MQTT_USERNAME** | Username to be used for connexion to the MQTT brokerr |  |
+| **MQTT_PASSWORD** | Password to be used for connexion to the MQTT brokerr |  |
+| **MQTT_QOS** | QOS for message publishing (0, 1 or 2) | 1 |
+| **MQTT_RETAIN** | Retain flag, default False | False |
+
 
 # Usage
 
