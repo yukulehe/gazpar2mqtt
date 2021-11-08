@@ -127,14 +127,14 @@ def _getEnvParams():
         params['mqtt','retain'] = os.environ['MQTT_RETAIN']
         
     if not "HASS_AUTODISCOVERY" in os.environ:
-        params['mqtt','retain'] = 'False'
+        params['hass','autodiscovery'] = 'False'
     else:
-        params['mqtt','retain'] = os.environ['HASS_AUTODISCOVERY']
+        params['hass','autodiscovery'] = os.environ['HASS_AUTODISCOVERY']
     
     if not "HASS_PREFIX" in os.environ:
-        params['mqtt','retain'] = 'False'
+        params['hass','prefix'] = 'False'
     else:
-        params['mqtt','retain'] = os.environ['HASS_PREFIX']
+        params['hass','prefix'] = os.environ['HASS_PREFIX']
     
     return params
 
@@ -280,7 +280,7 @@ def run(params):
     
     
     
-    # STEP 4 : We publish only the last input from grdf
+    # STEP 4A : Standalone mode : We publish only the last input from grdf
     if mqtt.MQTT_IS_CONNECTED:   
 
         try:
@@ -341,9 +341,41 @@ def run(params):
                 logging.info("Status values published !")
 
         except:
-            logging.error("Unable to publish value to mqtt broker")
+            logging.error("Standalone mode : unable to publish value to mqtt broker")
             sys.exit(1)
+    
+    # STEP 4B : Home assistant discovery mode
+    if params['hass','autodiscovery'] == true
+
+        try:
+
+            # Prepare topic
+            prefixTopic = params['mqtt','topic']
             
+            if dCount <= GRDF_API_ERRONEOUS_COUNT and dCount > 1: # Unfortunately, GRDF date are not correct
+
+            
+            else: # Looks good ...                
+                
+                
+                
+                # Publish configuration for each sensor
+                logging.info("Publishing to Mqtt the Home assistant devices configurations...")
+                mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('daily_gas'), params['mqtt','qos'], params['mqtt','retain'])
+                mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('monthly_gas'), params['mqtt','qos'], params['mqtt','retain'])
+                mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('daily_energy'), params['mqtt','qos'], params['mqtt','retain'])
+                mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('monthly_energy'), params['mqtt','qos'], params['mqtt','retain'])
+                logging.info("Home assistant devices configurations published !")
+                
+                # Publish values
+                payload = {
+                    
+                }
+
+        except:
+            logging.error("Standalone mode : unable to publish value to mqtt broker")
+            sys.exit(1)
+    
     else:
         logging.error("Unable to publish value to mqtt broker cause it seems to be disconnected")
         sys.exit(1)
@@ -418,6 +450,8 @@ if __name__ == "__main__":
     if args.mqtt_qos is not None: params['mqtt','qos']=int(args.mqtt_qos)
     if args.mqtt_topic is not None: params['mqtt','topic']=args.mqtt_topic
     if args.mqtt_retain is not None: params['mqtt','retain']=args.mqtt_retain
+    if args.hass_autodiscovery is not None: params['hass','autodiscovery']=args.hass_autodiscovery
+    if args.hass_prefix is not None: params['hass','prefix']=args.hass_prefix
     
     # STEP 4 : Log params info         
     logging.info("GRDF config : username = %s, password = %s", params['grdf','username'], "******")
