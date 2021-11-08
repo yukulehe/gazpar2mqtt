@@ -348,18 +348,13 @@ def run(params):
     if params['hass','autodiscovery'] == true
 
         try:
-
-            # Prepare topic
-            prefixTopic = params['mqtt','topic']
             
             if dCount <= GRDF_API_ERRONEOUS_COUNT and dCount > 1: # Unfortunately, GRDF date are not correct
 
             
             else: # Looks good ...                
                 
-                
-                
-                # Publish configuration for each sensor
+                # Publish Hass configuration for each sensor
                 logging.info("Publishing to Mqtt the Home assistant devices configurations...")
                 mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('daily_gas'), params['mqtt','qos'], params['mqtt','retain'])
                 mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('monthly_gas'), params['mqtt','qos'], params['mqtt','retain'])
@@ -368,9 +363,16 @@ def run(params):
                 logging.info("Home assistant devices configurations published !")
                 
                 # Publish values
+                logging.info("Publishing to Mqtt the Home assistant devices values...")
                 payload = {
-                    
-                }
+                    "daily_gas" : d1['mcube'],
+                    "monthly_gas" : m1['mcube'],
+                    "daily_energy" : d1['kwh'],
+                    "monthly_energy" : m1['kwh'],
+                    }
+                mqtt.publish(client, hass.getStateTopic, payload, params['mqtt','qos'], params['mqtt','retain'])3
+                logging.info("Home assistant devices values published !)
+                
 
         except:
             logging.error("Standalone mode : unable to publish value to mqtt broker")
