@@ -12,6 +12,7 @@ import locale
 from dateutil.relativedelta import relativedelta
 import gazpar
 import mqtt
+import hass
 import json
 
 import argparse
@@ -124,6 +125,16 @@ def _getEnvParams():
         params['mqtt','retain'] = 'False'
     else:
         params['mqtt','retain'] = os.environ['MQTT_RETAIN']
+        
+    if not "HASS_AUTODISCOVERY" in os.environ:
+        params['mqtt','retain'] = 'False'
+    else:
+        params['mqtt','retain'] = os.environ['HASS_AUTODISCOVERY']
+    
+    if not "HASS_PREFIX" in os.environ:
+        params['mqtt','retain'] = 'False'
+    else:
+        params['mqtt','retain'] = os.environ['HASS_PREFIX']
     
     return params
 
