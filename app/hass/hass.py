@@ -105,3 +105,4 @@ def getHassConfig(device,value):
     else:
         topic = "error"
     
+    return config
