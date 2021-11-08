@@ -15,7 +15,7 @@ HASS_UNIT_CLASS_ENERGY = "kWh"
 HA_AUTODISCOVERY_PREFIX = "homeassistant"
 
 
-def getHassStateTopic(device):
+def getHassStateTopic():
     
     topic = f"{HA_AUTODISCOVERY_PREFIX}/{HASS_COMPONENT_SENSOR}/gazpar/state"
     return topic
