@@ -15,7 +15,6 @@ HASS_UNIT_CLASS_ENERGY = "kWh"
 HA_AUTODISCOVERY_PREFIX = "homeassistant"
 
 
-
 def getHassStateTopic(device):
     
     topic = f"{HA_AUTODISCOVERY_PREFIX}/{HASS_COMPONENT_SENSOR}/gazpar/state"
@@ -23,14 +22,14 @@ def getHassStateTopic(device):
 
 def getHassConfigTopic():
     
-    configTopic = f"{HA_AUTODISCOVERY_PREFIX}/{HASS_COMPONENT_SENSOR}/gazpar/config"
-    return configTopic
+    topic = f"{HA_AUTODISCOVERY_PREFIX}/{HASS_COMPONENT_SENSOR}/gazpar/config"
+    return topic
     
     
 def getHassConfigPayload(device):
     
     # Set state topic
-    state_topic = f"{HA_AUTODISCOVERY_PREFIX}/sensor/gazpar/state"
+    state_topic = getHassStateTopic
     
     # Gas consumption daily
     if device == daily_gas:
