@@ -64,8 +64,8 @@ def getHassConfig(device,value):
             "device_class" : "gas"
             "name" : "gaspar_daily_gas"
             "unique_id" : "gaspar_daily_gas"
-            "state_topic" = {getHassStateTopic(device)}
-            "unit_of_measurement" : "m3"
+            "state_topic" = getHassStateTopic(device)
+            "unit_of_measurement" : HASS_UNIT_CLASS_GAS
             "value_template" : "{{ value_json.daily_gas}}"
         }
     
@@ -75,8 +75,8 @@ def getHassConfig(device,value):
             "device_class" : "gas"
             "name" : "gaspar_monthly_gas"
             "unique_id" : "gaspar_monthly_gas"
-            "state_topic" = {getHassStateTopic(device)}
-            "unit_of_measurement" : "m3"
+            "state_topic" = getHassStateTopic(device)
+            "unit_of_measurement" : HASS_UNIT_CLASS_GAS
             "value_template" : "{{ value_json.monthly_gas}}"
         }
         
@@ -87,7 +87,7 @@ def getHassConfig(device,value):
             "name" : "gaspar_daily_energy"
             "unique_id" : "gaspar_daily_energy"
             "state_topic" = {getHassStateTopic(device)}
-            "unit_of_measurement" : "kWh"
+            "unit_of_measurement" : HASS_UNIT_CLASS_ENERGY
             "value_template" : "{{ value_json.daily_energy}}"
         }
      
@@ -97,8 +97,8 @@ def getHassConfig(device,value):
             "device_class" : "energy"
             "name" : "gaspar_monthly_energy"
             "unique_id" : "gaspar_monthly_energy"
-            "state_topic" = {getHassStateTopic(device)}
-            "unit_of_measurement" : "kWh"
+            "state_topic" = getHassStateTopic(device)
+            "unit_of_measurement" : HASS_UNIT_CLASS_ENERGY
             "value_template" : "{{ value_json.monthly_energy}}"
         }
         
