@@ -35,7 +35,7 @@ def getHassConfigPayload(device):
     # Gas consumption daily
     if device == daily_gas:
         
-        config= {
+        configPayload= {
             "device_class" : "gas"
             "name" : "gaspar_daily_gas"
             "unique_id" : "gaspar_daily_gas"
@@ -47,7 +47,7 @@ def getHassConfigPayload(device):
     # Gas consumption monthly
     elif device == monthly_gas:
         
-        config= {
+        configPayload= {
             "device_class" : "gas"
             "name" : "gaspar_monthly_gas"
             "unique_id" : "gaspar_monthly_gas"
@@ -59,7 +59,7 @@ def getHassConfigPayload(device):
     # Energy consumption daily
     elif device == daily_energy:
         
-        config= {
+        configPayload= {
             "device_class" : "energy"
             "name" : "gaspar_daily_energy"
             "unique_id" : "gaspar_daily_energy"
@@ -71,7 +71,7 @@ def getHassConfigPayload(device):
     # Energy consumption monthly
     elif device == monthly_energy:
         
-        config= {
+        configPayload= {
             "device_class" : "energy"
             "name" : "gaspar_monthly_energy"
             "unique_id" : "gaspar_monthly_energy"
@@ -83,4 +83,4 @@ def getHassConfigPayload(device):
     else:
         topic = "error"
     
-    return config
+    return configPayload
