@@ -1,9 +1,7 @@
 ### Define Home Assistant-related functionality. ###
 # More info on HA discovery : https://www.home-assistant.io/docs/mqtt/discovery
 
-import argparse
-from dataclasses import dataclass
-from typing import Any, Dict, Optional, Union
+import json
 
 HASS_COMPONENT_BINARY_SENSOR = "binary_sensor
 HASS_COMPONENT_SENSOR = "sensor"
@@ -14,7 +12,7 @@ HASS_UNIT_CLASS_ENERGY = "kWh"
 HA_AUTODISCOVERY_PREFIX = "homeassistant"
 
 # Return the state topic
-def getStateTopic():
+def getStateTopic(device):
     
     if device in ('daily_gas','monthly_gas','daily_energy','monthly_energy'):
         
@@ -27,7 +25,7 @@ def getStateTopic():
     return topic
 
 # Return the configuration topic
-def getConfigTopic():
+def getConfigTopic(device):
     
     if device in ('daily_gas','monthly_gas','daily_energy','monthly_energy'):
         
@@ -43,7 +41,7 @@ def getConfigTopic():
 def getConfigPayload(device):
     
     # Set state topic
-    state_topic = getHassStateTopic
+    stateTopic = getStateTopic(device)
     
     # Gas consumption daily
     if device == 'daily_gas':
@@ -52,8 +50,8 @@ def getConfigPayload(device):
             "device_class" : "gas"
             "name" : "gaspar_daily_gas"
             "unique_id" : "gaspar_daily_gas"
-            "state_topic" = state_topic
-            "unit_of_measurement" : HASS_UNIT_CLASS_GAS
+            "state_topic" = stateTopic
+            "unit_of_measurement" : "m3"
             "value_template" : "{{ value_json.daily_gas}}"
         }
     
@@ -64,8 +62,8 @@ def getConfigPayload(device):
             "device_class" : "gas"
             "name" : "gaspar_monthly_gas"
             "unique_id" : "gaspar_monthly_gas"
-            "state_topic" = state_topic
-            "unit_of_measurement" : HASS_UNIT_CLASS_GAS
+            "state_topic" = stateTopic
+            "unit_of_measurement" : "m3"
             "value_template" : "{{ value_json.monthly_gas}}"
         }
     
@@ -76,8 +74,8 @@ def getConfigPayload(device):
             "device_class" : "energy"
             "name" : "gaspar_daily_energy"
             "unique_id" : "gaspar_daily_energy"
-            "state_topic" = {getHassStateTopic(device)}
-            "unit_of_measurement" : HASS_UNIT_CLASS_ENERGY
+            "state_topic" = stateTopic
+            "unit_of_measurement" : "kWh"
             "value_template" : "{{ value_json.daily_energy}}"
         }
     
@@ -88,8 +86,8 @@ def getConfigPayload(device):
             "device_class" : "energy"
             "name" : "gaspar_monthly_energy"
             "unique_id" : "gaspar_monthly_energy"
-            "state_topic" = getHassStateTopic(device)
-            "unit_of_measurement" : HASS_UNIT_CLASS_ENERGY
+            "state_topic" = stateTopic
+            "unit_of_measurement" : "kWh"
             "value_template" : "{{ value_json.monthly_energy}}"
         }
         
@@ -108,17 +106,3 @@ def getConfigPayload(device):
         topic = "error"
     
     return configPayload
-
-# Return the configuration payload    
-def getStatePayload(daily_gas,monthly_gas,daily_energy,monthly_energy):
-    
-    statePayload = {
-        "daily_gas" : daily_gas,
-        "monthly_gas" : monthly_gas,
-        "daily_energy" : daily_energy,
-        "monthly_energy" : monthly_energy,
-        }
-    
-    return statePayload
-    
-    
