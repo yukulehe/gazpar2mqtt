@@ -520,7 +520,10 @@ if __name__ == "__main__":
     if args.hass_autodiscovery is not None: params['hass','autodiscovery']=args.hass_autodiscovery
     if args.hass_prefix is not None: params['hass','prefix']=args.hass_prefix
     
-    # STEP 4 : Log params info         
+    # STEP 4 : Log params info
+    logging.info("-----------------------------------------------------------")
+    logging.info("Program parameters")
+    logging.info("-----------------------------------------------------------")
     logging.info("GRDF config : username = %s, password = %s", params['grdf','username'], "******")
     logging.info("Schedule : time = %s", params['schedule','time'])
     logging.info("MQTT config : host = %s, port = %s, clientId = %s, qos = %s, topic = %s, retain = %s", \
