@@ -367,13 +367,13 @@ def run(params):
             
             # Set Hass sensors configuration
             logging.info("Update of Home Assistant sensors configurations...")
-            mqtt.publish(client, hass.getConfigTopicSensor, json.dumps(hass.getConfigPayload('daily_gas')), params['mqtt','qos'], params['mqtt','retain'])
-            mqtt.publish(client, hass.getConfigTopicSensor, json.dumps(hass.getConfigPayload('monthly_gas')), params['mqtt','qos'], params['mqtt','retain'])
-            mqtt.publish(client, hass.getConfigTopicSensor, json.dumps(hass.getConfigPayload('daily_energy')), params['mqtt','qos'], params['mqtt','retain'])
-            mqtt.publish(client, hass.getConfigTopicSensor, json.dumps(hass.getConfigPayload('monthly_energy')), params['mqtt','qos'], params['mqtt','retain'])
-            mqtt.publish(client, hass.getConfigTopicSensor, json.dumps(hass.getConfigPayload('consumption_date')), params['mqtt','qos'], params['mqtt','retain'])
-            mqtt.publish(client, hass.getConfigTopicSensor, json.dumps(hass.getConfigPayload('consumption_month')), params['mqtt','qos'], params['mqtt','retain'])
-            mqtt.publish(client, hass.getConfigTopicBinary, json.dumps(hass.getConfigPayload('connectivity')), params['mqtt','qos'], params['mqtt','retain'])
+            mqtt.publish(client, hass.getConfigTopicSensor(), json.dumps(hass.getConfigPayload('daily_gas')), params['mqtt','qos'], params['mqtt','retain'])
+            mqtt.publish(client, hass.getConfigTopicSensor(), json.dumps(hass.getConfigPayload('monthly_gas')), params['mqtt','qos'], params['mqtt','retain'])
+            mqtt.publish(client, hass.getConfigTopicSensor(), json.dumps(hass.getConfigPayload('daily_energy')), params['mqtt','qos'], params['mqtt','retain'])
+            mqtt.publish(client, hass.getConfigTopicSensor(), json.dumps(hass.getConfigPayload('monthly_energy')), params['mqtt','qos'], params['mqtt','retain'])
+            mqtt.publish(client, hass.getConfigTopicSensor(), json.dumps(hass.getConfigPayload('consumption_date')), params['mqtt','qos'], params['mqtt','retain'])
+            mqtt.publish(client, hass.getConfigTopicSensor(), json.dumps(hass.getConfigPayload('consumption_month')), params['mqtt','qos'], params['mqtt','retain'])
+            mqtt.publish(client, hass.getConfigTopicBinary(), json.dumps(hass.getConfigPayload('connectivity')), params['mqtt','qos'], params['mqtt','retain'])
             logging.info("Home assistant devices configurations updated !")
             
             if hasGrdfFailed: # Values when Grdf failed
@@ -382,7 +382,7 @@ def run(params):
                 statePayload = {
                     "connectivity": 'OFF'
                     }
-                mqtt.publish(client, hass.getStateTopicBinary, json.dumps(statePayload), params['mqtt','qos'], params['mqtt','retain'])
+                mqtt.publish(client, hass.getStateTopicBinary(), json.dumps(statePayload), params['mqtt','qos'], params['mqtt','retain'])
                 logging.info("Home Assistant binary sensors values updated !")
             
             else: # Values when Grdf succeeded                
@@ -397,7 +397,7 @@ def run(params):
                     "consumption_date": d1['date'],
                     "consumption_month": m1['date'],
                     }
-                mqtt.publish(client, hass.getStateTopicSensor, json.dumps(statePayload), params['mqtt','qos'], params['mqtt','retain'])
+                mqtt.publish(client, hass.getStateTopicSensor(), json.dumps(statePayload), params['mqtt','qos'], params['mqtt','retain'])
                 logging.info("Home Assistant sensors values updated !")
                 
                 # Publish Hass binary sensors values
@@ -405,7 +405,7 @@ def run(params):
                 statePayload = {
                     "connectivity": 'ON'
                     }
-                mqtt.publish(client, hass.getStateTopicBinary, json.dumps(statePayload), params['mqtt','qos'], params['mqtt','retain'])
+                mqtt.publish(client, hass.getStateTopicBinary(), json.dumps(statePayload), params['mqtt','qos'], params['mqtt','retain'])
                 logging.info("Home Assistant binary sensors values updated !")
                 
 
