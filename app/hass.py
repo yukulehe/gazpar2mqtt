@@ -13,7 +13,7 @@ def getStateTopic(device):
         
         topic = f"{HA_AUTODISCOVERY_PREFIX}/sensor/{MQTT_PREFIX}/state"
         
-    elif device in ('connectivity')
+    elif device in ('connectivity'):
     
         topic = f"{HA_AUTODISCOVERY_PREFIX}/binary_sensor/{MQTT_PREFIX}/state"
     
