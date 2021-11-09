@@ -134,7 +134,7 @@ To be completed...
 
 ### List of available sensors :
 
-| Sensors name | Component | Device class | Description |
+| Sensor name | Component | Device class | Description |
 | --- | --- | --- | --- |
 | gazpar_daily_gas | Sensor | Gas | Gas consumption in m3 of the last daily statement |
 | gazpar_daily_energy | Sensor | Energy | Gas consumption in kWh of the last daily statement |
