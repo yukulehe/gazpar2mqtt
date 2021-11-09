@@ -314,7 +314,7 @@ def run(params):
         
     
     # STEP 5A : Standalone mode
-    if mqtt.MQTT_IS_CONNECTED and 1 == 2:   
+    if mqtt.MQTT_IS_CONNECTED:   
 
         try:
 
