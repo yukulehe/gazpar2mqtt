@@ -361,7 +361,7 @@ def run(params):
             sys.exit(1)
     
     # STEP 5B : Home Assistant discovery mode
-    if params['hass','autodiscovery'] and mqtt.MQTT_IS_CONNECTED:
+    if params['hass','autodiscovery'] == 'True' and mqtt.MQTT_IS_CONNECTED:
 
         try:
             
