@@ -88,9 +88,14 @@ def getConfigPayload(device):
     return configPayload
 
 # Return the configuration payload    
-def getStatePayload(device):
+def getStatePayload(daily_gas,monthly_gas,daily_energy,monthly_energy):
     
-    statePayload = ""
+    statePayload = {
+        "daily_gas" : daily_gas,
+        "monthly_gas" : monthly_gas,
+        "daily_energy" : daily_energy,
+        "monthly_energy" : monthly_energy,
+        }
     
     return statePayload
     
