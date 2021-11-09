@@ -283,7 +283,7 @@ def run(params):
     
     
     # STEP 4A : Standalone mode
-    if mqtt.MQTT_IS_CONNECTED:   
+    if mqtt.MQTT_IS_CONNECTED 1 == 2:   
 
         try:
 
@@ -354,13 +354,13 @@ def run(params):
             
             # Set Hass sensors configuration
             logging.info("Update of Home Assistant sensors configurations...")
-            mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('daily_gas'), params['mqtt','qos'], params['mqtt','retain'])
-            mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('monthly_gas'), params['mqtt','qos'], params['mqtt','retain'])
-            mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('daily_energy'), params['mqtt','qos'], params['mqtt','retain'])
-            mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('monthly_energy'), params['mqtt','qos'], params['mqtt','retain'])
-            mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('consumption_date'), params['mqtt','qos'], params['mqtt','retain'])
-            mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('consumption_month'), params['mqtt','qos'], params['mqtt','retain'])
-            mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('connectivity'), params['mqtt','qos'], params['mqtt','retain'])
+            mqtt.publish(client, json.dumps(hass.getConfigTopic), json.dumps(hass.getConfigPayload('daily_gas')), params['mqtt','qos'], params['mqtt','retain'])
+            #mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('monthly_gas'), params['mqtt','qos'], params['mqtt','retain'])
+            #mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('daily_energy'), params['mqtt','qos'], params['mqtt','retain'])
+            #mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('monthly_energy'), params['mqtt','qos'], params['mqtt','retain'])
+            #mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('consumption_date'), params['mqtt','qos'], params['mqtt','retain'])
+            #mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('consumption_month'), params['mqtt','qos'], params['mqtt','retain'])
+            #mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('connectivity'), params['mqtt','qos'], params['mqtt','retain'])
             logging.info("Home assistant devices configurations updated !")
             
             # Check data quality
@@ -370,7 +370,7 @@ def run(params):
                 statePayload = {
                     "connectivity": 'OFF'
                     }
-                mqtt.publish(client, hass.getStateTopic, statePayload, params['mqtt','qos'], params['mqtt','retain'])
+                #mqtt.publish(client, hass.getStateTopic, statePayload, params['mqtt','qos'], params['mqtt','retain'])
                 logging.info("Home Assistant sensors values updated !")
             
             else: # Looks good ...                
@@ -387,7 +387,7 @@ def run(params):
                     "consumption_month": m1["date"],
                     "connectivity": 'ON'
                     }
-                mqtt.publish(client, hass.getStateTopic, statePayload, params['mqtt','qos'], params['mqtt','retain'])
+                #mqtt.publish(client, hass.getStateTopic, statePayload, params['mqtt','qos'], params['mqtt','retain'])
                 logging.info("Home Assistant sensors values updated !")
                 
 
