@@ -4,17 +4,18 @@
 import json
 
 HA_AUTODISCOVERY_PREFIX = "homeassistant"
+MQTT_PREFIX = "gazpar"
 
 # Return the state topic
 def getStateTopic(device):
     
     if device in ('daily_gas','monthly_gas','daily_energy','monthly_energy','consumption_date','consumption_month'):
         
-        topic = f"{HA_AUTODISCOVERY_PREFIX}/sensor/gazpar/state"
+        topic = f"{HA_AUTODISCOVERY_PREFIX}/sensor/{MQTT_PREFIX}/state"
         
     elif device in ('connectivity')
     
-        topic = f"{HA_AUTODISCOVERY_PREFIX}/binary_sensor/gazpar/state"
+        topic = f"{HA_AUTODISCOVERY_PREFIX}/binary_sensor/{MQTT_PREFIX}/state"
     
     return topic
 
@@ -22,13 +23,13 @@ def getStateTopic(device):
 def getConfigTopic(device):
     
     if device in ('daily_gas','monthly_gas','daily_energy','monthly_energy' \
-                  , 'gazpar_consumption_date', 'gazpar_consumption_month'):
+                  , 'consumption_date', 'consumption_month'):
         
-        topic = f"{HA_AUTODISCOVERY_PREFIX}/sensor/gazpar/config"
+        topic = f"{HA_AUTODISCOVERY_PREFIX}/sensor/{MQTT_PREFIX}/config"
         
     elif device in ('connectivity')
     
-        topic = f"{HA_AUTODISCOVERY_PREFIX}/binary_sensor/gazpar/config"
+        topic = f"{HA_AUTODISCOVERY_PREFIX}/binary_sensor/{MQTT_PREFIX}/config"
     
     return topic
     
@@ -43,8 +44,8 @@ def getConfigPayload(device):
         
         configPayload= {
             "device_class" : "gas"
-            "name" : "gazpar_daily_gas"
-            "unique_id" : "gazpar_daily_gas"
+            "name" : f"{MQTT_PREFIX}_{device}"
+            "unique_id" : f"{MQTT_PREFIX}_{device}"
             "state_topic" = stateTopic
             "unit_of_measurement" : "m3"
             "value_template" : "{{ value_json.daily_gas}}"
@@ -55,8 +56,8 @@ def getConfigPayload(device):
         
         configPayload= {
             "device_class" : "gas"
-            "name" : "gazpar_monthly_gas"
-            "unique_id" : "gazpar_monthly_gas"
+            "name" : f"{MQTT_PREFIX}_{device}"
+            "unique_id" : f"{MQTT_PREFIX}_{device}"
             "state_topic" = stateTopic
             "unit_of_measurement" : "m3"
             "value_template" : "{{ value_json.monthly_gas}}"
@@ -67,8 +68,8 @@ def getConfigPayload(device):
         
         configPayload= {
             "device_class" : "energy"
-            "name" : "gazpar_daily_energy"
-            "unique_id" : "gazpar_daily_energy"
+            "name" : f"{MQTT_PREFIX}_{device}"
+            "unique_id" : f"{MQTT_PREFIX}_{device}"
             "state_topic" = stateTopic
             "unit_of_measurement" : "kWh"
             "value_template" : "{{ value_json.daily_energy}}"
@@ -79,8 +80,8 @@ def getConfigPayload(device):
         
         configPayload= {
             "device_class" : "energy"
-            "name" : "gazpar_monthly_energy"
-            "unique_id" : "gazpar_monthly_energy"
+            "name" : f"{MQTT_PREFIX}_{device}"
+            "unique_id" : f"{MQTT_PREFIX}_{device}"
             "state_topic" = stateTopic
             "unit_of_measurement" : "kWh"
             "value_template" : "{{ value_json.monthly_energy}}"
@@ -92,8 +93,8 @@ def getConfigPayload(device):
         configPayload= {
             "device_class" : "time_date"
             "display_options": "date"
-            "name" : "gazpar_consumption_date"
-            "unique_id" : "gazpar_consumption_date"
+            "name" : f"{MQTT_PREFIX}_{device}"
+            "unique_id" : f"{MQTT_PREFIX}_{device}"
             "state_topic" = getHassStateTopic(device)
             "value_template" : "{{ value_json.consumption_date}}"
         }
@@ -103,8 +104,8 @@ def getConfigPayload(device):
         
         configPayload= {
             "device_class" : ""
-            "name" : "gazpar_consumption_month"
-            "unique_id" : "gazpar_consumption_month"
+            "name" : f"{MQTT_PREFIX}_{device}"
+            "unique_id" : f"{MQTT_PREFIX}_{device}"
             "state_topic" = getHassStateTopic(device)
             "value_template" : "{{ value_json.consumption_month}}"
         }
@@ -114,8 +115,8 @@ def getConfigPayload(device):
         
         configPayload= {
             "device_class" : "connectivity"
-            "name" : "gazpar_monthly_energy"
-            "unique_id" : "gazpar_monthly_energy"
+            "name" : f"{MQTT_PREFIX}_{device}"
+            "unique_id" : f"{MQTT_PREFIX}_{device}"
             "state_topic" = getHassStateTopic(device)
             "value_template" : "{{ value_json.connectivity}}"
         }
