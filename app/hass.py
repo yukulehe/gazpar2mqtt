@@ -14,7 +14,7 @@ def getStateTopicSensor():
     return topic
 
 # Return the state topic for binary sensors
-def getStateTopicSensorBinary():
+def getStateTopicBinary():
     
     topic = f"{HA_AUTODISCOVERY_PREFIX}/binary_sensor/{MQTT_PREFIX}/state"
     return topic
