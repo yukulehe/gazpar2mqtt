@@ -350,7 +350,7 @@ def run(params):
     # STEP 4B : Home Assistant discovery mode
     if params['hass','autodiscovery'] and mqtt.MQTT_IS_CONNECTED:
 
-        try:
+        #try:
             
             # Set Hass sensors configuration
             logging.info("Update of Home Assistant sensors configurations...")
@@ -391,9 +391,9 @@ def run(params):
                 logging.info("Home Assistant sensors values updated !")
                 
 
-        except:
-            logging.error("Home Assistant discovery mode : unable to publish value to mqtt broker")
-            sys.exit(1)
+        #except:
+        #    logging.error("Home Assistant discovery mode : unable to publish value to mqtt broker")
+        #    sys.exit(1)
     
     else:
         logging.error("Unable to publish value to mqtt broker cause it seems to be disconnected")
