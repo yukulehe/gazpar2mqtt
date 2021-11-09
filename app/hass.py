@@ -10,7 +10,8 @@ MQTT_PREFIX = "gazpar"
 # Return the state topic
 def getStateTopic(device):
     
-    if device in ('daily_gas','monthly_gas','daily_energy','monthly_energy','consumption_date','consumption_month'):
+    if device in ('daily_gas','monthly_gas','daily_energy','monthly_energy' \
+                  ,'consumption_date','consumption_month'):
         
         topic = f"{HA_AUTODISCOVERY_PREFIX}/sensor/{MQTT_PREFIX}/state"
         
