@@ -281,8 +281,39 @@ def run(params):
             sys.exit(1)
     
     
+    # STEP 4 : Check data quality and prepare values
     
-    # STEP 4A : Standalone mode
+    if dCount <= GRDF_API_ERRONEOUS_COUNT and dCount > 1: # Unfortunately, GRDF date are not correct
+        
+        # Set flag
+        hasGrdfFailed = true
+        
+    elif: # GRDF date are correct
+        
+        # Set flag
+        hasGrdfFailed = false
+        
+        # Get GRDF -1 values
+        d1 = resDay[dCount-1]
+        m1 = resMonth[mCount-1]
+
+        # Get GRDF -2 values
+        d2 = resDay[dCount-2]
+        m2 = resMonth[mCount-2]
+
+        # Calculate delta in %
+        if d2['mcube'] is None or d2['mcube'] == '0':
+            d1['delta'] = 0
+        else:
+            d1['delta'] = round((( d1['mcube'] - d2['mcube'] ) / d2['mcube']) * 100,2)
+        if m2['mcube'] is None or m2['mcube'] == '0':
+            m1['delta'] = 0
+        else:
+            m1['delta'] = round((( m1['mcube'] - m2['mcube'] ) / m2['mcube']) * 100,2)
+        
+        
+    
+    # STEP 5A : Standalone mode
     if mqtt.MQTT_IS_CONNECTED and 1 == 2:   
 
         try:
@@ -290,8 +321,8 @@ def run(params):
             # Prepare topic
             prefixTopic = params['mqtt','topic']
             
-            # Check data quality
-            if dCount <= GRDF_API_ERRONEOUS_COUNT and dCount > 1: # Unfortunately, GRDF date are not correct
+            # Set values
+            if hasGrdfFailed: # Values when Grdf failed
 
                 ## Publish status values
                 logging.info("Publishing to Mqtt status values...")
@@ -300,25 +331,7 @@ def run(params):
                 logging.info("Status values published !")
 
             
-            else: # Looks good ...
-
-                # Get GRDF -1 values
-                d1 = resDay[dCount-1]
-                m1 = resMonth[mCount-1]
-                
-                # Get GRDF -2 values
-                d2 = resDay[dCount-2]
-                m2 = resMonth[mCount-2]
-                
-                # Calculate delta in %
-                if d2['mcube'] is None or d2['mcube'] == '0':
-                    d1['delta'] = 0
-                else:
-                    d1['delta'] = round((( d1['mcube'] - d2['mcube'] ) / d2['mcube']) * 100,2)
-                if m2['mcube'] is None or m2['mcube'] == '0':
-                    m1['delta'] = 0
-                else:
-                    m1['delta'] = round((( m1['mcube'] - m2['mcube'] ) / m2['mcube']) * 100,2)
+            else: # Values when Grdf succeeded
                 
                 
                 # Publish daily values
@@ -347,7 +360,7 @@ def run(params):
             logging.error("Standalone mode : unable to publish value to mqtt broker")
             sys.exit(1)
     
-    # STEP 4B : Home Assistant discovery mode
+    # STEP 5B : Home Assistant discovery mode
     if params['hass','autodiscovery'] and mqtt.MQTT_IS_CONNECTED:
 
         #try:
@@ -364,7 +377,7 @@ def run(params):
             logging.info("Home assistant devices configurations updated !")
             
             # Check data quality
-            if dCount <= GRDF_API_ERRONEOUS_COUNT and dCount > 1: # Unfortunately, GRDF date are not correct
+            if hasGrdfFailed: # Values when Grdf failed
                 
                 logging.info("Update of Home Assistant sensors values...")
                 statePayload = {
@@ -373,8 +386,7 @@ def run(params):
                 #mqtt.publish(client, hass.getStateTopic, statePayload, params['mqtt','qos'], params['mqtt','retain'])
                 logging.info("Home Assistant sensors values updated !")
             
-            else: # Looks good ...                
-                
+            else: # Values when Grdf succeeded                
                 
                 # Publish Hass sensors values
                 logging.info("Update of Home assistant sensors values...")
