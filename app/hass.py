@@ -1,9 +1,11 @@
-"""Define Home Assistant-related functionality."""
+### Define Home Assistant-related functionality. ###
+# More info on HA discovery : https://www.home-assistant.io/docs/mqtt/discovery
+
 import argparse
 from dataclasses import dataclass
 from typing import Any, Dict, Optional, Union
 
-HASS_COMPONENT_BINARY_SENSOR = "binary_sensor"
+HASS_COMPONENT_BINARY_SENSOR = "binary_sensor
 HASS_COMPONENT_SENSOR = "sensor"
 
 HASS_DEVICE_CLASS_GAS = "gas"
@@ -14,19 +16,20 @@ HASS_UNIT_CLASS_ENERGY = "kWh"
 
 HA_AUTODISCOVERY_PREFIX = "homeassistant"
 
-
-def getHassStateTopic():
+# Return the state topic
+def getStateTopic():
     
     topic = f"{HA_AUTODISCOVERY_PREFIX}/{HASS_COMPONENT_SENSOR}/gazpar/state"
     return topic
 
-def getHassConfigTopic():
+# Return the configuration topic
+def getConfigTopic():
     
     topic = f"{HA_AUTODISCOVERY_PREFIX}/{HASS_COMPONENT_SENSOR}/gazpar/config"
     return topic
     
-    
-def getHassConfigPayload(device):
+# Return the configuration payload    
+def getConfigPayload(device):
     
     # Set state topic
     state_topic = getHassStateTopic
@@ -83,3 +86,12 @@ def getHassConfigPayload(device):
         topic = "error"
     
     return configPayload
+
+# Return the configuration payload    
+def getStatePayload(device):
+    
+    statePayload = ""
+    
+    return statePayload
+    
+    
