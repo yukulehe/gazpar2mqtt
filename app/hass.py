@@ -44,11 +44,11 @@ def getConfigPayload(device):
     if device == 'daily_gas':
         
         configPayload= {
-            "device_class": "gas"
-            "name": f"{MQTT_PREFIX}_{device}"
-            "unique_id": f"{MQTT_PREFIX}_{device}"
-            "state_topic": stateTopic
-            "unit_of_measurement": "m3"
+            "device_class": "gas",
+            "name": f"{MQTT_PREFIX}_{device}",
+            "unique_id": f"{MQTT_PREFIX}_{device}",
+            "state_topic": stateTopic,
+            "unit_of_measurement": "m3",
             "value_template": "{{ value_json.daily_gas}}"
         }
     
@@ -56,11 +56,11 @@ def getConfigPayload(device):
     elif device == 'monthly_gas':
         
         configPayload= {
-            "device_class": "gas"
-            "name": f"{MQTT_PREFIX}_{device}"
-            "unique_id": f"{MQTT_PREFIX}_{device}"
-            "state_topic": stateTopic
-            "unit_of_measurement": "m3"
+            "device_class": "gas",
+            "name": f"{MQTT_PREFIX}_{device}",
+            "unique_id": f"{MQTT_PREFIX}_{device}",
+            "state_topic": stateTopic,
+            "unit_of_measurement": "m3",
             "value_template": "{{ value_json.monthly_gas}}"
         }
     
@@ -68,11 +68,11 @@ def getConfigPayload(device):
     elif device == 'daily_energy':
         
         configPayload= {
-            "device_class": "energy"
-            "name": f"{MQTT_PREFIX}_{device}"
-            "unique_id": f"{MQTT_PREFIX}_{device}"
-            "state_topic": stateTopic
-            "unit_of_measurement": "kWh"
+            "device_class": "energy",
+            "name": f"{MQTT_PREFIX}_{device}",
+            "unique_id": f"{MQTT_PREFIX}_{device}",
+            "state_topic": stateTopic,
+            "unit_of_measurement": "kWh",
             "value_template": "{{ value_json.daily_energy}}"
         }
     
@@ -80,11 +80,11 @@ def getConfigPayload(device):
     elif device == 'monthly_energy':
         
         configPayload= {
-            "device_class": "energy"
-            "name": f"{MQTT_PREFIX}_{device}"
-            "unique_id": f"{MQTT_PREFIX}_{device}"
-            "state_topic": stateTopic
-            "unit_of_measurement": "kWh"
+            "device_class": "energy",
+            "name": f"{MQTT_PREFIX}_{device}",
+            "unique_id": f"{MQTT_PREFIX}_{device}",
+            "state_topic": stateTopic,
+            "unit_of_measurement": "kWh",
             "value_template": "{{ value_json.monthly_energy}}"
         }
         
@@ -92,11 +92,11 @@ def getConfigPayload(device):
     elif device == 'consumption_date':
         
         configPayload= {
-            "device_class": "time_date"
-            "display_options": "date"
-            "name": f"{MQTT_PREFIX}_{device}"
-            "unique_id": f"{MQTT_PREFIX}_{device}"
-            "state_topic": getHassStateTopic(device)
+            "device_class": "time_date",
+            "display_options": "date",
+            "name": f"{MQTT_PREFIX}_{device}",
+            "unique_id": f"{MQTT_PREFIX}_{device}",
+            "state_topic": getHassStateTopic(device),
             "value_template": "{{ value_json.consumption_date}}"
         }
     
@@ -104,10 +104,10 @@ def getConfigPayload(device):
     elif device == 'consumption_month':
         
         configPayload= {
-            "device_class": ""
-            "name": f"{MQTT_PREFIX}_{device}"
-            "unique_id": f"{MQTT_PREFIX}_{device}"
-            "state_topic": getHassStateTopic(device)
+            "device_class": "",
+            "name": f"{MQTT_PREFIX}_{device}",
+            "unique_id": f"{MQTT_PREFIX}_{device}",
+            "state_topic": getHassStateTopic(device),
             "value_template": "{{ value_json.consumption_month}}"
         }
     
@@ -115,10 +115,10 @@ def getConfigPayload(device):
     elif device == 'connectivity':
         
         configPayload= {
-            "device_class": "connectivity"
-            "name": f"{MQTT_PREFIX}_{device}"
-            "unique_id": f"{MQTT_PREFIX}_{device}"
-            "state_topic": getHassStateTopic(device)
+            "device_class": "connectivity",
+            "name": f"{MQTT_PREFIX}_{device}",
+            "unique_id": f"{MQTT_PREFIX}_{device}",
+            "state_topic": getHassStateTopic(device),
             "value_template": "{{ value_json.connectivity}}"
         }
         
