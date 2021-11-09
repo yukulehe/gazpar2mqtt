@@ -351,9 +351,18 @@ def run(params):
 
         try:
             
+            # Set HA sensor configuration
+            logging.info("Update of Home assistant sensors configurations...")
+            mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('daily_gas'), params['mqtt','qos'], params['mqtt','retain'])
+            mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('monthly_gas'), params['mqtt','qos'], params['mqtt','retain'])
+            mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('daily_energy'), params['mqtt','qos'], params['mqtt','retain'])
+            mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('monthly_energy'), params['mqtt','qos'], params['mqtt','retain'])
+            mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('connectivity'), params['mqtt','qos'], params['mqtt','retain'])
+            logging.info("Home assistant devices configurations updated !")
+            
             if dCount <= GRDF_API_ERRONEOUS_COUNT and dCount > 1: # Unfortunately, GRDF date are not correct
                 
-                logging.info("Publishing to Mqtt the Home assistant devices configurations...")
+                logging.info("Update of Home assistant sensors values...")
                 statePayload = {
                     "daily_gas" : daily_gas,
                     "monthly_gas" : monthly_gas,
@@ -362,20 +371,13 @@ def run(params):
                     "connectivity": 'OFF'
                     }
                 mqtt.publish(client, hass.getStateTopic, statePayload, params['mqtt','qos'], params['mqtt','retain'])
-                logging.info("Home assistant devices values published !)
+                logging.info("Home assistant sensors values updated !")
             
             else: # Looks good ...                
                 
-                # Publish Hass configuration for each sensor
-                logging.info("Publishing to Mqtt the Home assistant devices configurations...")
-                mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('daily_gas'), params['mqtt','qos'], params['mqtt','retain'])
-                mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('monthly_gas'), params['mqtt','qos'], params['mqtt','retain'])
-                mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('daily_energy'), params['mqtt','qos'], params['mqtt','retain'])
-                mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('monthly_energy'), params['mqtt','qos'], params['mqtt','retain'])
-                logging.info("Home assistant devices configurations published !")
                 
                 # Publish values
-                logging.info("Publishing to Mqtt the Home assistant devices values...")
+                logging.info("Update of Home assistant sensors values...")
                 statePayload = {
                     "daily_gas" : daily_gas,
                     "monthly_gas" : monthly_gas,
@@ -384,7 +386,7 @@ def run(params):
                     "connectivity": 'ON'
                     }
                 mqtt.publish(client, hass.getStateTopic, statePayload, params['mqtt','qos'], params['mqtt','retain'])
-                logging.info("Home assistant devices values published !)
+                logging.info("Home assistant sensors values updated !")
                 
 
         except:
