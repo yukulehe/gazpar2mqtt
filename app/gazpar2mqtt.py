@@ -352,12 +352,14 @@ def run(params):
 
         try:
             
-            # Set HA sensor configuration
+            # Set Hass sensors configuration
             logging.info("Update of Home Assistant sensors configurations...")
             mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('daily_gas'), params['mqtt','qos'], params['mqtt','retain'])
             mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('monthly_gas'), params['mqtt','qos'], params['mqtt','retain'])
             mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('daily_energy'), params['mqtt','qos'], params['mqtt','retain'])
             mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('monthly_energy'), params['mqtt','qos'], params['mqtt','retain'])
+            mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('consumption_date'), params['mqtt','qos'], params['mqtt','retain'])
+            mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('consumption_month'), params['mqtt','qos'], params['mqtt','retain'])
             mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('connectivity'), params['mqtt','qos'], params['mqtt','retain'])
             logging.info("Home assistant devices configurations updated !")
             
@@ -374,7 +376,7 @@ def run(params):
             else: # Looks good ...                
                 
                 
-                # Publish values
+                # Publish Hass sensors values
                 logging.info("Update of Home assistant sensors values...")
                 statePayload = {
                     "daily_gas" : d1["mcube"],
