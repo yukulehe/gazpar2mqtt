@@ -318,6 +318,10 @@ def run(params):
 
         try:
 
+            logging.info("-----------------------------------------------------------")
+            logging.info("Stand alone publication mode")
+            logging.info("-----------------------------------------------------------")
+            
             # Prepare topic
             prefixTopic = params['mqtt','topic']
             
@@ -361,9 +365,13 @@ def run(params):
             sys.exit(1)
     
     # STEP 5B : Home Assistant discovery mode
-    if params['hass','autodiscovery'] == 'True' and mqtt.MQTT_IS_CONNECTED:
+    if params['hass','autodiscovery'] == 'True':
 
         try:
+            
+            logging.info("-----------------------------------------------------------")
+            logging.info("Home assistant publication mode")
+            logging.info("-----------------------------------------------------------")
             
             # Set Hass sensors configuration
             logging.info("Update of Home Assistant sensors configurations...")
@@ -412,10 +420,6 @@ def run(params):
         except:
             logging.error("Home Assistant discovery mode : unable to publish value to mqtt broker")
             sys.exit(1)
-    
-    else:
-        logging.error("Unable to publish value to mqtt broker cause it seems to be disconnected")
-        sys.exit(1)
     
     
     # STEP 6 : Disconnect mqtt broker
