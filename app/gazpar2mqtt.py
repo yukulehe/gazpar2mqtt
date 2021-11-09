@@ -381,6 +381,8 @@ def run(params):
                     "monthly_gas" : m1["mcube"],
                     "daily_energy" : d1["kwh"],
                     "monthly_energy" : m1["kwh"],
+                    "consumption_date": d1["date"],
+                    "consumption_month": m1["date"],
                     "connectivity": 'ON'
                     }
                 mqtt.publish(client, hass.getStateTopic, statePayload, params['mqtt','qos'], params['mqtt','retain'])
