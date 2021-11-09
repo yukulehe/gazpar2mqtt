@@ -162,9 +162,12 @@ def run(params):
     dtn = _dateTimeToStr(datetime.datetime.now())
     
     # STEP 2 : Log to MQTT broker
+    logging.info("-----------------------------------------------------------")
+    logging.info("Connexion to MQTT broker")
+    logging.info("-----------------------------------------------------------")
+    
     try:
         
-        logging.info("Connection to Mqtt broker...")
         
         # Construct mqtt client
         client = mqtt.create_client(params['mqtt','clientId'],params['mqtt','username'],params['mqtt','password'])
@@ -190,11 +193,15 @@ def run(params):
     
     ## STEP 3A : Get daily data
     #try:
-    logging.info("Get daily data from GRDF")
+    logging.info("-----------------------------------------------------------")
+    logging.info("Get data from GRDF")
+    logging.info("-----------------------------------------------------------")
 
     # Set period (5 days ago)
     startDate = _getDayOfssetDate(datetime.date.today(), 5)
     endDate = _dayToStr(datetime.date.today())
+    
+    logging.info("Get daily data from GRDF")
 
     # Get data and retry when failed
     i= 1
@@ -283,12 +290,20 @@ def run(params):
     
     # STEP 4 : Check data quality and prepare values
     
+    logging.info("-----------------------------------------------------------")
+    logging.info("Check Grdf data quality")
+    logging.info("-----------------------------------------------------------")
+    
     if dCount <= GRDF_API_ERRONEOUS_COUNT and dCount > 1: # Unfortunately, GRDF date are not correct
+        
+        logging.info("Grdf data are not reliable")
         
         # Set flag
         hasGrdfFailed = True
         
     else: # GRDF date are correct
+        
+        logging.info("Grdf data are correct")
         
         # Set flag
         hasGrdfFailed = False
@@ -423,6 +438,10 @@ def run(params):
     
     
     # STEP 6 : Disconnect mqtt broker
+    logging.info("-----------------------------------------------------------")
+    logging.info("Disconnecion from MQTT")
+    logging.info("-----------------------------------------------------------")
+    
     if mqtt.MQTT_IS_CONNECTED:
         try:
             mqtt.disconnect(client)
@@ -432,6 +451,9 @@ def run(params):
             sys.exit(1)
     
     # Game over
+    logging.info("-----------------------------------------------------------")
+    logging.info("End of program")
+    logging.info("-----------------------------------------------------------")
     if params['schedule','time'] is not None: 
         logging.info("gazpar2mqtt next run scheduled at %s",params['schedule','time'])
     else: 
