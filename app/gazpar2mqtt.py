@@ -190,43 +190,43 @@ def run(params):
     
     ## STEP 3A : Get daily data
     #try:
-        logging.info("Get daily data from GRDF")
-                     
-        # Set period (5 days ago)
-        startDate = _getDayOfssetDate(datetime.date.today(), 5)
-        endDate = _dayToStr(datetime.date.today())
-        
-        # Get data and retry when failed
-        i= 1
-        dCount = 0
-        
-        while i <= GRDF_API_MAX_RETRIES and dCount <= GRDF_API_ERRONEOUS_COUNT:
-        
-            if i > 1:
-                logging.info("Failed. Please wait %s seconds for next try",GRDF_API_WAIT_BTW_RETRIES)
-                time.sleep(GRDF_API_WAIT_BTW_RETRIES)
-                
-            logging.info("Try number %s", str(i))
-            
-            # Log to Grdf
-            token = _log_to_Grdf(params['grdf','username'], params['grdf','password'])
-            
-            # Get result from GRDF by day
-            resDay = gazpar.get_data_per_day(token, startDate, endDate)
-            
-            # Update loop conditions
-            i = i + 1
-            dCount = len(resDay)
+    logging.info("Get daily data from GRDF")
 
-        # Display infos
-        if dCount <= GRDF_API_ERRONEOUS_COUNT:
-            logging.warning("Daily values from GRDF seems wrong...")
-        else:
-            logging.info("Number of daily values retrieved : %s", dCount)
-        
-        # Display results
-        for d in resDay:
-            logging.info("%s : Energy = %s kwh, Gas = %s m3",d['date'],d['kwh'], d['mcube'])
+    # Set period (5 days ago)
+    startDate = _getDayOfssetDate(datetime.date.today(), 5)
+    endDate = _dayToStr(datetime.date.today())
+
+    # Get data and retry when failed
+    i= 1
+    dCount = 0
+
+    while i <= GRDF_API_MAX_RETRIES and dCount <= GRDF_API_ERRONEOUS_COUNT:
+
+        if i > 1:
+            logging.info("Failed. Please wait %s seconds for next try",GRDF_API_WAIT_BTW_RETRIES)
+            time.sleep(GRDF_API_WAIT_BTW_RETRIES)
+
+        logging.info("Try number %s", str(i))
+
+        # Log to Grdf
+        token = _log_to_Grdf(params['grdf','username'], params['grdf','password'])
+
+        # Get result from GRDF by day
+        resDay = gazpar.get_data_per_day(token, startDate, endDate)
+
+        # Update loop conditions
+        i = i + 1
+        dCount = len(resDay)
+
+    # Display infos
+    if dCount <= GRDF_API_ERRONEOUS_COUNT:
+        logging.warning("Daily values from GRDF seems wrong...")
+    else:
+        logging.info("Number of daily values retrieved : %s", dCount)
+
+    # Display results
+    for d in resDay:
+        logging.info("%s : Energy = %s kwh, Gas = %s m3",d['date'],d['kwh'], d['mcube'])
                 
     #except:
     #    logging.error("Unable to get daily data from GRDF")
