@@ -103,7 +103,7 @@ def getConfigPayload(device):
             "display_options": "date",
             "name": f"{MQTT_PREFIX}_{device}",
             "unique_id": f"{MQTT_PREFIX}_{device}",
-            "state_topic": getHassStateTopic(device),
+            "state_topic": stateTopic,
             "value_template": "{{ value_json.consumption_date}}"
         }
     
@@ -114,7 +114,7 @@ def getConfigPayload(device):
             "device_class": "",
             "name": f"{MQTT_PREFIX}_{device}",
             "unique_id": f"{MQTT_PREFIX}_{device}",
-            "state_topic": getHassStateTopic(device),
+            "state_topic": stateTopic,
             "value_template": "{{ value_json.consumption_month}}"
         }
     
@@ -125,7 +125,7 @@ def getConfigPayload(device):
             "device_class": "connectivity",
             "name": f"{MQTT_PREFIX}_{device}",
             "unique_id": f"{MQTT_PREFIX}_{device}",
-            "state_topic": getHassStateTopic(device),
+            "state_topic": stateTopic,
             "value_template": "{{ value_json.connectivity}}"
         }
         
