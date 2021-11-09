@@ -96,7 +96,7 @@ docker run --name app/gazpar2mqtt -e GRDF_USERNAME=gazou@email.com -e GRDF_PASSW
 ```
 
 
-## MQTT publication topics
+## MQTT publication topics (Standalone mode)
 
 Please note that only GRDF's **last values** are published in the MQTT broker in the topics bellow.
 
@@ -127,3 +127,19 @@ Note : you can replace the default topic prefix *gazpar* (see mqtt broker requir
 | --- | --- |
 | gazpar/status/date | Last execution date time of gazpar2mqtt |
 | gazpar/status/value | Last execution status of  gazpar2mqtt |
+
+## Home Assistant discovery sensors
+
+To be completed...
+
+### Sensors :
+
+| Sensors | Device class | Description |
+| --- | --- | --- |
+| gazpar_daily_gas | Gas | Gas consumption in m3 of the last daily statement |
+| gazpar_daily_energy | Energy | Gas consumption in kWh of the last daily statement |
+| gazpar_monthly_gas | Gas | Gas consumption in m3 of the last monthly statement |
+| gazpar_monthly_energy | Energy | Gas consumption in kWh of the last monthly statement |
+| gazpar_consumption_date | Date | Date of the last daily statement |
+| gazpar_consumption_month | Text | Month of the last monthly statement |
+| gazpar_connectivity | Connectivity | Binary sensor which indicates if the last gazpar statement succeeded (ON) or failed (OFF) |
