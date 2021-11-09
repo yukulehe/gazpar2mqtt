@@ -25,7 +25,7 @@ GRDF_API_MAX_RETRIES = 5 # number of retries max to get accurate data from GRDF
 GRDF_API_WAIT_BTW_RETRIES = 10 # number of seconds between two tries
 GRDF_API_ERRONEOUS_COUNT = 1 # Erroneous number of results send by GRDF 
 
-# Sensors topics
+# Sensors topics for standalone mode
 
 ## Daily
 TOPIC_DAILY_DATE = "/daily/date"
@@ -226,7 +226,7 @@ def run(params):
         
         # Display results
         for d in resDay:
-            logging.info("%s : Kwh = %s, Mcube = %s",d['date'],d['kwh'], d['mcube'])
+            logging.info("%s : Energy = %s kwh, Gas = %s m3",d['date'],d['kwh'], d['mcube'])
                 
     except:
         logging.error("Unable to get daily data from GRDF")
@@ -290,6 +290,7 @@ def run(params):
             # Prepare topic
             prefixTopic = params['mqtt','topic']
             
+            # Check data quality
             if dCount <= GRDF_API_ERRONEOUS_COUNT and dCount > 1: # Unfortunately, GRDF date are not correct
 
                 ## Publish status values
@@ -346,13 +347,13 @@ def run(params):
             logging.error("Standalone mode : unable to publish value to mqtt broker")
             sys.exit(1)
     
-    # STEP 4B : Home assistant discovery mode
+    # STEP 4B : Home Assistant discovery mode
     if params['hass','autodiscovery'] and mqtt.MQTT_IS_CONNECTED:
 
         try:
             
             # Set HA sensor configuration
-            logging.info("Update of Home assistant sensors configurations...")
+            logging.info("Update of Home Assistant sensors configurations...")
             mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('daily_gas'), params['mqtt','qos'], params['mqtt','retain'])
             mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('monthly_gas'), params['mqtt','qos'], params['mqtt','retain'])
             mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('daily_energy'), params['mqtt','qos'], params['mqtt','retain'])
@@ -360,18 +361,15 @@ def run(params):
             mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('connectivity'), params['mqtt','qos'], params['mqtt','retain'])
             logging.info("Home assistant devices configurations updated !")
             
+            # Check data quality
             if dCount <= GRDF_API_ERRONEOUS_COUNT and dCount > 1: # Unfortunately, GRDF date are not correct
                 
-                logging.info("Update of Home assistant sensors values...")
+                logging.info("Update of Home Assistant sensors values...")
                 statePayload = {
-                    "daily_gas" : daily_gas,
-                    "monthly_gas" : monthly_gas,
-                    "daily_energy" : daily_energy,
-                    "monthly_energy" : monthly_energy,
                     "connectivity": 'OFF'
                     }
                 mqtt.publish(client, hass.getStateTopic, statePayload, params['mqtt','qos'], params['mqtt','retain'])
-                logging.info("Home assistant sensors values updated !")
+                logging.info("Home Assistant sensors values updated !")
             
             else: # Looks good ...                
                 
@@ -379,18 +377,18 @@ def run(params):
                 # Publish values
                 logging.info("Update of Home assistant sensors values...")
                 statePayload = {
-                    "daily_gas" : daily_gas,
-                    "monthly_gas" : monthly_gas,
-                    "daily_energy" : daily_energy,
-                    "monthly_energy" : monthly_energy,
+                    "daily_gas" : d1["mcube"],
+                    "monthly_gas" : m1["mcube"],
+                    "daily_energy" : d1["kwh"],
+                    "monthly_energy" : m1["kwh"],
                     "connectivity": 'ON'
                     }
                 mqtt.publish(client, hass.getStateTopic, statePayload, params['mqtt','qos'], params['mqtt','retain'])
-                logging.info("Home assistant sensors values updated !")
+                logging.info("Home Assistant sensors values updated !")
                 
 
         except:
-            logging.error("Home assistant discovery mode : unable to publish value to mqtt broker")
+            logging.error("Home Assistant discovery mode : unable to publish value to mqtt broker")
             sys.exit(1)
     
     else:
