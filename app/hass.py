@@ -14,7 +14,7 @@ HA_AUTODISCOVERY_PREFIX = "homeassistant"
 # Return the state topic
 def getStateTopic(device):
     
-    if device in ('daily_gas','monthly_gas','daily_energy','monthly_energy'):
+    if device in ('daily_gas','monthly_gas','daily_energy','monthly_energy','consumption_date','consumption_month'):
         
         topic = f"{HA_AUTODISCOVERY_PREFIX}/sensor/gazpar/state"
         
@@ -27,7 +27,8 @@ def getStateTopic(device):
 # Return the configuration topic
 def getConfigTopic(device):
     
-    if device in ('daily_gas','monthly_gas','daily_energy','monthly_energy'):
+    if device in ('daily_gas','monthly_gas','daily_energy','monthly_energy' /
+                  , 'gazpar_consumption_date', 'gazpar_consumption_month'):
         
         topic = f"{HA_AUTODISCOVERY_PREFIX}/sensor/gazpar/config"
         
@@ -48,8 +49,8 @@ def getConfigPayload(device):
         
         configPayload= {
             "device_class" : "gas"
-            "name" : "gaspar_daily_gas"
-            "unique_id" : "gaspar_daily_gas"
+            "name" : "gazpar_daily_gas"
+            "unique_id" : "gazpar_daily_gas"
             "state_topic" = stateTopic
             "unit_of_measurement" : "m3"
             "value_template" : "{{ value_json.daily_gas}}"
@@ -60,8 +61,8 @@ def getConfigPayload(device):
         
         configPayload= {
             "device_class" : "gas"
-            "name" : "gaspar_monthly_gas"
-            "unique_id" : "gaspar_monthly_gas"
+            "name" : "gazpar_monthly_gas"
+            "unique_id" : "gazpar_monthly_gas"
             "state_topic" = stateTopic
             "unit_of_measurement" : "m3"
             "value_template" : "{{ value_json.monthly_gas}}"
@@ -72,8 +73,8 @@ def getConfigPayload(device):
         
         configPayload= {
             "device_class" : "energy"
-            "name" : "gaspar_daily_energy"
-            "unique_id" : "gaspar_daily_energy"
+            "name" : "gazpar_daily_energy"
+            "unique_id" : "gazpar_daily_energy"
             "state_topic" = stateTopic
             "unit_of_measurement" : "kWh"
             "value_template" : "{{ value_json.daily_energy}}"
@@ -84,22 +85,45 @@ def getConfigPayload(device):
         
         configPayload= {
             "device_class" : "energy"
-            "name" : "gaspar_monthly_energy"
-            "unique_id" : "gaspar_monthly_energy"
+            "name" : "gazpar_monthly_energy"
+            "unique_id" : "gazpar_monthly_energy"
             "state_topic" = stateTopic
             "unit_of_measurement" : "kWh"
             "value_template" : "{{ value_json.monthly_energy}}"
         }
         
-    # Energy consumption monthly
+    # Gazpar consumption date
+    elif device == 'consumption_date':
+        
+        configPayload= {
+            "device_class" : "time_date"
+            "display_options": "date"
+            "name" : "gazpar_consumption_date"
+            "unique_id" : "gazpar_consumption_date"
+            "state_topic" = getHassStateTopic(device)
+            "value_template" : "{{ value_json.consumption_date}}"
+        }
+    
+    # Gazpar consumption month
+    elif device == 'consumption_month':
+        
+        configPayload= {
+            "device_class" : ""
+            "name" : "gazpar_consumption_month"
+            "unique_id" : "gazpar_consumption_month"
+            "state_topic" = getHassStateTopic(device)
+            "value_template" : "{{ value_json.gazpar_consumption_month}}"
+        }
+    
+    # Gazpar connectivity
     elif device == 'connectivity':
         
         configPayload= {
             "device_class" : "connectivity"
-            "name" : "gaspar_monthly_energy"
-            "unique_id" : "gaspar_monthly_energy"
+            "name" : "gazpar_monthly_energy"
+            "unique_id" : "gazpar_monthly_energy"
             "state_topic" = getHassStateTopic(device)
-            "value_template" : "{{ value_json.monthly_energy}}"
+            "value_template" : "{{ value_json.connectivity}}"
         }
         
     else:
