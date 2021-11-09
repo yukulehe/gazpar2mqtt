@@ -134,7 +134,7 @@ To be completed...
 
 ### List of available sensors :
 
-| Sensors | Component | Device class | Description |
+| Sensors name | Component | Device class | Description |
 | --- | --- | --- | --- |
 | gazpar_daily_gas | Sensor | Gas | Gas consumption in m3 of the last daily statement |
 | gazpar_daily_energy | Sensor | Energy | Gas consumption in kWh of the last daily statement |
@@ -152,3 +152,4 @@ To be completed...
 | home_assistant/binary_sensor/gazpar/config | Binary sensor's configuration topic |
 | home_assistant/binary_sensor/gazpar/state | Binary sensor's state topic |
 
+Note : you can replace the default topic prefix *home_asssistant*
