@@ -432,6 +432,10 @@ if __name__ == "__main__":
         "--mqtt_topic",   help="Topic prefix of the messages to be published to the Mqtt broker")
     parser.add_argument(
         "--mqtt_retain",   help="Retain flag of the messages to be published to the Mqtt broker, possible values : True or False")
+    parser.add_argument(
+        "--hass_autodiscovery",   help="Enable Home Assistant autodiscovery, possible values : True or False")
+    parser.add_argument(
+        "--hass_prefix",   help="Home Assistant autodiscovery Mqtt topic prefix")
     
     args = parser.parse_args()
     
@@ -461,6 +465,8 @@ if __name__ == "__main__":
     logging.info("MQTT config : host = %s, port = %s, clientId = %s, qos = %s, topic = %s, retain = %s", \
                  params['mqtt','host'], params['mqtt','port'], params['mqtt','clientId'], \
                  params['mqtt','qos'],params['mqtt','topic'],params['mqtt','retain'])
+    logging.info("Home Assistant config : Enable = %s, Topic prefix = %s", \
+                 params['hass','autodiscovery'], params['hass','prefix'])
 
     # STEP 5 : Run
     if params['schedule','time'] is not None:
