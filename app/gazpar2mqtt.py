@@ -379,10 +379,10 @@ def run(params):
                 # Publish Hass sensors values
                 logging.info("Update of Home assistant sensors values...")
                 statePayload = {
-                    "daily_gas" : d1["mcube"],
-                    "monthly_gas" : m1["mcube"],
-                    "daily_energy" : d1["kwh"],
-                    "monthly_energy" : m1["kwh"],
+                    "daily_gas": d1["mcube"],
+                    "monthly_gas": m1["mcube"],
+                    "daily_energy": d1["kwh"],
+                    "monthly_energy": m1["kwh"],
                     "consumption_date": d1["date"],
                     "consumption_month": m1["date"],
                     "connectivity": 'ON'
