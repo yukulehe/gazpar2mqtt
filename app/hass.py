@@ -3,12 +3,6 @@
 
 import json
 
-HASS_COMPONENT_BINARY_SENSOR = "binary_sensor
-HASS_COMPONENT_SENSOR = "sensor"
-
-HASS_UNIT_CLASS_GAS = "m3"
-HASS_UNIT_CLASS_ENERGY = "kWh"
-
 HA_AUTODISCOVERY_PREFIX = "homeassistant"
 
 # Return the state topic
@@ -27,7 +21,7 @@ def getStateTopic(device):
 # Return the configuration topic
 def getConfigTopic(device):
     
-    if device in ('daily_gas','monthly_gas','daily_energy','monthly_energy' /
+    if device in ('daily_gas','monthly_gas','daily_energy','monthly_energy' \
                   , 'gazpar_consumption_date', 'gazpar_consumption_month'):
         
         topic = f"{HA_AUTODISCOVERY_PREFIX}/sensor/gazpar/config"
