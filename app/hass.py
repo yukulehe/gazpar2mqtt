@@ -3,6 +3,7 @@
 
 import json
 
+
 HA_AUTODISCOVERY_PREFIX = "homeassistant"
 MQTT_PREFIX = "gazpar"
 
@@ -43,82 +44,82 @@ def getConfigPayload(device):
     if device == 'daily_gas':
         
         configPayload= {
-            "device_class" : "gas"
-            "name" : f"{MQTT_PREFIX}_{device}"
-            "unique_id" : f"{MQTT_PREFIX}_{device}"
-            "state_topic" = stateTopic
-            "unit_of_measurement" : "m3"
-            "value_template" : "{{ value_json.daily_gas}}"
+            "device_class": "gas"
+            "name": f"{MQTT_PREFIX}_{device}"
+            "unique_id": f"{MQTT_PREFIX}_{device}"
+            "state_topic": stateTopic
+            "unit_of_measurement": "m3"
+            "value_template": "{{ value_json.daily_gas}}"
         }
     
     # Gas consumption monthly
     elif device == 'monthly_gas':
         
         configPayload= {
-            "device_class" : "gas"
-            "name" : f"{MQTT_PREFIX}_{device}"
-            "unique_id" : f"{MQTT_PREFIX}_{device}"
-            "state_topic" = stateTopic
-            "unit_of_measurement" : "m3"
-            "value_template" : "{{ value_json.monthly_gas}}"
+            "device_class": "gas"
+            "name": f"{MQTT_PREFIX}_{device}"
+            "unique_id": f"{MQTT_PREFIX}_{device}"
+            "state_topic": stateTopic
+            "unit_of_measurement": "m3"
+            "value_template": "{{ value_json.monthly_gas}}"
         }
     
     # Energy consumption daily
     elif device == 'daily_energy':
         
         configPayload= {
-            "device_class" : "energy"
-            "name" : f"{MQTT_PREFIX}_{device}"
-            "unique_id" : f"{MQTT_PREFIX}_{device}"
-            "state_topic" = stateTopic
-            "unit_of_measurement" : "kWh"
-            "value_template" : "{{ value_json.daily_energy}}"
+            "device_class": "energy"
+            "name": f"{MQTT_PREFIX}_{device}"
+            "unique_id": f"{MQTT_PREFIX}_{device}"
+            "state_topic": stateTopic
+            "unit_of_measurement": "kWh"
+            "value_template": "{{ value_json.daily_energy}}"
         }
     
     # Energy consumption monthly
     elif device == 'monthly_energy':
         
         configPayload= {
-            "device_class" : "energy"
-            "name" : f"{MQTT_PREFIX}_{device}"
-            "unique_id" : f"{MQTT_PREFIX}_{device}"
-            "state_topic" = stateTopic
-            "unit_of_measurement" : "kWh"
-            "value_template" : "{{ value_json.monthly_energy}}"
+            "device_class": "energy"
+            "name": f"{MQTT_PREFIX}_{device}"
+            "unique_id": f"{MQTT_PREFIX}_{device}"
+            "state_topic": stateTopic
+            "unit_of_measurement": "kWh"
+            "value_template": "{{ value_json.monthly_energy}}"
         }
         
     # Gazpar consumption date
     elif device == 'consumption_date':
         
         configPayload= {
-            "device_class" : "time_date"
+            "device_class": "time_date"
             "display_options": "date"
-            "name" : f"{MQTT_PREFIX}_{device}"
-            "unique_id" : f"{MQTT_PREFIX}_{device}"
-            "state_topic" = getHassStateTopic(device)
-            "value_template" : "{{ value_json.consumption_date}}"
+            "name": f"{MQTT_PREFIX}_{device}"
+            "unique_id": f"{MQTT_PREFIX}_{device}"
+            "state_topic": getHassStateTopic(device)
+            "value_template": "{{ value_json.consumption_date}}"
         }
     
     # Gazpar consumption month
     elif device == 'consumption_month':
         
         configPayload= {
-            "device_class" : ""
-            "name" : f"{MQTT_PREFIX}_{device}"
-            "unique_id" : f"{MQTT_PREFIX}_{device}"
-            "state_topic" = getHassStateTopic(device)
-            "value_template" : "{{ value_json.consumption_month}}"
+            "device_class": ""
+            "name": f"{MQTT_PREFIX}_{device}"
+            "unique_id": f"{MQTT_PREFIX}_{device}"
+            "state_topic": getHassStateTopic(device)
+            "value_template": "{{ value_json.consumption_month}}"
         }
     
     # Gazpar connectivity
     elif device == 'connectivity':
         
         configPayload= {
-            "device_class" : "connectivity"
-            "name" : f"{MQTT_PREFIX}_{device}"
-            "unique_id" : f"{MQTT_PREFIX}_{device}"
-            "state_topic" = getHassStateTopic(device)
-            "value_template" : "{{ value_json.connectivity}}"
+            "device_class": "connectivity"
+            "name": f"{MQTT_PREFIX}_{device}"
+            "unique_id": f"{MQTT_PREFIX}_{device}"
+            "state_topic": getHassStateTopic(device)
+            "value_template": "{{ value_json.connectivity}}"
         }
         
     else:
