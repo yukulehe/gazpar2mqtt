@@ -153,7 +153,9 @@ def _log_to_Grdf(username,password):
         logging.error("unable to login on %s", gazpar.API_BASE_URI)
         sys.exit(1)
 
-# Main program
+#######################################################################
+#### Main program
+#######################################################################
 def run(params):
     
     # Store time now
@@ -280,7 +282,7 @@ def run(params):
     
     
     
-    # STEP 4A : Standalone mode : We publish only the last input from grdf
+    # STEP 4A : Standalone mode
     if mqtt.MQTT_IS_CONNECTED:   
 
         try:
@@ -345,7 +347,7 @@ def run(params):
             sys.exit(1)
     
     # STEP 4B : Home assistant discovery mode
-    if params['hass','autodiscovery'] == true
+    if params['hass','autodiscovery'] and mqtt.MQTT_IS_CONNECTED:
 
         try:
             
@@ -364,13 +366,8 @@ def run(params):
                 
                 # Publish values
                 logging.info("Publishing to Mqtt the Home assistant devices values...")
-                payload = {
-                    "daily_gas" : d1['mcube'],
-                    "monthly_gas" : m1['mcube'],
-                    "daily_energy" : d1['kwh'],
-                    "monthly_energy" : m1['kwh'],
-                    }
-                mqtt.publish(client, hass.getStateTopic, payload, params['mqtt','qos'], params['mqtt','retain'])3
+                statePayload = hass.getStatePayload(d1['mcube'],m1['mcube'],d1['kwh'],m1['kwh'])
+                mqtt.publish(client, hass.getStateTopic, statePayload, params['mqtt','qos'], params['mqtt','retain'])3
                 logging.info("Home assistant devices values published !)
                 
 
