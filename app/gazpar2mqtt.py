@@ -353,6 +353,15 @@ def run(params):
             
             if dCount <= GRDF_API_ERRONEOUS_COUNT and dCount > 1: # Unfortunately, GRDF date are not correct
                 
+                logging.info("Publishing to Mqtt the Home assistant devices configurations...")
+                statePayload = {
+                    "daily_gas" : daily_gas,
+                    "monthly_gas" : monthly_gas,
+                    "daily_energy" : daily_energy,
+                    "monthly_energy" : monthly_energy,
+                    "connectivity": 'OFF'
+                    }
+                mqtt.publish(client, hass.getStateTopic, statePayload, params['mqtt','qos'], params['mqtt','retain'])
                 logging.info("Home assistant devices values published !)
             
             else: # Looks good ...                
@@ -367,8 +376,14 @@ def run(params):
                 
                 # Publish values
                 logging.info("Publishing to Mqtt the Home assistant devices values...")
-                statePayload = hass.getStatePayload(d1['mcube'],m1['mcube'],d1['kwh'],m1['kwh'])
-                mqtt.publish(client, hass.getStateTopic, statePayload, params['mqtt','qos'], params['mqtt','retain'])3
+                statePayload = {
+                    "daily_gas" : daily_gas,
+                    "monthly_gas" : monthly_gas,
+                    "daily_energy" : daily_energy,
+                    "monthly_energy" : monthly_energy,
+                    "connectivity": 'ON'
+                    }
+                mqtt.publish(client, hass.getStateTopic, statePayload, params['mqtt','qos'], params['mqtt','retain'])
                 logging.info("Home assistant devices values published !)
                 
 
