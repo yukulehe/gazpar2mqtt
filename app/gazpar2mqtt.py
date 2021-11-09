@@ -412,7 +412,7 @@ def run(params):
         sys.exit(1)
     
     
-    # STEP 5 : Disconnect mqtt broker
+    # STEP 6 : Disconnect mqtt broker
     if mqtt.MQTT_IS_CONNECTED:
         try:
             mqtt.disconnect(client)
