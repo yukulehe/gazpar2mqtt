@@ -132,14 +132,23 @@ Note : you can replace the default topic prefix *gazpar* (see mqtt broker requir
 
 To be completed...
 
-### Sensors :
+### List of available sensors :
 
-| Sensors | Device class | Description |
-| --- | --- | --- |
-| gazpar_daily_gas | Gas | Gas consumption in m3 of the last daily statement |
-| gazpar_daily_energy | Energy | Gas consumption in kWh of the last daily statement |
-| gazpar_monthly_gas | Gas | Gas consumption in m3 of the last monthly statement |
-| gazpar_monthly_energy | Energy | Gas consumption in kWh of the last monthly statement |
-| gazpar_consumption_date | Date | Date of the last daily statement |
-| gazpar_consumption_month | Text | Month of the last monthly statement |
-| gazpar_connectivity | Connectivity | Binary sensor which indicates if the last gazpar statement succeeded (ON) or failed (OFF) |
+| Sensors | Component | Device class | Description |
+| --- | --- | --- | --- |
+| gazpar_daily_gas | Sensor | Gas | Gas consumption in m3 of the last daily statement |
+| gazpar_daily_energy | Sensor | Energy | Gas consumption in kWh of the last daily statement |
+| gazpar_monthly_gas | Sensor | Gas | Gas consumption in m3 of the last monthly statement |
+| gazpar_monthly_energy | Sensor | Energy | Gas consumption in kWh of the last monthly statement |
+| gazpar_consumption_date | Sensor | Date | Date of the last daily statement |
+| gazpar_consumption_month | Sensor | Text | Month of the last monthly statement |
+| gazpar_connectivity | Binary sensor | Connectivity | Binary sensor which indicates if the last gazpar statement succeeded (ON) or failed (OFF) |
+
+### List of topics :
+| Topic | Description
+| --- | --- 
+| home_assistant/sensor/gazpar/config | Sensor's configuration topic |
+| home_assistant/sensor/gazpar/state | Sensor's state topic |
+| home_assistant/binary_sensor/gazpar/config | Binary sensor's configuration topic |
+| home_assistant/binary_sensor/gazpar/state | Binary sensor's state topic |
+
