@@ -161,6 +161,9 @@ def run(params):
     # Store time now
     dtn = _dateTimeToStr(datetime.datetime.now())
     
+    # Prepare flag
+    hasGrdfFailed = False
+    
     # STEP 2 : Log to MQTT broker
     logging.info("-----------------------------------------------------------")
     logging.info("Connexion to MQTT broker")
