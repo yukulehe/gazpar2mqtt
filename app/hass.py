@@ -29,7 +29,14 @@ def getStateTopic():
 # Return the configuration topic
 def getConfigTopic():
     
-    topic = f"{HA_AUTODISCOVERY_PREFIX}/{HASS_COMPONENT_SENSOR}/gazpar/config"
+    if device in ('daily_gas','monthly_gas','daily_energy','monthly_energy'):
+        
+        topic = f"{HA_AUTODISCOVERY_PREFIX}/sensor/gazpar/config"
+        
+    elif device in ('connectivity')
+    
+        topic = f"{HA_AUTODISCOVERY_PREFIX}/binary_sensor/gazpar/config"
+    
     return topic
     
 # Return the configuration payload    
