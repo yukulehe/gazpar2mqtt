@@ -288,7 +288,7 @@ def run(params):
         # Set flag
         hasGrdfFailed = true
         
-    elif: # GRDF date are correct
+    else: # GRDF date are correct
         
         # Set flag
         hasGrdfFailed = false
