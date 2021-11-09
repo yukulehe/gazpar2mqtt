@@ -352,7 +352,8 @@ def run(params):
         try:
             
             if dCount <= GRDF_API_ERRONEOUS_COUNT and dCount > 1: # Unfortunately, GRDF date are not correct
-
+                
+                logging.info("Home assistant devices values published !)
             
             else: # Looks good ...                
                 
@@ -372,7 +373,7 @@ def run(params):
                 
 
         except:
-            logging.error("Standalone mode : unable to publish value to mqtt broker")
+            logging.error("Home assistant discovery mode : unable to publish value to mqtt broker")
             sys.exit(1)
     
     else:
