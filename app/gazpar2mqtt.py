@@ -189,7 +189,7 @@ def run(params):
     # STEP 3 : Get data from GRDF API
     
     ## STEP 3A : Get daily data
-    try:
+    #try:
         logging.info("Get daily data from GRDF")
                      
         # Set period (5 days ago)
@@ -228,9 +228,9 @@ def run(params):
         for d in resDay:
             logging.info("%s : Energy = %s kwh, Gas = %s m3",d['date'],d['kwh'], d['mcube'])
                 
-    except:
-        logging.error("Unable to get daily data from GRDF")
-        sys.exit(1)
+    #except:
+    #    logging.error("Unable to get daily data from GRDF")
+    #    sys.exit(1)
                  
     
     ## When daily data are ok
