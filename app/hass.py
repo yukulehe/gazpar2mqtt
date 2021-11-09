@@ -17,6 +17,9 @@ def getStateTopic(device):
     elif device in ('connectivity'):
     
         topic = f"{HA_AUTODISCOVERY_PREFIX}/binary_sensor/{MQTT_PREFIX}/state"
+        
+    else:
+        topic = "error"
     
     return topic
 
@@ -31,6 +34,9 @@ def getConfigTopic(device):
     elif device in ('connectivity'):
     
         topic = f"{HA_AUTODISCOVERY_PREFIX}/binary_sensor/{MQTT_PREFIX}/config"
+        
+    else:
+        topic = "error"
     
     return topic
     
