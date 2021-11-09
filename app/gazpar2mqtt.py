@@ -354,7 +354,7 @@ def run(params):
             
             # Set Hass sensors configuration
             logging.info("Update of Home Assistant sensors configurations...")
-            mqtt.publish(client, json.dumps(hass.getConfigTopic), json.dumps(hass.getConfigPayload('daily_gas')), params['mqtt','qos'], params['mqtt','retain'])
+            mqtt.publish(client, json.dumps(hass.getConfigTopic('device_gas')), json.dumps(hass.getConfigPayload('daily_gas')), params['mqtt','qos'], params['mqtt','retain'])
             #mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('monthly_gas'), params['mqtt','qos'], params['mqtt','retain'])
             #mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('daily_energy'), params['mqtt','qos'], params['mqtt','retain'])
             #mqtt.publish(client, hass.getConfigTopic, hass.getConfigPayload('monthly_energy'), params['mqtt','qos'], params['mqtt','retain'])
