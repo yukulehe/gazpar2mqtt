@@ -112,7 +112,7 @@ def getConfigPayload(device):
             "name" : "gazpar_consumption_month"
             "unique_id" : "gazpar_consumption_month"
             "state_topic" = getHassStateTopic(device)
-            "value_template" : "{{ value_json.gazpar_consumption_month}}"
+            "value_template" : "{{ value_json.consumption_month}}"
         }
     
     # Gazpar connectivity
