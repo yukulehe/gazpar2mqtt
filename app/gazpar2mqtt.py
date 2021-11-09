@@ -286,12 +286,12 @@ def run(params):
     if dCount <= GRDF_API_ERRONEOUS_COUNT and dCount > 1: # Unfortunately, GRDF date are not correct
         
         # Set flag
-        hasGrdfFailed = true
+        hasGrdfFailed = True
         
     else: # GRDF date are correct
         
         # Set flag
-        hasGrdfFailed = false
+        hasGrdfFailed = False
         
         # Get GRDF -1 values
         d1 = resDay[dCount-1]
