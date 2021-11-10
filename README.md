@@ -53,6 +53,9 @@ Optionnal :
 | **MQTT_PASSWORD** | Password to be used for connexion to the MQTT brokerr |  |
 | **MQTT_QOS** | QOS for message publishing (0, 1 or 2) | 1 |
 | **MQTT_RETAIN** | Retain flag, default False | False |
+| **STANDALONE_MODE** | Enable standalone publication mode | True |
+| **HASS_DISCOVERY** | Enable Home assistant dicovery mode | False |
+| **HASS_PREFIX** | Home assistant topic prefix | homeassistant |
 
 
 # Usage
@@ -96,7 +99,7 @@ docker run --name app/gazpar2mqtt -e GRDF_USERNAME=gazou@email.com -e GRDF_PASSW
 ```
 
 
-## MQTT publication topics (Standalone mode)
+## MQTT Standalone mode
 
 Please note that only GRDF's **last values** are published in the MQTT broker in the topics bellow.
 
@@ -128,7 +131,9 @@ Note : you can replace the default topic prefix *gazpar* (see mqtt broker requir
 | gazpar/status/date | Last execution date time of gazpar2mqtt |
 | gazpar/status/value | Last execution status of  gazpar2mqtt |
 
-## Home Assistant
+
+
+## Home Assistant discovery mode
 
 To be completed...
 
