@@ -88,8 +88,6 @@ def getConfigPayload(device):
     elif device == 'consumption_date':
         
         configPayload= {
-            "device_class": "time_date",
-            "display_options": "date",
             "name": f"{MQTT_PREFIX}_{device}",
             "unique_id": f"{MQTT_PREFIX}_{device}",
             "state_topic": getStateTopicSensor(),
@@ -100,7 +98,6 @@ def getConfigPayload(device):
     elif device == 'consumption_month':
         
         configPayload= {
-            #"device_class": "",
             "name": f"{MQTT_PREFIX}_{device}",
             "unique_id": f"{MQTT_PREFIX}_{device}",
             "state_topic": getStateTopicSensor(),
