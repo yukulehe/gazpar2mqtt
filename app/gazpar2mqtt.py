@@ -237,17 +237,18 @@ def run(params):
             
             # Check results
             dCount = len(resDay)
-            if dCount <= GRDF_API_ERRONEOUS_COUNT:
+            if dCount <= GRDF_API_ERRONEOUS_COUNT and dCount > 1:
                 logging.warning("Daily values from GRDF seems wrong...")
                 i = i + 1
                 continue # next loop
             else:
-                logging.info("Number of daily values retrieved : %s", dCount)
                 isDailyDataOk = True
                 break # exit loop
   
         # Display results
         if isDailyDataOk:
+            logging.info("Grdf daily values are ok")
+            logging.info("Number of daily values retrieved : %s", dCount)
             for d in resDay:
                 logging.info("%s : Energy = %s kwh, Gas = %s m3",d['date'],d['kwh'], d['mcube'])
         else:
@@ -276,7 +277,7 @@ def run(params):
             mCount = 0
             isMonthlyDataOk = False
 
-            while i <= GRDF_API_MAX_RETRIES and mCount <= GRDF_API_ERRONEOUS_COUNT:
+            while i <= GRDF_API_MAX_RETRIES:
 
                 if i > 1:
                     logging.info("Failed. Please wait %s seconds for next try",GRDF_API_WAIT_BTW_RETRIES)
@@ -287,41 +288,40 @@ def run(params):
                 ## Note : no need to relog to Grdf, we reuse the successful token used for daily data ;-)
                 
                 # Get result from GRDF by day
-                resMonth = gazpar.get_data_per_month(token, startDate, endDate)
+                try:
+                    resMonth = gazpar.get_data_per_month(token, startDate, endDate)
+                except:
+                    logging.error("Error to get Grdf monthly data")
+                    i = i + 1
+                    continue # next loop
 
-                # Update loop conditions
-                i = i + 1
+                
+                # Check data quality
                 mCount = len(resMonth)
-
-            # Display infos
-            if mCount <= GRDF_API_ERRONEOUS_COUNT:
-                logging.warning("Monthly values from GRDF seems wrong...")
-            else:
-                logging.info("Number of monthly values retrieved : %s", mCount)
+                if mCount <= GRDF_API_ERRONEOUS_COUNT and mCount > 1:
+                    logging.warning("Monthly values from GRDF seems wrong...")
+                    i = i + 1
+                    continue # next loop
+                else:
+                    isMonthlyDataOk = True
+                    break # exit loop
 
             # Display results
-            for m in resMonth:
-                logging.info("%s : Kwh = %s, Mcube = %s",m['date'],m['kwh'], m['mcube'])         
+            if isMonthlyDataOk:
+                logging.info("Grdf monthly values are ok")
+                logging.info("Number of monthly values retrieved : %s", mCount)
+                for m in resMonth:
+                    logging.info("%s : Kwh = %s, Mcube = %s",m['date'],m['kwh'], m['mcube'])
+            else:
+                logging.info("Unable to get monthly data from GRDF after %s tries",GRDF_API_MAX_RETRIES)
+                hasGrdfFailed = True
 
         except:
-            logging.error("Unable to get monthly data from GRDF")
+            logging.error("Error on Step 3B")
             hasGrdfFailed = True
     
-    
-    # STEP 4 : Check data quality and prepare values
-    
-    logging.info("-----------------------------------------------------------")
-    logging.info("Check Grdf data quality")
-    logging.info("-----------------------------------------------------------")
-    
-    if hasGrdfFailed or (dCount <= GRDF_API_ERRONEOUS_COUNT and dCount > 1): # Unfortunately, GRDF date are not correct
-        
-        logging.info("Grdf data are not reliable")
-        
-        # Set flag
-        hasGrdfFailed = True
-        
-    else: # GRDF date are correct
+    # Prepare data
+    if not hasGrdfFailed: # GRDF date are correct
         
         logging.info("Grdf data are correct")
         
@@ -348,11 +348,11 @@ def run(params):
         
         
     
-    # STEP 5A : Standalone mode
+    # STEP 4A : Standalone mode
     if mqtt.MQTT_IS_CONNECTED:   
 
         try:
-
+            
             logging.info("-----------------------------------------------------------")
             logging.info("Stand alone publication mode")
             logging.info("-----------------------------------------------------------")
@@ -399,7 +399,7 @@ def run(params):
             logging.error("Standalone mode : unable to publish value to mqtt broker")
             sys.exit(1)
     
-    # STEP 5B : Home Assistant discovery mode
+    # STEP 4B : Home Assistant discovery mode
     if params['hass','autodiscovery'] == 'True':
 
         try:
