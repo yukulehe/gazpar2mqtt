@@ -20,16 +20,16 @@ def getStateTopicBinary():
     return topic
 
 # Return the configuration topic for sensors
-def getConfigTopicSensor():
+def getConfigTopicSensor(device):
         
-    topic = f"{HA_AUTODISCOVERY_PREFIX}/sensor/{MQTT_PREFIX}/config"
+    topic = f"{HA_AUTODISCOVERY_PREFIX}/sensor/{MQTT_PREFIX}/{device}/config"
     return topic
 
 
 # Return the configuration topic for binary sensors
-def getConfigTopicBinary():
+def getConfigTopicBinary(device):
     
-    topic = f"{HA_AUTODISCOVERY_PREFIX}/binary_sensor/{MQTT_PREFIX}/config"
+    topic = f"{HA_AUTODISCOVERY_PREFIX}/binary_sensor/{MQTT_PREFIX}/{device}/config"
     return topic
     
     
@@ -100,7 +100,7 @@ def getConfigPayload(device):
     elif device == 'consumption_month':
         
         configPayload= {
-            "device_class": "",
+            #"device_class": "",
             "name": f"{MQTT_PREFIX}_{device}",
             "unique_id": f"{MQTT_PREFIX}_{device}",
             "state_topic": getStateTopicSensor(),
