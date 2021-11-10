@@ -175,11 +175,12 @@ def run(params):
     
     # STEP 2 : Log to MQTT broker
     logging.info("-----------------------------------------------------------")
-    logging.info("Connexion to MQTT broker")
+    logging.info("Connexion to Mqtt broker")
     logging.info("-----------------------------------------------------------")
     
     try:
         
+        logging.info("Connect to Mqtt broker...")
         
         # Construct mqtt client
         client = mqtt.create_client(params['mqtt','clientId'],params['mqtt','username'],params['mqtt','password'])
@@ -196,7 +197,7 @@ def run(params):
             sys.exit(1)
         
     except:
-        logging.error("Unable to connect to mqtt broker. Please check that broker is running, or check broker configuration.")
+        logging.error("Unable to connect to Mqtt broker. Please check that broker is running, or check broker configuration.")
         sys.exit(1)
     
     
@@ -207,6 +208,8 @@ def run(params):
     logging.info("-----------------------------------------------------------")
     logging.info("Get data from GRDF")
     logging.info("-----------------------------------------------------------")
+    
+    
     try:
         
         # Set period (5 days ago)
@@ -230,6 +233,7 @@ def run(params):
             
             # Log to Grdf
             try:
+                logging.info("Trying to log to Grdf...")
                 token = _log_to_Grdf(params['grdf','username'], params['grdf','password'])
             except:
                 logging.error("Error during log to Grdf")
@@ -238,6 +242,7 @@ def run(params):
 
             # Get result from GRDF by day
             try:
+                logging.info("Trying to get daily values from Grdf...")
                 resDay = gazpar.get_data_per_day(token, startDate, endDate)
             except:
                 logging.error("Error to get Grdf daily data")
@@ -256,7 +261,7 @@ def run(params):
   
         # Display results
         if isDailyDataOk:
-            logging.info("Grdf daily values are ok")
+            logging.info("Grdf daily values are ok !")
             logging.info("Number of daily values retrieved : %s", dCount)
             for d in resDay:
                 logging.info("%s : Energy = %s kwh, Gas = %s m3",d['date'],d['kwh'], d['mcube'])
@@ -298,6 +303,7 @@ def run(params):
                 
                 # Get result from GRDF by day
                 try:
+                    logging.info("Trying to get daily values from Grdf...")
                     resMonth = gazpar.get_data_per_month(token, startDate, endDate)
                 except:
                     logging.error("Error to get Grdf monthly data")
@@ -317,7 +323,7 @@ def run(params):
 
             # Display results
             if isMonthlyDataOk:
-                logging.info("Grdf monthly values are ok")
+                logging.info("Grdf monthly values are ok !")
                 logging.info("Number of monthly values retrieved : %s", mCount)
                 for m in resMonth:
                     logging.info("%s : Kwh = %s, Mcube = %s",m['date'],m['kwh'], m['mcube'])
