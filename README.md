@@ -99,7 +99,7 @@ docker run --name app/gazpar2mqtt -e GRDF_USERNAME=gazou@email.com -e GRDF_PASSW
 ```
 
 
-## MQTT Standalone mode
+## Standalone mode
 
 Please note that only GRDF's **last values** are published in the MQTT broker in the topics bellow.
 
