@@ -90,7 +90,8 @@ python3 app/gazpar2mqtt.py --help
 
 ## Docker
 
-[Docker repository](https://hub.docker.com/repository/docker/yukulehe/gazpar2mqtt) 
+![docker_logo](https://s1.qwant.com/thumbr/0x380/1/e/c0972380653df7af2ee177c914bd40d730e969c9c0970bf1eedf7b3d761a2c/Docker-Logo-White-RGB_Vertical-BG_0.png?u=https%3A%2F%2Fwww.docker.com%2Fsites%2Fdefault%2Ffiles%2Fd8%2Fstyles%2Frole_icon%2Fpublic%2F2019-07%2FDocker-Logo-White-RGB_Vertical-BG_0.png%3Fitok%3D8Tuac9I3&q=0&b=1&p=0&a=0)
+Have a look the [docker repository](https://hub.docker.com/repository/docker/yukulehe/gazpar2mqtt) 
 
 Example of docker run command with environment variables :
 
@@ -135,6 +136,7 @@ You can replace the default topic prefix *gazpar* (see mqtt broker requirements 
 ## Home Assistant discovery mode
 
 ![HA_logo](https://user-images.githubusercontent.com/31646663/141127001-6f868a1a-1820-45bc-9f3b-c3ee2a4d2d06.png)
+
 Gazpar2mqtt provides Home Assistant compatible Mqtt devices. The discovery function enable to use MQTT devices with a minimal configuration effort.
 Have a look to [Home Assistant Mqtt discovery documentation](https://www.home-assistant.io/docs/mqtt/discovery/).
 
