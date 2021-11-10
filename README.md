@@ -101,9 +101,9 @@ docker run --name app/gazpar2mqtt -e GRDF_USERNAME=gazou@email.com -e GRDF_PASSW
 
 ## Standalone mode
 
+Default mode, gazpar2mqtt is autonomous and is not dependent of any third-party tool.
 Please note that only GRDF's **last values** are published in the MQTT broker in the topics bellow.
-
-Note : you can replace the default topic prefix *gazpar* (see mqtt broker requirements chapter)
+You can replace the default topic prefix *gazpar* (see mqtt broker requirements chapter)
 
 ### Daily values :
 
@@ -135,7 +135,8 @@ Note : you can replace the default topic prefix *gazpar* (see mqtt broker requir
 
 ## Home Assistant discovery mode
 
-To be completed...
+Gazpar2mqtt provides Home Assistant compatible Mqtt devices. The discovery function enable to use MQTT devices with a minimal configuration effort.
+Have a look to [Home Assistant Mqtt discovery documentation](https://www.home-assistant.io/docs/mqtt/discovery/)
 
 ### List of available sensors :
 
