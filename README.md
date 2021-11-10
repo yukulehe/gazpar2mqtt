@@ -132,11 +132,11 @@ You can replace the default topic prefix *gazpar* (see mqtt broker requirements 
 | gazpar/status/value | Last execution status of  gazpar2mqtt |
 
 
-
 ## Home Assistant discovery mode
 
+![HA_logo](https://s1.qwant.com/thumbr/0x380/1/5/23c6349d06badaf76cd2c088d3e818188847ae496ce44f6f306e861b2b5316/519px-Home_Assistant_Logo.svg.png?u=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fthumb%2F6%2F6e%2FHome_Assistant_Logo.svg%2F519px-Home_Assistant_Logo.svg.png&q=0&b=1&p=0&a=0)
 Gazpar2mqtt provides Home Assistant compatible Mqtt devices. The discovery function enable to use MQTT devices with a minimal configuration effort.
-Have a look to [Home Assistant Mqtt discovery documentation](https://www.home-assistant.io/docs/mqtt/discovery/)
+Have a look to [Home Assistant Mqtt discovery documentation](https://www.home-assistant.io/docs/mqtt/discovery/).
 
 ### List of available sensors :
 
