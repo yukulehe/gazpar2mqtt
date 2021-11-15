@@ -67,7 +67,7 @@ def _dateTimeToStr(datetime):
 # Get environment parameters
 def _getEnvParams():
     
-    # Check and get manadatory environment parameters
+    # Check and get mandatory environment parameters
     params = {}
     
     if not "GRDF_USERNAME" in os.environ:
