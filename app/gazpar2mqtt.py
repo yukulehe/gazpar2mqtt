@@ -138,7 +138,7 @@ def _getEnvParams():
     if not "HASS_DISCOVERY" in os.environ:
         params['hass','discovery'] = 'False'
     else:
-        params['hass','discovery'] = os.environ['HASS_discovery']
+        params['hass','discovery'] = os.environ['HASS_DISCOVERY']
     
     if not "HASS_PREFIX" in os.environ:
         params['hass','prefix'] = 'homeassistant'
