@@ -19,6 +19,6 @@ services:
       #MQTT_PASSWORD: 'myMqttPassword'
       #MQTT_QOS: '1'
       #MQTT_RETAIN: 'True'
-      #STAND_ALONE: 'True'
+      #STANDALONE_MODE: 'True'
       #HASS_DISCOVERY: 'False'
       #HASS_PREFIX: 'homeassistant'
