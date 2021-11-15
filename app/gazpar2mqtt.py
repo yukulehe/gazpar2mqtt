@@ -135,7 +135,7 @@ def _getEnvParams():
     else:
         params['standalone','mode'] = os.environ['STANDALONE_MODE']
         
-    if not "HASS_discovery" in os.environ:
+    if not "HASS_DISCOVERY" in os.environ:
         params['hass','discovery'] = 'False'
     else:
         params['hass','discovery'] = os.environ['HASS_discovery']
@@ -566,8 +566,6 @@ if __name__ == "__main__":
     logging.info("Program parameters")
     logging.info("-----------------------------------------------------------")
     logging.info("GRDF config : username = %s, password = %s", params['grdf','username'], "******")
-    logging.info("Home Assistant discovery : Enable = %s, Topic prefix = %s", \
-                 params['hass','discovery'], params['hass','prefix'])
     logging.info("MQTT broker config : host = %s, port = %s, clientId = %s, qos = %s, topic = %s, retain = %s", \
                  params['mqtt','host'], params['mqtt','port'], params['mqtt','clientId'], \
                  params['mqtt','qos'],params['mqtt','topic'],params['mqtt','retain'])
