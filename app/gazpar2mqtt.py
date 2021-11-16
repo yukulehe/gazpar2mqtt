@@ -403,10 +403,17 @@ if __name__ == "__main__":
 
     # STEP 5 : Run
     if params['schedule','time'] is not None:
+        
+        # Run once at launch
+        run(params)
+        
+        # Then execute at schedule time
         logging.info("gazpar2mqtt next run scheduled at %s",params['schedule','time'])
         schedule.every().day.at(params['schedule','time']).do(run,params)
         while True:
             schedule.run_pending()
             time.sleep(1)
     else:
+        
+        # Run once
         run(params)
