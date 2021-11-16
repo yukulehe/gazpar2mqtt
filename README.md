@@ -9,6 +9,8 @@ The project has been inspired by job done by [empierre](https://github.com/empie
 
 # Informations
 
+Important : the tool is still under development, various functions may disappear or be modified.
+
 ## Changelogs :
 
 - v0.4 : Home assistant mqtt discovery
