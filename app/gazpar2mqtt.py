@@ -576,10 +576,11 @@ if __name__ == "__main__":
         # Run once at lauch
         run(params)
         
-        # Then run at scheduled time
         logging.info("-----------------------------------------------------------")
         logging.info("End of program")
         logging.info("-----------------------------------------------------------")
+
+        # Then run at scheduled time
         logging.info("gazpar2mqtt next run scheduled at %s",params['schedule','time'])
         schedule.every().day.at(params['schedule','time']).do(run,params)
         while True:
@@ -591,6 +592,7 @@ if __name__ == "__main__":
         
         # Run once
         run(params)
+        
         logging.info("-----------------------------------------------------------")
         logging.info("End of program")
         logging.info("-----------------------------------------------------------")
