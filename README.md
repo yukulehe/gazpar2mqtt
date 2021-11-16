@@ -7,6 +7,17 @@ Python script to fetch GRDF data and publish data to a mqtt broker
 # Externals/Thanks
 The project has been inspired by job done by [empierre](https://github.com/empierre/domoticz_gaspar) on project domoticz_gazpar and [beufanet](https://github.com/beufanet/gazpar) on project gazinflux availables on Github. I modified a bit the code to work and fit my needs.
 
+# Informations
+
+## Changelogs :
+
+- v0.4 : Home assitant mqtt discovery
+- v0.3 : First reliable release
+
+## Roadmap :
+
+- Home assistant add-on
+
 # Requirements
 
 ## Python3 and libs
