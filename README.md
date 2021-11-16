@@ -58,7 +58,7 @@ Optionnal :
 
 | Variable | Description | Default value |
 | --- | --- | --- |
-| **SCHEDULE_TIME** | Time for refreshing data everyday | None (format : 06:30) |
+| **SCHEDULE_TIME** | Time for refreshing data everyday | None (format : 14:30) |
 | **MQTT_PORT** | Port of the MQTT broker | 1883 |
 | **MQTT_TOPIC** | Topic used as prefix | gazpar |
 | **MQTT_CLIENTID** | Client id to be used for connexion to the MQTT broker | gazou |
