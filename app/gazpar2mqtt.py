@@ -505,6 +505,10 @@ if __name__ == "__main__":
     
     logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
     
+    logging.info("Welcome to gazpar2mqtt")
+    logging.info("-----------------------------------------------------------")
+    logging.info("-----------------------------------------------------------")
+    
     # STEP 1 : Get params from args
     
     parser = argparse.ArgumentParser()
@@ -575,10 +579,16 @@ if __name__ == "__main__":
 
     # STEP 5 : Run
     if params['schedule','time'] is not None:
+        
+        # Run once at lauch
+        run(params)
+        
+        # Then run at scheduled time
         logging.info("gazpar2mqtt next run scheduled at %s",params['schedule','time'])
         schedule.every().day.at(params['schedule','time']).do(run,params)
         while True:
             schedule.run_pending()
             time.sleep(1)
     else:
+        # Run once
         run(params)
