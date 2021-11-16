@@ -11,7 +11,7 @@ The project has been inspired by job done by [empierre](https://github.com/empie
 
 ## Changelogs :
 
-- v0.4 : Home assitant mqtt discovery
+- v0.4 : Home assistant mqtt discovery
 - v0.3 : First reliable release
 
 ## Roadmap :
