@@ -174,4 +174,4 @@ Have a look to [Home Assistant Mqtt discovery documentation](https://www.home-as
 | home_assistant/binary_sensor/gazpar/config | Binary sensor's configuration topic |
 | home_assistant/binary_sensor/gazpar/state | Binary sensor's state topic |
 
-Note : you can replace the default topic prefix *home_asssistant*
+Note : you can replace the default topic prefix *homeasssistant*
