@@ -11,7 +11,7 @@ services:
       MQTT_HOST=host
       TZ=Europe/Paris
       # Optional:
-      #SCHEDULE_TIME: '04:00'
+      #SCHEDULE_TIME: '06:30'
       #MQTT_PORT: '1883'
       #MQTT_TOPIC: 'gazpar'
       #MQTT_CLIENTID: 'gazou'
