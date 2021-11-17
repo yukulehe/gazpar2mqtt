@@ -45,7 +45,7 @@ jobs:
         if: steps.check-tag.outputs.dev == 'false'
         with:
           context: .
-          platforms: linux/amd64,linux/arm64,linux/armv7
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
           tags: |
             yukulehe/gazpar2mqtt:latest
@@ -56,7 +56,7 @@ jobs:
         if: steps.check-tag.outputs.dev == 'true'
         with:
           context: .
-          platforms: linux/amd64,linux/armv7
+          platforms: linux/amd64,linux/arm/v7
           push: true
           tags: |
             yukulehe/gazpar2mqtt:${{ steps.vars.outputs.version }}
