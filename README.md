@@ -13,8 +13,8 @@ Important : the tool is still under development, various functions may disappear
 
 ## Changelogs :
 
-- v0.4 : Home assistant mqtt discovery
-- v0.3 : First reliable release
+- v0.4.x : Home assistant mqtt discovery, arm/v7
+- v0.3.x : First reliable release
 
 ## Roadmap :
 
