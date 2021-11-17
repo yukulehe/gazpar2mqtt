@@ -4,6 +4,7 @@ COPY ./app /app
 
 RUN apt-get update
 RUN mkdir -p /data
+RUN apt-get install libxml2-dev libxslt1-dev
 RUN pip3 install --no-cache-dir -r /app/requirement.txt
 
 CMD ["python3", "app/gazpar2mqtt.py"]
