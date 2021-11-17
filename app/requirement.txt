@@ -1,6 +1,5 @@
 requests
-libxml2-dev
-libxslt1-dev
+libxml2
 lxml
 python-dateutil
 argparse
