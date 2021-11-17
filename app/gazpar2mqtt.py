@@ -485,6 +485,14 @@ def run(params):
         except:
             logging.error("Unable to disconnect mqtt broker")
             sys.exit(1)
+            
+    
+    if params['schedule','time'] is not None:
+        logging.info("gazpar2mqtt next run scheduled at %s",params['schedule','time'])
+    
+    logging.info("-----------------------------------------------------------")
+    logging.info("End of program")
+    logging.info("-----------------------------------------------------------")
     
 
         
@@ -575,13 +583,8 @@ if __name__ == "__main__":
         
         # Run once at lauch
         run(params)
-        
-        logging.info("-----------------------------------------------------------")
-        logging.info("End of program")
-        logging.info("-----------------------------------------------------------")
 
         # Then run at scheduled time
-        logging.info("gazpar2mqtt next run scheduled at %s",params['schedule','time'])
         schedule.every().day.at(params['schedule','time']).do(run,params)
         while True:
             schedule.run_pending()
@@ -592,8 +595,4 @@ if __name__ == "__main__":
         
         # Run once
         run(params)
-        
-        logging.info("-----------------------------------------------------------")
-        logging.info("End of program")
-        logging.info("-----------------------------------------------------------")
         logging.info("End of gazpar2mqtt. See u...")
