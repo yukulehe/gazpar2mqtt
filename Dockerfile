@@ -6,7 +6,7 @@ RUN apt-get update
 RUN mkdir -p /data
 
 # Prerequisite for installing package lxml on armv7
-RUN apt-get install --upgrade -y g++ gcc libxml2-dev libxslt-dev libxml2 python3-dev
+RUN apt-get install --upgrade -y g++ gcc libxml2-dev libxslt-dev python3-dev
  
 # Install python requirements
 RUN pip3 install --upgrade pip && \
