@@ -417,8 +417,12 @@ def run(params):
                 logging.info("Update of Home Assistant sensors configurations...")
                 mqtt.publish(client, hass.getConfigTopicSensor('daily_gas'), json.dumps(hass.getConfigPayload('daily_gas')), params['mqtt','qos'], params['mqtt','retain'])
                 mqtt.publish(client, hass.getConfigTopicSensor('monthly_gas'), json.dumps(hass.getConfigPayload('monthly_gas')), params['mqtt','qos'], params['mqtt','retain'])
+                mqtt.publish(client, hass.getConfigTopicSensor('monthly_gas_tsh'), json.dumps(hass.getConfigPayload('monthly_gas_tsh')), params['mqtt','qos'], params['mqtt','retain'])
+                mqtt.publish(client, hass.getConfigTopicSensor('monthly_gas_prev'), json.dumps(hass.getConfigPayload('monthly_gas_prev')), params['mqtt','qos'], params['mqtt','retain'])
                 mqtt.publish(client, hass.getConfigTopicSensor('daily_energy'), json.dumps(hass.getConfigPayload('daily_energy')), params['mqtt','qos'], params['mqtt','retain'])
                 mqtt.publish(client, hass.getConfigTopicSensor('monthly_energy'), json.dumps(hass.getConfigPayload('monthly_energy')), params['mqtt','qos'], params['mqtt','retain'])
+                mqtt.publish(client, hass.getConfigTopicSensor('monthly_energy_tsh'), json.dumps(hass.getConfigPayload('monthly_energy_tsh')), params['mqtt','qos'], params['mqtt','retain'])
+                mqtt.publish(client, hass.getConfigTopicSensor('monthly_energy_prev'), json.dumps(hass.getConfigPayload('monthly_energy_prev')), params['mqtt','qos'], params['mqtt','retain'])
                 mqtt.publish(client, hass.getConfigTopicSensor('consumption_date'), json.dumps(hass.getConfigPayload('consumption_date')), params['mqtt','qos'], params['mqtt','retain'])
                 mqtt.publish(client, hass.getConfigTopicSensor('consumption_month'), json.dumps(hass.getConfigPayload('consumption_month')), params['mqtt','qos'], params['mqtt','retain'])
                 mqtt.publish(client, hass.getConfigTopicBinary('connectivity'), json.dumps(hass.getConfigPayload('connectivity')), params['mqtt','qos'], params['mqtt','retain'])
@@ -440,8 +444,12 @@ def run(params):
                     statePayload = {
                         "daily_gas": d1['mcube'],
                         "monthly_gas": m1['mcube'],
+                        "monthly_gas_tsh": m1['mcube_seuil'],
+                        "monthly_gas_prev": m1['mcube_prec'],
                         "daily_energy": d1['kwh'],
                         "monthly_energy": m1['kwh'],
+                        "monthly_energy_tsh": m1['kwh_seuil'],
+                        "monthly_energy_prev": m1['kwh_prec'],
                         "consumption_date": d1['date'],
                         "consumption_month": m1['date'],
                         }
