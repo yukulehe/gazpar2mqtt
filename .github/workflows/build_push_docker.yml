@@ -39,7 +39,8 @@ jobs:
           else
             echo "::set-output name=dev::false"
           fi
-          
+      
+      # Production versions 
       - name: Build and push
         uses: docker/build-push-action@v2
         if: steps.check-tag.outputs.dev == 'false'
@@ -50,13 +51,14 @@ jobs:
           tags: |
             yukulehe/gazpar2mqtt:latest
             yukulehe/gazpar2mqtt:${{ steps.vars.outputs.version }}
-            
+      
+      # Development versions
       - name: Build and push
         uses: docker/build-push-action@v2
         if: steps.check-tag.outputs.dev == 'true'
         with:
           context: .
-          platforms: linux/amd64,linux/arm/v7
+          platforms: linux/amd64
           push: true
           tags: |
             yukulehe/gazpar2mqtt:${{ steps.vars.outputs.version }}

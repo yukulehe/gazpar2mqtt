@@ -31,13 +31,15 @@ GRDF_API_ERRONEOUS_COUNT = 1 # Erroneous number of results send by GRDF
 TOPIC_DAILY_DATE = "/daily/date"
 TOPIC_DAILY_KWH = "/daily/kwh"
 TOPIC_DAILY_MCUBE = "/daily/mcube"
-TOPIC_DAILY_DELTA = "/daily/delta"
 
 ## Monthly
 TOPIC_MONTHLY_DATE = "/monthly/month"
 TOPIC_MONTHLY_KWH = "/monthly/kwh"
+TOPIC_MONTHLY_KWH_TSH = "/monthly/kwh/threshold"
+TOPIC_MONTHLY_KWH_PREV = "/monthly/kwh/previous"
 TOPIC_MONTHLY_MCUBE = "/monthly/mcube"
-TOPIC_MONTHLY_DELTA = "/monthly/delta"
+TOPIC_MONTHLY_MCUBE_PREV = "/monthly/kwh/previous"
+
 
 ## Status
 TOPIC_STATUS_DATE = "/status/date"
@@ -343,24 +345,10 @@ def run(params):
         # Set flag
         hasGrdfFailed = False
         
-        # Get GRDF -1 values
+        # Get GRDF last values
         d1 = resDay[dCount-1]
         m1 = resMonth[mCount-1]
 
-        # Get GRDF -2 values
-        d2 = resDay[dCount-2]
-        m2 = resMonth[mCount-2]
-
-        # Calculate delta in %
-        if d2['mcube'] is None or d2['mcube'] == '0':
-            d1['delta'] = 0
-        else:
-            d1['delta'] = round((( d1['mcube'] - d2['mcube'] ) / d2['mcube']) * 100,2)
-        if m2['mcube'] is None or m2['mcube'] == '0':
-            m1['delta'] = 0
-        else:
-            m1['delta'] = round((( m1['mcube'] - m2['mcube'] ) / m2['mcube']) * 100,2)
-        
     
     if not hasGrdfFailed:
     
@@ -394,15 +382,17 @@ def run(params):
                     mqtt.publish(client, prefixTopic + TOPIC_DAILY_DATE, d1['date'], params['mqtt','qos'], params['mqtt','retain'])
                     mqtt.publish(client, prefixTopic + TOPIC_DAILY_KWH, d1['kwh'], params['mqtt','qos'], params['mqtt','retain'])
                     mqtt.publish(client, prefixTopic + TOPIC_DAILY_MCUBE, d1['mcube'], params['mqtt','qos'], params['mqtt','retain'])
-                    mqtt.publish(client, prefixTopic + TOPIC_DAILY_DELTA, d1['delta'], params['mqtt','qos'], params['mqtt','retain'])
+                    
                     logging.info("Daily values published !")
 
                     # Publish monthly values
                     logging.info("Publishing to Mqtt the last monthly values...")
                     mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_DATE, m1['date'], params['mqtt','qos'], params['mqtt','retain'])
                     mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_KWH, m1['kwh'], params['mqtt','qos'], params['mqtt','retain'])
+                    mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_KWH_TSH, m1['kwh_seuil'], params['mqtt','qos'], params['mqtt','retain'])
+                    mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_KWH_PREV, m1['kwh_prec'], params['mqtt','qos'], params['mqtt','retain'])
                     mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_MCUBE, m1['mcube'], params['mqtt','qos'], params['mqtt','retain'])
-                    mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_DELTA, m1['delta'], params['mqtt','qos'], params['mqtt','retain'])
+                    mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_MCUBE_PREV, m1['mcube_prec'], params['mqtt','qos'], params['mqtt','retain'])
                     logging.info("Monthly values published !")
 
                     ## Publish status values
@@ -428,8 +418,11 @@ def run(params):
                 logging.info("Update of Home Assistant sensors configurations...")
                 mqtt.publish(client, hass.getConfigTopicSensor('daily_gas'), json.dumps(hass.getConfigPayload('daily_gas')), params['mqtt','qos'], params['mqtt','retain'])
                 mqtt.publish(client, hass.getConfigTopicSensor('monthly_gas'), json.dumps(hass.getConfigPayload('monthly_gas')), params['mqtt','qos'], params['mqtt','retain'])
+                mqtt.publish(client, hass.getConfigTopicSensor('monthly_gas_prev'), json.dumps(hass.getConfigPayload('monthly_gas_prev')), params['mqtt','qos'], params['mqtt','retain'])
                 mqtt.publish(client, hass.getConfigTopicSensor('daily_energy'), json.dumps(hass.getConfigPayload('daily_energy')), params['mqtt','qos'], params['mqtt','retain'])
                 mqtt.publish(client, hass.getConfigTopicSensor('monthly_energy'), json.dumps(hass.getConfigPayload('monthly_energy')), params['mqtt','qos'], params['mqtt','retain'])
+                mqtt.publish(client, hass.getConfigTopicSensor('monthly_energy_tsh'), json.dumps(hass.getConfigPayload('monthly_energy_tsh')), params['mqtt','qos'], params['mqtt','retain'])
+                mqtt.publish(client, hass.getConfigTopicSensor('monthly_energy_prev'), json.dumps(hass.getConfigPayload('monthly_energy_prev')), params['mqtt','qos'], params['mqtt','retain'])
                 mqtt.publish(client, hass.getConfigTopicSensor('consumption_date'), json.dumps(hass.getConfigPayload('consumption_date')), params['mqtt','qos'], params['mqtt','retain'])
                 mqtt.publish(client, hass.getConfigTopicSensor('consumption_month'), json.dumps(hass.getConfigPayload('consumption_month')), params['mqtt','qos'], params['mqtt','retain'])
                 mqtt.publish(client, hass.getConfigTopicBinary('connectivity'), json.dumps(hass.getConfigPayload('connectivity')), params['mqtt','qos'], params['mqtt','retain'])
@@ -451,8 +444,11 @@ def run(params):
                     statePayload = {
                         "daily_gas": d1['mcube'],
                         "monthly_gas": m1['mcube'],
+                        "monthly_gas_prev": m1['mcube_prec'],
                         "daily_energy": d1['kwh'],
                         "monthly_energy": m1['kwh'],
+                        "monthly_energy_tsh": m1['kwh_seuil'],
+                        "monthly_energy_prev": m1['kwh_prec'],
                         "consumption_date": d1['date'],
                         "consumption_month": m1['date'],
                         }

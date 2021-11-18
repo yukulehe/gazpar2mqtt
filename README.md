@@ -1,5 +1,5 @@
 # gazpar2mqtt
-Python script to fetch GRDF data and publish data to a mqtt broker
+Python script to fetch GRDF's website data and publish data to a mqtt broker
 
 ![Gazpar logo](https://s2.qwant.com/thumbr/474x266/d/6/5f73ca2a6a6ad456cee493bb73bc9bf24662ded76a98c4eb0a117e16d666d2/th.jpg?u=https%3A%2F%2Ftse2.explicit.bing.net%2Fth%3Fid%3DOIP.Y_lVygaMR2JQYgTvLVvc5wHaEK%26pid%3DApi&q=0&b=1&p=0&a=0)
 ![MQTT logo](https://s2.qwant.com/thumbr/474x266/e/b/0bb1caaf35b0ed78b567ce4ba21cffd3d22f8bc4a7c82a3ba331cc0dd88a23/th.jpg?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.eK8FAO1DnuuVt6wYA1WOmAHaEK%26pid%3DApi&q=0&b=1&p=0&a=0)
@@ -11,14 +11,25 @@ The project has been inspired by job done by [empierre](https://github.com/empie
 
 Important : the tool is still under development, various functions may disappear or be modified.
 
+
 ## Changelogs :
 
-- v0.4.x : Home assistant mqtt discovery, arm/v7
-- v0.3.x : First reliable release
+- v0.4.x : 
+  - Home assistant mqtt discovery available
+  - Home assistant add-on available : https://github.com/alexbelgium/hassio-addons/tree/master/gazpar2mqtt (special thx to [alexbelgium](https://github.com/alexbelgium))
+  - Enable Docker build for arm/v7 architecture
+  - Grdf's thresholds (seuil) and previous year consumption
+- v0.3.x :
+  - First reliable release
+
 
 ## Roadmap :
 
-- Home assistant add-on
+- Get weekly consumptions
+- Set alerts when threshold reached
+- Get most economic and most energivor consumption in local environment
+- Provide an exemple of Home assistant card
+
 
 # Requirements
 
@@ -34,13 +45,18 @@ pip3 install -r app/requirements.txt
 
 Verify you have gazpar data available on [GRDF Portal](https://monespace.grdf.fr/monespace/connexion)
 
-Data provided is the last day and last month consumptions.
+Data provided are :
+- the previous day and the current month consumptions of gas (in m3) and energy (kwh)
+- the consumptions of the previous year for the current month
+- the threshold (seuil) of the current month defined in Grdf portal
 
 Remember, kWh provided is conversion factor dependant. Please verify it's coherent with your provider bills.
+
 
 ## MQTT broker
 
 A MQTT broker is required. Please check its configuration (hostname, port, remote access allowed, username & password if needed).
+
 
 ## Parameters
 
@@ -135,11 +151,14 @@ You can replace the default topic prefix *gazpar* (see mqtt broker requirements 
 | --- | --- |
 | gazpar/monthly/date | Month of the last monthly statement |
 | gazpar/monthly/kwh | Consumption in kwh of the last monthly statement |
+| gazpar/monthly/kwh/threshold | Threshold in kwh of the last monthly statement |
+| gazpar/monthly/kwh/previous | Consumption in kWh of previous year at the same month |
 | gazpar/monthly/mcube | Consumption in cube meter of the last monthly statement  |
-| gazpar/monthly/delta | Variation in percentage between the last and the previous monthly statement  |
+| gazpar/monthly/mcube/previous | Consumption in m3 of previous year at the same month  |
+| gazpar/monthly/delta | Deprecated  |
+
 
 ### Status values :
-
 
 | Topic | Description |
 | --- | --- |
@@ -154,6 +173,7 @@ You can replace the default topic prefix *gazpar* (see mqtt broker requirements 
 Gazpar2mqtt provides Home Assistant compatible Mqtt devices. The discovery function enable to use MQTT devices with a minimal configuration effort.
 Have a look to [Home Assistant Mqtt discovery documentation](https://www.home-assistant.io/docs/mqtt/discovery/).
 
+
 ### List of available sensors :
 
 | Sensor name | Component | Device class | Description |
@@ -161,10 +181,14 @@ Have a look to [Home Assistant Mqtt discovery documentation](https://www.home-as
 | gazpar_daily_gas | Sensor | Gas | Gas consumption in m3 of the last daily statement |
 | gazpar_daily_energy | Sensor | Energy | Gas consumption in kWh of the last daily statement |
 | gazpar_monthly_gas | Sensor | Gas | Gas consumption in m3 of the last monthly statement |
+| gazpar_monthly_gas_prev | Sensor | Gas | Gas consumption in m3 of previous year at the same month |
 | gazpar_monthly_energy | Sensor | Energy | Gas consumption in kWh of the last monthly statement |
+| gazpar_monthly_energy_tsh | Sensor | Energy | Gas threshold in kWh of the last monthly statement |
+| gazpar_monthly_energy_prev | Sensor | Energy | Gas consumption in kWh of previous year at the same month |
 | gazpar_consumption_date | Sensor | Date | Date of the last daily statement |
 | gazpar_consumption_month | Sensor | Text | Month of the last monthly statement |
 | gazpar_connectivity | Binary sensor | Connectivity | Binary sensor which indicates if the last gazpar statement succeeded (ON) or failed (OFF) |
+
 
 ### List of topics :
 | Topic | Description

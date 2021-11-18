@@ -59,6 +59,19 @@ def getConfigPayload(device):
             "unit_of_measurement": "m3",
             "value_template": "{{ value_json.monthly_gas}}"
         }
+        
+    
+    # Gas consumption monthly of previous year
+    elif device == 'monthly_gas_prev':
+        
+        configPayload= {
+            "device_class": "gas",
+            "name": f"{MQTT_PREFIX}_{device}",
+            "unique_id": f"{MQTT_PREFIX}_{device}",
+            "state_topic": getStateTopicSensor(),
+            "unit_of_measurement": "m3",
+            "value_template": "{{ value_json.monthly_gas_prev}}"
+        }
     
     # Energy consumption daily
     elif device == 'daily_energy':
@@ -82,6 +95,30 @@ def getConfigPayload(device):
             "state_topic": getStateTopicSensor(),
             "unit_of_measurement": "kWh",
             "value_template": "{{ value_json.monthly_energy}}"
+        }
+    
+    # Energy consumption monthly threshold
+    elif device == 'monthly_energy_tsh':
+        
+        configPayload= {
+            "device_class": "energy",
+            "name": f"{MQTT_PREFIX}_{device}",
+            "unique_id": f"{MQTT_PREFIX}_{device}",
+            "state_topic": getStateTopicSensor(),
+            "unit_of_measurement": "kWh",
+            "value_template": "{{ value_json.monthly_energy_tsh}}"
+        }
+    
+    # Energy consumption monthly of previous year
+    elif device == 'monthly_energy_prev':
+        
+        configPayload= {
+            "device_class": "energy",
+            "name": f"{MQTT_PREFIX}_{device}",
+            "unique_id": f"{MQTT_PREFIX}_{device}",
+            "state_topic": getStateTopicSensor(),
+            "unit_of_measurement": "kWh",
+            "value_template": "{{ value_json.monthly_energy_prev}}"
         }
         
     # Gazpar consumption date
