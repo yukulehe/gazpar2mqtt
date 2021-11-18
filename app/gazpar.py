@@ -287,6 +287,7 @@ def _get_data(session, resource_id, start_date=None, end_date=None):
     i=0
     while i<size:
         if ds[i]!="null":
+            logging.info("iterator : %s",i)
             rdate = ts[i].replace('Le ','').replace('/','-')
             data.append({
                 "date": rdate,
