@@ -359,14 +359,14 @@ def _get_data(session, resource_id, start_date=None, end_date=None):
     size=len(ts)
     i=0
     while i<size:
-        rdate = ts[i].replace('Le ','').replace('/','-')
-        for d in data:
-		if rdate == d['date']:
-			d['mcube'] = float(ds[i])
-			d['mcube_seuil'] = float(ss[i])
-			d['mcube_prec'] = float(ps[i])
+      rdate = ts[i].replace('Le ','').replace('/','-')
+      for d in data:
+        if rdate == d['date']:
+	  d['mcube'] = float(ds[i])
+	  d['mcube_seuil'] = float(ss[i])
+	  d['mcube_prec'] = float(ps[i])
 		
-        i +=1
+      i +=1
 
     #if 300 <= req.status_code < 400:
     #   # So... apparently, we may need to do that once again if we hit a 302
