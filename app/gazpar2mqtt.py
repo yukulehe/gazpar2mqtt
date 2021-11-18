@@ -380,7 +380,6 @@ def run(params):
                     mqtt.publish(client, prefixTopic + TOPIC_DAILY_KWH, d1['kwh'], params['mqtt','qos'], params['mqtt','retain'])
                     mqtt.publish(client, prefixTopic + TOPIC_DAILY_MCUBE, d1['mcube'], params['mqtt','qos'], params['mqtt','retain'])
                     
-                    
                     logging.info("Daily values published !")
 
                     # Publish monthly values
