@@ -138,7 +138,6 @@ You can replace the default topic prefix *gazpar* (see mqtt broker requirements 
 | gazpar/monthly/kwh/threshold | Threshold in kwh of the last monthly statement |
 | gazpar/monthly/kwh/previous | Consumption in kWh of previous year at the same month |
 | gazpar/monthly/mcube | Consumption in cube meter of the last monthly statement  |
-| gazpar/monthly/mcube/threshold | Threshold in m3 of the last monthly statement |
 | gazpar/monthly/mcube/previous | Consumption in m3 of previous year at the same month  |
 | gazpar/monthly/delta | Deprecated  |
 
@@ -166,7 +165,6 @@ Have a look to [Home Assistant Mqtt discovery documentation](https://www.home-as
 | gazpar_daily_gas | Sensor | Gas | Gas consumption in m3 of the last daily statement |
 | gazpar_daily_energy | Sensor | Energy | Gas consumption in kWh of the last daily statement |
 | gazpar_monthly_gas | Sensor | Gas | Gas consumption in m3 of the last monthly statement |
-| gazpar_monthly_gas_tsh | Sensor | Gas | Gas threshold in m3 of the last monthly statement |
 | gazpar_monthly_gas_prev | Sensor | Gas | Gas consumption in m3 of previous year at the same month |
 | gazpar_monthly_energy | Sensor | Energy | Gas consumption in kWh of the last monthly statement |
 | gazpar_monthly_gas_tsh | Sensor | Energy | Gas threshold in kWh of the last monthly statement |
