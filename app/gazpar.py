@@ -262,18 +262,14 @@ def _get_data(session, resource_id, start_date=None, end_date=None):
         t = '0'
     ms = re.search("donneesSeuil = \"(.*?)\"", req.text)
     logging.info("ms : %s",ms)
-    if ms is not None and ms != "null":
+    if ms is not None:
         s = ms.group(1)
-        if s == 'null':
-          s = '0'
     else:
         s = '0'
     mp = re.search("donneesPrecedente = \"(.*?)\"", req.text)
     logging.info("ms : %s",mp)
     if mp is not None:
         p = mp.group(1)
-        if p == 'null':
-          p = '0'
     else:
         p = '0'
 
@@ -289,6 +285,10 @@ def _get_data(session, resource_id, start_date=None, end_date=None):
         if ds[i]!="null":
             logging.info("iterator %s, seuil = %s, prec = %s",i,ss[i],ps[i])
             logging.info("iterator : %s",i)
+            if ss[i] == "null":
+              ss[i] = '0'
+            if ps[i] == "null":
+              ps[i] = '0'
             rdate = ts[i].replace('Le ','').replace('/','-')
             data.append({
                 "date": rdate,
