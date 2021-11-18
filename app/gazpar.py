@@ -261,11 +261,13 @@ def _get_data(session, resource_id, start_date=None, end_date=None):
     else:
         t = '0'
     ms = re.search("donneesSeuil = \"(.*?)\"", req.text)
+    logging.info("ms : %s",ms)
     if ms is not None and ms != "null":
         s = ms.group(1)
     else:
         s = '0'
     mp = re.search("donneesPrecedente = \"(.*?)\"", req.text)
+    logging.info("ms : %s",mp)
     if mp is not None and ms != "null":
         p = mp.group(1)
     else:
