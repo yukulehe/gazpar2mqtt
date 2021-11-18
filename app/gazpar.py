@@ -362,9 +362,9 @@ def _get_data(session, resource_id, start_date=None, end_date=None):
       rdate = ts[i].replace('Le ','').replace('/','-')
       for d in data:
         if rdate == d['date']:
-	  d['mcube'] = float(ds[i])
-	  d['mcube_seuil'] = float(ss[i])
-	  d['mcube_prec'] = float(ps[i])	
+          d['mcube'] = float(ds[i])
+          d['mcube_seuil'] = float(ss[i])
+          d['mcube_prec'] = float(ps[i])	
       i +=1
 
     #if 300 <= req.status_code < 400:
