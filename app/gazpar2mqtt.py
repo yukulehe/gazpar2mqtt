@@ -346,6 +346,10 @@ def run(params):
         # Set flag
         hasGrdfFailed = False
         
+        # Get GRDF last values
+        d1 = resDay[dCount-1]
+        m1 = resMonth[mCount-1]
+
     
     if not hasGrdfFailed:
     
