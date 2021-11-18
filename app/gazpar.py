@@ -284,7 +284,7 @@ def _get_data(session, resource_id, start_date=None, end_date=None):
     while i<size:
         if ds[i]!="null":
             rdate = ts[i].replace('Le ','').replace('/','-')
-            ss[i] = ss[i].replace('null','').replace('.0','')
+            ss[i] = ss[i].replace('null','0').replace('.0','')
             ps[i] = ps[i].replace('null','0').replace('.0','')
             logging.info("iterator %s : s =%s, p= %s",i,ss[i],ps[i])
             data.append({
@@ -365,7 +365,7 @@ def _get_data(session, resource_id, start_date=None, end_date=None):
     i=0
     while i<size:
       rdate = ts[i].replace('Le ','').replace('/','-')
-      ss[i] = ss[i].replace('null','').replace('.0','')
+      ss[i] = ss[i].replace('null','0').replace('.0','')
       ps[i] = ps[i].replace('null','0').replace('.0','')
       for d in data:
         if rdate == d['date']:
