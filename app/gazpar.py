@@ -212,6 +212,7 @@ def _get_data(session, resource_id, start_date=None, end_date=None):
 
     req = session.post('https://monespace.grdf.fr/monespace/particulier/consommation/consommations', allow_redirects=False, data=payload, params=params)
 
+
     # get kwh 
     payload = {
                "javax.faces.partial.ajax":"true",
@@ -259,10 +260,22 @@ def _get_data(session, resource_id, start_date=None, end_date=None):
         t = mt.group(1)
     else:
         t = '0'
+    ms = re.search("donneesSeuil = \"(.*?)\"", req.text)
+    if ms is not None:
+        s = ms.group(1)
+    else:
+        s = '0'
+    mp = re.search("donneesPrecedente = \"(.*?)\"", req.text)
+    if ms is not None:
+        p = mp.group(1)
+    else:
+        p = '0'
 
     now = datetime.datetime.now()
     ts=t.split(",")
     ds=d.split(",")
+    ss=s.split(",")
+    ps=p.split(",")
     size=len(ts)
     data = []
     i=0
@@ -272,7 +285,11 @@ def _get_data(session, resource_id, start_date=None, end_date=None):
             data.append({
                 "date": rdate,
                 "kwh": int(ds[i]),
+		"kwh_seuil": int(ss[i])
+		"kwh_prec": int(ps[i])
                 "mcube": 0.0
+		"mcube_seuil": 0.0
+		"mcube_prec": 0.0
             })
         i +=1
     
@@ -323,10 +340,22 @@ def _get_data(session, resource_id, start_date=None, end_date=None):
         t = mt.group(1)
     else:
         t = '0'
+    ms = re.search("donneesSeuil = \"(.*?)\"", req.text)
+    if ms is not None:
+        s = ms.group(1)
+    else:
+        s = '0'
+    mp = re.search("donneesPrecedente = \"(.*?)\"", req.text)
+    if ms is not None:
+        p = mp.group(1)
+    else:
+        p = '0'
     
     now = datetime.datetime.now()
     ts=t.split(",")
     ds=d.split(",")
+    ss=s.split(",")
+    ps=p.split(",")
     size=len(ts)
     i=0
     while i<size:
@@ -334,6 +363,9 @@ def _get_data(session, resource_id, start_date=None, end_date=None):
         for d in data:
             if rdate == d['date']:
                 d['mcube'] = float(ds[i])
+		d['mcube_seuil'] = float(ss[i])
+		d['mcube_prec'] = float(ps[i])
+		
         i +=1
 
     #if 300 <= req.status_code < 400:
