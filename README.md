@@ -175,8 +175,8 @@ Have a look to [Home Assistant Mqtt discovery documentation](https://www.home-as
 | gazpar_monthly_gas | Sensor | Gas | Gas consumption in m3 of the last monthly statement |
 | gazpar_monthly_gas_prev | Sensor | Gas | Gas consumption in m3 of previous year at the same month |
 | gazpar_monthly_energy | Sensor | Energy | Gas consumption in kWh of the last monthly statement |
-| gazpar_monthly_gas_tsh | Sensor | Energy | Gas threshold in kWh of the last monthly statement |
-| gazpar_monthly_gas_prev | Sensor | Energy | Gas consumption in kWh of previous year at the same month |
+| gazpar_monthly_energy_tsh | Sensor | Energy | Gas threshold in kWh of the last monthly statement |
+| gazpar_monthly_energy_prev | Sensor | Energy | Gas consumption in kWh of previous year at the same month |
 | gazpar_consumption_date | Sensor | Date | Date of the last daily statement |
 | gazpar_consumption_month | Sensor | Text | Month of the last monthly statement |
 | gazpar_connectivity | Binary sensor | Connectivity | Binary sensor which indicates if the last gazpar statement succeeded (ON) or failed (OFF) |
