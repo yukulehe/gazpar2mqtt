@@ -1,4 +1,5 @@
-FROM python:3.9.7-slim
+#FROM python:3.9.7-slim
+FROM python:3.10-slim
 
 COPY ./app /app
 
@@ -6,7 +7,7 @@ RUN apt-get update
 RUN mkdir -p /data
 
 # Prerequisite for installing package lxml on armv7
-RUN apt-get install --upgrade -y g++ gcc libxml2-dev libxslt-dev python3-dev
+#RUN apt-get install --upgrade -y g++ gcc libxml2-dev libxslt-dev python3-dev
  
 # Install python requirements
 RUN pip3 install --upgrade pip && \
