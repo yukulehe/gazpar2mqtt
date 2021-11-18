@@ -264,7 +264,7 @@ def _get_data(session, resource_id, start_date=None, end_date=None):
     logging.info("ms : %s",ms)
     if ms is not None and ms != "null":
         s = ms.group(1)
-        if s = 'null':
+        if s == 'null':
 	  s = '0'
     else:
         s = '0'
@@ -272,7 +272,7 @@ def _get_data(session, resource_id, start_date=None, end_date=None):
     logging.info("ms : %s",mp)
     if mp is not None:
         p = mp.group(1)
-	if p = 'null':
+	if p == 'null':
 	  p = '0'
     else:
         p = '0'
@@ -349,14 +349,14 @@ def _get_data(session, resource_id, start_date=None, end_date=None):
     ms = re.search("donneesSeuil = \"(.*?)\"", req.text)
     if ms is not None and ms != "null":
         s = ms.group(1)
-        if s = 'null':
+        if s == 'null':
 	  s = '0'
     else:
         s = '0'
     mp = re.search("donneesPrecedente = \"(.*?)\"", req.text)
     if mp is not None and mp != "null":
         p = mp.group(1)
-        if p = 'null':
+        if p == 'null':
 	  p = '0'
     else:
         p = '0'
