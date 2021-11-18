@@ -283,11 +283,9 @@ def _get_data(session, resource_id, start_date=None, end_date=None):
     i=0
     while i<size:
         if ds[i]!="null":
-            if ss[i] == "null":
-              ss[i] = '0'
-            if ps[i] == "null":
-              ps[i] = '0'
             rdate = ts[i].replace('Le ','').replace('/','-')
+            ss[i] = ss[i].replace('null','').replace('.0','')
+            ps[i] = ps[i].replace('null','0').replace('.0','')
             data.append({
                 "date": rdate,
                 "kwh": int(ds[i]),
@@ -370,11 +368,9 @@ def _get_data(session, resource_id, start_date=None, end_date=None):
     i=0
     while i<size:
       rdate = ts[i].replace('Le ','').replace('/','-')
+      ss[i] = ss[i].replace('null','').replace('.0','')
+      ps[i] = ps[i].replace('null','0').replace('.0','')
       for d in data:
-        if ss[i] == "null":
-          ss[i] = '0'
-        if ps[i] == "null":
-          ps[i] = '0'
         if rdate == d['date']:
           d['mcube'] = float(ds[i])
           d['mcube_seuil'] = float(ss[i])
