@@ -13,7 +13,7 @@ Important : the tool is still under development, various functions may disappear
 
 ## Changelogs :
 
-- v0.4.x : Home assistant mqtt discovery, arm/v7
+- v0.4.x : Home assistant mqtt discovery, arm/v7, Grdf's thresholds (seuil) and previous year consumption
 - v0.3.x : First reliable release
 
 ## Roadmap :
