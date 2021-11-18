@@ -265,15 +265,15 @@ def _get_data(session, resource_id, start_date=None, end_date=None):
     if ms is not None and ms != "null":
         s = ms.group(1)
         if s == 'null':
-	  s = '0'
+          s = '0'
     else:
         s = '0'
     mp = re.search("donneesPrecedente = \"(.*?)\"", req.text)
     logging.info("ms : %s",mp)
     if mp is not None:
         p = mp.group(1)
-	if p == 'null':
-	  p = '0'
+        if p == 'null':
+          p = '0'
     else:
         p = '0'
 
@@ -291,11 +291,11 @@ def _get_data(session, resource_id, start_date=None, end_date=None):
             data.append({
                 "date": rdate,
                 "kwh": int(ds[i]),
-		"kwh_seuil": int(ss[i]),
-		"kwh_prec": int(ps[i]),
+                "kwh_seuil": int(ss[i]),
+                "kwh_prec": int(ps[i]),
                 "mcube": 0.0,
-		"mcube_seuil": 0.0,
-		"mcube_prec": 0.0
+                "mcube_seuil": 0.0,
+                "mcube_prec": 0.0
             })
         i +=1
     
@@ -350,14 +350,14 @@ def _get_data(session, resource_id, start_date=None, end_date=None):
     if ms is not None and ms != "null":
         s = ms.group(1)
         if s == 'null':
-	  s = '0'
+          s = '0'
     else:
         s = '0'
     mp = re.search("donneesPrecedente = \"(.*?)\"", req.text)
     if mp is not None and mp != "null":
         p = mp.group(1)
         if p == 'null':
-	  p = '0'
+          p = '0'
     else:
         p = '0'
     
