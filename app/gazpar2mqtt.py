@@ -38,7 +38,6 @@ TOPIC_MONTHLY_KWH = "/monthly/kwh"
 TOPIC_MONTHLY_KWH_TSH = "/monthly/kwh/threshold"
 TOPIC_MONTHLY_KWH_PREV = "/monthly/kwh/previous"
 TOPIC_MONTHLY_MCUBE = "/monthly/mcube"
-TOPIC_MONTHLY_MCUBE_TSH = "/monthly/kwh/threshold"
 TOPIC_MONTHLY_MCUBE_PREV = "/monthly/kwh/previous"
 
 
@@ -393,7 +392,6 @@ def run(params):
                     mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_KWH_TSH, m1['kwh_seuil'], params['mqtt','qos'], params['mqtt','retain'])
                     mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_KWH_PREV, m1['kwh_prec'], params['mqtt','qos'], params['mqtt','retain'])
                     mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_MCUBE, m1['mcube'], params['mqtt','qos'], params['mqtt','retain'])
-                    mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_MCUBE_TSH, m1['mcube_seuil'], params['mqtt','qos'], params['mqtt','retain'])
                     mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_MCUBE_PREV, m1['mcube_prec'], params['mqtt','qos'], params['mqtt','retain'])
                     logging.info("Monthly values published !")
 
@@ -420,7 +418,6 @@ def run(params):
                 logging.info("Update of Home Assistant sensors configurations...")
                 mqtt.publish(client, hass.getConfigTopicSensor('daily_gas'), json.dumps(hass.getConfigPayload('daily_gas')), params['mqtt','qos'], params['mqtt','retain'])
                 mqtt.publish(client, hass.getConfigTopicSensor('monthly_gas'), json.dumps(hass.getConfigPayload('monthly_gas')), params['mqtt','qos'], params['mqtt','retain'])
-                mqtt.publish(client, hass.getConfigTopicSensor('monthly_gas_tsh'), json.dumps(hass.getConfigPayload('monthly_gas_tsh')), params['mqtt','qos'], params['mqtt','retain'])
                 mqtt.publish(client, hass.getConfigTopicSensor('monthly_gas_prev'), json.dumps(hass.getConfigPayload('monthly_gas_prev')), params['mqtt','qos'], params['mqtt','retain'])
                 mqtt.publish(client, hass.getConfigTopicSensor('daily_energy'), json.dumps(hass.getConfigPayload('daily_energy')), params['mqtt','qos'], params['mqtt','retain'])
                 mqtt.publish(client, hass.getConfigTopicSensor('monthly_energy'), json.dumps(hass.getConfigPayload('monthly_energy')), params['mqtt','qos'], params['mqtt','retain'])
@@ -447,7 +444,6 @@ def run(params):
                     statePayload = {
                         "daily_gas": d1['mcube'],
                         "monthly_gas": m1['mcube'],
-                        "monthly_gas_tsh": m1['mcube_seuil'],
                         "monthly_gas_prev": m1['mcube_prec'],
                         "daily_energy": d1['kwh'],
                         "monthly_energy": m1['kwh'],
