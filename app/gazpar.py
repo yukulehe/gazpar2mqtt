@@ -373,6 +373,10 @@ def _get_data(session, resource_id, start_date=None, end_date=None):
     while i<size:
       rdate = ts[i].replace('Le ','').replace('/','-')
       for d in data:
+        if ss[i] == "null":
+          ss[i] = '0'
+        if ps[i] == "null":
+          ps[i] = '0'
         if rdate == d['date']:
           d['mcube'] = float(ds[i])
           d['mcube_seuil'] = float(ss[i])
