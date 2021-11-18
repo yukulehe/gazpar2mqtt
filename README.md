@@ -11,14 +11,17 @@ The project has been inspired by job done by [empierre](https://github.com/empie
 
 Important : the tool is still under development, various functions may disappear or be modified.
 
+
 ## Changelogs :
 
 - v0.4.x : Home assistant mqtt discovery, arm/v7, Grdf's thresholds (seuil) and previous year consumption
 - v0.3.x : First reliable release
 
+
 ## Roadmap :
 
 - Home assistant add-on
+
 
 # Requirements
 
@@ -34,13 +37,18 @@ pip3 install -r app/requirements.txt
 
 Verify you have gazpar data available on [GRDF Portal](https://monespace.grdf.fr/monespace/connexion)
 
-Data provided is the last day and last month consumptions.
+Data provided are :
+- the previous day and the current month consumptions of gas (in m3) and energy (kwh)
+- the consumptions of the previous year for the current month
+- the threshold (seuil) of the current month defined in Grdf portal
 
 Remember, kWh provided is conversion factor dependant. Please verify it's coherent with your provider bills.
+
 
 ## MQTT broker
 
 A MQTT broker is required. Please check its configuration (hostname, port, remote access allowed, username & password if needed).
+
 
 ## Parameters
 
