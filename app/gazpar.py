@@ -213,7 +213,8 @@ def _get_data(session, resource_id, start_date=None, end_date=None):
     req = session.post('https://monespace.grdf.fr/monespace/particulier/consommation/consommations', allow_redirects=False, data=payload, params=params)
 
 
-    # get kwh 
+    # get kwh
+    logging.info("KWH !!)
     payload = {
                "javax.faces.partial.ajax":"true",
                'javax.faces.source':'_eConsoconsoDetaille_WAR_eConsoportlet_:idFormConsoDetaille:panelTypeGranularite1:2',
@@ -264,12 +265,16 @@ def _get_data(session, resource_id, start_date=None, end_date=None):
     logging.info("ms : %s",ms)
     if ms is not None and ms != "null":
         s = ms.group(1)
+        if s = 'null':
+	  s = '0'
     else:
         s = '0'
     mp = re.search("donneesPrecedente = \"(.*?)\"", req.text)
     logging.info("ms : %s",mp)
-    if mp is not None and ms != "null":
+    if mp is not None:
         p = mp.group(1)
+	if p = 'null':
+	  p = '0'
     else:
         p = '0'
 
@@ -296,6 +301,7 @@ def _get_data(session, resource_id, start_date=None, end_date=None):
         i +=1
     
     # get mcube
+    logging.info("MCUBE !!)
     payload = {
            "javax.faces.partial.ajax":"true",
            'javax.faces.source':'_eConsoconsoDetaille_WAR_eConsoportlet_:idFormConsoDetaille:selecteurVolumeType2:1',
@@ -345,11 +351,15 @@ def _get_data(session, resource_id, start_date=None, end_date=None):
     ms = re.search("donneesSeuil = \"(.*?)\"", req.text)
     if ms is not None and ms != "null":
         s = ms.group(1)
+        if s = 'null':
+	  s = '0'
     else:
         s = '0'
     mp = re.search("donneesPrecedente = \"(.*?)\"", req.text)
     if mp is not None and mp != "null":
         p = mp.group(1)
+        if p = 'null':
+	  p = '0'
     else:
         p = '0'
     
