@@ -16,7 +16,7 @@ Important : the tool is still under development, various functions may disappear
 
 - v0.4.x : 
   - Home assistant mqtt discovery available
-  - Home assistant add-on available ( #5 ) : https://github.com/alexbelgium/hassio-addons/tree/master/gazpar2mqtt (special thx to [alexbelgium](https://github.com/alexbelgium))
+  - Home assistant add-on available : https://github.com/alexbelgium/hassio-addons/tree/master/gazpar2mqtt (special thx to [alexbelgium](https://github.com/alexbelgium))
   - Enable Docker build for arm/v7 architecture
   - Grdf's thresholds (seuil) and previous year consumption
 - v0.3.x :
