@@ -214,7 +214,6 @@ def _get_data(session, resource_id, start_date=None, end_date=None):
 
 
     # get kwh
-    logging.info("KWH !!)
     payload = {
                "javax.faces.partial.ajax":"true",
                'javax.faces.source':'_eConsoconsoDetaille_WAR_eConsoportlet_:idFormConsoDetaille:panelTypeGranularite1:2',
@@ -301,7 +300,6 @@ def _get_data(session, resource_id, start_date=None, end_date=None):
         i +=1
     
     # get mcube
-    logging.info("MCUBE !!)
     payload = {
            "javax.faces.partial.ajax":"true",
            'javax.faces.source':'_eConsoconsoDetaille_WAR_eConsoportlet_:idFormConsoDetaille:selecteurVolumeType2:1',
