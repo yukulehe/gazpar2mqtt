@@ -285,10 +285,10 @@ def _get_data(session, resource_id, start_date=None, end_date=None):
             data.append({
                 "date": rdate,
                 "kwh": int(ds[i]),
-		"kwh_seuil": int(ss[i])
-		"kwh_prec": int(ps[i])
-                "mcube": 0.0
-		"mcube_seuil": 0.0
+		"kwh_seuil": int(ss[i]),
+		"kwh_prec": int(ps[i]),
+                "mcube": 0.0,
+		"mcube_seuil": 0.0,
 		"mcube_prec": 0.0
             })
         i +=1
