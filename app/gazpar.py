@@ -286,6 +286,7 @@ def _get_data(session, resource_id, start_date=None, end_date=None):
             rdate = ts[i].replace('Le ','').replace('/','-')
             ss[i] = ss[i].replace('null','').replace('.0','')
             ps[i] = ps[i].replace('null','0').replace('.0','')
+            logging.info("iterator %s : s =%s, p= %s",i,ss[i],ps[i])
             data.append({
                 "date": rdate,
                 "kwh": int(ds[i]),
@@ -372,6 +373,7 @@ def _get_data(session, resource_id, start_date=None, end_date=None):
       ps[i] = ps[i].replace('null','0').replace('.0','')
       for d in data:
         if rdate == d['date']:
+          logging.info("iterator %s : s =%s, p= %s",i,ss[i],ps[i])
           d['mcube'] = float(ds[i])
           d['mcube_seuil'] = float(ss[i])
           d['mcube_prec'] = float(ps[i])
