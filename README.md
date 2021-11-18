@@ -25,7 +25,10 @@ Important : the tool is still under development, various functions may disappear
 
 ## Roadmap :
 
-- Home assistant add-on
+- Get weekly consumptions
+- Set alerts when threshold reached
+- Get most economic and most energivor consumption in local environment
+- Provide an exemple of Home assistant card
 
 
 # Requirements
