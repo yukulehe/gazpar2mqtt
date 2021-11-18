@@ -135,11 +135,15 @@ You can replace the default topic prefix *gazpar* (see mqtt broker requirements 
 | --- | --- |
 | gazpar/monthly/date | Month of the last monthly statement |
 | gazpar/monthly/kwh | Consumption in kwh of the last monthly statement |
+| gazpar/monthly/kwh/threshold | Threshold in kwh of the last monthly statement |
+| gazpar/monthly/kwh/previous | Consumption in kWh of previous year at the same month |
 | gazpar/monthly/mcube | Consumption in cube meter of the last monthly statement  |
-| gazpar/monthly/delta | Variation in percentage between the last and the previous monthly statement  |
+| gazpar/monthly/mcube/threshold | Threshold in m3 of the last monthly statement |
+| gazpar/monthly/mcube/previous | Consumption in m3 of previous year at the same month  |
+| gazpar/monthly/delta | Deprecated  |
+
 
 ### Status values :
-
 
 | Topic | Description |
 | --- | --- |
@@ -154,6 +158,7 @@ You can replace the default topic prefix *gazpar* (see mqtt broker requirements 
 Gazpar2mqtt provides Home Assistant compatible Mqtt devices. The discovery function enable to use MQTT devices with a minimal configuration effort.
 Have a look to [Home Assistant Mqtt discovery documentation](https://www.home-assistant.io/docs/mqtt/discovery/).
 
+
 ### List of available sensors :
 
 | Sensor name | Component | Device class | Description |
@@ -161,10 +166,15 @@ Have a look to [Home Assistant Mqtt discovery documentation](https://www.home-as
 | gazpar_daily_gas | Sensor | Gas | Gas consumption in m3 of the last daily statement |
 | gazpar_daily_energy | Sensor | Energy | Gas consumption in kWh of the last daily statement |
 | gazpar_monthly_gas | Sensor | Gas | Gas consumption in m3 of the last monthly statement |
+| gazpar_monthly_gas_tsh | Sensor | Gas | Gas threshold in m3 of the last monthly statement |
+| gazpar_monthly_gas_prev | Sensor | Gas | Gas consumption in m3 of previous year at the same month |
 | gazpar_monthly_energy | Sensor | Energy | Gas consumption in kWh of the last monthly statement |
+| gazpar_monthly_gas_tsh | Sensor | Energy | Gas threshold in kWh of the last monthly statement |
+| gazpar_monthly_gas_prev | Sensor | Energy | Gas consumption in kWh of previous year at the same month |
 | gazpar_consumption_date | Sensor | Date | Date of the last daily statement |
 | gazpar_consumption_month | Sensor | Text | Month of the last monthly statement |
 | gazpar_connectivity | Binary sensor | Connectivity | Binary sensor which indicates if the last gazpar statement succeeded (ON) or failed (OFF) |
+
 
 ### List of topics :
 | Topic | Description
