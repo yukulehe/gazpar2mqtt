@@ -121,7 +121,7 @@ def getConfigPayload(device):
         }
     
     # Energy consumption monthly of previous year
-    elif device == 'monthly_energy_tsh':
+    elif device == 'monthly_energy_prev':
         
         configPayload= {
             "device_class": "energy",
