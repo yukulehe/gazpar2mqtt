@@ -266,7 +266,7 @@ def _get_data(session, resource_id, start_date=None, end_date=None):
     else:
         s = '0'
     mp = re.search("donneesPrecedente = \"(.*?)\"", req.text)
-    if ms is not None:
+    if mp is not None:
         p = mp.group(1)
     else:
         p = '0'
@@ -346,7 +346,7 @@ def _get_data(session, resource_id, start_date=None, end_date=None):
     else:
         s = '0'
     mp = re.search("donneesPrecedente = \"(.*?)\"", req.text)
-    if ms is not None:
+    if mp is not None:
         p = mp.group(1)
     else:
         p = '0'
