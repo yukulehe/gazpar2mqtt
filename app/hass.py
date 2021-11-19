@@ -14,12 +14,10 @@ def getDeviceId(device_name):
 def getDeviceConfig(prefix,device_id,device_name):
     
     config = {
-        "device": {
-            "identifiers": [{device_id}],
-            "name": {device_name},
-            "model": "gazpar",
-            "manufacturer": "GRDF"
-        }
+        "identifiers": [{device_id}],
+        "name": {device_name},
+        "model": "gazpar",
+        "manufacturer": "GRDF"
     }
     
     return config
