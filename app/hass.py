@@ -13,12 +13,14 @@ def getDeviceId(device_name):
 # Return the device config
 def getDeviceConfig(prefix,device_id,device_name):
     
-    devicePayload = {
+    config = {
         "identifiers": [{device_id}],
         "name": {device_name},
         "model": "gazpar",
         "manufacturer": "GRDF"
-    }   
+    }
+    
+    return config
                         
 # Return the state topic for sensors
 def getStateTopicSensor(prefix,device_id):
