@@ -5,7 +5,7 @@ import json
 import gazpar2mqtt
 
 
-HA_AUTODISCOVERY_PREFIX = gazpar2mqtt.HA_AUTODISCOVERY_PREFIX
+HASS_AUTODISCOVERY_PREFIX = gazpar2mqtt.HA_AUTODISCOVERY_PREFIX
 HASS_DEVICE_NAME = gazpar2mqtt.HASS_DEVICE_NAME
 
 # Return the device config
@@ -22,26 +22,26 @@ def getDeviceConfig():
 # Return the state topic for sensors
 def getStateTopicSensor():
     
-    topic = f"{HA_AUTODISCOVERY_PREFIX}/sensor/{HASS_DEVICE_NAME}/state"
+    topic = f"{HASS_AUTODISCOVERY_PREFIX}/sensor/{HASS_DEVICE_NAME}/state"
     return topic
 
 # Return the state topic for binary sensors
 def getStateTopicBinary():
     
-    topic = f"{HA_AUTODISCOVERY_PREFIX}/binary_sensor/{HASS_DEVICE_NAME}/state"
+    topic = f"{HASS_AUTODISCOVERY_PREFIX}/binary_sensor/{HASS_DEVICE_NAME}/state"
     return topic
 
 # Return the configuration topic for sensors
 def getConfigTopicSensor(sensor):
         
-    topic = f"{HA_AUTODISCOVERY_PREFIX}/sensor/{HASS_DEVICE_NAME}/{sensor}/config"
+    topic = f"{HASS_AUTODISCOVERY_PREFIX}/sensor/{HASS_DEVICE_NAME}/{sensor}/config"
     return topic
 
 
 # Return the configuration topic for binary sensors
 def getConfigTopicBinary(sensor):
     
-    topic = f"{HA_AUTODISCOVERY_PREFIX}/binary_sensor/{HASS_DEVICE_NAME}/{sensor}/config"
+    topic = f"{HASS_AUTODISCOVERY_PREFIX}/binary_sensor/{HASS_DEVICE_NAME}/{sensor}/config"
     return topic
     
     
