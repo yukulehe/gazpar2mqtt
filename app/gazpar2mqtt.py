@@ -73,20 +73,17 @@ def _getEnvParams():
     params = {}
     
     if not "GRDF_USERNAME" in os.environ:
-        logging.error("Environement variable 'GRDF_USERNAME' is mandatory")
-        quit()
+        params['grdf','username'] = None
     else:
         params['grdf','username'] = os.environ['GRDF_USERNAME']
         
     if not "GRDF_PASSWORD" in os.environ:
-        logging.error("Environement variable 'GRDF_USERNAME' is mandatory")
-        quit()
+        params['grdf','password'] = None
     else:
         params['grdf','password'] = os.environ['GRDF_PASSWORD']
         
     if not "MQTT_HOST" in os.environ:
-        logging.error("Environement variable 'MQTT_HOST' is mandatory")
-        quit()
+        params['mqtt','host'] = None
     else:
         params['mqtt','host'] = os.environ['MQTT_HOST']
         
@@ -561,8 +558,21 @@ if __name__ == "__main__":
     if args.standalone_mode is not None: params['standalone','mode']=args.standalone_mode
     if args.hass_discovery is not None: params['hass','discovery']=args.hass_discovery
     if args.hass_prefix is not None: params['hass','prefix']=args.hass_prefix
+        
+    # STEP 4 : Check mandatory parameters
+    if params['grdf','username'] is None:
+        logging.error("Parameter GRDF username is mandatory.")
+        quit()
+    if params['grdf','password'] is None:
+        logging.error("Parameter GRDF password is mandatory.")
+        quit()
+    if params['mqtt','host'] is None:
+        logging.error("Parameter MQTT host is mandatory.")
+        quit()
+    if params['standalone','mode'] is False and params['hass','discovery'] is False:
+        logging.warning("Both Standalone mode and Home assistant discovery are disable. No value will be published to MQTT ! Please check your parameters.")
     
-    # STEP 4 : Log params info
+    # STEP 5 : Log params info
     logging.info("-----------------------------------------------------------")
     logging.info("Program parameters")
     logging.info("-----------------------------------------------------------")
@@ -574,7 +584,7 @@ if __name__ == "__main__":
     logging.info("Home Assistant discovery : Enable = %s, Topic prefix = %s", \
                  params['hass','discovery'], params['hass','prefix'])
 
-    # STEP 5 : Run
+    # STEP 6 : Run
     if params['schedule','time'] is not None:
         
         # Run once at lauch
