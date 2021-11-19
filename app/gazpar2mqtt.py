@@ -25,6 +25,7 @@ GRDF_API_MAX_RETRIES = 5 # number of retries max to get accurate data from GRDF
 GRDF_API_WAIT_BTW_RETRIES = 10 # number of seconds between two tries
 GRDF_API_ERRONEOUS_COUNT = 1 # Erroneous number of results send by GRDF 
 
+
 # Sensors topics for standalone mode
 
 ## Daily
@@ -45,6 +46,9 @@ TOPIC_MONTHLY_MCUBE_PREV = "/monthly/kwh/previous"
 TOPIC_STATUS_DATE = "/status/date"
 TOPIC_STATUS_VALUE = "/status/value"
 
+# Global for HASS
+HASS_AUTODISCOVERY_PREFIX = None
+HASS_DEVICE_NAME = None
 
 #######################################################################
 #### Functions
@@ -421,6 +425,10 @@ def run(params):
                 logging.info("-----------------------------------------------------------")
                 logging.info("Home assistant publication mode")
                 logging.info("-----------------------------------------------------------")
+                
+                # Set global variable
+                HASS_AUTODISCOVERY_PREFIX = params['hass','prefix']
+                HASS_DEVICE_NAME = params['hass','device_name']
 
                 # Set Hass sensors configuration
                 logging.info("Update of Home Assistant sensors configurations...")
