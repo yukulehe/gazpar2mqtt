@@ -81,7 +81,8 @@ Optionnal :
 | **MQTT_USERNAME** | Username to be used for connexion to the MQTT brokerr |  |
 | **MQTT_PASSWORD** | Password to be used for connexion to the MQTT brokerr |  |
 | **MQTT_QOS** | QOS for message publishing (0, 1 or 2) | 1 |
-| **MQTT_RETAIN** | Retain flag, default False | False |
+| **MQTT_RETAIN** | Retain flag| False |
+| **MQTT_SSL** | Enable MQTT SSL connexion | False |
 | **STANDALONE_MODE** | Enable standalone publication mode | True |
 | **HASS_DISCOVERY** | Enable Home assistant dicovery mode | False |
 | **HASS_PREFIX** | Home assistant topic prefix | homeassistant |
