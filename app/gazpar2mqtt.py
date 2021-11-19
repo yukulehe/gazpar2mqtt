@@ -150,6 +150,11 @@ def _getEnvParams():
     else:
         params['hass','prefix'] = os.environ['HASS_PREFIX']
     
+    if not "HASS_DEVICE_NAME" in os.environ:
+        params['hass','device_name'] = 'gazpar'
+    else:
+        params['hass','device_name'] = os.environ['HASS_DEVICE_NAME']
+    
     return params
 
 # Log to GRDF
@@ -543,6 +548,8 @@ if __name__ == "__main__":
         "--hass_discovery",   help="Enable Home Assistant discovery, possible values : True or False")
     parser.add_argument(
         "--hass_prefix",      help="Home Assistant discovery Mqtt topic prefix")
+    parser.add_argument(
+        "--hass_device_name",      help="Home Assistant device name")
     
     args = parser.parse_args()
     
@@ -567,6 +574,7 @@ if __name__ == "__main__":
     if args.standalone_mode is not None: params['standalone','mode']=args.standalone_mode
     if args.hass_discovery is not None: params['hass','discovery']=args.hass_discovery
     if args.hass_prefix is not None: params['hass','prefix']=args.hass_prefix
+    if args.hass_prefix is not None: params['hass','device_name']=args.hass_prefix
         
     # STEP 4 : Check mandatory parameters (fix issue #12)
     if params['grdf','username'] is None:
@@ -591,8 +599,8 @@ if __name__ == "__main__":
                  params['mqtt','qos'],params['mqtt','topic'],params['mqtt','retain']), \
                  params['mqtt','ssl']),
     logging.info("Standlone mode : Enable = %s", params['standalone','mode'])
-    logging.info("Home Assistant discovery : Enable = %s, Topic prefix = %s", \
-                 params['hass','discovery'], params['hass','prefix'])
+    logging.info("Home Assistant discovery : Enable = %s, Topic prefix = %s, Device name = %s", \
+                 params['hass','discovery'], params['hass','prefix'], params['hass','device_name'])
 
     # STEP 6 : Run
     if params['schedule','time'] is not None:
