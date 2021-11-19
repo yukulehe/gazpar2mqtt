@@ -7,7 +7,7 @@ from importlib import import_module
 # Return a formatted device Id
 def getDeviceId(device_name):
     
-    deviceId = prefix.replace(' ','_')
+    deviceId = device_name.replace(' ','_')
     return deviceId
 
 # Return the device config
