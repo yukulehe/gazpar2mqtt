@@ -191,6 +191,7 @@ Have a look to [Home Assistant Mqtt discovery documentation](https://www.home-as
 | gazpar_consumption_date | Sensor | Date | Date of the last daily statement |
 | gazpar_consumption_month | Sensor | Text | Month of the last monthly statement |
 | gazpar_connectivity | Binary sensor | Connectivity | Binary sensor which indicates if the last gazpar statement succeeded (ON) or failed (OFF) |
+
 Note : you can replace the default device name *gazpar*
 
 ### List of topics :
