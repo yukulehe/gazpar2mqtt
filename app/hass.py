@@ -2,7 +2,6 @@
 # More info on HA discovery : https://www.home-assistant.io/docs/mqtt/discovery
 
 import json
-import gazpar2mqtt
 
 
 HASS_AUTODISCOVERY_PREFIX = None
@@ -11,8 +10,8 @@ HASS_DEVICE_NAME = None
 # Set Hass global
 def setHassGlobal(prefix,device_name):
     
-    HASS_AUTODISCOVERY_PREFIX = prefix
-    HASS_DEVICE_NAME = device_name
+    global HASS_AUTODISCOVERY_PREFIX = prefix
+    global HASS_DEVICE_NAME = device_name
 
 # Return the device config
 def getDeviceConfig():
