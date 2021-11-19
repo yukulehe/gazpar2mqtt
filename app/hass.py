@@ -14,10 +14,12 @@ def getDeviceId(device_name):
 def getDeviceConfig(prefix,device_id,device_name):
     
     config = {
+        "device": {
             "identifiers": [{device_id}],
             "name": {device_name},
             "model": "gazpar",
             "manufacturer": "GRDF"
+        }
     }
     
     return config
@@ -174,6 +176,7 @@ def getConfigPayload(prefix,device_name,sensor):
         topic = "error"
     
     # Add device config to payload
-    configPayload[0]["device"].append(getDeviceConfig(prefix,device_id,device_name))
+    print configPayload
+    configPayload = configPayload.update(getDeviceConfig(prefix,device_id,device_name))
 
     return configPayload
