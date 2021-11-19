@@ -5,8 +5,14 @@ import json
 import gazpar2mqtt
 
 
-HASS_AUTODISCOVERY_PREFIX = gazpar2mqtt.HASS_AUTODISCOVERY_PREFIX
-HASS_DEVICE_NAME = gazpar2mqtt.HASS_DEVICE_NAME
+HASS_AUTODISCOVERY_PREFIX = None
+HASS_DEVICE_NAME = None
+
+# Set Hass global
+def setHassGlobal(prefix,device_name):
+    
+    HASS_AUTODISCOVERY_PREFIX = prefix
+    HASS_DEVICE_NAME = device_name
 
 # Return the device config
 def getDeviceConfig():
