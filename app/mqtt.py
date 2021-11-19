@@ -27,7 +27,7 @@ def on_publish(client, userdata, mid):
     logging.debug("Mqtt on_publish : message published")
 
 # Sub constructor
-def create_client(clientId,username,password,ssl):
+def create_client(clientId,username,password,ssl_enable):
     
     # Create instance
     client = mqtt.Client(clientId)
@@ -38,7 +38,7 @@ def create_client(clientId,username,password,ssl):
     
     # Set SSL if required
     ssl_boolean = False
-    ssl_boolean = ssl.lower() in ("t","true","1","Yes","Y","Yup","Oui","Si","Da")
+    ssl_boolean = ssl_enable.lower() in ("t","true","1","yes","y","yup","oui","si","da")
     if ssl_boolean:
         client.tls_set(cert_reqs=ssl.CERT_NONE)
         client.tls_insecure_set(True)
@@ -79,7 +79,7 @@ def publish(client,topic,payload,qos,retain):
     logging.debug("Mqtt publish : publication...")
     
     retain_boolean = False
-    retain_boolean = retain.lower() in ("t","true","1","Yes","Y","Yup","Oui","Si","Da")
+    retain_boolean = retain.lower() in ("t","true","1","yes","y","yup","oui","si","da")
     
     logging.debug("Publishing payload %s to topic %s, qos %s, retain %s",payload,topic, qos, retain_boolean)
     client.publish(topic, payload=payload, qos=qos, retain=retain_boolean)
