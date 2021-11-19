@@ -125,37 +125,37 @@ def _getEnvParams():
         params['mqtt','qos'] = int(os.environ['MQTT_QOS'])
         
     if not "MQTT_TOPIC" in os.environ:
-        params['mqtt','topic'] = 'gazpar'
+        params['mqtt','topic'] = "gazpar"
     else:
         params['mqtt','topic'] = os.environ['MQTT_TOPIC']
         
     if not "MQTT_RETAIN" in os.environ:
-        params['mqtt','retain'] = 'False'
+        params['mqtt','retain'] = "False"
     else:
         params['mqtt','retain'] = os.environ['MQTT_RETAIN']
     
     if not "MQTT_SSL" in os.environ:
-        params['mqtt','ssl'] = 'False'
+        params['mqtt','ssl'] = "False"
     else:
         params['mqtt','ssl'] = os.environ['MQTT_SSL']
     
     if not "STANDALONE_MODE" in os.environ:
-        params['standalone','mode'] = 'True'
+        params['standalone','mode'] = "True"
     else:
         params['standalone','mode'] = os.environ['STANDALONE_MODE']
         
     if not "HASS_DISCOVERY" in os.environ:
-        params['hass','discovery'] = 'False'
+        params['hass','discovery'] = "False"
     else:
         params['hass','discovery'] = os.environ['HASS_DISCOVERY']
     
     if not "HASS_PREFIX" in os.environ:
-        params['hass','prefix'] = 'homeassistant'
+        params['hass','prefix'] = "homeassistant"
     else:
         params['hass','prefix'] = os.environ['HASS_PREFIX']
     
     if not "HASS_DEVICE_NAME" in os.environ:
-        params['hass','device_name'] = 'gazpar'
+        params['hass','device_name'] = "gazpar"
     else:
         params['hass','device_name'] = os.environ['HASS_DEVICE_NAME']
     
