@@ -14,8 +14,8 @@ def getDeviceId(device_name):
 def getDeviceConfig(prefix,device_id,device_name):
     
     config = {
-        "identifiers": [{device_id}],
-        "name": {device_name},
+        "identifiers": [device_id],
+        "name": device_name,
         "model": "gazpar",
         "manufacturer": "GRDF"
     }
