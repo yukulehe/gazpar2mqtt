@@ -9,6 +9,7 @@ g2m = import_module("gazpar2mqtt")
 # Return the device config
 def getDeviceConfig():
     
+    print(g2m.HASS_DEVICE_NAME)
     deviceId = g2m.HASS_DEVICE_NAME.replace(' ','_')
     devicePayload = {
         "identifiers": [{deviceId}],
