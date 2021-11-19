@@ -605,7 +605,7 @@ if __name__ == "__main__":
     logging.info("-----------------------------------------------------------")
     logging.info("Program parameters")
     logging.info("-----------------------------------------------------------")
-    logging.info("GRDF config : username = %s, password = %s", params['grdf','username'], "******")
+    logging.info("GRDF config : username = %s, password = %s", "******@****.**", "******")
     logging.info("MQTT broker config : host = %s, port = %s, clientId = %s, qos = %s, topic = %s, retain = %s, ssl = %s", \
                  params['mqtt','host'], params['mqtt','port'], params['mqtt','clientId'], \
                  params['mqtt','qos'],params['mqtt','topic'],params['mqtt','retain'], \
