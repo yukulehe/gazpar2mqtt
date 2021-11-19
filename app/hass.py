@@ -5,7 +5,7 @@ import json
 import gazpar2mqtt
 
 
-HASS_AUTODISCOVERY_PREFIX = gazpar2mqtt.HA_AUTODISCOVERY_PREFIX
+HASS_AUTODISCOVERY_PREFIX = gazpar2mqtt.HASS_AUTODISCOVERY_PREFIX
 HASS_DEVICE_NAME = gazpar2mqtt.HASS_DEVICE_NAME
 
 # Return the device config
