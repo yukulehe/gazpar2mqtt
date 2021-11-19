@@ -72,7 +72,7 @@ def getConfigPayload(prefix,device_name,sensor):
             "device_class": "gas",
             "name": f"{deviceId}_{sensor}",
             "unique_id": f"{deviceId}_{sensor}",
-            "state_topic": getStateTopicSensor(),
+            "state_topic": getStateTopicSensor(prefix,device_id),
             "unit_of_measurement": "m3",
             "value_template": "{{ value_json.monthly_gas}}",
             "device": getDeviceConfig(prefix,deviceId,device_name)
@@ -86,7 +86,7 @@ def getConfigPayload(prefix,device_name,sensor):
             "device_class": "gas",
             "name": f"{deviceId}_{sensor}",
             "unique_id": f"{deviceId}_{sensor}",
-            "state_topic": getStateTopicSensor(),
+            "state_topic": getStateTopicSensor(prefix,device_id),
             "unit_of_measurement": "m3",
             "value_template": "{{ value_json.monthly_gas_prev}}",
             "device": getDeviceConfig(prefix,deviceId,device_name)
@@ -99,7 +99,7 @@ def getConfigPayload(prefix,device_name,sensor):
             "device_class": "energy",
             "name": f"{deviceId}_{sensor}",
             "unique_id": f"{deviceId}_{sensor}",
-            "state_topic": getStateTopicSensor(),
+            "state_topic": getStateTopicSensor(prefix,device_id),
             "unit_of_measurement": "kWh",
             "value_template": "{{ value_json.daily_energy}}",
             "device": getDeviceConfig(prefix,deviceId,device_name)
@@ -112,7 +112,7 @@ def getConfigPayload(prefix,device_name,sensor):
             "device_class": "energy",
             "name": f"{deviceId}_{sensor}",
             "unique_id": f"{deviceId}_{sensor}",
-            "state_topic": getStateTopicSensor(),
+            "state_topic": getStateTopicSensor(prefix,device_id),
             "unit_of_measurement": "kWh",
             "value_template": "{{ value_json.monthly_energy}}",
             "device": getDeviceConfig(prefix,deviceId,device_name)
@@ -125,7 +125,7 @@ def getConfigPayload(prefix,device_name,sensor):
             "device_class": "energy",
             "name": f"{deviceId}_{sensor}",
             "unique_id": f"{deviceId}_{sensor}",
-            "state_topic": getStateTopicSensor(),
+            "state_topic": getStateTopicSensor(prefix,device_id),
             "unit_of_measurement": "kWh",
             "value_template": "{{ value_json.monthly_energy_tsh}}",
             "device": getDeviceConfig(prefix,deviceId,device_name)
@@ -138,7 +138,7 @@ def getConfigPayload(prefix,device_name,sensor):
             "device_class": "energy",
             "name": f"{deviceId}_{sensor}",
             "unique_id": f"{deviceId}_{sensor}",
-            "state_topic": getStateTopicSensor(),
+            "state_topic": getStateTopicSensor(prefix,device_id),
             "unit_of_measurement": "kWh",
             "value_template": "{{ value_json.monthly_energy_prev}}",
             "device": getDeviceConfig(prefix,deviceId,device_name)
@@ -150,7 +150,7 @@ def getConfigPayload(prefix,device_name,sensor):
         configPayload= {
             "name": f"{deviceId}_{device}",
             "unique_id": f"{deviceId}_{device}",
-            "state_topic": getStateTopicSensor(),
+            "state_topic": getStateTopicSensor(prefix,device_id),
             "value_template": "{{ value_json.consumption_date}}",
             "device": getDeviceConfig(prefix,deviceId,device_name)
         }
@@ -161,7 +161,7 @@ def getConfigPayload(prefix,device_name,sensor):
         configPayload= {
             "name": f"{deviceId}_{sensor}",
             "unique_id": f"{deviceId}_{sensor}",
-            "state_topic": getStateTopicSensor(),
+            "state_topic": getStateTopicSensor(prefix,device_id),
             "value_template": "{{ value_json.consumption_month}}",
             "device": getDeviceConfig(prefix,deviceId,device_name)
         }
@@ -173,7 +173,7 @@ def getConfigPayload(prefix,device_name,sensor):
             "device_class": "connectivity",
             "name": f"{deviceId}_{sensor}",
             "unique_id": f"{deviceId}_{sensor}",
-            "state_topic": getStateTopicBinary(),
+            "state_topic": getStateTopicBinary(prefix,device_id),
             "value_template": "{{ value_json.connectivity}}",
             "device": getDeviceConfig(prefix,deviceId,device_name)
         }
