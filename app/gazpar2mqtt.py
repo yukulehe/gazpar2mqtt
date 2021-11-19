@@ -434,16 +434,16 @@ def run(params):
 
                 # Set Hass sensors configuration
                 logging.info("Update of Home Assistant sensors configurations...")
-                mqtt.publish(client, hass.getConfigTopicSensor('daily_gas'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'daily_gas')), qos, retain)
-                mqtt.publish(client, hass.getConfigTopicSensor('monthly_gas'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'monthly_gas')), qos, retain)
-                mqtt.publish(client, hass.getConfigTopicSensor('monthly_gas_prev'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'monthly_gas_prev')), qos, retain)
-                mqtt.publish(client, hass.getConfigTopicSensor('daily_energy'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'daily_energy')), qos, retain)
-                mqtt.publish(client, hass.getConfigTopicSensor('monthly_energy'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'monthly_energy')), qos, retain)
-                mqtt.publish(client, hass.getConfigTopicSensor('monthly_energy_tsh'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'monthly_energy_tsh')), qos, retain)
-                mqtt.publish(client, hass.getConfigTopicSensor('monthly_energy_prev'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'monthly_energy_prev')), qos, retain)
-                mqtt.publish(client, hass.getConfigTopicSensor('consumption_date'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'consumption_date')), qos, retain)
-                mqtt.publish(client, hass.getConfigTopicSensor('consumption_month'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'consumption_month')), qos, retain)
-                mqtt.publish(client, hass.getConfigTopicBinary('connectivity'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'connectivity')), qos, retain)
+                mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'daily_gas'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'daily_gas')), qos, retain)
+                mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'monthly_gas'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'monthly_gas')), qos, retain)
+                mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'monthly_gas_prev'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'monthly_gas_prev')), qos, retain)
+                mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'daily_energy'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'daily_energy')), qos, retain)
+                mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'monthly_energy'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'monthly_energy')), qos, retain)
+                mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'monthly_energy_tsh'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'monthly_energy_tsh')), qos, retain)
+                mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'monthly_energy_prev'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'monthly_energy_prev')), qos, retain)
+                mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'consumption_date'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'consumption_date')), qos, retain)
+                mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'consumption_month'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'consumption_month')), qos, retain)
+                mqtt.publish(client, hass.getConfigTopicBinary(ha_prefix,device_name,'connectivity'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'connectivity')), qos, retain)
                 logging.info("Home assistant devices configurations updated !")
 
                 if hasGrdfFailed: # Values when Grdf failed
