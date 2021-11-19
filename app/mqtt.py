@@ -26,13 +26,21 @@ def on_publish(client, userdata, mid):
     logging.debug("Mqtt on_publish : message published")
 
 # Sub constructor
-def create_client(clientId,username,password):
+def create_client(clientId,username,password,ssl):
     
     # Create instance
     client = mqtt.Client(clientId)
     
+    # Set authentification
     if username != "" and password != "":
         client.username_pw_set(username, password)
+    
+    # Set SSL if required
+    ssl_boolean = False
+    ssl_boolean = ssl.lower() in ("t","true","1","Yes","Y","Yup","Oui","Si","Da")
+    if ssl_boolean:
+        client.tls_set(cert_reqs=ssl.CERT_NONE)
+        client.tls_insecure_set(True)
     
     return client
 
