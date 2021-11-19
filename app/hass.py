@@ -2,24 +2,17 @@
 # More info on HA discovery : https://www.home-assistant.io/docs/mqtt/discovery
 
 import json
+from importlib import import_module
 
-
-HASS_AUTODISCOVERY_PREFIX = None
-HASS_DEVICE_NAME = None
-
-# Set Hass global
-def setHassGlobal(prefix,device_name):
-    
-    global HASS_AUTODISCOVERY_PREFIX = prefix
-    global HASS_DEVICE_NAME = device_name
+g2m = import_module("gazpar2mqtt")
 
 # Return the device config
 def getDeviceConfig():
     
-    deviceId = HASS_DEVICE_NAME.replace(' ','_')
+    deviceId = g2m.HASS_DEVICE_NAME.replace(' ','_')
     devicePayload = {
         "identifiers": [{deviceId}],
-        "name": {HASS_DEVICE_NAME},
+        "name": {g2m.HASS_DEVICE_NAME},
         "model": "gazpar",
         "manufacturer": "GRDF"
     }   
@@ -27,26 +20,26 @@ def getDeviceConfig():
 # Return the state topic for sensors
 def getStateTopicSensor():
     
-    topic = f"{HASS_AUTODISCOVERY_PREFIX}/sensor/{HASS_DEVICE_NAME}/state"
+    topic = f"{g2m.HASS_AUTODISCOVERY_PREFIX}/sensor/{g2m.HASS_DEVICE_NAME}/state"
     return topic
 
 # Return the state topic for binary sensors
 def getStateTopicBinary():
     
-    topic = f"{HASS_AUTODISCOVERY_PREFIX}/binary_sensor/{HASS_DEVICE_NAME}/state"
+    topic = f"{g2m.HASS_AUTODISCOVERY_PREFIX}/binary_sensor/{g2m.HASS_DEVICE_NAME}/state"
     return topic
 
 # Return the configuration topic for sensors
 def getConfigTopicSensor(sensor):
         
-    topic = f"{HASS_AUTODISCOVERY_PREFIX}/sensor/{HASS_DEVICE_NAME}/{sensor}/config"
+    topic = f"{g2m.HASS_AUTODISCOVERY_PREFIX}/sensor/{g2m.HASS_DEVICE_NAME}/{sensor}/config"
     return topic
 
 
 # Return the configuration topic for binary sensors
 def getConfigTopicBinary(sensor):
     
-    topic = f"{HASS_AUTODISCOVERY_PREFIX}/binary_sensor/{HASS_DEVICE_NAME}/{sensor}/config"
+    topic = f"{g2m.HASS_AUTODISCOVERY_PREFIX}/binary_sensor/{g2m.HASS_DEVICE_NAME}/{sensor}/config"
     return topic
     
     
@@ -58,8 +51,8 @@ def getConfigPayload(sensor):
         
         configPayload= {
             "device_class": "gas",
-            "name": f"{HASS_DEVICE_NAME}_{sensor}",
-            "unique_id": f"{HASS_DEVICE_NAME}_{sensor}",
+            "name": f"{g2m.HASS_DEVICE_NAME}_{sensor}",
+            "unique_id": f"{g2m.HASS_DEVICE_NAME}_{sensor}",
             "state_topic": getStateTopicSensor(),
             "unit_of_measurement": "m3",
             "value_template": "{{ value_json.daily_gas}}",
@@ -71,8 +64,8 @@ def getConfigPayload(sensor):
         
         configPayload= {
             "device_class": "gas",
-            "name": f"{HASS_DEVICE_NAME}_{sensor}",
-            "unique_id": f"{HASS_DEVICE_NAME}_{sensor}",
+            "name": f"{g2m.HASS_DEVICE_NAME}_{sensor}",
+            "unique_id": f"{g2m.HASS_DEVICE_NAME}_{sensor}",
             "state_topic": getStateTopicSensor(),
             "unit_of_measurement": "m3",
             "value_template": "{{ value_json.monthly_gas}}",
@@ -85,8 +78,8 @@ def getConfigPayload(sensor):
         
         configPayload= {
             "device_class": "gas",
-            "name": f"{HASS_DEVICE_NAME}_{sensor}",
-            "unique_id": f"{HASS_DEVICE_NAME}_{sensor}",
+            "name": f"{g2m.HASS_DEVICE_NAME}_{sensor}",
+            "unique_id": f"{g2m.HASS_DEVICE_NAME}_{sensor}",
             "state_topic": getStateTopicSensor(),
             "unit_of_measurement": "m3",
             "value_template": "{{ value_json.monthly_gas_prev}}",
@@ -98,8 +91,8 @@ def getConfigPayload(sensor):
         
         configPayload= {
             "device_class": "energy",
-            "name": f"{HASS_DEVICE_NAME}_{sensor}",
-            "unique_id": f"{HASS_DEVICE_NAME}_{sensor}",
+            "name": f"{g2m.HASS_DEVICE_NAME}_{sensor}",
+            "unique_id": f"{g2m.HASS_DEVICE_NAME}_{sensor}",
             "state_topic": getStateTopicSensor(),
             "unit_of_measurement": "kWh",
             "value_template": "{{ value_json.daily_energy}}",
@@ -111,8 +104,8 @@ def getConfigPayload(sensor):
         
         configPayload= {
             "device_class": "energy",
-            "name": f"{HASS_DEVICE_NAME}_{sensor}",
-            "unique_id": f"{HASS_DEVICE_NAME}_{sensor}",
+            "name": f"{g2m.HASS_DEVICE_NAME}_{sensor}",
+            "unique_id": f"{g2m.HASS_DEVICE_NAME}_{sensor}",
             "state_topic": getStateTopicSensor(),
             "unit_of_measurement": "kWh",
             "value_template": "{{ value_json.monthly_energy}}",
@@ -124,8 +117,8 @@ def getConfigPayload(sensor):
         
         configPayload= {
             "device_class": "energy",
-            "name": f"{HASS_DEVICE_NAME}_{sensor}",
-            "unique_id": f"{HASS_DEVICE_NAME}_{sensor}",
+            "name": f"{g2m.HASS_DEVICE_NAME}_{sensor}",
+            "unique_id": f"{g2m.HASS_DEVICE_NAME}_{sensor}",
             "state_topic": getStateTopicSensor(),
             "unit_of_measurement": "kWh",
             "value_template": "{{ value_json.monthly_energy_tsh}}",
@@ -137,8 +130,8 @@ def getConfigPayload(sensor):
         
         configPayload= {
             "device_class": "energy",
-            "name": f"{HASS_DEVICE_NAME}_{sensor}",
-            "unique_id": f"{HASS_DEVICE_NAME}_{sensor}",
+            "name": f"{g2m.HASS_DEVICE_NAME}_{sensor}",
+            "unique_id": f"{g2m.HASS_DEVICE_NAME}_{sensor}",
             "state_topic": getStateTopicSensor(),
             "unit_of_measurement": "kWh",
             "value_template": "{{ value_json.monthly_energy_prev}}",
@@ -149,8 +142,8 @@ def getConfigPayload(sensor):
     elif sensor == 'consumption_date':
         
         configPayload= {
-            "name": f"{HASS_DEVICE_NAME}_{device}",
-            "unique_id": f"{HASS_DEVICE_NAME}_{device}",
+            "name": f"{g2m.HASS_DEVICE_NAME}_{device}",
+            "unique_id": f"{g2m.HASS_DEVICE_NAME}_{device}",
             "state_topic": getStateTopicSensor(),
             "value_template": "{{ value_json.consumption_date}}",
             "device": getDeviceConfig()
@@ -160,8 +153,8 @@ def getConfigPayload(sensor):
     elif sensor == 'consumption_month':
         
         configPayload= {
-            "name": f"{HASS_DEVICE_NAME}_{sensor}",
-            "unique_id": f"{HASS_DEVICE_NAME}_{sensor}",
+            "name": f"{g2m.HASS_DEVICE_NAME}_{sensor}",
+            "unique_id": f"{g2m.HASS_DEVICE_NAME}_{sensor}",
             "state_topic": getStateTopicSensor(),
             "value_template": "{{ value_json.consumption_month}}",
             "device": getDeviceConfig()
@@ -172,8 +165,8 @@ def getConfigPayload(sensor):
         
         configPayload= {
             "device_class": "connectivity",
-            "name": f"{HASS_DEVICE_NAME}_{sensor}",
-            "unique_id": f"{HASS_DEVICE_NAME}_{sensor}",
+            "name": f"{g2m.HASS_DEVICE_NAME}_{sensor}",
+            "unique_id": f"{g2m.HASS_DEVICE_NAME}_{sensor}",
             "state_topic": getStateTopicBinary(),
             "value_template": "{{ value_json.connectivity}}",
             "device": getDeviceConfig()
