@@ -5,7 +5,6 @@ import json
 
 
 HA_AUTODISCOVERY_PREFIX = "homeassistant"
-MQTT_PREFIX = "gazpar"
 HASS_DEVICE_NAME = "gazpar"
 
 # Return the device config
