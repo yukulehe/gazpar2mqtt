@@ -470,7 +470,7 @@ def run(params):
                         "consumption_date": d1['date'],
                         "consumption_month": m1['date'],
                         }
-                    mqtt.publish(client, hass.getStateTopicSensor(ha_prefix,device_name), json.dumps(ha_prefix,device_name,statePayload), qos, retain)
+                    mqtt.publish(client, hass.getStateTopicSensor(ha_prefix,device_name), json.dumps(statePayload), qos, retain)
                     logging.info("Home Assistant sensors values updated !")
 
                     # Publish Hass binary sensors values
@@ -478,7 +478,7 @@ def run(params):
                     statePayload = {
                         "connectivity": 'ON'
                         }
-                    mqtt.publish(client, hass.getStateTopicBinary(ha_prefix,device_name), json.dumps(ha_prefix,device_name,statePayload), qos, retain)
+                    mqtt.publish(client, hass.getStateTopicBinary(ha_prefix,device_name), json.dumps(statePayload), qos, retain)
                     logging.info("Home Assistant binary sensors values updated !")
 
 
