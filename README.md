@@ -107,7 +107,7 @@ python3 app/gazpar2mqtt.py --grdf_username=myemail@email.com --grdf_password=myp
 Schedule it manually :
 
 ``` 
-python3 app/gazpar2mqtt.py --schedule 04:00
+python3 app/gazpar2mqtt.py --schedule 10:30
 ``` 
 
 Full list of arguments  :
