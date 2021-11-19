@@ -16,7 +16,7 @@ def getDeviceConfig(prefix,device_id,device_name):
     config = {
         "identifiers": [device_id],
         "name": device_name,
-        "model": "gazpar",
+        "model": "monespace.grdf.fr",
         "manufacturer": "GRDF"
     }
     
@@ -64,7 +64,12 @@ def getConfigPayload(prefix,device_name,sensor):
             "state_topic": getStateTopicSensor(prefix,device_id),
             "unit_of_measurement": "m3",
             "value_template": "{{ value_json.daily_gas}}",
-            "device": f"{getDeviceConfig(prefix,device_id,device_name)}"
+            "device": {
+                "identifiers": [device_id],
+                "name": device_name,
+                "model": "monespace.grdf.fr",
+                "manufacturer": "GRDF"
+            }
         }
     
     # Gas consumption monthly
@@ -77,7 +82,7 @@ def getConfigPayload(prefix,device_name,sensor):
             "state_topic": getStateTopicSensor(prefix,device_id),
             "unit_of_measurement": "m3",
             "value_template": "{{ value_json.monthly_gas}}",
-            "device": f"{getDeviceConfig(prefix,device_id,device_name)}"
+            "device": getDeviceConfig(prefix,device_id,device_name)
         }
         
     
