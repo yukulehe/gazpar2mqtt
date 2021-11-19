@@ -148,8 +148,8 @@ def getConfigPayload(prefix,device_name,sensor):
     elif sensor == 'consumption_date':
         
         configPayload= {
-            "name": f"{device_id}_{device}",
-            "unique_id": f"{device_id}_{device}",
+            "name": f"{device_id}_{sensor}",
+            "unique_id": f"{device_id}_{sensor}",
             "state_topic": getStateTopicSensor(prefix,device_id),
             "value_template": "{{ value_json.consumption_date}}",
             "device": getDeviceConfig(prefix,device_id,device_name)
