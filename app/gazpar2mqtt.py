@@ -130,6 +130,11 @@ def _getEnvParams():
     else:
         params['mqtt','retain'] = os.environ['MQTT_RETAIN']
     
+    if not "MQTT_SSL" in os.environ:
+        params['mqtt','ssl'] = 'False'
+    else:
+        params['mqtt','ssl'] = os.environ['MQTT_SSL']
+    
     if not "STANDALONE_MODE" in os.environ:
         params['standalone','mode'] = 'True'
     else:
@@ -183,7 +188,7 @@ def run(params):
         logging.info("Connect to Mqtt broker...")
         
         # Construct mqtt client
-        client = mqtt.create_client(params['mqtt','clientId'],params['mqtt','username'],params['mqtt','password'])
+        client = mqtt.create_client(params['mqtt','clientId'],params['mqtt','username'],params['mqtt','password'],params['mqtt','ssl'])
     
         # Connect mqtt brocker
         mqtt.connect(client,params['mqtt','host'],params['mqtt','port'])
@@ -531,6 +536,8 @@ if __name__ == "__main__":
     parser.add_argument(
         "--mqtt_retain",      help="Retain flag of the messages to be published to the Mqtt broker, possible values : True or False")
     parser.add_argument(
+        "--mqtt_ssl",      help="Enable MQTT SSL connexion, possible values : True or False")
+    parser.add_argument(
         "--standalone_mode",  help="Enable standalone publication mode, possible values : True or False")
     parser.add_argument(
         "--hass_discovery",   help="Enable Home Assistant discovery, possible values : True or False")
@@ -556,6 +563,7 @@ if __name__ == "__main__":
     if args.mqtt_qos is not None: params['mqtt','qos']=int(args.mqtt_qos)
     if args.mqtt_topic is not None: params['mqtt','topic']=args.mqtt_topic
     if args.mqtt_retain is not None: params['mqtt','retain']=args.mqtt_retain
+    if args.mqtt_ssl is not None: params['mqtt','ssl']=args.mqtt_ssl
     if args.standalone_mode is not None: params['standalone','mode']=args.standalone_mode
     if args.hass_discovery is not None: params['hass','discovery']=args.hass_discovery
     if args.hass_prefix is not None: params['hass','prefix']=args.hass_prefix
@@ -578,9 +586,10 @@ if __name__ == "__main__":
     logging.info("Program parameters")
     logging.info("-----------------------------------------------------------")
     logging.info("GRDF config : username = %s, password = %s", params['grdf','username'], "******")
-    logging.info("MQTT broker config : host = %s, port = %s, clientId = %s, qos = %s, topic = %s, retain = %s", \
+    logging.info("MQTT broker config : host = %s, port = %s, clientId = %s, qos = %s, topic = %s, retain = %s, ssl = %s", \
                  params['mqtt','host'], params['mqtt','port'], params['mqtt','clientId'], \
-                 params['mqtt','qos'],params['mqtt','topic'],params['mqtt','retain'])
+                 params['mqtt','qos'],params['mqtt','topic'],params['mqtt','retain']), \
+                 params['mqtt','ssl']),
     logging.info("Standlone mode : Enable = %s", params['standalone','mode'])
     logging.info("Home Assistant discovery : Enable = %s, Topic prefix = %s", \
                  params['hass','discovery'], params['hass','prefix'])
