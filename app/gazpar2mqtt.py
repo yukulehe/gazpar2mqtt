@@ -604,7 +604,7 @@ if __name__ == "__main__":
     logging.info("GRDF config : username = %s, password = %s", params['grdf','username'], "******")
     logging.info("MQTT broker config : host = %s, port = %s, clientId = %s, qos = %s, topic = %s, retain = %s, ssl = %s", \
                  params['mqtt','host'], params['mqtt','port'], params['mqtt','clientId'], \
-                 params['mqtt','qos'],params['mqtt','topic'],params['mqtt','retain']), \
+                 params['mqtt','qos'],params['mqtt','topic'],params['mqtt','retain'], \
                  params['mqtt','ssl']),
     logging.info("Standlone mode : Enable = %s", params['standalone','mode'])
     logging.info("Home Assistant discovery : Enable = %s, Topic prefix = %s, Device name = %s", \
