@@ -176,7 +176,7 @@ def getConfigPayload(prefix,device_name,sensor):
         topic = "error"
     
     # Add device config to payload
-    print configPayload
+    print(configPayload)
     configPayload = configPayload.update(getDeviceConfig(prefix,device_id,device_name))
 
     return configPayload
