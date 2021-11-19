@@ -18,6 +18,7 @@ Important : the tool is still under development, various functions may disappear
   - Home assistant mqtt discovery available
   - Home assistant add-on available : https://github.com/alexbelgium/hassio-addons/tree/master/gazpar2mqtt (special thx to [alexbelgium](https://github.com/alexbelgium))
   - Enable Docker build for arm/v7 architecture
+  - Enable MQTT SSL connexion
   - Grdf's thresholds (seuil) and previous year consumption
 - v0.3.x :
   - First reliable release
@@ -38,7 +39,7 @@ Important : the tool is still under development, various functions may disappear
 **python3** with its dependencies:
 
 ``` 
-pip3 install -r app/requirements.txt
+pip3 install -r app/requirement.txt
 ``` 
 
 ## GRDF Gazpar API
@@ -81,10 +82,12 @@ Optionnal :
 | **MQTT_USERNAME** | Username to be used for connexion to the MQTT brokerr |  |
 | **MQTT_PASSWORD** | Password to be used for connexion to the MQTT brokerr |  |
 | **MQTT_QOS** | QOS for message publishing (0, 1 or 2) | 1 |
-| **MQTT_RETAIN** | Retain flag, default False | False |
+| **MQTT_RETAIN** | Retain flag| False |
+| **MQTT_SSL** | Enable MQTT SSL connexion | False |
 | **STANDALONE_MODE** | Enable standalone publication mode | True |
 | **HASS_DISCOVERY** | Enable Home assistant dicovery mode | False |
 | **HASS_PREFIX** | Home assistant topic prefix | homeassistant |
+| **HASS_DEVICE_NAME** | Home assistant device name | gazpar |
 
 
 # Usage
@@ -106,7 +109,7 @@ python3 app/gazpar2mqtt.py --grdf_username=myemail@email.com --grdf_password=myp
 Schedule it manually :
 
 ``` 
-python3 app/gazpar2mqtt.py --schedule 04:00
+python3 app/gazpar2mqtt.py --schedule 10:30
 ``` 
 
 Full list of arguments  :
@@ -189,6 +192,7 @@ Have a look to [Home Assistant Mqtt discovery documentation](https://www.home-as
 | gazpar_consumption_month | Sensor | Text | Month of the last monthly statement |
 | gazpar_connectivity | Binary sensor | Connectivity | Binary sensor which indicates if the last gazpar statement succeeded (ON) or failed (OFF) |
 
+Note : you can replace the default device name *gazpar*
 
 ### List of topics :
 | Topic | Description
