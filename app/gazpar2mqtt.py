@@ -427,8 +427,10 @@ def run(params):
                 logging.info("-----------------------------------------------------------")
                 
                 # Set global variables
-                global HASS_AUTODISCOVERY_PREFIX = params['hass','prefix']
-                global HASS_DEVICE_NAME = params['hass','device_name']
+                global HASS_AUTODISCOVERY_PREFIX
+                global HASS_DEVICE_NAME
+                HASS_AUTODISCOVERY_PREFIX= params['hass','prefix']
+                HASS_DEVICE_NAME = params['hass','device_name']
 
                 # Set Hass sensors configuration
                 logging.info("Update of Home Assistant sensors configurations...")
