@@ -66,6 +66,7 @@ def getConfigPayload(prefix,device_name,sensor):
             "state_topic": getStateTopicSensor(prefix,device_id),
             "unit_of_measurement": "m3",
             "value_template": "{{ value_json.daily_gas}}",
+            "device": f"{getDeviceConfig(prefix,device_id,device_name)}"
         }
     
     # Gas consumption monthly
@@ -78,6 +79,7 @@ def getConfigPayload(prefix,device_name,sensor):
             "state_topic": getStateTopicSensor(prefix,device_id),
             "unit_of_measurement": "m3",
             "value_template": "{{ value_json.monthly_gas}}",
+            "device": f"{getDeviceConfig(prefix,device_id,device_name)}"
         }
         
     
@@ -91,6 +93,7 @@ def getConfigPayload(prefix,device_name,sensor):
             "state_topic": getStateTopicSensor(prefix,device_id),
             "unit_of_measurement": "m3",
             "value_template": "{{ value_json.monthly_gas_prev}}",
+            "device": f"{getDeviceConfig(prefix,device_id,device_name)}"
         }
     
     # Energy consumption daily
@@ -103,6 +106,7 @@ def getConfigPayload(prefix,device_name,sensor):
             "state_topic": getStateTopicSensor(prefix,device_id),
             "unit_of_measurement": "kWh",
             "value_template": "{{ value_json.daily_energy}}",
+            "device": f"{getDeviceConfig(prefix,device_id,device_name)}"
         }
     
     # Energy consumption monthly
@@ -115,6 +119,7 @@ def getConfigPayload(prefix,device_name,sensor):
             "state_topic": getStateTopicSensor(prefix,device_id),
             "unit_of_measurement": "kWh",
             "value_template": "{{ value_json.monthly_energy}}",
+            "device": f"{getDeviceConfig(prefix,device_id,device_name)}"
         }
     
     # Energy consumption monthly threshold
@@ -127,6 +132,7 @@ def getConfigPayload(prefix,device_name,sensor):
             "state_topic": getStateTopicSensor(prefix,device_id),
             "unit_of_measurement": "kWh",
             "value_template": "{{ value_json.monthly_energy_tsh}}",
+            "device": f"{getDeviceConfig(prefix,device_id,device_name)}"
         }
     
     # Energy consumption monthly of previous year
@@ -139,6 +145,7 @@ def getConfigPayload(prefix,device_name,sensor):
             "state_topic": getStateTopicSensor(prefix,device_id),
             "unit_of_measurement": "kWh",
             "value_template": "{{ value_json.monthly_energy_prev}}",
+            "device": f"{getDeviceConfig(prefix,device_id,device_name)}"
         }
         
     # Gazpar consumption date
@@ -149,6 +156,7 @@ def getConfigPayload(prefix,device_name,sensor):
             "unique_id": f"{device_id}_{sensor}",
             "state_topic": getStateTopicSensor(prefix,device_id),
             "value_template": "{{ value_json.consumption_date}}",
+            "device": f"{getDeviceConfig(prefix,device_id,device_name)}"
         }
     
     # Gazpar consumption month
@@ -159,6 +167,7 @@ def getConfigPayload(prefix,device_name,sensor):
             "unique_id": f"{device_id}_{sensor}",
             "state_topic": getStateTopicSensor(prefix,device_id),
             "value_template": "{{ value_json.consumption_month}}",
+            "device": f"{getDeviceConfig(prefix,device_id,device_name)}"
         }
     
     # Gazpar connectivity
@@ -170,15 +179,11 @@ def getConfigPayload(prefix,device_name,sensor):
             "unique_id": f"{device_id}_{sensor}",
             "state_topic": getStateTopicBinary(prefix,device_id),
             "value_template": "{{ value_json.connectivity}}",
+            "device": f"{getDeviceConfig(prefix,device_id,device_name)}"
         }
         
     else:
         topic = "error"
     
-    # Add device config to payload
-    configJson = json.dumps(configPayload)
-    configJson.update(getDeviceConfig(prefix,device_id,device_name))
-    
-    configPayload = json.dumps(configJson)
 
     return configPayload
