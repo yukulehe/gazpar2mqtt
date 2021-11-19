@@ -38,7 +38,7 @@ Important : the tool is still under development, various functions may disappear
 **python3** with its dependencies:
 
 ``` 
-pip3 install -r app/requirements.txt
+pip3 install -r app/requirement.txt
 ``` 
 
 ## GRDF Gazpar API
