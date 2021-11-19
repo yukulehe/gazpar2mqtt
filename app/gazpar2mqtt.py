@@ -420,7 +420,7 @@ def run(params):
         # STEP 4B : Home Assistant discovery mode
         if params['hass','discovery'] == 'True':
 
-            #try:
+            try:
 
                 logging.info("-----------------------------------------------------------")
                 logging.info("Home assistant publication mode")
@@ -482,9 +482,9 @@ def run(params):
                     logging.info("Home Assistant binary sensors values updated !")
 
 
-            #except:
-            #    logging.error("Home Assistant discovery mode : unable to publish value to mqtt broker")
-            #    sys.exit(1)
+            except:
+                logging.error("Home Assistant discovery mode : unable to publish value to mqtt broker")
+                sys.exit(1)
     
     
     # STEP 5 : Disconnect mqtt broker
