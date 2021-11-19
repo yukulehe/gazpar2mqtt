@@ -2,10 +2,11 @@
 # More info on HA discovery : https://www.home-assistant.io/docs/mqtt/discovery
 
 import json
+import gazpar2mqtt
 
 
-HA_AUTODISCOVERY_PREFIX = "homeassistant"
-HASS_DEVICE_NAME = "gazpar"
+HA_AUTODISCOVERY_PREFIX = gazpar2mqtt.HA_AUTODISCOVERY_PREFIX
+HASS_DEVICE_NAME = gazpar2mqtt.HASS_DEVICE_NAME
 
 # Return the device config
 def getDeviceConfig():
