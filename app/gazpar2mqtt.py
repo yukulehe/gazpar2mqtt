@@ -97,7 +97,8 @@ def _getEnvParams():
     if not "MQTT_PORT" in os.environ:
         params['mqtt','port'] = 1883
     else:
-        params['mqtt','port'] = int(os.environ['MQTT_PORT'])
+        myPort = os.environ['MQTT_PORT'].replace('"','') # Fix issue #13
+        params['mqtt','port'] = int(myPort)
         
     if not "MQTT_CLIENTID" in os.environ:
         params['mqtt','clientId'] = 'gazpar2mqtt'
@@ -559,7 +560,7 @@ if __name__ == "__main__":
     if args.hass_discovery is not None: params['hass','discovery']=args.hass_discovery
     if args.hass_prefix is not None: params['hass','prefix']=args.hass_prefix
         
-    # STEP 4 : Check mandatory parameters
+    # STEP 4 : Check mandatory parameters (fix issue #12)
     if params['grdf','username'] is None:
         logging.error("Parameter GRDF username is mandatory.")
         quit()
