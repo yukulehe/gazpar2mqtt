@@ -46,6 +46,10 @@ TOPIC_MONTHLY_MCUBE_PREV = "/monthly/kwh/previous"
 TOPIC_STATUS_DATE = "/status/date"
 TOPIC_STATUS_VALUE = "/status/value"
 
+# Hass global
+HASS_AUTODISCOVERY_PREFIX = None
+HASS_DEVICE_NAME = None
+
 #######################################################################
 #### Functions
 #######################################################################
@@ -423,7 +427,8 @@ def run(params):
                 logging.info("-----------------------------------------------------------")
                 
                 # Set global variables
-                hass.setHassGlobal(params['hass','prefix'],params['hass','device_name'])
+                global HASS_AUTODISCOVERY_PREFIX = params['hass','prefix']
+                global HASS_DEVICE_NAME = params['hass','device_name']
 
                 # Set Hass sensors configuration
                 logging.info("Update of Home Assistant sensors configurations...")
