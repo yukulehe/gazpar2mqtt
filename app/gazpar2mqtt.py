@@ -353,7 +353,7 @@ def run(params):
     if not hasGrdfFailed:
     
         # STEP 4A : Standalone mode
-        if mqtt.MQTT_IS_CONNECTED and params['standalone','mode']=="True":   
+        if mqtt.MQTT_IS_CONNECTED and params['standalone','mode'].lower()=="True":   
 
             try:
 
@@ -406,7 +406,7 @@ def run(params):
                 sys.exit(1)
 
         # STEP 4B : Home Assistant discovery mode
-        if params['hass','discovery'] == 'True':
+        if mqtt.MQTT_IS_CONNECTED and params['hass','discovery'].lower() == 'true':
 
             try:
 
