@@ -80,7 +80,7 @@ Optionnal :
 | **MQTT_TOPIC** | Topic used as prefix | gazpar |
 | **MQTT_CLIENTID** | Client id to be used for connexion to the MQTT broker | gazou |
 | **MQTT_USERNAME** | Username to be used for connexion to the MQTT brokerr |  |
-| **MQTT_PASSWORD** | Password to be used for connexion to the MQTT brokerr |  |
+| **MQTT_PASSWORD** | Password to be used for connexion to the MQTT broker |  |
 | **MQTT_QOS** | QOS for message publishing (0, 1 or 2) | 1 |
 | **MQTT_RETAIN** | Retain flag| False |
 | **MQTT_SSL** | Enable MQTT SSL connexion | False |
