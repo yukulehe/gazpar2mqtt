@@ -2,6 +2,9 @@
 Python script to fetch GRDF's website data and publish data to a mqtt broker
 
 ![Gazpar logo](https://s2.qwant.com/thumbr/474x266/d/6/5f73ca2a6a6ad456cee493bb73bc9bf24662ded76a98c4eb0a117e16d666d2/th.jpg?u=https%3A%2F%2Ftse2.explicit.bing.net%2Fth%3Fid%3DOIP.Y_lVygaMR2JQYgTvLVvc5wHaEK%26pid%3DApi&q=0&b=1&p=0&a=0)
+
+![Grdf_website](https://s1.qwant.com/thumbr/0x0/2/7/5c8e1b6b4d304a208b062d1b4e113da7468170421d3f0a951f962de71ccb70/7d11f39a-a20c-4cf5-9510-bbb97d0d9cee.jpg?u=https%3A%2F%2Fmonespace.grdf.fr%2Fdocuments%2F20001%2F7d11f39a-a20c-4cf5-9510-bbb97d0d9cee&q=0&b=1&p=0&a=0)
+
 ![MQTT logo](https://s2.qwant.com/thumbr/474x266/e/b/0bb1caaf35b0ed78b567ce4ba21cffd3d22f8bc4a7c82a3ba331cc0dd88a23/th.jpg?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.eK8FAO1DnuuVt6wYA1WOmAHaEK%26pid%3DApi&q=0&b=1&p=0&a=0)
 
 # Externals/Thanks
@@ -80,7 +83,7 @@ Optionnal :
 | **MQTT_TOPIC** | Topic used as prefix | gazpar |
 | **MQTT_CLIENTID** | Client id to be used for connexion to the MQTT broker | gazou |
 | **MQTT_USERNAME** | Username to be used for connexion to the MQTT brokerr |  |
-| **MQTT_PASSWORD** | Password to be used for connexion to the MQTT brokerr |  |
+| **MQTT_PASSWORD** | Password to be used for connexion to the MQTT broker |  |
 | **MQTT_QOS** | QOS for message publishing (0, 1 or 2) | 1 |
 | **MQTT_RETAIN** | Retain flag| False |
 | **MQTT_SSL** | Enable MQTT SSL connexion | False |
