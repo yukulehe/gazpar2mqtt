@@ -211,3 +211,7 @@ Note : you can replace the default device name *gazpar* by editing the related p
 | homeassistant/binary_sensor/gazpar/state | Binary sensor's state topic |
 
 Note : you can replace the default topic prefix *homeasssistant* by editing the related parameter.
+
+
+### Add-on
+For Hass.io user, gazpar2mqtt is also available as an add-on provided by [alexbelgium](https://github.com/alexbelgium) (thanks you to him). Please visit the dedicated [repository](https://github.com/alexbelgium/hassio-addons/tree/master/gazpar2mqtt).
