@@ -179,6 +179,12 @@ You can replace the default topic prefix *gazpar* (see mqtt broker requirements 
 Gazpar2mqtt provides Home Assistant compatible Mqtt devices. The discovery function enable to use MQTT devices with a minimal configuration effort.
 Have a look to [Home Assistant Mqtt discovery documentation](https://www.home-assistant.io/docs/mqtt/discovery/).
 
+### Device :
+| Device name | Device ID | Model | Manufacturer |
+| --- | --- | --- | --- |
+| gazpar | gazpar | monespace.grdf.fr | GRDF |
+
+Note : you can replace the default device name *gazpar* by editing the related parameter.
 
 ### List of available sensors :
 
@@ -195,7 +201,6 @@ Have a look to [Home Assistant Mqtt discovery documentation](https://www.home-as
 | gazpar_consumption_month | Sensor | Text | Month of the last monthly statement |
 | gazpar_connectivity | Binary sensor | Connectivity | Binary sensor which indicates if the last gazpar statement succeeded (ON) or failed (OFF) |
 
-Note : you can replace the default device name *gazpar*
 
 ### List of topics :
 | Topic | Description
@@ -205,4 +210,4 @@ Note : you can replace the default device name *gazpar*
 | homeassistant/binary_sensor/gazpar/config | Binary sensor's configuration topic |
 | homeassistant/binary_sensor/gazpar/state | Binary sensor's state topic |
 
-Note : you can replace the default topic prefix *homeasssistant*
+Note : you can replace the default topic prefix *homeasssistant* by editing the related parameter.
