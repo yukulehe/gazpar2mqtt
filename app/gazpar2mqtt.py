@@ -207,12 +207,10 @@ def run(params):
         
         if mqtt.MQTT_IS_CONNECTED:
             logging.info("Mqtt broker connected !")
-        else:
-            sys.exit(1)
         
     except:
         logging.error("Unable to connect to Mqtt broker. Please check that broker is running, or check broker configuration.")
-        sys.exit(1)
+        
     
     
     
