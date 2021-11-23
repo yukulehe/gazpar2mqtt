@@ -362,7 +362,7 @@ def run(params):
     
 
     # STEP 4A : Standalone mode
-    if mqtt.MQTT_IS_CONNECTED and params['standalone','mode'].lower()=="True":   
+    if mqtt.MQTT_IS_CONNECTED and params['standalone','mode'].lower()=="true":   
 
         try:
 
