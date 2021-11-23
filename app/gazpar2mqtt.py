@@ -517,7 +517,7 @@ def run(params):
 if __name__ == "__main__":
     
     
-    logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
+    logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
     
     logging.info("Welcome to gazpar2mqtt")
     logging.info("-----------------------------------------------------------")
