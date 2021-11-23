@@ -362,133 +362,132 @@ def run(params):
         m1 = resMonth[mCount-1]
 
     
-    if not hasGrdfFailed:
-    
-        # STEP 4A : Standalone mode
-        if mqtt.MQTT_IS_CONNECTED and params['standalone','mode'].lower()=="True":   
 
-            try:
+    # STEP 4A : Standalone mode
+    if mqtt.MQTT_IS_CONNECTED and params['standalone','mode'].lower()=="True":   
 
-                logging.info("-----------------------------------------------------------")
-                logging.info("Stand alone publication mode")
-                logging.info("-----------------------------------------------------------")
+        try:
 
-                # Set variables
-                prefixTopic = params['mqtt','topic']
-                retain = params['mqtt','retain']
-                qos = params['mqtt','qos']
+            logging.info("-----------------------------------------------------------")
+            logging.info("Stand alone publication mode")
+            logging.info("-----------------------------------------------------------")
 
-                # Set values
-                if hasGrdfFailed: # Values when Grdf failed
+            # Set variables
+            prefixTopic = params['mqtt','topic']
+            retain = params['mqtt','retain']
+            qos = params['mqtt','qos']
 
-                    ## Publish status values
-                    logging.info("Publishing to Mqtt status values...")
-                    mqtt.publish(client, prefixTopic + TOPIC_STATUS_DATE, dtn, qos, retain)
-                    mqtt.publish(client, prefixTopic + TOPIC_STATUS_VALUE, "Failed", qos, retain)
-                    logging.info("Status values published !")
+            # Set values
+            if hasGrdfFailed: # Values when Grdf failed
 
-
-                else: # Values when Grdf succeeded
+                ## Publish status values
+                logging.info("Publishing to Mqtt status values...")
+                mqtt.publish(client, prefixTopic + TOPIC_STATUS_DATE, dtn, qos, retain)
+                mqtt.publish(client, prefixTopic + TOPIC_STATUS_VALUE, "Failed", qos, retain)
+                logging.info("Status values published !")
 
 
-                    # Publish daily values
-                    logging.info("Publishing to Mqtt the last daily values...")
-                    mqtt.publish(client, prefixTopic + TOPIC_DAILY_DATE, d1['date'], qos, retain)
-                    mqtt.publish(client, prefixTopic + TOPIC_DAILY_KWH, d1['kwh'], qos, retain)
-                    mqtt.publish(client, prefixTopic + TOPIC_DAILY_MCUBE, d1['mcube'], qos, retain)
-                    
-                    logging.info("Daily values published !")
-
-                    # Publish monthly values
-                    logging.info("Publishing to Mqtt the last monthly values...")
-                    mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_DATE, m1['date'], qos, retain)
-                    mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_KWH, m1['kwh'], qos, retain)
-                    mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_KWH_TSH, m1['kwh_seuil'], qos, retain)
-                    mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_KWH_PREV, m1['kwh_prec'], qos, retain)
-                    mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_MCUBE, m1['mcube'], qos, retain)
-                    mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_MCUBE_PREV, m1['mcube_prec'], qos, retain)
-                    logging.info("Monthly values published !")
-
-                    ## Publish status values
-                    logging.info("Publishing to Mqtt status values...")
-                    mqtt.publish(client, prefixTopic + TOPIC_STATUS_DATE, dtn, qos, retain)
-                    mqtt.publish(client, prefixTopic + TOPIC_STATUS_VALUE, "Success", qos, retain)
-                    logging.info("Status values published !")
-
-            except:
-                logging.error("Standalone mode : unable to publish value to mqtt broker")
-                sys.exit(1)
-
-        # STEP 4B : Home Assistant discovery mode
-        if mqtt.MQTT_IS_CONNECTED and params['hass','discovery'].lower() == 'true':
-
-            try:
-
-                logging.info("-----------------------------------------------------------")
-                logging.info("Home assistant publication mode")
-                logging.info("-----------------------------------------------------------")
-                
-                # Set variables
-                retain = params['mqtt','retain']
-                qos = params['mqtt','qos']
-                ha_prefix = params['hass','prefix']
-                device_name = params['hass','device_name']
-
-                # Set Hass sensors configuration
-                logging.info("Update of Home Assistant sensors configurations...")
-                mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'daily_gas'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'daily_gas')), qos, retain)
-                mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'monthly_gas'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'monthly_gas')), qos, retain)
-                mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'monthly_gas_prev'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'monthly_gas_prev')), qos, retain)
-                mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'daily_energy'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'daily_energy')), qos, retain)
-                mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'monthly_energy'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'monthly_energy')), qos, retain)
-                mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'monthly_energy_tsh'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'monthly_energy_tsh')), qos, retain)
-                mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'monthly_energy_prev'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'monthly_energy_prev')), qos, retain)
-                mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'consumption_date'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'consumption_date')), qos, retain)
-                mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'consumption_month'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'consumption_month')), qos, retain)
-                mqtt.publish(client, hass.getConfigTopicBinary(ha_prefix,device_name,'connectivity'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'connectivity')), qos, retain)
-                logging.info("Home assistant devices configurations updated !")
-
-                if hasGrdfFailed: # Values when Grdf failed
-
-                    logging.info("Update of Home Assistant binary sensors values...")
-                    statePayload = {
-                        "connectivity": 'OFF'
-                        }
-                    mqtt.publish(client, hass.getStateTopicBinary(ha_prefix,device_name), json.dumps(statePayload), qos, retain)
-                    logging.info("Home Assistant binary sensors values updated !")
-
-                else: # Values when Grdf succeeded                
-
-                    # Publish Hass sensors values
-                    logging.info("Update of Home assistant sensors values...")
-                    statePayload = {
-                        "daily_gas": d1['mcube'],
-                        "monthly_gas": m1['mcube'],
-                        "monthly_gas_prev": m1['mcube_prec'],
-                        "daily_energy": d1['kwh'],
-                        "monthly_energy": m1['kwh'],
-                        "monthly_energy_tsh": m1['kwh_seuil'],
-                        "monthly_energy_prev": m1['kwh_prec'],
-                        "consumption_date": d1['date'],
-                        "consumption_month": m1['date'],
-                        }
-                    mqtt.publish(client, hass.getStateTopicSensor(ha_prefix,device_name), json.dumps(statePayload), qos, retain)
-                    logging.info("Home Assistant sensors values updated !")
-
-                    # Publish Hass binary sensors values
-                    logging.info("Update of Home assistant binary sensors values...")
-                    statePayload = {
-                        "connectivity": 'ON'
-                        }
-                    mqtt.publish(client, hass.getStateTopicBinary(ha_prefix,device_name), json.dumps(statePayload), qos, retain)
-                    logging.info("Home Assistant binary sensors values updated !")
+            else: # Values when Grdf succeeded
 
 
-            except:
-                logging.error("Home Assistant discovery mode : unable to publish value to mqtt broker")
-                sys.exit(1)
-    
-    
+                # Publish daily values
+                logging.info("Publishing to Mqtt the last daily values...")
+                mqtt.publish(client, prefixTopic + TOPIC_DAILY_DATE, d1['date'], qos, retain)
+                mqtt.publish(client, prefixTopic + TOPIC_DAILY_KWH, d1['kwh'], qos, retain)
+                mqtt.publish(client, prefixTopic + TOPIC_DAILY_MCUBE, d1['mcube'], qos, retain)
+
+                logging.info("Daily values published !")
+
+                # Publish monthly values
+                logging.info("Publishing to Mqtt the last monthly values...")
+                mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_DATE, m1['date'], qos, retain)
+                mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_KWH, m1['kwh'], qos, retain)
+                mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_KWH_TSH, m1['kwh_seuil'], qos, retain)
+                mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_KWH_PREV, m1['kwh_prec'], qos, retain)
+                mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_MCUBE, m1['mcube'], qos, retain)
+                mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_MCUBE_PREV, m1['mcube_prec'], qos, retain)
+                logging.info("Monthly values published !")
+
+                ## Publish status values
+                logging.info("Publishing to Mqtt status values...")
+                mqtt.publish(client, prefixTopic + TOPIC_STATUS_DATE, dtn, qos, retain)
+                mqtt.publish(client, prefixTopic + TOPIC_STATUS_VALUE, "Success", qos, retain)
+                logging.info("Status values published !")
+
+        except:
+            logging.error("Standalone mode : unable to publish value to mqtt broker")
+            sys.exit(1)
+
+    # STEP 4B : Home Assistant discovery mode
+    if mqtt.MQTT_IS_CONNECTED and params['hass','discovery'].lower() == 'true':
+
+        try:
+
+            logging.info("-----------------------------------------------------------")
+            logging.info("Home assistant publication mode")
+            logging.info("-----------------------------------------------------------")
+
+            # Set variables
+            retain = params['mqtt','retain']
+            qos = params['mqtt','qos']
+            ha_prefix = params['hass','prefix']
+            device_name = params['hass','device_name']
+
+            # Set Hass sensors configuration
+            logging.info("Update of Home Assistant sensors configurations...")
+            mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'daily_gas'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'daily_gas')), qos, retain)
+            mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'monthly_gas'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'monthly_gas')), qos, retain)
+            mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'monthly_gas_prev'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'monthly_gas_prev')), qos, retain)
+            mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'daily_energy'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'daily_energy')), qos, retain)
+            mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'monthly_energy'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'monthly_energy')), qos, retain)
+            mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'monthly_energy_tsh'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'monthly_energy_tsh')), qos, retain)
+            mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'monthly_energy_prev'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'monthly_energy_prev')), qos, retain)
+            mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'consumption_date'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'consumption_date')), qos, retain)
+            mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'consumption_month'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'consumption_month')), qos, retain)
+            mqtt.publish(client, hass.getConfigTopicBinary(ha_prefix,device_name,'connectivity'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'connectivity')), qos, retain)
+            logging.info("Home assistant devices configurations updated !")
+
+            if hasGrdfFailed: # Values when Grdf failed
+
+                logging.info("Update of Home Assistant binary sensors values...")
+                statePayload = {
+                    "connectivity": 'OFF'
+                    }
+                mqtt.publish(client, hass.getStateTopicBinary(ha_prefix,device_name), json.dumps(statePayload), qos, retain)
+                logging.info("Home Assistant binary sensors values updated !")
+
+            else: # Values when Grdf succeeded                
+
+                # Publish Hass sensors values
+                logging.info("Update of Home assistant sensors values...")
+                statePayload = {
+                    "daily_gas": d1['mcube'],
+                    "monthly_gas": m1['mcube'],
+                    "monthly_gas_prev": m1['mcube_prec'],
+                    "daily_energy": d1['kwh'],
+                    "monthly_energy": m1['kwh'],
+                    "monthly_energy_tsh": m1['kwh_seuil'],
+                    "monthly_energy_prev": m1['kwh_prec'],
+                    "consumption_date": d1['date'],
+                    "consumption_month": m1['date'],
+                    }
+                mqtt.publish(client, hass.getStateTopicSensor(ha_prefix,device_name), json.dumps(statePayload), qos, retain)
+                logging.info("Home Assistant sensors values updated !")
+
+                # Publish Hass binary sensors values
+                logging.info("Update of Home assistant binary sensors values...")
+                statePayload = {
+                    "connectivity": 'ON'
+                    }
+                mqtt.publish(client, hass.getStateTopicBinary(ha_prefix,device_name), json.dumps(statePayload), qos, retain)
+                logging.info("Home Assistant binary sensors values updated !")
+
+
+        except:
+            logging.error("Home Assistant discovery mode : unable to publish value to mqtt broker")
+            sys.exit(1)
+
+
     # STEP 5 : Disconnect mqtt broker
     logging.info("-----------------------------------------------------------")
     logging.info("Disconnecion from MQTT")
