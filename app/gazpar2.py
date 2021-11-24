@@ -14,7 +14,6 @@ args = parser.parse_args()
 log = logging.getLogger()
 logging.basicConfig(stream=sys.stderr, level=logging.WARNING,
                     format='%(name)s (%(levelname)s): %(message)s')
-log.setLevel(max(3 - args.verbose_count, 0) * 10)
 
 client = pygazpar.Client(args.PYGAZPAR_LOGIN,
                          args.PYGAZPAR_PASSWORD,
