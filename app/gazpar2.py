@@ -18,4 +18,4 @@ log.debug('End update pygazpar data')
 data = client.data()
 
 for measure in data:
-    print("measure")
+    print(measure['volume_m3'])
