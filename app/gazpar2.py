@@ -5,6 +5,10 @@ import logging
 import argparse
 import pygazpar
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--pygazpar-login", dest="PYGAZPAR_LOGIN", help="pygazpar login")
+parser.add_argument("--pygazpar-password", dest="PYGAZPAR_PASSWORD", help="pygazpar password")
+
 client = pygazpar.Client(args.PYGAZPAR_LOGIN,
                          args.PYGAZPAR_PASSWORD,
                          'geckodriver',
