@@ -5,3 +5,4 @@ argparse
 envparse
 schedule
 paho-mqtt
+pygazpar
