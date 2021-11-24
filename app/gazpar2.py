@@ -17,7 +17,7 @@ logging.basicConfig(stream=sys.stderr, level=logging.WARNING,
 
 client = pygazpar.Client(args.PYGAZPAR_LOGIN,
                          args.PYGAZPAR_PASSWORD,
-                         'geckodriver',
+                         './usr/local/bin/geckodriver',
                          30,
                          '/tmp')
 
