@@ -1,0 +1,21 @@
+#!/usr/bin/env python3
+
+import sys
+import logging
+import argparse
+import pygazpar
+
+client = pygazpar.Client(args.PYGAZPAR_LOGIN,
+                         args.PYGAZPAR_PASSWORD,
+                         'geckodriver',
+                         30,
+                         '/tmp')
+
+log.debug('Starting to update pygazpar data')
+client.update()
+log.debug('End update pygazpar data')
+
+data = client.data()
+
+for measure in data:
+    print("measure")
