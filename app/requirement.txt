@@ -5,4 +5,4 @@ argparse
 envparse
 schedule
 paho-mqtt
-pygazpar
+pygazpar==1.0.1
