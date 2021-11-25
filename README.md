@@ -3,7 +3,9 @@
 ![warning](https://s1.qwant.com/thumbr/0x380/b/8/226685b0a3d5b779d1be21407deb02023bfd0bf31225fae8072e9d86a8b801/warning.png?u=https%3A%2F%2Fopenclipart.org%2Fimage%2F2400px%2Fsvg_to_png%2F29833%2Fwarning.png&q=0&b=1&p=0&a=0)
 
 GRDF website has a new design since 23/11/2021. The script is currently out of service until we find a solution.
-Update 25/11/2021 : the website is totally unstable, we don't know if a strong authentification will be implemented. For the moment we have to wait.
+
+### Update 25/11/2021 : 
+The website is totally unstable, we don't know if a strong authentification will be implemented. For the moment we have to wait.
 
 # gazpar2mqtt
 Python script to fetch GRDF's website data and publish data to a mqtt broker
