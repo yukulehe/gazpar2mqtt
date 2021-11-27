@@ -3,6 +3,16 @@
 import sys
 import logging
 import requests
+import json
+
+def getConsoDataByPce(session,pce):
+    
+    req = session.get('https://monespace.grdf.fr/api/e-conso/pce/consommation/informatives?dateDebut=2018-11-27&dateFin=2021-11-27&pceList%5B%5D=' + pce)
+    logging.info("CONSO:")
+    logging.info(req.text)
+    
+    return req
+    
 
 def login(username, password):
 
@@ -46,20 +56,25 @@ def login(username, password):
     req = session.get('https://sofa-connexion.grdf.fr:443/openam/oauth2/externeGrdf/authorize?response_type=code&scope=openid%20profile%20email%20infotravaux%20%2Fv1%2Faccreditation%20%2Fv1%2Faccreditations%20%2Fdigiconso%2Fv1%20%2Fdigiconso%2Fv1%2Fconsommations%20new_meg%20%2FDemande.read%20%2FDemande.write&client_id=prod_espaceclient&state=0&redirect_uri=https%3A%2F%2Fmonespace.grdf.fr%2F_codexch&nonce=' + auth_nonce + '&by_pass_okta=1&capp=meg')
     logging.info(req.text)
     
-    logging.info("Try to get 2... ")
+    logging.info("Try to get account informations ")
     req = session.get('https://monespace.grdf.fr/api/e-connexion/users/whoami')
     logging.info(req.text)
     
     
-    logging.info("Try to get 3... ")
+    logging.info("Try to get PCE list... ")
     req = session.get('https://monespace.grdf.fr/api/e-conso/pce')
     logging.info("PCEs:")
     logging.info(req.text)
+    
+    
+    jsonPce = json.load(req.text)
+    for key in jsonPce:
+        print(key,":",jsonPce[key])
+        
+    logging.info("Try to get conso data... ")
+    #req = getConsoDataByPce(session,pce)
+    
+    
   
-    logging.info("Try to get 4... ")
-    req = session.get('https://monespace.grdf.fr/api/e-conso/pce/consommation/informatives?dateDebut=2018-11-27&dateFin=2021-11-27&pceList%5B%5D=**PCE***')
-    logging.info("CONSO:")
-    logging.info(req.text)
-
 
     return session
