@@ -2,9 +2,7 @@
 
 import sys
 import logging
-import argparse
-import pygazpar
-
+import 
 
 def login(username, password):
 
