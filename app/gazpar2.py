@@ -69,7 +69,7 @@ def login(username, password):
     
     jsonPce = json.loads(req.text)
     for key in jsonPce:
-        print(key,":",jsonPce[key])
+        print(key)
         
     logging.info("Try to get conso data... ")
     #req = getConsoDataByPce(session,pce)
