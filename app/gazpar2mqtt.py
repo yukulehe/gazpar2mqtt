@@ -14,7 +14,7 @@ import gazpar2
 import mqtt
 import hass
 import json
-
+import requests
 import argparse
 import logging
 import pprint
