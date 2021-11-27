@@ -29,8 +29,8 @@ def login(username, password):
     logging.info("auth_nonce: " + auth_nonce)
 
     payload = {
-        'email': '***MAIL***',
-        'password': '***PASS***',
+        'email': username,
+        'password': password,
         'capp': 'meg',
         'goto': 'https://sofa-connexion.grdf.fr:443/openam/oauth2/externeGrdf/authorize?response_type=code&scope=openid%20profile%20email%20infotravaux%20%2Fv1%2Faccreditation%20%2Fv1%2Faccreditations%20%2Fdigiconso%2Fv1%20%2Fdigiconso%2Fv1%2Fconsommations%20new_meg%20%2FDemande.read%20%2FDemande.write&client_id=prod_espaceclient&state=0&redirect_uri=https%3A%2F%2Fmonespace.grdf.fr%2F_codexch&nonce=' + auth_nonce + '&by_pass_okta=1&capp=meg'
     }
