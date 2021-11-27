@@ -67,7 +67,7 @@ def login(username, password):
     logging.info(req.text)
     
     
-    jsonPce = json.load(req.text)
+    jsonPce = json.loads(req.text)
     for key in jsonPce:
         print(key,":",jsonPce[key])
         
