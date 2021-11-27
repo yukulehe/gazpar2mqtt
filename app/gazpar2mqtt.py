@@ -10,7 +10,7 @@ import schedule
 import time
 import locale
 from dateutil.relativedelta import relativedelta
-import gazpar
+import gazpar2
 import mqtt
 import hass
 import json
