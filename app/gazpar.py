@@ -78,7 +78,7 @@ class Grdf:
         pceList = json.loads(req.text)
         for item in pceList:
             myPce = Pce(item)
-            self.addPce(mPce)
+            self.addPce(myPce)
             print(item["alias"])
         
         return req
