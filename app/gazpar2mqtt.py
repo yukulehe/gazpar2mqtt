@@ -197,45 +197,52 @@ def run(params):
      
     # STEP 3 : Get data from GRDF website
     
+    logging.info("-----------------------------------------------------------")
+    logging.info("Get data from GRDF website")
+    logging.info("-----------------------------------------------------------")
+    
     hasGrdfFailed = False
     
     # Connexion
     try:
         
         # Create Grdf instance
+        logging.info("Connexion to GRDF...")
         myGrdf = gazpar.Grdf()
 
         # Connect to Grdf website
         myGrdf.login(params['grdf','username'],params['grdf','password'])
+        logging.info("GRDF connected !")
     
     except:
         logging.info("Unable to login to GRDF website")
         hasGrdfFailed = True
     
     # Get account informations
+    logging.info("Retrieve account informations")
     myGrdf.getWhoami()
-
+    logging.info("GRDF account informations retrieved !")
     
     # Get list of PCE
+    logging.info("Retrieve list of PCEs..")
     myGrdf.getPceList()
-    logging.info("%s PCE found",myGrdf.countPce())
+    logging.info("%s PCE found !",myGrdf.countPce())
     
     # Get measures for each PCE
     for pce in myGrdf.pceList:
-        
         
         # Set date range
         startDate = _getDayOfssetDate(datetime.date.today(), 7)
         endDate = _getDayOfssetDate(datetime.date.today(), 1)
         
         # Get measures of the PCE
-        logging.info("PCE %s alias %s",pce.pceId,pce.alias)
-        logging.info("Retrieving measures between %s and %s...",startDate,endDate)
+        logging.info("Get measures of PCE %s alias %s",pce.pceId,pce.alias)
+        logging.info("Range period : from %s to %s...",startDate,endDate)
         myGrdf.getPceDailyMeasures(pce,startDate,endDate)
         logging.info("%s measures retrieved, %s seems ok !",pce.countDailyMeasure(), pce.countDailyMeasureOk() )
         
-    
-    
+        
+        
     
 
     # STEP 4A : Standalone mode
