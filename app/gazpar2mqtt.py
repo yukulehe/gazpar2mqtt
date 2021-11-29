@@ -197,14 +197,21 @@ def run(params):
      
     # STEP 3 : Get data from GRDF website
     
-    # Create Grdf instance
-    myGrdf = gazpar.Grdf()
+    # Connexion
+    try:
+        
+        # Create Grdf instance
+        myGrdf = gazpar.Grdf()
+
+        # Connect to Grdf website
+        myGrdf.login(params['grdf','username'],params['grdf','password'])
     
-    # Connect to Grdf website
-    myGrdf.login(params['grdf','username'],params['grdf','password'])
+    except:
+        logging.info("Unable to login to GRDF website)
     
     # Get account informations
     myGrdf.getWhoami()
+
     
     # Get list of PCE
     myGrdf.getPceList()
