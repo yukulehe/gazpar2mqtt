@@ -218,7 +218,7 @@ def run(params):
         logging.info("Pce %s retrieve %s daily measures between %s and %s",pce.alias,pce.countDailyMeasure(),pce.dailyMeasureStart,pce.dailyMeasureEnd)
         logging.info("%s measures are ok",pce.countDailyMeasureOk())
         logging.info("The last valid measure is dated to %s",pce.getLastMeasureOk().gasDate)
-        logging.info("Volume diff of period %s -> %s is %s mcube",startDate,endDate,pce.getDailyMeasureDiff(startDate,endDate))
+        logging.info("Volume diff of period %s -> %s is %s mcube",startDate,endDate,pce.getDailyMeasureVolumeDiff(startDate,endDate))
     
     hasGrdfFailed = True
     
