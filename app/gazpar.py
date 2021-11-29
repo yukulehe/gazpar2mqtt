@@ -196,6 +196,12 @@ class Pce:
                 result = measure
                 break
         return result
+    
+    # Return volume difference for a range of date
+    def getDailyMeasureVolumeDiff(self,startDate,endDate):
+        
+        # Get the first measure:
+        
         
         
         
