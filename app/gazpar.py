@@ -26,6 +26,7 @@ def _convertDateTime(dateTimeString):
     
     if dateTimeString == None: return None
     else:
+        print(dateTimeString)
         myDateTimeString = dateTimeString[18] # we remove timezone
         print(myDateTimeString)
         myDateTime = datetime.datetime.strptime(myDateTimeString,GRDF_DATETIME_FORMAT)
