@@ -10,13 +10,13 @@ global JAVAVXS
 
 class myGrdf:
     
-    self.session = None
-    self.auth_nonce = None
-    self.pceList = None
-    self.measuresList = None
-    self.whoiam = None
-    
     def __init__(self):
+        
+        self.session = None
+        self.auth_nonce = None
+        self.pceList = None
+        self.measuresList = None
+        self.whoiam = None
         
         self.session = requests.Session()
         session.headers = {
@@ -87,12 +87,11 @@ class myGrdf:
             
 class Measure:
     
-    self.volume = None
-    self.energy = None
-    self.gasDate = None
-    
     def __init__(self, measure):
         
+        self.volume = None
+        self.energy = None
+        self.gasDate = None
         self.measure = measure
         
         
