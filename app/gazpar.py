@@ -89,7 +89,7 @@ class Grdf:
         print("Pce added in list")
     
     # Get measures of a single PCE for a period range
-    def getPceMeasures(self,pce, startDate='2018-11-27', endDate='2021-11-27'):
+    def getPceDailyMeasures(self,pce, startDate='2018-11-27', endDate='2021-11-27'):
         
         req = self.session.get('https://monespace.grdf.fr/api/e-conso/pce/consommation/informatives?dateDebut=' + startDate + '&dateFin=' + endDate + '&pceList%5B%5D=' + pce.pceId)
         measureList = json.loads(req.text)
@@ -97,10 +97,10 @@ class Grdf:
         for item in measureList[pce.pceId]["releves"]:
             
             # Create the measure
-            myMeasure = Measure(item)
+            myDailyMeasure = DailyMeasure(item)
             
             # Append measure to the PCE's measure list
-            pce.addMeasure(myMeasure)
+            pce.addDailyMeasure(myDailyMeasure)
             
             
 
@@ -131,29 +131,21 @@ class Pce:
         self.measureList = []
         
         
-    def addMeasure(self, measure):
-        self.measureList.append(measure)
+    def addDailyMeasure(self, measure):
+        self.dailyMeasureList.append(measure)
     
         
-# Measure class          
-class Measure:
+# Daily Measure class          
+class DailyMeasure:
     
     def __init__(self, measure):
         
-        self.volume = None
-        self.energy = None
-        self.gasDate = None
-        self.measure = measure
-             
-    def getVolume():
-        print("energy")
+        self.startDateTime = measure["dateDebutReleve"]
+        self.endDateTime = measure["dateFinReleve"]
+        self.gasDate = measure["journeeGaziere"]
+        self.startIndex = measure["indexDebut"]
+        self.endIndex = measure["indexFin"]
+        self.volume = measure["volumeBrutConsomme"]
+        self.energy = measure["energieConsomme"]
+        self.energy = measure["temperature"]
         
-        
-    def getEnergy():
-        print("energy")
-        
-    def getMeasureDate():
-        print("energy")
-        
-        
-
