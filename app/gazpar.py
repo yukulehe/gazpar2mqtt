@@ -61,6 +61,7 @@ class Grdf:
     
         return req
         
+    
     # Get account informations
     def getWhoami(self):
         
@@ -74,14 +75,13 @@ class Grdf:
     def getPceList(self):
         
         req = self.session.get('https://monespace.grdf.fr/api/e-conso/pce')
-        
         pceList = json.loads(req.text)
-        for item in pceList:
-            myPce = Pce(item)
-            self.addPce(myPce)
-            print(item["alias"])
         
-        return req
+        for item in pceList:
+            # Create PCE
+            myPce = Pce(item)
+            # Add PCE to list
+            self.addPce(myPce)
     
     # Add PCE to list
     def addPce(self, pce):
@@ -101,14 +101,14 @@ class Pce:
     def __init__(self, pce):
         
         self.alias = pce["alias"]
-        print(self.alias)
-        self.pceId = None
-        self.activationDate = None
-        self.freqenceReleve = None
+        self.pceId = pce["pce"]
+        self.activationDate = pce["dateActivation"]
+        self.freqenceReleve = pce["frequenceReleve"]
+        self.state = pce["etat"]
+        self.ownerName = pce["nomTitulaire"]
+        self.postalCode = pce["codePostal"]
         
-    
-        
-        
+           
 class Measure:
     
     def __init__(self, measure):
