@@ -78,11 +78,12 @@ class Grdf:
         pceList = json.loads(req.text)
         for item in pceList:
             myPce = Pce(item)
-            addPce(mPce)
+            self.addPce(mPce)
             print(item["alias"])
         
         return req
     
+    # Add PCE to list
     def addPce(self, pce):
         self.pceList.append(pce)
         print("Pce added in list")
