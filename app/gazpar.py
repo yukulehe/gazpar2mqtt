@@ -31,8 +31,9 @@ def _convertDateTime(dateTimeString):
         return myDateTime
     
 # Convert date to GRDF date string
-def _convertGrdfDate(day):
-    return datetime.strftime(day,GRDF_DATE_FORMAT)
+def _convertGrdfDate(date):
+    return date.strftime(GRDF_DATE_FORMAT)
+
 
 # Class GRDF
 class Grdf:
