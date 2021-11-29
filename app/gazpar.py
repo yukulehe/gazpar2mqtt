@@ -76,7 +76,8 @@ class Grdf:
         req = self.session.get('https://monespace.grdf.fr/api/e-conso/pce')
         logging.info(req.text)
         
-        for item in req.text:
+        pceList = json.loads(req.text)
+        for item in pceList:
             print(item["alias"])
         
         return req
