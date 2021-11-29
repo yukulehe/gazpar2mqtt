@@ -87,6 +87,9 @@ class Grdf:
     def addPce(self, pce):
         self.pceList.append(pce)
         print("Pce added in list")
+        
+    def countPce(self):
+        return len(self.pceList)
     
     # Get measures of a single PCE for a period range
     def getPceDailyMeasures(self,pce, startDate='2018-11-27', endDate='2021-11-27'):
