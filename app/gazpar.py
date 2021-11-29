@@ -16,7 +16,6 @@ class Grdf:
         self.session = None
         self.auth_nonce = None
         self.pceList = []
-        self.measuresList = None
         self.whoiam = None
         
         
