@@ -158,8 +158,8 @@ class Pce:
         measure = None
         
         while i>=0:
-            if dailyMeasureList[i].isOk() == True:
-                measure = dailyMeasureList[i]
+            if self.dailyMeasureList[i].isOk() == True:
+                measure = self.dailyMeasureList[i]
                 break;
             i -= 1
         
