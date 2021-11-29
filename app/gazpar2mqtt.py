@@ -10,7 +10,7 @@ import schedule
 import time
 import locale
 from dateutil.relativedelta import relativedelta
-import gazpar2
+import gazpar
 import mqtt
 import hass
 import json
@@ -216,9 +216,9 @@ def run(params):
     
     # STEP 3 : Get data from GRDF website
     
-    session = requests.Session()
+    myGrdf = gazpar.Grdf()
+    myGrdf.login(params['grdf','username'],params['grdf','password'])
     
-    session = gazpar2.login(params['grdf','username'],params['grdf','password'])
     hasGrdfFailed = True
     
     
