@@ -10,7 +10,7 @@ global JAVAVXS
 
 # Constants
 GRDF_DATE_FORMAT = "%Y-%m-%d"
-GRDF_DATETIME_FORMAT = "%Y-%m-%dT:%H:%M:%S:%z"
+GRDF_DATETIME_FORMAT = "%Y-%m-%dT:%H:%M:%S"
 
 # Tools
 
@@ -21,9 +21,8 @@ def _convertDate(dateString):
     
 # Convert string to datetime
 def _convertDateTime(dateTimeString):
-    #myDate = _convertDate(dateTimeString[9])
-    #myTime = dateTimeString[13:13]
-    myDateTime = datetime.datetime.strptime(dateTimeString,GRDF_DATETIME_FORMAT)
+    myDateTimeString = dateTimeString[18] # we remove timezone
+    myDateTime = datetime.datetime.strptime(myDateTimeString,GRDF_DATETIME_FORMAT)
     return myDateTime
 
 # Class GRDF
