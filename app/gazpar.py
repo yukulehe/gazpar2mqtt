@@ -163,9 +163,9 @@ class DailyMeasure:
     # Check measure quality
     def isMeasureOk(self):
         
-        if self.volume = None: return false
-        elif self.startIndex = None: return false
-        elif self.endIndex = None: return false
+        if self.volume == None: return false
+        elif self.startIndex == None: return false
+        elif self.endIndex == None: return false
         else: return true
         
         
