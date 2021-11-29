@@ -154,7 +154,7 @@ class Pce:
     # Return the last valid measure
     def getLastMeasureOk(self):
         
-        i = self.countDailyMeasure()
+        i = self.countDailyMeasure() - 1
         measure = None
         
         while i>=0:
