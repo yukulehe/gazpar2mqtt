@@ -149,6 +149,8 @@ class Pce:
         for myMeasure in self.dailyMeasureList:
             if myMeasure.isOk == True:
                 i += 1
+            elif:
+                print("Index : %s-%s, Vol = %s, Energy = %s",myMeasure.startIndex,myMeasure.endIndex,myMeasure.volume,myMeasure.energy)
         return i
         
     
