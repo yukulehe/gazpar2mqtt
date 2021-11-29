@@ -245,47 +245,52 @@ def run(params):
             logging.info("Stand alone publication mode")
             logging.info("-----------------------------------------------------------")
 
-            # Set variables
-            prefixTopic = params['mqtt','topic']
-            retain = params['mqtt','retain']
-            qos = params['mqtt','qos']
+            # Loop on PCEs
+            for myPce in myGrdf.pceList:
+                     
+                # Set variables
+                prefixTopic = params['mqtt','topic'] + '/' + myPce.pceId
+                retain = params['mqtt','retain']
+                qos = params['mqtt','qos']
 
-            # Set values
-            if hasGrdfFailed: # Values when Grdf failed
+                # Set values
+                if hasGrdfFailed: # Values when Grdf failed
 
-                ## Publish status values
-                logging.info("Publishing to Mqtt status values...")
-                mqtt.publish(client, prefixTopic + TOPIC_STATUS_DATE, dtn, qos, retain)
-                mqtt.publish(client, prefixTopic + TOPIC_STATUS_VALUE, "Failed", qos, retain)
-                logging.info("Status values published !")
-
-
-            else: # Values when Grdf succeeded
+                    ## Publish status values
+                    logging.info("Publishing to Mqtt status values...")
+                    mqtt.publish(client, prefixTopic + TOPIC_STATUS_DATE, dtn, qos, retain)
+                    mqtt.publish(client, prefixTopic + TOPIC_STATUS_VALUE, "Failed", qos, retain)
+                    logging.info("Status values published !")
 
 
-                # Publish daily values
-                logging.info("Publishing to Mqtt the last daily values...")
-                mqtt.publish(client, prefixTopic + TOPIC_DAILY_DATE, d1['date'], qos, retain)
-                mqtt.publish(client, prefixTopic + TOPIC_DAILY_KWH, d1['kwh'], qos, retain)
-                mqtt.publish(client, prefixTopic + TOPIC_DAILY_MCUBE, d1['mcube'], qos, retain)
+                else: # Values when Grdf succeeded
 
-                logging.info("Daily values published !")
 
-                # Publish monthly values
-                logging.info("Publishing to Mqtt the last monthly values...")
-                mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_DATE, m1['date'], qos, retain)
-                mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_KWH, m1['kwh'], qos, retain)
-                mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_KWH_TSH, m1['kwh_seuil'], qos, retain)
-                mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_KWH_PREV, m1['kwh_prec'], qos, retain)
-                mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_MCUBE, m1['mcube'], qos, retain)
-                mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_MCUBE_PREV, m1['mcube_prec'], qos, retain)
-                logging.info("Monthly values published !")
+                    myDailyMeasure = myPce.getLastDailyMeasure()
+                     
+                    # Publish daily values
+                    logging.info("Publishing to Mqtt the last daily values...")
+                    mqtt.publish(client, prefixTopic + TOPIC_DAILY_DATE, myDailyMeasure.gasDate, qos, retain)
+                    mqtt.publish(client, prefixTopic + TOPIC_DAILY_KWH, myDailyMeasure.energy, qos, retain)
+                    mqtt.publish(client, prefixTopic + TOPIC_DAILY_MCUBE, myDailyMeasure.volume, qos, retain)
 
-                ## Publish status values
-                logging.info("Publishing to Mqtt status values...")
-                mqtt.publish(client, prefixTopic + TOPIC_STATUS_DATE, dtn, qos, retain)
-                mqtt.publish(client, prefixTopic + TOPIC_STATUS_VALUE, "Success", qos, retain)
-                logging.info("Status values published !")
+                    logging.info("Daily values published !")
+
+                    # Publish monthly values
+                    #logging.info("Publishing to Mqtt the last monthly values...")
+                    #mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_DATE, m1['date'], qos, retain)
+                    #mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_KWH, m1['kwh'], qos, retain)
+                    #mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_KWH_TSH, m1['kwh_seuil'], qos, retain)
+                    #mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_KWH_PREV, m1['kwh_prec'], qos, retain)
+                    #mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_MCUBE, m1['mcube'], qos, retain)
+                    #mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_MCUBE_PREV, m1['mcube_prec'], qos, retain)
+                    #logging.info("Monthly values published !")
+
+                    ## Publish status values
+                    logging.info("Publishing to Mqtt status values...")
+                    mqtt.publish(client, prefixTopic + TOPIC_STATUS_DATE, dtn, qos, retain)
+                    mqtt.publish(client, prefixTopic + TOPIC_STATUS_VALUE, "Success", qos, retain)
+                    logging.info("Status values published !")
 
         except:
             logging.error("Standalone mode : unable to publish value to mqtt broker")
