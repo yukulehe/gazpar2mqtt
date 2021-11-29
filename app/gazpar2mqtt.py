@@ -161,20 +161,6 @@ def _getEnvParams():
     
     return params
 
-# Log to GRDF
-def _log_to_Grdf(username,password):
-    
-    # Log to GRDF API
-    try:
-                      
-        logging.info("Logging in GRDF URI %s...", gazpar.API_BASE_URI)
-        token = gazpar.login(username, password)
-        logging.info("Logged in successfully !")
-        return token
-                      
-    except:
-        logging.error("unable to login on %s", gazpar.API_BASE_URI)
-        sys.exit(1)
 
 #######################################################################
 #### Running program
@@ -212,35 +198,30 @@ def run(params):
         logging.error("Unable to connect to Mqtt broker. Please check that broker is running, or check broker configuration.")
         
     
-    
-    
+     
     # STEP 3 : Get data from GRDF website
     
+    # Create Grdf instance
     myGrdf = gazpar.Grdf()
+    
+    # Connect to Grdf website
     myGrdf.login(params['grdf','username'],params['grdf','password'])
+    
+    # Get account informations
     myGrdf.getWhoami()
+    
+    # Get list of PCE
     myGrdf.getPceList()
     logging.info("%s PCE found",myGrdf.countPce())
+    
+    # Get measures for each PCE
     for pce in myGrdf.pceList:
         myGrdf.getPceDailyMeasures(pce,"2021-11-01","2021-11-29")
         logging.info("Pce %s retrieve %s daily measures between %s and %s",pce.alias,pce.countDailyMeasure(),pce.dailyMeasureStart,pce.dailyMeasureEnd)
         logging.info("%s measures are ok",pce.countDailyMeasureOk())
     
+    
     hasGrdfFailed = True
-    
-    
-    # Prepare data
-    if not hasGrdfFailed:
-        
-        logging.info("Grdf data are correct")
-        
-        # Set flag
-        hasGrdfFailed = False
-        
-        # Get GRDF last values
-        d1 = resDay[dCount-1]
-        m1 = resMonth[mCount-1]
-
     
 
     # STEP 4A : Standalone mode
