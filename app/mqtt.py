@@ -83,6 +83,6 @@ def publish(client,topic,payload,qos,retain):
     
     myPayload = str(payload)
     
-    logging.info("Publishing payload %s to topic %s, qos %s, retain %s",payload,topic, qos, retain_boolean)
+    logging.debug("Publishing payload %s to topic %s, qos %s, retain %s",payload,topic, qos, retain_boolean)
     client.publish(topic, payload=myPayload, qos=qos, retain=retain_boolean)
     time.sleep(1)
