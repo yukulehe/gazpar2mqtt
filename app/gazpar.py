@@ -201,6 +201,21 @@ class Pce:
     def getDailyMeasureVolumeDiff(self,startDate,endDate):
         
         # Get the first measure:
+        firstMeasure = self.getDailyMeasureByDate(startDate)
+        
+        # Get the last measure:
+        lastMeasure = self.getDailyMeasureByDate(endDate)
+        
+        if firstMeasure == None or lastMeasure == None:
+            return None
+        elif firstMeasure.isOk() == False or lastMeasure.isOk() == False:
+            return None
+        else:
+            # Calculate the volume difference
+            result = lastMeasure - firstMeasure
+            return result
+            
+        
         
         
         
