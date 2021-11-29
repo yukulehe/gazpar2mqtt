@@ -85,8 +85,8 @@ class Grdf:
     # Add PCE to list
     def addPce(self, pce):
         self.pceList.append(pce)
-        print("Pce added in list")
         
+    # Count PCEs in list
     def countPce(self):
         return len(self.pceList)
     
@@ -108,7 +108,6 @@ class Grdf:
             
             
 
-
 # Account class
 class Account:
     
@@ -119,6 +118,7 @@ class Account:
         self.lastName = account["last_name"]
         self.lastName = account["email"]
 
+        
 # PCE class      
 class Pce:
     
@@ -159,4 +159,13 @@ class DailyMeasure:
         self.volume = measure["volumeBrutConsomme"]
         self.energy = measure["energieConsomme"]
         self.energy = measure["temperature"]
+        
+    # Check measure quality
+    def isMeasureOk(self):
+        
+        if self.volume = None: return false
+        elif self.startIndex = None: return false
+        elif self.endIndex = None: return false
+        else: return true
+        
         
