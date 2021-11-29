@@ -220,6 +220,8 @@ def run(params):
     myGrdf.login(params['grdf','username'],params['grdf','password'])
     myGrdf.getWhoami()
     myGrdf.getPceList()
+    for pce in grdf.pceList:
+        myGrdf.getPceMeasures(pce,"2021-11-01","2021-11-29")
     
     hasGrdfFailed = True
     
