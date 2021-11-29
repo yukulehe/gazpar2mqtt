@@ -94,7 +94,7 @@ class Grdf:
         req = self.session.get('https://monespace.grdf.fr/api/e-conso/pce/consommation/informatives?dateDebut=' + startDate + '&dateFin=' + endDate + '&pceList%5B%5D=' + pce.pceId)
         measureList = json.loads(req.text)
         
-        for item in measureList["releves"]:
+        for item in measureList[pce.pceId]["releves"]:
             
             # Create the measure
             myMeasure = Measure(item)
