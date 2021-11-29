@@ -16,14 +16,19 @@ GRDF_DATETIME_FORMAT = "%Y-%m-%dT:%H:%M:%S"
 
 # Convert string to date
 def _convertDate(dateString):
-    myDate = datetime.datetime.strptime(dateString,GRDF_DATE_FORMAT).date()
-    return myDate
+    if dateString == None: return None
+    else:
+        myDate = datetime.datetime.strptime(dateString,GRDF_DATE_FORMAT).date()
+        return myDate
     
 # Convert string to datetime
 def _convertDateTime(dateTimeString):
-    myDateTimeString = dateTimeString[18] # we remove timezone
-    myDateTime = datetime.datetime.strptime(myDateTimeString,GRDF_DATETIME_FORMAT)
-    return myDateTime
+    
+    if dateTimeString == None: return None
+    else:
+        myDateTimeString = dateTimeString[18] # we remove timezone
+        myDateTime = datetime.datetime.strptime(myDateTimeString,GRDF_DATETIME_FORMAT)
+        return myDateTime
 
 # Class GRDF
 class Grdf:
