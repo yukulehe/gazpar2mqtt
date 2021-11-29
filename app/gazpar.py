@@ -212,7 +212,7 @@ class Pce:
             return None
         else:
             # Calculate the volume difference
-            result = lastMeasure - firstMeasure
+            result = lastMeasure.volume - firstMeasure.volume
             return result
             
         
