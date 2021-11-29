@@ -4,6 +4,7 @@
 
 GRDF website has a new design since 23/11/2021. We have redesign the app. A lot of work remains. All previous functionalities could not be performed.
 
+
 # gazpar2mqtt
 Python script to fetch GRDF's website data and publish data to a mqtt broker
 
