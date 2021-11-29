@@ -265,7 +265,7 @@ def run(params):
                 else: # Values when Grdf succeeded
 
 
-                    myDailyMeasure = myPce.getLastDailyMeasure()
+                    myDailyMeasure = myPce.getLastMeasureOk()
                      
                     # Publish daily values
                     logging.info("Publishing to Mqtt the last daily values...")
