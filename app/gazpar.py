@@ -32,7 +32,7 @@ class Grdf:
         # Get cookie
         req = self.session.get('https://monespace.grdf.fr/client/particulier/accueil')
         
-        if not 'auth_nonce' in session.cookies:
+        if not 'auth_nonce' in self.session.cookies:
             raise GazparLoginException("Cannot get auth_nonce.")
         else:
             logging.info("Cookies ok")
