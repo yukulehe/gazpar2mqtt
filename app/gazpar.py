@@ -94,13 +94,15 @@ class Grdf:
         req = self.session.get('https://monespace.grdf.fr/api/e-conso/pce/consommation/informatives?dateDebut=' + startDate + '&dateFin=' + endDate + '&pceList%5B%5D=' + pce.pceId)
         measureList = json.loads(req.text)
         
-        for item in measureList[pce.pceId]["releves"]:
+        for myPce in measureList[pce.pceId]["releves"]:
             
             # Create the measure
-            myDailyMeasure = DailyMeasure(item)
+            myDailyMeasure = DailyMeasure(myPce)
             
             # Append measure to the PCE's measure list
-            pce.addDailyMeasure(myDailyMeasure)
+            myPce.dailyMeasureStart = startDate
+            myPce.dailyMeasureEnd = endDate
+            myPce.addDailyMeasure(myDailyMeasure)
             
             
 
@@ -129,6 +131,9 @@ class Pce:
         self.postalCode = pce["codePostal"]
         
         self.dailyMeasureList = []
+        self.dailyMeasureStart = None
+        self.dailyMeasureEnd = None
+        
         
         
     def addDailyMeasure(self, measure):
