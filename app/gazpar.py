@@ -91,7 +91,7 @@ class Grdf:
     # Get measures of a single PCE for a period range
     def getPceMeasures(self,pce, startDate='2018-11-27', endDate='2021-11-27'):
         
-        req = self.grdf.session.get('https://monespace.grdf.fr/api/e-conso/pce/consommation/informatives?dateDebut=' + startDate + '&dateFin=' + endDate + '&pceList%5B%5D=' + self.pce)
+        req = self.session.get('https://monespace.grdf.fr/api/e-conso/pce/consommation/informatives?dateDebut=' + startDate + '&dateFin=' + endDate + '&pceList%5B%5D=' + pce.pceId)
         print(req.text)
 
 
