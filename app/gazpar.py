@@ -8,8 +8,9 @@ import datetime
 
 global JAVAVXS
 
-const GRDF_DATE_FORMAT = "%Y-%m-%d"
-const GRDF_DATETIME_FORMAT = "%Y-%m-%d%Z:%H:%M:%S"
+# Constants
+GRDF_DATE_FORMAT = "%Y-%m-%d"
+GRDF_DATETIME_FORMAT = "%Y-%m-%d%Z:%H:%M:%S"
 
 # Tools
 
