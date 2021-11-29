@@ -241,6 +241,12 @@ def run(params):
         myGrdf.getPceDailyMeasures(pce,startDate,endDate)
         logging.info("%s measures retrieved, %s seems ok !",pce.countDailyMeasure(), pce.countDailyMeasureOk() )
         
+        # Log last valid measure
+        myMeasure = pce.getLastMeasureOk()
+        logging.info("Last valide measure : Date = %s, Volume = %s m3, Energy = %s kWh.",myMeasure.gasDate,myMeasure.volume,myMeasure.energy)
+        
+    
+    
         
         
     
