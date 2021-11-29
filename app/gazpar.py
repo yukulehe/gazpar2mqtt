@@ -147,7 +147,7 @@ class Pce:
     def countDailyMeasureOk(self):
         i = 0
         for myMeasure in self.dailyMeasureList:
-            if myMeasure.isOk == True:
+            if myMeasure.isOk() == True:
                 i += 1
             else:
                 print("Index : %s-%s, Vol = %s, Energy = %s",myMeasure.startIndex,myMeasure.endIndex,myMeasure.volume,myMeasure.energy)
@@ -174,6 +174,7 @@ class DailyMeasure:
     def isOk(self):
         
         if self.volume == None: return False
+        elif self.energy == None: return False
         elif self.startIndex == None: return False
         elif self.endIndex == None: return False
         else: return True
