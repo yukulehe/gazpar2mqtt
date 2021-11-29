@@ -77,7 +77,7 @@ class Grdf:
         logging.info(req.text)
         
         for item in req.text:
-            print(item)
+            print(item["alias"])
         
         return req
     
