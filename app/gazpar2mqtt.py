@@ -203,7 +203,7 @@ def run(params):
         mqtt.connect(client,params['mqtt','host'],params['mqtt','port'])
         
         # Wait mqtt callback (connection confirmation)
-        time.sleep(2)
+        time.sleep(1)
         
         if mqtt.MQTT_IS_CONNECTED:
             logging.info("Mqtt broker connected !")
