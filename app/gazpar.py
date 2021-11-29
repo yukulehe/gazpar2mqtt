@@ -87,15 +87,19 @@ class myGrdf:
             
 class Measure:
     
+    self.volume = None
+    self.energy = None
+    self.gasDate = None
     
     def __init__(self, measure):
         
         self.measure = measure
         
-    def getVolume:
         
-    def getEnergy:
+    def getVolume():
         
-    def getMeasureDate:
+    def getEnergy():
+        
+    def getMeasureDate():
         
         
