@@ -207,7 +207,7 @@ def run(params):
         myGrdf.login(params['grdf','username'],params['grdf','password'])
     
     except:
-        logging.info("Unable to login to GRDF website)
+        logging.info("Unable to login to GRDF website")
     
     # Get account informations
     myGrdf.getWhoami()
