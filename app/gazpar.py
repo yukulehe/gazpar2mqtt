@@ -62,15 +62,14 @@ class Grdf:
         return req
         
     
-    # Get account informations
+    # Get account info
     def getWhoami(self):
         
         req = self.session.get('https://monespace.grdf.fr/api/e-connexion/users/whoami')
-        logging.info(req.text)
+        account = json.loads(req.text)
+        self.account = Account(account)
         
-        return req
-        
-        
+               
     # Get list of PCE
     def getPceList(self):
         
@@ -94,8 +93,19 @@ class Grdf:
         startDate = '2018-11-27'
         endDate = '2021-11-27'
         req = self.grdf.session.get('https://monespace.grdf.fr/api/e-conso/pce/consommation/informatives?dateDebut=' + startDate + '&dateFin=' + endDate + '&pceList%5B%5D=' + self.pce)
-        
 
+
+# Account class
+class Account:
+    
+    def __init__(self, account):
+        
+        self.type = pce["type"]
+        self.firstName = pce["first_name"]
+        self.lastName = pce["last_name"]
+        self.lastName = pce["email"]
+
+# PCE class      
 class Pce:
     
     def __init__(self, pce):
@@ -108,7 +118,7 @@ class Pce:
         self.ownerName = pce["nomTitulaire"]
         self.postalCode = pce["codePostal"]
         
-           
+# Measure class          
 class Measure:
     
     def __init__(self, measure):
@@ -117,8 +127,7 @@ class Measure:
         self.energy = None
         self.gasDate = None
         self.measure = measure
-        
-        
+             
     def getVolume():
         print("energy")
         
@@ -130,4 +139,4 @@ class Measure:
         print("energy")
         
         
-        
+
