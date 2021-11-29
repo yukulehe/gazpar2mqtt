@@ -14,9 +14,10 @@ class Grdf:
         
         self.session = None
         self.auth_nonce = None
-        self.pceList = None
+        self.pceList = []
         self.measuresList = None
         self.whoiam = None
+        
         
         self.session = requests.Session()
         self.session.headers = {
@@ -75,6 +76,9 @@ class Grdf:
         req = self.session.get('https://monespace.grdf.fr/api/e-conso/pce')
         logging.info(req.text)
         
+        for item in req.text:
+            print(item)
+        
         return req
     
     # Get measures of a single PCE for a period range
@@ -84,7 +88,17 @@ class Grdf:
         endDate = '2021-11-27'
         req = self.grdf.session.get('https://monespace.grdf.fr/api/e-conso/pce/consommation/informatives?dateDebut=' + startDate + '&dateFin=' + endDate + '&pceList%5B%5D=' + self.pce)
         
-            
+
+class Pce:
+    
+    def __init__(self, pce):
+        
+        self.alias = None
+        self.pceId = None
+        self.activationDate = None
+        self.freqenceReleve = None
+        
+        
 class Measure:
     
     def __init__(self, measure):
