@@ -362,7 +362,7 @@ def run(params):
                         #"monthly_energy": m1['kwh'],
                         #"monthly_energy_tsh": m1['kwh_seuil'],
                         #"monthly_energy_prev": m1['kwh_prec'],
-                        "consumption_date": myDailyMeasure.gasDate,
+                        "consumption_date": str(myDailyMeasure.gasDate),
                         #"consumption_month": m1['date'],
                         }
                     mqtt.publish(client, hass.getStateTopicSensor(ha_prefix,device_name), json.dumps(statePayload), qos, retain)
