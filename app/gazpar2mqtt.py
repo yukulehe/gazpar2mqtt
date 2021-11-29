@@ -232,7 +232,7 @@ def run(params):
         logging.info("%s measures retrieved, %s seems ok !",pce.countDailyMeasure(), pce.countDailyMeasureOk() )
         
     
-    hasGrdfFailed = True
+    hasGrdfFailed = False
     
 
     # STEP 4A : Standalone mode
