@@ -16,7 +16,7 @@ class myGrdf:
     self.measuresList = None
     self.whoiam = None
     
-    def __init__():
+    def __init__(self):
         
         self.session = requests.Session()
         session.headers = {
