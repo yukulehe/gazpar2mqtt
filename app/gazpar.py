@@ -4,9 +4,24 @@ import sys
 import logging
 import requests
 import json
+import datetime
 
 global JAVAVXS
 
+const GRDF_DATE_FORMAT = "%Y-%m-%d"
+const GRDF_DATETIME_FORMAT = "%Y-%m-%d%Z:%H:%M:%S"
+
+# Tools
+
+# Convert string to date
+def _convertDate(dateString):
+    myDate = datetime.datetime.strpt(dateString,GRDF_DATE_FORMAT).date()
+    return myDate
+    
+# Convert string to datetime
+def _convertDateTime(dateTimeString):
+    myDateTime = datetime.datetime.strpt(dateTimeString,GRDF_DATETIME_FORMAT)
+    return myDateTime
 
 # Class GRDF
 class Grdf:
@@ -171,9 +186,9 @@ class DailyMeasure:
     
     def __init__(self, measure):
         
-        self.startDateTime = measure["dateDebutReleve"]
-        self.endDateTime = measure["dateFinReleve"]
-        self.gasDate = measure["journeeGaziere"]
+        self.startDateTime = _convertDateTime(measure["dateDebutReleve"])
+        self.endDateTime = _convertDateTime(measure["dateFinReleve"])
+        self.gasDate = _convertDate(measure["journeeGaziere"])
         self.startIndex = measure["indexDebut"]
         self.endIndex = measure["indexFin"]
         self.volume = measure["volumeBrutConsomme"]
