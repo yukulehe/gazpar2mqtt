@@ -10,7 +10,7 @@ global JAVAVXS
 
 # Constants
 GRDF_DATE_FORMAT = "%Y-%m-%d"
-GRDF_DATETIME_FORMAT = "%Y-%m-%d%Z:%H:%M:%S"
+GRDF_DATETIME_FORMAT = "%Y-%m-%dT%z:%H:%M:%S"
 
 # Tools
 
