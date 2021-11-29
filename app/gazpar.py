@@ -14,14 +14,14 @@ GRDF_DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 # Tools
 
-# Convert string to date
+# Convert GRDF datetime string to date
 def _convertDate(dateString):
     if dateString == None: return None
     else:
         myDate = datetime.datetime.strptime(dateString,GRDF_DATE_FORMAT).date()
         return myDate
     
-# Convert string to datetime
+# Convert GRDF datetime string to datetime
 def _convertDateTime(dateTimeString):
     
     if dateTimeString == None: return None
@@ -29,6 +29,10 @@ def _convertDateTime(dateTimeString):
         myDateTimeString = dateTimeString[0:19].replace('T',' ') # we remove timezone
         myDateTime = datetime.datetime.strptime(myDateTimeString,GRDF_DATETIME_FORMAT)
         return myDateTime
+    
+# Convert date to GRDF date string
+def _convertGrdfDate(day):
+    return datetime.strftime(day,GRDF_DATE_FORMAT)
 
 # Class GRDF
 class Grdf:
@@ -113,9 +117,13 @@ class Grdf:
         return len(self.pceList)
     
     # Get measures of a single PCE for a period range
-    def getPceDailyMeasures(self,pce, startDate='2018-11-27', endDate='2021-11-27'):
+    def getPceDailyMeasures(self,pce, startDate, endDate):
         
-        req = self.session.get('https://monespace.grdf.fr/api/e-conso/pce/consommation/informatives?dateDebut=' + startDate + '&dateFin=' + endDate + '&pceList%5B%5D=' + pce.pceId)
+        # Convert date
+        myStartDate = _convertGrdfDate(startDate)
+        myEndDate = _convertGrdfDate(endDate)
+        
+        req = self.session.get('https://monespace.grdf.fr/api/e-conso/pce/consommation/informatives?dateDebut=' + myStartDate + '&dateFin=' + myEndDate + '&pceList%5B%5D=' + pce.pceId)
         measureList = json.loads(req.text)
         
         for measure in measureList[pce.pceId]["releves"]:
