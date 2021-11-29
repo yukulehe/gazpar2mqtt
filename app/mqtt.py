@@ -76,7 +76,7 @@ def disconnect(client):
 # Sub publish
 def publish(client,topic,payload,qos,retain):
     
-    logging.debug("Mqtt publish : publication...")
+    logging.info("Mqtt publish : publication...")
     
     retain_boolean = False
     retain_boolean = retain.lower() in ("t","true","1","yes","y","yup","oui","si","da")
