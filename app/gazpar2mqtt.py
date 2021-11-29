@@ -238,7 +238,7 @@ def run(params):
     # STEP 4A : Standalone mode
     if mqtt.MQTT_IS_CONNECTED and params['standalone','mode'].lower()=="true":   
 
-        try:
+        #try:
 
             logging.info("-----------------------------------------------------------")
             logging.info("Stand alone publication mode")
@@ -292,9 +292,9 @@ def run(params):
                     mqtt.publish(client, prefixTopic + TOPIC_STATUS_VALUE, "Success", qos, retain)
                     logging.info("Status values published !")
 
-        except:
-            logging.error("Standalone mode : unable to publish value to mqtt broker")
-            sys.exit(1)
+        #except:
+            #logging.error("Standalone mode : unable to publish value to mqtt broker")
+            #sys.exit(1)
 
     # STEP 4B : Home Assistant discovery mode
     if mqtt.MQTT_IS_CONNECTED and params['hass','discovery'].lower() == 'true':
