@@ -19,7 +19,7 @@ class Grdf:
         self.whoiam = None
         
         self.session = requests.Session()
-        session.headers = {
+        self.session.headers = {
             'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Mobile Safari/537.36',
             'Accept-Encoding':'gzip, deflate, br',
             'Accept':'application/json, */*',
