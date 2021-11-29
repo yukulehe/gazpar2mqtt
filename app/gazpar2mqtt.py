@@ -424,6 +424,8 @@ if __name__ == "__main__":
     
     logging.info("Welcome to gazpar2mqtt")
     logging.info("-----------------------------------------------------------")
+    logging.info("Version 0.5")
+    logging.info("Please note that the the tool is still under development, various functions may disappear or be modified.")
     logging.info("-----------------------------------------------------------")
     
     # STEP 1 : Get params from args
