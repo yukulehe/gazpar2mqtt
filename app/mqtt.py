@@ -57,7 +57,7 @@ def connect(client,host,port):
     # Connect
     logging.debug("Mqtt connect : connection to broker...")
     client.connect(host,port, 60)
-    time.sleep(5)
+    time.sleep(1)
     
     # Start loop
     client.loop_start()
