@@ -165,7 +165,8 @@ class DailyMeasure:
         self.endIndex = measure["indexFin"]
         self.volume = measure["volumeBrutConsomme"]
         self.energy = measure["energieConsomme"]
-        self.energy = measure["temperature"]
+        self.temperature = measure["temperature"]
+        
         
     # Check measure quality
     def isOk(self):
