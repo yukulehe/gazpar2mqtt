@@ -220,6 +220,7 @@ def run(params):
     myGrdf.login(params['grdf','username'],params['grdf','password'])
     myGrdf.getWhoami()
     myGrdf.getPceList()
+    logging.info("%s PCE found",myGrdf.countPce)
     for pce in myGrdf.pceList:
         myGrdf.getPceDailyMeasures(pce,"2021-11-01","2021-11-29")
         logging.info("Pce %s retrieve %s daily measures between %s and %s",pce.alias,pce.countDailyMeasure(),pce.dailyMeasureStart,pce.dailyMeasureEnd)
