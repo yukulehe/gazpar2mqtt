@@ -2,7 +2,7 @@
 
 ![warning](https://s1.qwant.com/thumbr/0x380/b/8/226685b0a3d5b779d1be21407deb02023bfd0bf31225fae8072e9d86a8b801/warning.png?u=https%3A%2F%2Fopenclipart.org%2Fimage%2F2400px%2Fsvg_to_png%2F29833%2Fwarning.png&q=0&b=1&p=0&a=0)
 
-GRDF website has a new design since 23/11/2021. The script is currently out of service until we find a solution. Any help is welcome.
+GRDF website has a new design since 23/11/2021. We have redesign the app. A lot of work remains. All previous functionalities could not be performed.
 
 # gazpar2mqtt
 Python script to fetch GRDF's website data and publish data to a mqtt broker
@@ -157,19 +157,6 @@ You can replace the default topic prefix *gazpar* (see mqtt broker requirements 
 | gazpar/daily/mcube | Consumption in cube meter of the last daily statement  |
 | gazpar/daily/delta | Variation in percentage between the last and the previous daily statement  |
 
-### Monthly values :
-
-| Topic | Description |
-| --- | --- |
-| gazpar/monthly/date | Month of the last monthly statement |
-| gazpar/monthly/kwh | Consumption in kwh of the last monthly statement |
-| gazpar/monthly/kwh/threshold | Threshold in kwh of the last monthly statement |
-| gazpar/monthly/kwh/previous | Consumption in kWh of previous year at the same month |
-| gazpar/monthly/mcube | Consumption in cube meter of the last monthly statement  |
-| gazpar/monthly/mcube/previous | Consumption in m3 of previous year at the same month  |
-| gazpar/monthly/delta | Deprecated  |
-
-
 ### Status values :
 
 | Topic | Description |
@@ -198,13 +185,7 @@ Note : you can replace the default device name *gazpar* by editing the related p
 | --- | --- | --- | --- |
 | gazpar_daily_gas | Sensor | Gas | Gas consumption in m3 of the last daily statement |
 | gazpar_daily_energy | Sensor | Energy | Gas consumption in kWh of the last daily statement |
-| gazpar_monthly_gas | Sensor | Gas | Gas consumption in m3 of the last monthly statement |
-| gazpar_monthly_gas_prev | Sensor | Gas | Gas consumption in m3 of previous year at the same month |
-| gazpar_monthly_energy | Sensor | Energy | Gas consumption in kWh of the last monthly statement |
-| gazpar_monthly_energy_tsh | Sensor | Energy | Gas threshold in kWh of the last monthly statement |
-| gazpar_monthly_energy_prev | Sensor | Energy | Gas consumption in kWh of previous year at the same month |
 | gazpar_consumption_date | Sensor | Date | Date of the last daily statement |
-| gazpar_consumption_month | Sensor | Text | Month of the last monthly statement |
 | gazpar_connectivity | Binary sensor | Connectivity | Binary sensor which indicates if the last gazpar statement succeeded (ON) or failed (OFF) |
 
 
