@@ -128,7 +128,7 @@ class Pce:
         self.ownerName = pce["nomTitulaire"]
         self.postalCode = pce["codePostal"]
         
-        self.measureList = []
+        self.dailyMeasureList = []
         
         
     def addDailyMeasure(self, measure):
