@@ -81,6 +81,8 @@ def publish(client,topic,payload,qos,retain):
     retain_boolean = False
     retain_boolean = retain.lower() in ("t","true","1","yes","y","yup","oui","si","da")
     
+    myPayload = str(payload)
+    
     logging.info("Publishing payload %s to topic %s, qos %s, retain %s",payload,topic, qos, retain_boolean)
-    client.publish(topic, payload=payload, qos=qos, retain=retain_boolean)
+    client.publish(topic, payload=myPayload, qos=qos, retain=retain_boolean)
     time.sleep(1)
