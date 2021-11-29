@@ -269,6 +269,7 @@ def run(params):
                      
                     # Publish daily values
                     logging.info("Publishing to Mqtt the last daily values...")
+                    logging.info("Date %s, Energy = %s, Volume %s",myDailyMeasure.gasDate,myDailyMeasure.energy,myDailyMeasure.volume)
                     mqtt.publish(client, prefixTopic + TOPIC_DAILY_DATE, myDailyMeasure.gasDate, qos, retain)
                     mqtt.publish(client, prefixTopic + TOPIC_DAILY_KWH, myDailyMeasure.energy, qos, retain)
                     mqtt.publish(client, prefixTopic + TOPIC_DAILY_MCUBE, myDailyMeasure.volume, qos, retain)
