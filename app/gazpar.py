@@ -186,6 +186,17 @@ class Pce:
             i -= 1
         
         return measure
+    
+    # Return a measure by date
+    def getDailyMeasureByDate(self,date):
+        
+        result = None
+        for measure in self.dailyMeasureList:
+            if measure.gasDate == date:
+                result = measure
+                break
+        return result
+        
         
         
 # Daily Measure class          
