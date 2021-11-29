@@ -218,6 +218,7 @@ def run(params):
     
     myGrdf = gazpar.Grdf()
     myGrdf.login(params['grdf','username'],params['grdf','password'])
+    myGrdf.getWhoami()
     myGrdf.getPceList()
     
     hasGrdfFailed = True
