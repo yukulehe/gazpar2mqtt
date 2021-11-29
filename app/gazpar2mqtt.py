@@ -251,7 +251,7 @@ def run(params):
             for myPce in myGrdf.pceList:
                      
                 logging.info("Publishing values of PCE %s alias %s...",myPce.pceId,myPce.alias)
-                logging.info("-----------------------------------------------------------")
+                logging.info("---------------------------------")
                 
                 # Set variables
                 prefixTopic = params['mqtt','topic'] + '/' + myPce.pceId
@@ -305,7 +305,7 @@ def run(params):
     # STEP 4B : Home Assistant discovery mode
     if mqtt.MQTT_IS_CONNECTED and params['hass','discovery'].lower() == 'true':
 
-        #try:
+        try:
 
             logging.info("-----------------------------------------------------------")
             logging.info("Home assistant publication mode")
@@ -315,7 +315,7 @@ def run(params):
             for myPce in myGrdf.pceList:
                      
                 logging.info("Publishing values of PCE %s alias %s...",myPce.pceId,myPce.alias)
-                logging.info("-----------------------------------------------------------")
+                logging.info("---------------------------------")
             
                 # Set variables
                 retain = params['mqtt','retain']
@@ -377,7 +377,7 @@ def run(params):
                     logging.info("Home Assistant binary sensors values updated !")
 
 
-        #except:
+        except:
             logging.error("Home Assistant discovery mode : unable to publish value to mqtt broker")
             sys.exit(1)
 
