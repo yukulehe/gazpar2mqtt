@@ -222,7 +222,7 @@ def run(params):
     myGrdf.getPceList()
     for pce in myGrdf.pceList:
         myGrdf.getPceDailyMeasures(pce,"2021-11-01","2021-11-29")
-        logging.info("Pce %s retrieve %s daily measures",pce.pceId,pce.countDailyMeasures())
+        logging.info("Pce %s retrieve %s daily measures",pce.pceId,pce.countDailyMeasure)
     
     hasGrdfFailed = True
     
