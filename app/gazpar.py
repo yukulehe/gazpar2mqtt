@@ -133,6 +133,10 @@ class Pce:
         
     def addDailyMeasure(self, measure):
         self.dailyMeasureList.append(measure)
+        
+    def countDailyMeasure(self):
+        return self.dailyMeasureList.count()
+        
     
         
 # Daily Measure class          
