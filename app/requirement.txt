@@ -1,8 +1,6 @@
 requests
-lxml
 python-dateutil
 argparse
 envparse
 schedule
 paho-mqtt
-pygazpar==1.0.1
