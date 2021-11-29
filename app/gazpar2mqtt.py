@@ -221,7 +221,7 @@ def run(params):
     myGrdf.getWhoami()
     myGrdf.getPceList()
     for pce in myGrdf.pceList:
-        myGrdf.getPceMeasures(pce,"2021-11-01","2021-11-29")
+        myGrdf.getPceDailyMeasures(pce,"2021-11-01","2021-11-29")
     
     hasGrdfFailed = True
     
