@@ -64,7 +64,7 @@ class Grdf:
     def getWhoami(self):
         
         req = self.session.get('https://monespace.grdf.fr/api/e-connexion/users/whoami')
-        logging.info(req.txt)
+        logging.info(req.text)
         
         return req
         
@@ -73,7 +73,7 @@ class Grdf:
     def getPceList(self):
         
         req = self.session.get('https://monespace.grdf.fr/api/e-conso/pce')
-        logging.info(req.txt)
+        logging.info(req.text)
         
         return req
     
