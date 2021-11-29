@@ -92,7 +92,16 @@ class Grdf:
     def getPceMeasures(self,pce, startDate='2018-11-27', endDate='2021-11-27'):
         
         req = self.session.get('https://monespace.grdf.fr/api/e-conso/pce/consommation/informatives?dateDebut=' + startDate + '&dateFin=' + endDate + '&pceList%5B%5D=' + pce.pceId)
-        print(req.text)
+        measureList = json.loads(req.text)
+        
+        for item in measureList["releves"]
+            # Create the measure
+            myMeasure = Measure(item)
+            
+            # Append measure to the PCE's measure list
+            pce.addMeasure(myMeasure)
+            
+            
 
 
 # Account class
@@ -117,6 +126,13 @@ class Pce:
         self.state = pce["etat"]
         self.ownerName = pce["nomTitulaire"]
         self.postalCode = pce["codePostal"]
+        
+        self.measureList = []
+        
+        
+    def addMeasure(self, measure):
+        self.measureList.append(measure)
+    
         
 # Measure class          
 class Measure:
