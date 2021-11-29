@@ -150,8 +150,21 @@ class Pce:
             if myMeasure.isOk() == True:
                 i += 1
         return i
-        
     
+    # Return the last valid measure
+    def getLastMeasureOk(self):
+        
+        i = self.countDailyMeasure()
+        measure = None
+        
+        while i>=0:
+            if dailyMeasureList[i].isOk() == True:
+                measure = dailyMeasureList[i]
+                break;
+            i -= 1
+        
+        return measure
+        
         
 # Daily Measure class          
 class DailyMeasure:
