@@ -100,7 +100,8 @@ class Pce:
     
     def __init__(self, pce):
         
-        self.alias = None
+        self.alias = pce["alias"]
+        print(self.alias)
         self.pceId = None
         self.activationDate = None
         self.freqenceReleve = None
