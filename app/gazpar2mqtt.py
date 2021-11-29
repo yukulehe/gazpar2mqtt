@@ -213,7 +213,6 @@ def run(params):
     # Get measures for each PCE
     for pce in myGrdf.pceList:
         
-        
         # Set date range
         startDate = _getDayOfssetDate(datetime.date.today(), 7)
         endDate = _getDayOfssetDate(datetime.date.today(), 1)
