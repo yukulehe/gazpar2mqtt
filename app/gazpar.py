@@ -10,7 +10,7 @@ global JAVAVXS
 
 # Constants
 GRDF_DATE_FORMAT = "%Y-%m-%d"
-GRDF_DATETIME_FORMAT = "%Y-%m-%dT:%H:%M:%S"
+GRDF_DATETIME_FORMAT = "%Y-%m-%d:%H:%M:%S"
 
 # Tools
 
@@ -27,7 +27,7 @@ def _convertDateTime(dateTimeString):
     if dateTimeString == None: return None
     else:
         print(dateTimeString)
-        myDateTimeString = dateTimeString[0:18] # we remove timezone
+        myDateTimeString = dateTimeString[0:18].replace('T','') # we remove timezone
         print(myDateTimeString)
         myDateTime = datetime.datetime.strptime(myDateTimeString,GRDF_DATETIME_FORMAT)
         return myDateTime
