@@ -100,10 +100,10 @@ class Account:
     
     def __init__(self, account):
         
-        self.type = pce["type"]
-        self.firstName = pce["first_name"]
-        self.lastName = pce["last_name"]
-        self.lastName = pce["email"]
+        self.type = account["type"]
+        self.firstName = account["first_name"]
+        self.lastName = account["last_name"]
+        self.lastName = account["email"]
 
 # PCE class      
 class Pce:
