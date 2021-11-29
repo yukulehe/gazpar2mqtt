@@ -214,7 +214,7 @@ def run(params):
     for pce in myGrdf.pceList:
         startDate = _getDayOfssetDate(datetime.date.today(), 5)
         endDate = _getDayOfssetDate(datetime.date.today(), 1)
-        myGrdf.getPceDailyMeasures(pce,"2021-11-01","2021-11-29")
+        myGrdf.getPceDailyMeasures(pce,startDate,endDate")
         logging.info("Pce %s retrieve %s daily measures between %s and %s",pce.alias,pce.countDailyMeasure(),pce.dailyMeasureStart,pce.dailyMeasureEnd)
         logging.info("%s measures are ok",pce.countDailyMeasureOk())
         logging.info("The last valid measure is dated to %s",pce.getLastMeasureOk().gasDate)
