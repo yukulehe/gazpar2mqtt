@@ -14,7 +14,7 @@ import gazpar
 import mqtt
 import hass
 import json
-
+import requests
 import argparse
 import logging
 import pprint
@@ -56,15 +56,11 @@ HASS_DEVICE_NAME = None
 
 # Sub to get date with day offset
 def _getDayOfssetDate(day, number):
-    return _dayToStr(day - relativedelta(days=number))
+    return day - relativedelta(days=number)
 
 # Sub to get date with month offset
 def _getMonthOfssetDate(day, number):
     return _dayToStr(day - relativedelta(months=number))
-
-# Sub to return format wanted
-def _dayToStr(date):
-    return date.strftime("%d/%m/%Y")
 
 # Sub to return format wanted
 def _dateTimeToStr(datetime):
@@ -161,20 +157,6 @@ def _getEnvParams():
     
     return params
 
-# Log to GRDF
-def _log_to_Grdf(username,password):
-    
-    # Log to GRDF API
-    try:
-                      
-        logging.info("Logging in GRDF URI %s...", gazpar.API_BASE_URI)
-        token = gazpar.login(username, password)
-        logging.info("Logged in successfully !")
-        return token
-                      
-    except:
-        logging.error("unable to login on %s", gazpar.API_BASE_URI)
-        sys.exit(1)
 
 #######################################################################
 #### Running program
@@ -212,153 +194,61 @@ def run(params):
         logging.error("Unable to connect to Mqtt broker. Please check that broker is running, or check broker configuration.")
         
     
+     
+    # STEP 3 : Get data from GRDF website
     
-    
-    # STEP 3 : Get data from GRDF API
-    
-    ## STEP 3A : Get daily data
     logging.info("-----------------------------------------------------------")
-    logging.info("Get data from GRDF")
+    logging.info("Get data from GRDF website")
     logging.info("-----------------------------------------------------------")
     
+    hasGrdfFailed = False
     
+    # Connexion
     try:
         
-        # Set period (5 days ago)
-        startDate = _getDayOfssetDate(datetime.date.today(), 5)
-        endDate = _dayToStr(datetime.date.today())
+        # Create Grdf instance
+        logging.info("Connexion to GRDF...")
+        myGrdf = gazpar.Grdf()
 
-        logging.info("Get daily data from GRDF")
-
-        # Get data and retry when failed
-        i= 1
-        dCount = 0
-        isDailyDataOk = False
-
-        while i <= GRDF_API_MAX_RETRIES:
-
-            if i > 1:
-                logging.info("Failed. Please wait %s seconds for next try",GRDF_API_WAIT_BTW_RETRIES)
-                time.sleep(GRDF_API_WAIT_BTW_RETRIES)
-
-            logging.info("Try number %s", str(i))
-            
-            # Log to Grdf
-            try:
-                logging.info("Trying to log to Grdf...")
-                token = _log_to_Grdf(params['grdf','username'], params['grdf','password'])
-            except:
-                logging.error("Error during log to Grdf")
-                i = i + 1
-                continue # next try
-
-            # Get result from GRDF by day
-            try:
-                logging.info("Trying to get daily values from Grdf...")
-                resDay = gazpar.get_data_per_day(token, startDate, endDate)
-            except:
-                logging.error("Error to get Grdf daily data")
-                i = i + 1
-                continue # next loop
-            
-            # Check results
-            dCount = len(resDay)
-            if dCount <= GRDF_API_ERRONEOUS_COUNT:
-                logging.warning("Daily values from GRDF seems wrong...")
-                i = i + 1
-                continue # next loop
-            else:
-                isDailyDataOk = True
-                break # exit loop
-  
-        # Display results
-        if isDailyDataOk:
-            logging.info("Grdf daily values are ok !")
-            logging.info("Number of daily values retrieved : %s", dCount)
-            for d in resDay:
-                logging.info("%s : Energy = %s kwh, Gas = %s m3",d['date'],d['kwh'], d['mcube'])
-        else:
-            logging.info("Unable to get daily data from GRDF after %s tries",GRDF_API_MAX_RETRIES)
-            hasGrdfFailed = True
-                
+        # Connect to Grdf website
+        myGrdf.login(params['grdf','username'],params['grdf','password'])
+        logging.info("GRDF connected !")
+    
     except:
-        logging.error("Error on Step 3A")
+        logging.info("Unable to login to GRDF website")
         hasGrdfFailed = True
-                 
     
-    ## When daily data are ok
-    if isDailyDataOk:
-        
-        ## STEP 3B : Get monthly data
-        
-        try:
-            logging.info("Get monthly data from GRDF")
-
-            # Set period (5 months ago)
-            startDate = _getMonthOfssetDate(datetime.date.today(), 5)
-            endDate = _dayToStr(datetime.date.today())
-
-            # Get data and retry when failed
-            i= 1
-            mCount = 0
-            isMonthlyDataOk = False
-
-            while i <= GRDF_API_MAX_RETRIES:
-
-                if i > 1:
-                    logging.info("Failed. Please wait %s seconds for next try",GRDF_API_WAIT_BTW_RETRIES)
-                    time.sleep(GRDF_API_WAIT_BTW_RETRIES)
-
-                logging.info("Try number %s", str(i))
-                
-                ## Note : no need to relog to Grdf, we reuse the successful token used for daily data ;-)
-                
-                # Get result from GRDF by day
-                try:
-                    logging.info("Trying to get daily values from Grdf...")
-                    resMonth = gazpar.get_data_per_month(token, startDate, endDate)
-                except:
-                    logging.error("Error to get Grdf monthly data")
-                    i = i + 1
-                    continue # next loop
-
-                
-                # Check data quality
-                mCount = len(resMonth)
-                if mCount <= GRDF_API_ERRONEOUS_COUNT:
-                    logging.warning("Monthly values from GRDF seems wrong...")
-                    i = i + 1
-                    continue # next loop
-                else:
-                    isMonthlyDataOk = True
-                    break # exit loop
-
-            # Display results
-            if isMonthlyDataOk:
-                logging.info("Grdf monthly values are ok !")
-                logging.info("Number of monthly values retrieved : %s", mCount)
-                for m in resMonth:
-                    logging.info("%s : Kwh = %s, Mcube = %s",m['date'],m['kwh'], m['mcube'])
-            else:
-                logging.info("Unable to get monthly data from GRDF after %s tries",GRDF_API_MAX_RETRIES)
-                hasGrdfFailed = True
-
-        except:
-            logging.error("Error on Step 3B")
-            hasGrdfFailed = True
+    # Get account informations
+    logging.info("Retrieve account informations")
+    myGrdf.getWhoami()
+    logging.info("GRDF account informations retrieved !")
     
-    # Prepare data
-    if not hasGrdfFailed:
+    # Get list of PCE
+    logging.info("Retrieve list of PCEs..")
+    myGrdf.getPceList()
+    logging.info("%s PCE found !",myGrdf.countPce())
+    
+    # Get measures for each PCE
+    for pce in myGrdf.pceList:
         
-        logging.info("Grdf data are correct")
+        # Set date range
+        startDate = _getDayOfssetDate(datetime.date.today(), 7)
+        endDate = _getDayOfssetDate(datetime.date.today(), 1)
         
-        # Set flag
-        hasGrdfFailed = False
+        # Get measures of the PCE
+        logging.info("Get measures of PCE %s alias %s",pce.pceId,pce.alias)
+        logging.info("Range period : from %s to %s...",startDate,endDate)
+        myGrdf.getPceDailyMeasures(pce,startDate,endDate)
+        logging.info("%s measures retrieved, %s seems ok !",pce.countDailyMeasure(), pce.countDailyMeasureOk() )
         
-        # Get GRDF last values
-        d1 = resDay[dCount-1]
-        m1 = resMonth[mCount-1]
-
+        # Log last valid measure
+        myMeasure = pce.getLastMeasureOk()
+        logging.info("Last valid measure : Date = %s, Volume = %s m3, Energy = %s kWh.",myMeasure.gasDate,myMeasure.volume,myMeasure.energy)
+        
+    
+    
+        
+        
     
 
     # STEP 4A : Standalone mode
@@ -370,47 +260,56 @@ def run(params):
             logging.info("Stand alone publication mode")
             logging.info("-----------------------------------------------------------")
 
-            # Set variables
-            prefixTopic = params['mqtt','topic']
-            retain = params['mqtt','retain']
-            qos = params['mqtt','qos']
+            # Loop on PCEs
+            for myPce in myGrdf.pceList:
+                     
+                logging.info("Publishing values of PCE %s alias %s...",myPce.pceId,myPce.alias)
+                logging.info("---------------------------------")
+                
+                # Set variables
+                prefixTopic = params['mqtt','topic'] + '/' + myPce.pceId
+                retain = params['mqtt','retain']
+                qos = params['mqtt','qos']
 
-            # Set values
-            if hasGrdfFailed: # Values when Grdf failed
+                # Set values
+                if hasGrdfFailed: # Values when Grdf failed
 
-                ## Publish status values
-                logging.info("Publishing to Mqtt status values...")
-                mqtt.publish(client, prefixTopic + TOPIC_STATUS_DATE, dtn, qos, retain)
-                mqtt.publish(client, prefixTopic + TOPIC_STATUS_VALUE, "Failed", qos, retain)
-                logging.info("Status values published !")
-
-
-            else: # Values when Grdf succeeded
+                    ## Publish status values
+                    logging.info("Publishing to Mqtt status values...")
+                    mqtt.publish(client, prefixTopic + TOPIC_STATUS_DATE, dtn, qos, retain)
+                    mqtt.publish(client, prefixTopic + TOPIC_STATUS_VALUE, "Failed", qos, retain)
+                    logging.info("Status values published !")
 
 
-                # Publish daily values
-                logging.info("Publishing to Mqtt the last daily values...")
-                mqtt.publish(client, prefixTopic + TOPIC_DAILY_DATE, d1['date'], qos, retain)
-                mqtt.publish(client, prefixTopic + TOPIC_DAILY_KWH, d1['kwh'], qos, retain)
-                mqtt.publish(client, prefixTopic + TOPIC_DAILY_MCUBE, d1['mcube'], qos, retain)
+                else: # Values when Grdf succeeded
 
-                logging.info("Daily values published !")
 
-                # Publish monthly values
-                logging.info("Publishing to Mqtt the last monthly values...")
-                mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_DATE, m1['date'], qos, retain)
-                mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_KWH, m1['kwh'], qos, retain)
-                mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_KWH_TSH, m1['kwh_seuil'], qos, retain)
-                mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_KWH_PREV, m1['kwh_prec'], qos, retain)
-                mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_MCUBE, m1['mcube'], qos, retain)
-                mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_MCUBE_PREV, m1['mcube_prec'], qos, retain)
-                logging.info("Monthly values published !")
+                    myDailyMeasure = myPce.getLastMeasureOk()
+                     
+                    # Publish daily values
+                    logging.info("Publishing to Mqtt the last daily values...")
+                    logging.debug("Date %s, Energy = %s, Volume %s",myDailyMeasure.gasDate,myDailyMeasure.energy,myDailyMeasure.volume)
+                    mqtt.publish(client, prefixTopic + TOPIC_DAILY_DATE, myDailyMeasure.gasDate, qos, retain)
+                    mqtt.publish(client, prefixTopic + TOPIC_DAILY_KWH, myDailyMeasure.energy, qos, retain)
+                    mqtt.publish(client, prefixTopic + TOPIC_DAILY_MCUBE, myDailyMeasure.volume, qos, retain)
 
-                ## Publish status values
-                logging.info("Publishing to Mqtt status values...")
-                mqtt.publish(client, prefixTopic + TOPIC_STATUS_DATE, dtn, qos, retain)
-                mqtt.publish(client, prefixTopic + TOPIC_STATUS_VALUE, "Success", qos, retain)
-                logging.info("Status values published !")
+                    logging.info("Daily values published !")
+
+                    # Publish monthly values
+                    #logging.info("Publishing to Mqtt the last monthly values...")
+                    #mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_DATE, m1['date'], qos, retain)
+                    #mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_KWH, m1['kwh'], qos, retain)
+                    #mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_KWH_TSH, m1['kwh_seuil'], qos, retain)
+                    #mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_KWH_PREV, m1['kwh_prec'], qos, retain)
+                    #mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_MCUBE, m1['mcube'], qos, retain)
+                    #mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_MCUBE_PREV, m1['mcube_prec'], qos, retain)
+                    #logging.info("Monthly values published !")
+
+                    ## Publish status values
+                    logging.info("Publishing to Mqtt status values...")
+                    mqtt.publish(client, prefixTopic + TOPIC_STATUS_DATE, dtn, qos, retain)
+                    mqtt.publish(client, prefixTopic + TOPIC_STATUS_VALUE, "Success", qos, retain)
+                    logging.info("Status values published !")
 
         except:
             logging.error("Standalone mode : unable to publish value to mqtt broker")
@@ -425,60 +324,70 @@ def run(params):
             logging.info("Home assistant publication mode")
             logging.info("-----------------------------------------------------------")
 
-            # Set variables
-            retain = params['mqtt','retain']
-            qos = params['mqtt','qos']
-            ha_prefix = params['hass','prefix']
-            device_name = params['hass','device_name']
+            # Loop on PCEs
+            for myPce in myGrdf.pceList:
+                     
+                logging.info("Publishing values of PCE %s alias %s...",myPce.pceId,myPce.alias)
+                logging.info("---------------------------------")
+            
+                # Set variables
+                retain = params['mqtt','retain']
+                qos = params['mqtt','qos']
+                ha_prefix = params['hass','prefix']
+                device_name = params['hass','device_name'] + "_" + myPce.pceId
+                
 
-            # Set Hass sensors configuration
-            logging.info("Update of Home Assistant configurations...")
-            mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'daily_gas'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'daily_gas')), qos, retain)
-            mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'monthly_gas'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'monthly_gas')), qos, retain)
-            mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'monthly_gas_prev'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'monthly_gas_prev')), qos, retain)
-            mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'daily_energy'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'daily_energy')), qos, retain)
-            mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'monthly_energy'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'monthly_energy')), qos, retain)
-            mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'monthly_energy_tsh'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'monthly_energy_tsh')), qos, retain)
-            mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'monthly_energy_prev'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'monthly_energy_prev')), qos, retain)
-            mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'consumption_date'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'consumption_date')), qos, retain)
-            mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'consumption_month'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'consumption_month')), qos, retain)
-            mqtt.publish(client, hass.getConfigTopicBinary(ha_prefix,device_name,'connectivity'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'connectivity')), qos, retain)
-            logging.info("Home assistant configurations updated !")
+                # Set Hass sensors configuration
+                logging.info("Update of Home Assistant configurations...")
+                mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'daily_gas'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'daily_gas')), qos, retain)
+                #mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'monthly_gas'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'monthly_gas')), qos, retain)
+                #mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'monthly_gas_prev'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'monthly_gas_prev')), qos, retain)
+                mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'daily_energy'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'daily_energy')), qos, retain)
+                #mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'monthly_energy'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'monthly_energy')), qos, retain)
+                #mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'monthly_energy_tsh'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'monthly_energy_tsh')), qos, retain)
+                #mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'monthly_energy_prev'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'monthly_energy_prev')), qos, retain)
+                mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'consumption_date'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'consumption_date')), qos, retain)
+                #mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'consumption_month'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'consumption_month')), qos, retain)
+                mqtt.publish(client, hass.getConfigTopicBinary(ha_prefix,device_name,'connectivity'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'connectivity')), qos, retain)
+                logging.info("Home assistant configurations updated !")
 
-            if hasGrdfFailed: # Values when Grdf failed
+                if hasGrdfFailed: # Values when Grdf failed
 
-                logging.info("Update of Home Assistant binary sensors values...")
-                statePayload = {
-                    "connectivity": 'OFF'
-                    }
-                mqtt.publish(client, hass.getStateTopicBinary(ha_prefix,device_name), json.dumps(statePayload), qos, retain)
-                logging.info("Home Assistant binary sensors values updated !")
+                    logging.info("Update of Home Assistant binary sensors values...")
+                    statePayload = {
+                        "connectivity": 'OFF'
+                        }
+                    mqtt.publish(client, hass.getStateTopicBinary(ha_prefix,device_name), json.dumps(statePayload), qos, retain)
+                    logging.info("Home Assistant binary sensors values updated !")
 
-            else: # Values when Grdf succeeded                
+                else: # Values when Grdf succeeded   
+                    
+                    # Get last daily measure
+                    myDailyMeasure = myPce.getLastMeasureOk()
 
-                # Publish Hass sensors values
-                logging.info("Update of Home assistant sensors values...")
-                statePayload = {
-                    "daily_gas": d1['mcube'],
-                    "monthly_gas": m1['mcube'],
-                    "monthly_gas_prev": m1['mcube_prec'],
-                    "daily_energy": d1['kwh'],
-                    "monthly_energy": m1['kwh'],
-                    "monthly_energy_tsh": m1['kwh_seuil'],
-                    "monthly_energy_prev": m1['kwh_prec'],
-                    "consumption_date": d1['date'],
-                    "consumption_month": m1['date'],
-                    }
-                mqtt.publish(client, hass.getStateTopicSensor(ha_prefix,device_name), json.dumps(statePayload), qos, retain)
-                logging.info("Home Assistant sensors values updated !")
+                    # Publish Hass sensors values
+                    logging.info("Update of Home assistant sensors values...")
+                    statePayload = {
+                        "daily_gas": myDailyMeasure.volume,
+                        #"monthly_gas": m1['mcube'],
+                        #"monthly_gas_prev": m1['mcube_prec'],
+                        "daily_energy": myDailyMeasure.energy,
+                        #"monthly_energy": m1['kwh'],
+                        #"monthly_energy_tsh": m1['kwh_seuil'],
+                        #"monthly_energy_prev": m1['kwh_prec'],
+                        "consumption_date": str(myDailyMeasure.gasDate),
+                        #"consumption_month": m1['date'],
+                        }
+                    mqtt.publish(client, hass.getStateTopicSensor(ha_prefix,device_name), json.dumps(statePayload), qos, retain)
+                    logging.info("Home Assistant sensors values updated !")
 
-                # Publish Hass binary sensors values
-                logging.info("Update of Home assistant binary sensors values...")
-                statePayload = {
-                    "connectivity": 'ON'
-                    }
-                mqtt.publish(client, hass.getStateTopicBinary(ha_prefix,device_name), json.dumps(statePayload), qos, retain)
-                logging.info("Home Assistant binary sensors values updated !")
+                    # Publish Hass binary sensors values
+                    logging.info("Update of Home assistant binary sensors values...")
+                    statePayload = {
+                        "connectivity": 'ON'
+                        }
+                    mqtt.publish(client, hass.getStateTopicBinary(ha_prefix,device_name), json.dumps(statePayload), qos, retain)
+                    logging.info("Home Assistant binary sensors values updated !")
 
 
         except:
@@ -521,6 +430,8 @@ if __name__ == "__main__":
     
     logging.info("Welcome to gazpar2mqtt")
     logging.info("-----------------------------------------------------------")
+    logging.info("Version 0.5")
+    logging.info("Please note that the the tool is still under development, various functions may disappear or be modified.")
     logging.info("-----------------------------------------------------------")
     
     # STEP 1 : Get params from args
