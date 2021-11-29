@@ -197,6 +197,8 @@ def run(params):
      
     # STEP 3 : Get data from GRDF website
     
+    hasGrdfFailed = False
+    
     # Connexion
     try:
         
@@ -208,6 +210,7 @@ def run(params):
     
     except:
         logging.info("Unable to login to GRDF website")
+        hasGrdfFailed = True
     
     # Get account informations
     myGrdf.getWhoami()
@@ -232,7 +235,7 @@ def run(params):
         logging.info("%s measures retrieved, %s seems ok !",pce.countDailyMeasure(), pce.countDailyMeasureOk() )
         
     
-    hasGrdfFailed = False
+    
     
 
     # STEP 4A : Standalone mode
@@ -302,7 +305,7 @@ def run(params):
     # STEP 4B : Home Assistant discovery mode
     if mqtt.MQTT_IS_CONNECTED and params['hass','discovery'].lower() == 'true':
 
-        try:
+        #try:
 
             logging.info("-----------------------------------------------------------")
             logging.info("Home assistant publication mode")
@@ -374,7 +377,7 @@ def run(params):
                     logging.info("Home Assistant binary sensors values updated !")
 
 
-        except:
+        #except:
             logging.error("Home Assistant discovery mode : unable to publish value to mqtt broker")
             sys.exit(1)
 
