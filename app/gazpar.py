@@ -63,10 +63,10 @@ class Grdf:
         if not 'auth_nonce' in self.session.cookies:
             raise GazparLoginException("Cannot get auth_nonce.")
         else:
-            logging.info("Cookies ok")
+            logging.debug("Cookies ok")
             
         self.auth_nonce = self.session.cookies.get('auth_nonce')
-        logging.info("auth_nonce: " + self.auth_nonce)
+        logging.debug("auth_nonce: " + self.auth_nonce)
 
         payload = {
             'email': username,
