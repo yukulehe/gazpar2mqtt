@@ -56,15 +56,11 @@ HASS_DEVICE_NAME = None
 
 # Sub to get date with day offset
 def _getDayOfssetDate(day, number):
-    return _dayToStr(day - relativedelta(days=number))
+    return day - relativedelta(days=number)
 
 # Sub to get date with month offset
 def _getMonthOfssetDate(day, number):
     return _dayToStr(day - relativedelta(months=number))
-
-# Sub to return format wanted
-def _dayToStr(date):
-    return date.strftime("%d/%m/%Y")
 
 # Sub to return format wanted
 def _dateTimeToStr(datetime):
@@ -216,8 +212,8 @@ def run(params):
     
     # Get measures for each PCE
     for pce in myGrdf.pceList:
-        startDate = datetime.datetime.now().date()
-        endDate = datetime.datetime.now().date() - 7
+        startDate = _getDayOfssetDate(datetime.date.today(), 5)
+        endDate = _getDayOfssetDate(datetime.date.today(), 1)
         myGrdf.getPceDailyMeasures(pce,"2021-11-01","2021-11-29")
         logging.info("Pce %s retrieve %s daily measures between %s and %s",pce.alias,pce.countDailyMeasure(),pce.dailyMeasureStart,pce.dailyMeasureEnd)
         logging.info("%s measures are ok",pce.countDailyMeasureOk())
