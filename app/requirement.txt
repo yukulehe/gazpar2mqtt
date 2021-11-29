@@ -1,5 +1,4 @@
 requests
-lxml
 python-dateutil
 argparse
 envparse
