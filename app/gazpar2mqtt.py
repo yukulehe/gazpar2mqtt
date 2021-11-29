@@ -212,11 +212,18 @@ def run(params):
     
     # Get measures for each PCE
     for pce in myGrdf.pceList:
-        startDate = _getDayOfssetDate(datetime.date.today(), 5)
+        
+        
+        # Set date range
+        startDate = _getDayOfssetDate(datetime.date.today(), 7)
         endDate = _getDayOfssetDate(datetime.date.today(), 1)
+        
+        # Get measures of the PCE
+        logging.info("Retrieving measures between %s and %s",startDate,endDate)
         myGrdf.getPceDailyMeasures(pce,startDate,endDate)
-        logging.info("Pce %s retrieve %s daily measures between %s and %s",pce.alias,pce.countDailyMeasure(),pce.dailyMeasureStart,pce.dailyMeasureEnd)
-        logging.info("%s measures are ok",pce.countDailyMeasureOk())
+        logging.info("%s measures retrieved, %s seems ok",pce.countDailyMeasure(), pce.countDailyMeasureOk() )
+        
+        # Log info
         logging.info("The last valid measure is dated to %s",pce.getLastMeasureOk().gasDate)
         logging.info("Volume diff of period %s -> %s is %s mcube",startDate,endDate,pce.getDailyMeasureVolumeDiff(startDate,endDate))
     
