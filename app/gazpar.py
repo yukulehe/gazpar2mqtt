@@ -74,13 +74,18 @@ class Grdf:
     def getPceList(self):
         
         req = self.session.get('https://monespace.grdf.fr/api/e-conso/pce')
-        logging.info(req.text)
         
         pceList = json.loads(req.text)
         for item in pceList:
+            myPce = Pce(item)
+            addPce(mPce)
             print(item["alias"])
         
         return req
+    
+    def addPce(self, pce):
+        self.pceList.append(pce)
+        print("Pce added in list")
     
     # Get measures of a single PCE for a period range
     def getPceMeasures(self,pce, startDate, endDate):
@@ -98,6 +103,8 @@ class Pce:
         self.pceId = None
         self.activationDate = None
         self.freqenceReleve = None
+        
+    
         
         
 class Measure:
