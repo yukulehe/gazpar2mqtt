@@ -243,7 +243,7 @@ def run(params):
         
         # Log last valid measure
         myMeasure = pce.getLastMeasureOk()
-        logging.info("Last valide measure : Date = %s, Volume = %s m3, Energy = %s kWh.",myMeasure.gasDate,myMeasure.volume,myMeasure.energy)
+        logging.info("Last valid measure : Date = %s, Volume = %s m3, Energy = %s kWh.",myMeasure.gasDate,myMeasure.volume,myMeasure.energy)
         
     
     
