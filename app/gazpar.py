@@ -97,9 +97,14 @@ class Measure:
         
         
     def getVolume():
+        print("energy")
+        
         
     def getEnergy():
+        print("energy")
         
     def getMeasureDate():
+        print("energy")
+        
         
         
