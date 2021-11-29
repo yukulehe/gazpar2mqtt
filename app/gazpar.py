@@ -143,6 +143,13 @@ class Pce:
         
     def countDailyMeasure(self):
         return len(self.dailyMeasureList)
+    
+    def countDailyMeasureOk(self):
+        i = 0
+        for myMeasure in self.dailyMeasureList:
+            if myMeasure.isDailyMeasureOk == True:
+                i += 1
+        return i
         
     
         
