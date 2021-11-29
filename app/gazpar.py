@@ -8,7 +8,7 @@ import json
 global JAVAVXS
 
 
-class myGrdf:
+class Grdf:
     
     def __init__(self):
         
