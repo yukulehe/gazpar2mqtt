@@ -5,19 +5,33 @@ import json
 from importlib import import_module
 
 MANUFACTURER = "GRDF"
+UNIT_BY_CLASS = {
+    "gas": "m3"
+    "energy": "kWh"
+    "connectivity": None
+}
 
+# Return the unit related to the device class
+def _getUnitFromClass(deviceClass):
+    return UNIT_BY_CLASS[deviceClass]
+
+# Class Home assistant
 class hass:
     
+    # Constructor
     def __init__(prefix):
         
         self.prefix = prefix # discovery prefix
               
-
+# Class Home assistant Device
 class device:
     
+    # Constructor
     def __init__(self,hass,pceId,deviceId, deviceName):
         
         self.hass = hass
+        self.id = deviceId
+        self.name = deviceName
         
         self.configPayload = config = {
             "identifiers": [device_id],
@@ -28,27 +42,39 @@ class device:
         self.deviceId = deviceId
         self.deviceName = deviceName
     
-
+# Class Home assistant Entity
 class entity:
     
-    def __init__(self,device,type,id,name):
+    # Constructor
+    def __init__(self,device,type,id,name,deviceClass):
         
         self.device = device
         self.type = type
         self.id = id
         self.name = name
+        self.class = deviceClass
+        self.unit = _getUnitFromClass(self.class)
         
         # Set topics
-        self.configTopic = f"{device.hass.prefix}/{type}/{device_id}/{id}/config"
-        self.stateTopic = f"{device.hass.prefix}/{type}/{device_id}/state"
+        self.configTopic = f"{self.device.hass.prefix}/{type}/{self.device_id}/{id}/config"
+        self.stateTopic = f"{self.device.hass.prefix}/{type}/{self.device_id}/state"
         
-        # Set payload
-        self.configPayload = None
+        # Set config payload
+        self.configPayload = {
+            "device_class": self.class,
+            "name": f"{self.device.name} {self.name}",
+            "unique_id": f"{self.device.id}_{self.id}",
+            "state_topic": self.stateTopic,
+            "unit_of_measurement": self.unit,
+            "value_template": "{{ value_json.daily_gas}}",
+            "device": getDeviceConfig(prefix,device_id,device_name)
+            }
+        
         self.statePayload = None
         
 
 
-# Return a formatted device Id
+# Return a formated device Id
 def getDeviceId(device_name):
     
     device_id = device_name.replace(' ','_')
