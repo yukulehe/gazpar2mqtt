@@ -153,17 +153,17 @@ You can replace the default topic prefix *gazpar* (see mqtt broker requirements 
 
 | Topic | Description |
 | --- | --- |
-| gazpar/_#PCE_ID#_/daily/date | Date of the last daily statement |
-| gazpar/_#PCE_ID#_/daily/kwh | Consumption in kwh of the last daily statement |
-| gazpar/_#PCE_ID#_/daily/mcube | Consumption in cube meter of the last daily statement  |
-| gazpar/_#PCE_ID#_/daily/delta | Variation in percentage between the last and the previous daily statement  |
+| gazpar/PCE/daily/date | Date of the last daily statement |
+| gazpar/PCE/daily/kwh | Consumption in kwh of the last daily statement |
+| gazpar/PCE/daily/mcube | Consumption in cube meter of the last daily statement  |
+| gazpar/PCE/daily/delta | Variation in percentage between the last and the previous daily statement  |
 
 ### Status values :
 
 | Topic | Description |
 | --- | --- |
-| gazpar/_#PCE_ID#_/status/date | Last execution date time of gazpar2mqtt |
-| gazpar/_#PCE_ID#_/status/value | Last execution status of  gazpar2mqtt |
+| gazpar/PCE/status/date | Last execution date time of gazpar2mqtt |
+| gazpar/PCE/status/value | Last execution status of  gazpar2mqtt |
 
 
 ## Home Assistant discovery mode
@@ -184,19 +184,19 @@ Note : you can replace the default device name *gazpar* by editing the related p
 
 | Sensor name | Component | Device class | Description |
 | --- | --- | --- | --- |
-| gazpar_#PCE_ID#_daily_gas | Sensor | Gas | Gas consumption in m3 of the last daily statement |
-| gazpar_#PCE_ID#_daily_energy | Sensor | Energy | Gas consumption in kWh of the last daily statement |
-| gazpar_#PCE_ID#_consumption_date | Sensor | Date | Date of the last daily statement |
-| gazpar_#PCE_ID#_connectivity | Binary sensor | Connectivity | Binary sensor which indicates if the last gazpar statement succeeded (ON) or failed (OFF) |
+| gazpar_PCE_daily_gas | Sensor | Gas | Gas consumption in m3 of the last daily statement |
+| gazpar_PCE_daily_energy | Sensor | Energy | Gas consumption in kWh of the last daily statement |
+| gazpar_PCE_consumption_date | Sensor | Date | Date of the last daily statement |
+| gazpar_PCE_connectivity | Binary sensor | Connectivity | Binary sensor which indicates if the last gazpar statement succeeded (ON) or failed (OFF) |
 
 
 ### List of topics :
 | Topic | Description
 | --- | --- 
-| homeassistant/sensor/gazpar_#PCE_ID#/config | Sensor's configuration topic |
-| homeassistant/sensor/gazpar_#PCE_ID#/state | Sensor's state topic |
-| homeassistant/binary_sensor/gazpar_#PCE_ID#/config | Binary sensor's configuration topic |
-| homeassistant/binary_sensor/gazpar_#PCE_ID#/state | Binary sensor's state topic |
+| homeassistant/sensor/gazpar_PCE/config | Sensor's configuration topic |
+| homeassistant/sensor/gazpar_PCE/state | Sensor's state topic |
+| homeassistant/binary_sensor/gazpar_PCE/config | Binary sensor's configuration topic |
+| homeassistant/binary_sensor/gazpar_PCE/state | Binary sensor's state topic |
 
 Note : you can replace the default topic prefix *homeasssistant* by editing the related parameter.
 
