@@ -176,7 +176,7 @@ Have a look to [Home Assistant Mqtt discovery documentation](https://www.home-as
 ### Device :
 | Device name | Device ID | Model | Manufacturer |
 | --- | --- | --- | --- |
-| gazpar | gazpar | monespace.grdf.fr | GRDF |
+| gazpar | gazpar_PCE | monespace.grdf.fr | GRDF |
 
 Note : you can replace the default device name *gazpar* by editing the related parameter.
 
