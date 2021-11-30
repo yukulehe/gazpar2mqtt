@@ -51,6 +51,7 @@ class Device:
         self.deviceId = deviceId
         self.deviceName = deviceName
         
+        
     # Add entity
     def addEntity(self,entity):
         self.entityList.append(entity)
