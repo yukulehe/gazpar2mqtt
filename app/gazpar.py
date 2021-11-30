@@ -45,12 +45,12 @@ class Grdf:
     # Constructor
     def __init__(self):
         
+        # Initialize instance variables
         self.session = None
         self.auth_nonce = None
         self.pceList = []
         self.whoiam = None
-        
-        
+        self.isConnected = False
         self.session = requests.Session()
         self.session.headers = {
             'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Mobile Safari/537.36',
@@ -86,13 +86,18 @@ class Grdf:
         if not 'XSRF-TOKEN' in self.session.cookies:
             raise GazparLoginException("Login unsuccessful. Check your credentials.")
         else:
-            logging.info("Login sucessfull.")
+            logging.debug("Login sucessfull.")
             
         
         # Login step 2
         req = self.session.get('https://sofa-connexion.grdf.fr:443/openam/oauth2/externeGrdf/authorize?response_type=code&scope=openid%20profile%20email%20infotravaux%20%2Fv1%2Faccreditation%20%2Fv1%2Faccreditations%20%2Fdigiconso%2Fv1%20%2Fdigiconso%2Fv1%2Fconsommations%20new_meg%20%2FDemande.read%20%2FDemande.write&client_id=prod_espaceclient&state=0&redirect_uri=https%3A%2F%2Fmonespace.grdf.fr%2F_codexch&nonce=' + self.auth_nonce + '&by_pass_okta=1&capp=meg')
+        # ! missing a check for step  2!
+        
+        
+        # When everything is ok
+        self.isConnected = True
     
-        return req
+    
     
     # Return GRDF quality status
     def isOk():
