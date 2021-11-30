@@ -266,7 +266,7 @@ def run(params):
                 qos = params['mqtt','qos']
 
                 # Set values
-                if not pce.isOk(): # PCE is not correct
+                if not myPce.isOk(): # PCE is not correct
 
                     ## Publish status values
                     logging.info("Publishing to Mqtt status values...")
@@ -347,7 +347,7 @@ def run(params):
                 mqtt.publish(client, hass.getConfigTopicBinary(ha_prefix,device_name,'connectivity'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'connectivity')), qos, retain)
                 logging.info("Home assistant configurations updated !")
 
-                if not pce.isOk(): # PCE is not correct
+                if not myPce.isOk(): # PCE is not correct
 
                     logging.info("Update of Home Assistant binary sensors values...")
                     statePayload = {
