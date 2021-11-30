@@ -38,9 +38,7 @@ Important : the tool is still under development, various functions may disappear
 
 ## Roadmap :
 
-- Get weekly consumptions
-- Set alerts when threshold reached
-- Get most economic and most energivor consumption in local environment
+- Calculation of monthly/weekly consumptions
 - Provide an exemple of Home assistant card
 
 
