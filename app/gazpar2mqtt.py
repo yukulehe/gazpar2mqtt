@@ -213,7 +213,7 @@ def run(params):
         logging.info("Unable to login to GRDF website")
     
     # When GRDF is connected
-    if myGrdf.im_self is not None and myGrdf.isConnected:
+    if myGrdf.__self__ is not None and myGrdf.isConnected:
     
         # Get account informations
         logging.info("Retrieve account informations")
@@ -246,7 +246,7 @@ def run(params):
     # STEP 4A : Standalone mode
     if mqtt.MQTT_IS_CONNECTED \
         and params['standalone','mode'].lower()=="true" \
-        and myGrdf.im_self is not None \
+        and myGrdf.__self__ is not None \
         and myGrdf.isConnected:   
 
         try:
@@ -313,7 +313,7 @@ def run(params):
     # STEP 4B : Home Assistant discovery mode
     if mqtt.MQTT_IS_CONNECTED \
         and params['hass','discovery'].lower() == 'true' \
-        and myGrdf.im_self is not None \
+        and myGrdf.__self__ is not None \
         and myGrdf.isConnected:
 
         try:
