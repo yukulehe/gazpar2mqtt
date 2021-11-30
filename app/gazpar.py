@@ -100,7 +100,7 @@ class Grdf:
         # GRDF is ok when contains at least one valid PCE
         if self.countPce() == 0 or self.countPce() is None:
             return False
-        elif self.countPceOk() == 0 or self.countPceOk() Is None:
+        elif self.countPceOk() == 0 or self.countPceOk() is None:
             return False
         else:
             return True
