@@ -42,6 +42,7 @@ def _convertGrdfDate(date):
 #######################################################################
 class Grdf:
     
+    # Constructor
     def __init__(self):
         
         self.session = None
@@ -148,6 +149,7 @@ class Grdf:
 #######################################################################
 class Account:
     
+    # Constructor
     def __init__(self, account):
         
         self.type = account["type"]
@@ -161,6 +163,7 @@ class Account:
 #######################################################################    
 class Pce:
     
+    # Constructor
     def __init__(self, pce):
         
         self.alias = pce["alias"]
@@ -176,13 +179,15 @@ class Pce:
         self.dailyMeasureEnd = None
         
         
-        
+    # Add a measure to the PCE    
     def addDailyMeasure(self, measure):
         self.dailyMeasureList.append(measure)
         
+    # Return the number of measure for the PCE
     def countDailyMeasure(self):
         return len(self.dailyMeasureList)
     
+    # Return the number of valid measure for the PCE
     def countDailyMeasureOk(self):
         i = 0
         for myMeasure in self.dailyMeasureList:
@@ -190,7 +195,17 @@ class Pce:
                 i += 1
         return i
     
-    # Return the last valid measure
+    # Return PCE quality status
+    def isOk():
+         # To be ok, the PCE must contains at least one valid measure
+         if self.countDailyMeasure = 0 or self.countDailyMeasure is None:
+            return False
+         elif self.countDailyMeasureOk = 0 or self.countDailyMeasureOk is None:
+            return False
+         else:
+            return True 
+    
+    # Return the last valid measure for the PCE
     def getLastMeasureOk(self):
         
         i = self.countDailyMeasure() - 1
@@ -241,6 +256,7 @@ class Pce:
 #######################################################################                
 class DailyMeasure:
     
+    # Constructor
     def __init__(self, measure):
         
         self.startDateTime = _convertDateTime(measure["dateDebutReleve"])
@@ -253,7 +269,7 @@ class DailyMeasure:
         self.temperature = measure["temperature"]
         
         
-    # Check measure quality
+    # Return measure measure quality status
     def isOk(self):
         
         if self.volume == None: return False
