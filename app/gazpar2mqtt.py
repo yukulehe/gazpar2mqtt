@@ -336,21 +336,21 @@ def run(params):
                 # Create the device corresponding to the PCE
                 deviceId = params['hass','device_name'].replace(" ","_") + "_" +  myPce.pceId
                 deviceName = params['hass','device_name'] + " " +  myPce.alias
-                myDevice = myHass.addDevice(hass.Device(myPce.pceId,deviceId,deviceName))
+                myDevice =hass.Device(myHass,myPce.pceId,deviceId,deviceName)
                 
                 # Create entities
-                myDevice.addEntity(hass.Entity(SENSOR,'daily_gas','Daily gas',GAS_TYPE))
-                myDevice.addEntity(hass.Entity(SENSOR,'daily_energy','Daily energy',ENERGY_TYPE))
-                myDevice.addEntity(hass.Entity(SENSOR,'consumption_date','Consumption date',None))
-                myDevice.addEntity(hass.Entity(SENSOR,'connectivity','Connectivity',CONNECTIVITY_TYPE))
+                myDevice.addEntity(hass.Entity(SENSOR,'daily_gas','Daily gas',hass.GAS_TYPE))
+                myDevice.addEntity(hass.Entity(SENSOR,'daily_energy','Daily energy',hass.ENERGY_TYPE))
+                myDevice.addEntity(hass.Entity(SENSOR,'consumption_date','Consumption date',hass.NONE_TYPE))
+                myDevice.addEntity(hass.Entity(SENSOR,'connectivity','Connectivity',hass.CONNECTIVITY_TYPE))
 
-                # Pubish config
+                # Pubish config of each entities to mqtt
                 logging.info("Update of Home Assistant configurations...")
                 for myEntity in myDevice.deviceList:
                     mqtt.publish(client, myEntity.configTopic, myEntity.getConfigPayloadJson, qos, retain)
-                
                 logging.info("Home assistant configurations updated !")
 
+                # Process values
                 if not myPce.isOk(): # PCE is not correct
 
                     logging.info("Update of Home Assistant binary sensors values...")
