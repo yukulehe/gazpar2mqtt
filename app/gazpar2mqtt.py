@@ -248,7 +248,7 @@ def run(params):
         and params['standalone','mode'].lower()=="true" \
         and myGrdf.isConnected:   
 
-        try:
+        #try:
 
             logging.info("-----------------------------------------------------------")
             logging.info("Stand alone publication mode")
@@ -305,7 +305,7 @@ def run(params):
                     mqtt.publish(client, prefixTopic + TOPIC_STATUS_VALUE, "Success", qos, retain)
                     logging.info("Status values published !")
 
-        except:
+        #except:
             logging.error("Standalone mode : unable to publish value to mqtt broker")
             sys.exit(1)
 
