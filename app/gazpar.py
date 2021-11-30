@@ -13,7 +13,7 @@ GRDF_DATE_FORMAT = "%Y-%m-%d"
 GRDF_DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 #######################################################################
-#### Functions
+#### Usefull functions
 #######################################################################
 
 # Convert GRDF datetime string to date
