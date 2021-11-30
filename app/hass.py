@@ -93,3 +93,7 @@ class Entity:
     # Return config payload in Json format
     def getConfigPayloadJson(self):
         return json.dumps(self.configPayload)
+    
+    # Set state payload
+    def setValue(self,value):
+        self.value = value
