@@ -216,7 +216,6 @@ def run(params):
     
     except:
         logging.info("Unable to login to GRDF website")
-        hasGrdfFailed = True
     
     # Get account informations
     logging.info("Retrieve account informations")
