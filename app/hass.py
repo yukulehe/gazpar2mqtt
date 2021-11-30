@@ -6,25 +6,35 @@ from importlib import import_module
 
 class hass:
     
-    def __init__(prefix):
+    def __init__(prefix,deviceName):
         
         self.prefix = prefix # discovery prefix
+        self.deviceName = deviceName
+        self.deviceId = deviceName.replace(' ','_')
+        
         
 
 class device:
     
-    def __init__(deviceId, deviceName):
+    def __init__(self,pceId,deviceId, deviceName):
         
-        self.config = None
+        self.configPayload = config = {
+            "identifiers": [device_id],
+            "name": device_name,
+            "model": pceId,
+            "manufacturer": "GRDF"
+            }
         self.deviceId = deviceId
         self.deviceName = deviceName
     
 
 class entity:
     
-    def __init__(type):
+    def __init__(self,device,type):
         
+        self.device = device
         self.type = type
+        
         self.configPayload = None
         self.configTopic = None
         self.statePayload = None
