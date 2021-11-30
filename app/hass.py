@@ -17,7 +17,7 @@ def _getUnitFromClass(deviceClass):
 
 
 # Class Home assistant
-class hass:
+class Hass:
     
     # Constructor
     def __init__(prefix):
@@ -26,7 +26,7 @@ class hass:
         
               
 # Class Home assistant Device
-class device:
+class Device:
     
     # Constructor
     def __init__(self,hass,pceId,deviceId, deviceName):
@@ -46,7 +46,7 @@ class device:
     
     
 # Class Home assistant Entity
-class entity:
+class Entity:
     
     # Constructor
     def __init__(self,device,type,id,name,deviceClass):
