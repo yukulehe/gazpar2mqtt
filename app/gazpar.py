@@ -100,7 +100,7 @@ class Grdf:
     
     
     # Return GRDF quality status
-    def isOk():
+    def isOk(self):
         
         # GRDF is ok when contains at least one valid PCE
         if self.countPce() == 0 or self.countPce() is None:
@@ -223,7 +223,7 @@ class Pce:
         return i
     
     # Return PCE quality status
-    def isOk():
+    def isOk(self):
          # To be ok, the PCE must contains at least one valid measure
          if self.countDailyMeasure() == 0 or self.countDailyMeasure() is None:
             return False
