@@ -29,21 +29,16 @@ class Hass:
     def __init__(self,prefix):
         
         self.prefix = prefix # discovery prefix
-        self.deviceList = []
         
-    # Add device
-    def addDevice(self,device):
-        self.deviceList.append(device)
-        return device
-        
-        
+           
               
 # Class Home assistant Device
 class Device:
     
     # Constructor
-    def __init__(self,pceId,deviceId, deviceName):
+    def __init__(self,hass,pceId,deviceId, deviceName):
         
+        self.hass = hass
         self.id = deviceId
         self.name = deviceName
         
