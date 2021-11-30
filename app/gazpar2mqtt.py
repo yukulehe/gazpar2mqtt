@@ -319,6 +319,9 @@ def run(params):
             logging.info("-----------------------------------------------------------")
             logging.info("Home assistant publication mode")
             logging.info("-----------------------------------------------------------")
+            
+            # Create hass instance
+            myHass = hass.Hass(params['hass','prefix'])
 
             # Loop on PCEs
             for myPce in myGrdf.pceList:
@@ -329,22 +332,23 @@ def run(params):
                 # Set variables
                 retain = params['mqtt','retain']
                 qos = params['mqtt','qos']
-                ha_prefix = params['hass','prefix']
-                device_name = params['hass','device_name'] + "_" + myPce.pceId
                 
+                # Create the device corresponding to the PCE
+                deviceId = params['hass','device_name'].replace(" ","_") + "_" +  myPce.pceId
+                deviceName = params['hass','device_name'] + " " +  myPce.alias
+                myDevice = myHass.addDevice(hass.Device(myPce.pceId,deviceId,deviceName))
+                
+                # Create entities
+                myDevice.addEntity(hass.Entity(SENSOR,'daily_gas','Daily gas',GAS_TYPE))
+                myDevice.addEntity(hass.Entity(SENSOR,'daily_energy','Daily energy',ENERGY_TYPE))
+                myDevice.addEntity(hass.Entity(SENSOR,'consumption_date','Consumption date',None))
+                myDevice.addEntity(hass.Entity(SENSOR,'connectivity','Connectivity',CONNECTIVITY_TYPE))
 
-                # Set Hass sensors configuration
+                # Pubish config
                 logging.info("Update of Home Assistant configurations...")
-                mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'daily_gas'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'daily_gas')), qos, retain)
-                #mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'monthly_gas'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'monthly_gas')), qos, retain)
-                #mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'monthly_gas_prev'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'monthly_gas_prev')), qos, retain)
-                mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'daily_energy'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'daily_energy')), qos, retain)
-                #mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'monthly_energy'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'monthly_energy')), qos, retain)
-                #mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'monthly_energy_tsh'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'monthly_energy_tsh')), qos, retain)
-                #mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'monthly_energy_prev'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'monthly_energy_prev')), qos, retain)
-                mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'consumption_date'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'consumption_date')), qos, retain)
-                #mqtt.publish(client, hass.getConfigTopicSensor(ha_prefix,device_name,'consumption_month'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'consumption_month')), qos, retain)
-                mqtt.publish(client, hass.getConfigTopicBinary(ha_prefix,device_name,'connectivity'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'connectivity')), qos, retain)
+                for myEntity in myDevice.deviceList:
+                    mqtt.publish(client, myEntity.configTopic, myEntity.getConfigPayloadJson, qos, retain)
+                
                 logging.info("Home assistant configurations updated !")
 
                 if not myPce.isOk(): # PCE is not correct
