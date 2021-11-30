@@ -4,12 +4,18 @@
 import json
 from importlib import import_module
 
+# Constants
+GAS_TYPE = "gas"
+ENERGY_TYPE = "energy"
+CONNECTIVITY_TYPE = "connectivity"
+NONE_TYPE = ""
 MANUFACTURER = "GRDF"
 UNIT_BY_CLASS = {
     "gas": "m3"
     "energy": "kWh"
     "connectivity": None
 }
+
 
 # Return the unit related to the device class
 def _getUnitFromClass(deviceClass):
@@ -88,5 +94,7 @@ class Entity:
             }
         
         self.statePayload = None
-        
-        
+    
+    # Return config payload in Json format
+    def getConfigPayloadJson(self):
+        return json.dumps(self.configPayload)
