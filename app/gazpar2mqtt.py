@@ -166,9 +166,6 @@ def run(params):
     # Store time now
     dtn = _dateTimeToStr(datetime.datetime.now())
     
-    # Prepare flag
-    hasGrdfFailed = False
-    
     # STEP 2 : Log to MQTT broker
     logging.info("-----------------------------------------------------------")
     logging.info("Connexion to Mqtt broker")
@@ -201,8 +198,6 @@ def run(params):
     logging.info("Get data from GRDF website")
     logging.info("-----------------------------------------------------------")
     
-    hasGrdfFailed = False
-    
     # Connexion
     try:
         
@@ -217,41 +212,42 @@ def run(params):
     except:
         logging.info("Unable to login to GRDF website")
     
-    # Get account informations
-    logging.info("Retrieve account informations")
-    myGrdf.getWhoami()
-    logging.info("GRDF account informations retrieved !")
+    # When GRDF is connected
+    if myGrdf.im_self is not None and myGrdf.isConnected:
     
-    # Get list of PCE
-    logging.info("Retrieve list of PCEs..")
-    myGrdf.getPceList()
-    logging.info("%s PCE found !",myGrdf.countPce())
-    
-    # Get measures for each PCE
-    for pce in myGrdf.pceList:
-        
-        # Set date range
-        startDate = _getDayOfssetDate(datetime.date.today(), 7)
-        endDate = _getDayOfssetDate(datetime.date.today(), 1)
-        
-        # Get measures of the PCE
-        logging.info("Get measures of PCE %s alias %s",pce.pceId,pce.alias)
-        logging.info("Range period : from %s to %s...",startDate,endDate)
-        myGrdf.getPceDailyMeasures(pce,startDate,endDate)
-        logging.info("%s measures retrieved, %s seems ok !",pce.countDailyMeasure(), pce.countDailyMeasureOk() )
-        
-        # Log last valid measure
-        myMeasure = pce.getLastMeasureOk()
-        logging.info("Last valid measure : Date = %s, Volume = %s m3, Energy = %s kWh.",myMeasure.gasDate,myMeasure.volume,myMeasure.energy)
-        
-    
-    
-        
-        
-    
+        # Get account informations
+        logging.info("Retrieve account informations")
+        myGrdf.getWhoami()
+        logging.info("GRDF account informations retrieved !")
 
+        # Get list of PCE
+        logging.info("Retrieve list of PCEs..")
+        myGrdf.getPceList()
+        logging.info("%s PCE found !",myGrdf.countPce())
+
+        # Get measures for each PCE
+        for pce in myGrdf.pceList:
+            
+            # Set date range
+            startDate = _getDayOfssetDate(datetime.date.today(), 7)
+            endDate = _getDayOfssetDate(datetime.date.today(), 1)
+
+            # Get measures of the PCE
+            logging.info("Get measures of PCE %s alias %s",pce.pceId,pce.alias)
+            logging.info("Range period : from %s to %s...",startDate,endDate)
+            myGrdf.getPceDailyMeasures(pce,startDate,endDate)
+            logging.info("%s measures retrieved, %s seems ok !",pce.countDailyMeasure(), pce.countDailyMeasureOk() )
+
+            # Log last valid measure
+            myMeasure = pce.getLastMeasureOk()
+            logging.info("Last valid measure : Date = %s, Volume = %s m3, Energy = %s kWh.",myMeasure.gasDate,myMeasure.volume,myMeasure.energy)
+        
+    
     # STEP 4A : Standalone mode
-    if mqtt.MQTT_IS_CONNECTED and params['standalone','mode'].lower()=="true":   
+    if mqtt.MQTT_IS_CONNECTED \
+        and params['standalone','mode'].lower()=="true" \
+        and myGrdf.im_self is not None \
+        and myGrdf.isConnected:   
 
         try:
 
@@ -261,7 +257,7 @@ def run(params):
 
             # Loop on PCEs
             for myPce in myGrdf.pceList:
-                     
+                
                 logging.info("Publishing values of PCE %s alias %s...",myPce.pceId,myPce.alias)
                 logging.info("---------------------------------")
                 
@@ -271,7 +267,7 @@ def run(params):
                 qos = params['mqtt','qos']
 
                 # Set values
-                if hasGrdfFailed: # Values when Grdf failed
+                if not pce.isOk(): # PCE is not correct
 
                     ## Publish status values
                     logging.info("Publishing to Mqtt status values...")
@@ -315,7 +311,10 @@ def run(params):
             sys.exit(1)
 
     # STEP 4B : Home Assistant discovery mode
-    if mqtt.MQTT_IS_CONNECTED and params['hass','discovery'].lower() == 'true':
+    if mqtt.MQTT_IS_CONNECTED \
+        and params['hass','discovery'].lower() == 'true' \
+        and myGrdf.im_self is not None \
+        and myGrdf.isConnected:
 
         try:
 
@@ -350,7 +349,7 @@ def run(params):
                 mqtt.publish(client, hass.getConfigTopicBinary(ha_prefix,device_name,'connectivity'), json.dumps(hass.getConfigPayload(ha_prefix,device_name,'connectivity')), qos, retain)
                 logging.info("Home assistant configurations updated !")
 
-                if hasGrdfFailed: # Values when Grdf failed
+                if not pce.isOk(): # PCE is not correct
 
                     logging.info("Update of Home Assistant binary sensors values...")
                     statePayload = {
