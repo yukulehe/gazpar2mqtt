@@ -20,20 +20,27 @@ def _getUnitFromClass(deviceClass):
 class Hass:
     
     # Constructor
-    def __init__(prefix):
+    def __init__(self,prefix):
         
         self.prefix = prefix # discovery prefix
+        self.deviceList = []
+        
+    # Add device
+    def addDevice(self,device):
+        self.deviceList.append(device)
+        
         
               
 # Class Home assistant Device
 class Device:
     
     # Constructor
-    def __init__(self,hass,pceId,deviceId, deviceName):
+    def __init__(self,pceId,deviceId, deviceName):
         
-        self.hass = hass
         self.id = deviceId
         self.name = deviceName
+        
+        self.entityList = []
         
         self.configPayload = config = {
             "identifiers": [device_id],
@@ -43,15 +50,18 @@ class Device:
             }
         self.deviceId = deviceId
         self.deviceName = deviceName
+        
+    # Add entity
+    def addEntity(self,entity):
+        self.entityList.append(entity)
     
     
 # Class Home assistant Entity
 class Entity:
     
     # Constructor
-    def __init__(self,device,type,id,name,deviceClass):
+    def __init__(self,type,id,name,deviceClass):
         
-        self.device = device
         self.type = type
         self.id = id
         self.name = name
