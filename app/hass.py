@@ -4,25 +4,26 @@
 import json
 from importlib import import_module
 
+MANUFACTURER = "GRDF"
+
 class hass:
     
-    def __init__(prefix,deviceName):
+    def __init__(prefix):
         
         self.prefix = prefix # discovery prefix
-        self.deviceName = deviceName
-        self.deviceId = deviceName.replace(' ','_')
-        
-        
+              
 
 class device:
     
-    def __init__(self,pceId,deviceId, deviceName):
+    def __init__(self,hass,pceId,deviceId, deviceName):
+        
+        self.hass = hass
         
         self.configPayload = config = {
             "identifiers": [device_id],
             "name": device_name,
             "model": pceId,
-            "manufacturer": "GRDF"
+            "manufacturer": MANUFACTURER
             }
         self.deviceId = deviceId
         self.deviceName = deviceName
@@ -30,15 +31,21 @@ class device:
 
 class entity:
     
-    def __init__(self,device,type):
+    def __init__(self,device,type,id,name):
         
         self.device = device
         self.type = type
+        self.id = id
+        self.name = name
         
+        # Set topics
+        self.configTopic = f"{device.hass.prefix}/{type}/{device_id}/{id}/config"
+        self.stateTopic = f"{device.hass.prefix}/{type}/{device_id}/state"
+        
+        # Set payload
         self.configPayload = None
-        self.configTopic = None
         self.statePayload = None
-        self.stateTopic = None
+        
 
 
 # Return a formatted device Id
