@@ -153,17 +153,17 @@ You can replace the default topic prefix *gazpar* (see mqtt broker requirements 
 
 | Topic | Description |
 | --- | --- |
-| gazpar/daily/date | Date of the last daily statement |
-| gazpar/daily/kwh | Consumption in kwh of the last daily statement |
-| gazpar/daily/mcube | Consumption in cube meter of the last daily statement  |
-| gazpar/daily/delta | Variation in percentage between the last and the previous daily statement  |
+| gazpar/_#PCE_ID#_/daily/date | Date of the last daily statement |
+| gazpar/_#PCE_ID#_/daily/kwh | Consumption in kwh of the last daily statement |
+| gazpar/_#PCE_ID#_/daily/mcube | Consumption in cube meter of the last daily statement  |
+| gazpar/_#PCE_ID#_/daily/delta | Variation in percentage between the last and the previous daily statement  |
 
 ### Status values :
 
 | Topic | Description |
 | --- | --- |
-| gazpar/status/date | Last execution date time of gazpar2mqtt |
-| gazpar/status/value | Last execution status of  gazpar2mqtt |
+| gazpar/_#PCE_ID#_/status/date | Last execution date time of gazpar2mqtt |
+| gazpar/_#PCE_ID#_/status/value | Last execution status of  gazpar2mqtt |
 
 
 ## Home Assistant discovery mode
@@ -184,9 +184,9 @@ Note : you can replace the default device name *gazpar* by editing the related p
 
 | Sensor name | Component | Device class | Description |
 | --- | --- | --- | --- |
-| gazpar_daily_gas | Sensor | Gas | Gas consumption in m3 of the last daily statement |
-| gazpar_daily_energy | Sensor | Energy | Gas consumption in kWh of the last daily statement |
-| gazpar_consumption_date | Sensor | Date | Date of the last daily statement |
+| gazpar__#PCE_ID#__daily_gas | Sensor | Gas | Gas consumption in m3 of the last daily statement |
+| gazpar__#PCE_ID#__daily_energy | Sensor | Energy | Gas consumption in kWh of the last daily statement |
+| gazpar__#PCE_ID#__consumption_date | Sensor | Date | Date of the last daily statement |
 | gazpar_connectivity | Binary sensor | Connectivity | Binary sensor which indicates if the last gazpar statement succeeded (ON) or failed (OFF) |
 
 
