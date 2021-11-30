@@ -15,6 +15,7 @@ UNIT_BY_CLASS = {
 def _getUnitFromClass(deviceClass):
     return UNIT_BY_CLASS[deviceClass]
 
+
 # Class Home assistant
 class hass:
     
@@ -54,6 +55,7 @@ class entity:
         self.name = name
         self.class = deviceClass
         self.unit = _getUnitFromClass(self.class)
+        self.valueTemplate = "{{ value_json. " + self.id + " }}"
         
         # Set topics
         self.configTopic = f"{self.device.hass.prefix}/{type}/{self.device_id}/{id}/config"
@@ -66,11 +68,13 @@ class entity:
             "unique_id": f"{self.device.id}_{self.id}",
             "state_topic": self.stateTopic,
             "unit_of_measurement": self.unit,
-            "value_template": "{{ value_json.daily_gas}}",
-            "device": getDeviceConfig(prefix,device_id,device_name)
+            "value_template": self.valueTemplate,
+            "device": self.device.configPayload
             }
         
         self.statePayload = None
+        
+    def _getValueTemplate()
         
 
 
