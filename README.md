@@ -187,16 +187,16 @@ Note : you can replace the default device name *gazpar* by editing the related p
 | gazpar__#PCE_ID#__daily_gas | Sensor | Gas | Gas consumption in m3 of the last daily statement |
 | gazpar__#PCE_ID#__daily_energy | Sensor | Energy | Gas consumption in kWh of the last daily statement |
 | gazpar__#PCE_ID#__consumption_date | Sensor | Date | Date of the last daily statement |
-| gazpar_connectivity | Binary sensor | Connectivity | Binary sensor which indicates if the last gazpar statement succeeded (ON) or failed (OFF) |
+| gazpar__#PCE_ID#__connectivity | Binary sensor | Connectivity | Binary sensor which indicates if the last gazpar statement succeeded (ON) or failed (OFF) |
 
 
 ### List of topics :
 | Topic | Description
 | --- | --- 
-| homeassistant/sensor/gazpar/config | Sensor's configuration topic |
-| homeassistant/sensor/gazpar/state | Sensor's state topic |
-| homeassistant/binary_sensor/gazpar/config | Binary sensor's configuration topic |
-| homeassistant/binary_sensor/gazpar/state | Binary sensor's state topic |
+| homeassistant/sensor/gazpar__#PCE_ID#_/config | Sensor's configuration topic |
+| homeassistant/sensor/gazpar__#PCE_ID#_/state | Sensor's state topic |
+| homeassistant/binary_sensor/gazpar__#PCE_ID#_/config | Binary sensor's configuration topic |
+| homeassistant/binary_sensor/gazpar__#PCE_ID#_/state | Binary sensor's state topic |
 
 Note : you can replace the default topic prefix *homeasssistant* by editing the related parameter.
 
