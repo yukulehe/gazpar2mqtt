@@ -12,7 +12,9 @@ global JAVAVXS
 GRDF_DATE_FORMAT = "%Y-%m-%d"
 GRDF_DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
-# Tools
+#######################################################################
+#### Functions
+#######################################################################
 
 # Convert GRDF datetime string to date
 def _convertDate(dateString):
@@ -35,7 +37,9 @@ def _convertGrdfDate(date):
     return date.strftime(GRDF_DATE_FORMAT)
 
 
-# Class GRDF
+#######################################################################
+#### Class GRDF
+#######################################################################
 class Grdf:
     
     def __init__(self):
@@ -139,7 +143,9 @@ class Grdf:
             
             
 
-# Account class
+#######################################################################
+#### Class Account
+#######################################################################
 class Account:
     
     def __init__(self, account):
@@ -149,8 +155,10 @@ class Account:
         self.lastName = account["last_name"]
         self.lastName = account["email"]
 
-        
-# PCE class      
+
+#######################################################################
+#### Class PCE
+#######################################################################    
 class Pce:
     
     def __init__(self, pce):
@@ -228,8 +236,9 @@ class Pce:
         
         
         
-        
-# Daily Measure class          
+#######################################################################
+#### Class Daily Measure
+#######################################################################                
 class DailyMeasure:
     
     def __init__(self, measure):
