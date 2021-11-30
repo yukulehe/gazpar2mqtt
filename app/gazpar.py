@@ -152,14 +152,16 @@ class Grdf:
         req = self.session.get('https://monespace.grdf.fr/api/e-conso/pce/consommation/informatives?dateDebut=' + myStartDate + '&dateFin=' + myEndDate + '&pceList%5B%5D=' + pce.pceId)
         measureList = json.loads(req.text)
         
+        # Update PCE range of date
+        pce.dailyMeasureStart = startDate
+        pce.dailyMeasureEnd = endDate
+        
         for measure in measureList[pce.pceId]["releves"]:
             
             # Create the measure
             myDailyMeasure = DailyMeasure(measure)
             
             # Append measure to the PCE's measure list
-            pce.dailyMeasureStart = startDate
-            pce.dailyMeasureEnd = endDate
             pce.addDailyMeasure(myDailyMeasure)
             
             
