@@ -59,6 +59,7 @@ class Grdf:
             'Connection': 'keep-alive'
         }
     
+    
     # Login
     def login(self,username,password):
         
@@ -92,6 +93,17 @@ class Grdf:
         req = self.session.get('https://sofa-connexion.grdf.fr:443/openam/oauth2/externeGrdf/authorize?response_type=code&scope=openid%20profile%20email%20infotravaux%20%2Fv1%2Faccreditation%20%2Fv1%2Faccreditations%20%2Fdigiconso%2Fv1%20%2Fdigiconso%2Fv1%2Fconsommations%20new_meg%20%2FDemande.read%20%2FDemande.write&client_id=prod_espaceclient&state=0&redirect_uri=https%3A%2F%2Fmonespace.grdf.fr%2F_codexch&nonce=' + self.auth_nonce + '&by_pass_okta=1&capp=meg')
     
         return req
+    
+    # Return GRDF quality status
+    def isOk():
+        
+        # GRDF is ok when contains at least one valid PCE
+        if self.countPce() == 0 or self.countPce() is None:
+            return False
+        elif self.countPceOk() == 0 or self.countPceOk() Is None:
+            return False
+        else:
+            return True
         
     
     # Get account info
@@ -118,9 +130,17 @@ class Grdf:
     def addPce(self, pce):
         self.pceList.append(pce)
         
-    # Count PCEs in list
+    # Return the number of PCE
     def countPce(self):
         return len(self.pceList)
+    
+    # Return the number of valid PCE
+    def countPceOk(self):
+        i = 0
+        for myPce in self.pceList:
+            if myPce.isOk() == True:
+                i += 1
+        return i
     
     # Get measures of a single PCE for a period range
     def getPceDailyMeasures(self,pce, startDate, endDate):
@@ -198,9 +218,9 @@ class Pce:
     # Return PCE quality status
     def isOk():
          # To be ok, the PCE must contains at least one valid measure
-         if self.countDailyMeasure = 0 or self.countDailyMeasure is None:
+         if self.countDailyMeasure() == 0 or self.countDailyMeasure() is None:
             return False
-         elif self.countDailyMeasureOk = 0 or self.countDailyMeasureOk is None:
+         elif self.countDailyMeasureOk() == 0 or self.countDailyMeasureOk() is None:
             return False
          else:
             return True 
