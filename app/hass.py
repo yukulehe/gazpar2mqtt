@@ -28,6 +28,7 @@ class Hass:
     # Add device
     def addDevice(self,device):
         self.deviceList.append(device)
+        return device
         
         
               
@@ -55,6 +56,7 @@ class Device:
     # Add entity
     def addEntity(self,entity):
         self.entityList.append(entity)
+        return entity
     
     
 # Class Home assistant Entity
