@@ -4,6 +4,33 @@
 import json
 from importlib import import_module
 
+class hass:
+    
+    def __init__(prefix):
+        
+        self.prefix = prefix # discovery prefix
+        
+
+class device:
+    
+    def __init__(deviceId, deviceName):
+        
+        self.config = None
+        self.deviceId = deviceId
+        self.deviceName = deviceName
+    
+
+class entity:
+    
+    def __init__(type):
+        
+        self.type = type
+        self.configPayload = None
+        self.configTopic = None
+        self.statePayload = None
+        self.stateTopic = None
+
+
 # Return a formatted device Id
 def getDeviceId(device_name):
     
