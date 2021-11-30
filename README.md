@@ -24,6 +24,8 @@ Important : the tool is still under development, various functions may disappear
 
 ## Changelogs :
 
+- v0.5.x :
+  - Hard redesign of the application after new GRDF website released on 23/11/2021 . Thanks to **echauvet** for his contribution.
 - v0.4.x : 
   - Home assistant mqtt discovery available
   - Home assistant add-on available : https://github.com/alexbelgium/hassio-addons/tree/master/gazpar2mqtt (special thx to [alexbelgium](https://github.com/alexbelgium))
@@ -56,10 +58,10 @@ pip3 install -r app/requirement.txt
 
 Verify you have gazpar data available on [GRDF Portal](https://monespace.grdf.fr/monespace/connexion)
 
-Data provided are :
-- the previous day and the current month consumptions of gas (in m3) and energy (kwh)
-- the consumptions of the previous year for the current month
-- the threshold (seuil) of the current month defined in Grdf portal
+For each PCE (Point de Comptage et d'Estimation) linked to GRDF account, data provided are :
+- the previous day ~~and the current month consumptions~~ of gas (in m3) and energy (kwh)
+- ~~the consumptions of the previous year for the current month
+- ~~the threshold (seuil) of the current month defined in Grdf portal
 
 Remember, kWh provided is conversion factor dependant. Please verify it's coherent with your provider bills.
 
