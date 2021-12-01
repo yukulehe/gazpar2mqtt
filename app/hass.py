@@ -69,10 +69,10 @@ class Device:
         self.entityList.append(entity)
     
     # Return the state payload of all entities of the device
-    def getStatePayload(self,entityType):
+    def getStatePayload(self):
         payload = {}
         for myEntity in self.entityList:
-            payload[myEntity.id]=myEntity.value
+            payload[myEntity.stateTopic][myEntity.id]=myEntity.value
         return payload
     
     
