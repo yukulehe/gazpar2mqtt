@@ -171,7 +171,7 @@ def run(params):
     logging.info("Connexion to Mqtt broker")
     logging.info("-----------------------------------------------------------")
     
-    try:
+    #try:
         
         logging.info("Connect to Mqtt broker...")
         
@@ -187,8 +187,8 @@ def run(params):
         if myMqtt.isConnected:
             logging.info("Mqtt broker connected !")
         
-    except:
-        logging.error("Unable to connect to Mqtt broker. Please check that broker is running, or check broker configuration.")
+    #except:
+        #logging.error("Unable to connect to Mqtt broker. Please check that broker is running, or check broker configuration.")
         
     
      
