@@ -357,7 +357,7 @@ def run(params):
 
             # Publish config
             for myEntity in myDevice.entityList:
-                logging.info("%s : %s, %s",myEntity.id, myEntity.configTopic,myEntity.getConfigPayloadJson)
+                logging.info("%s : %s, %s",myEntity.id, myEntity.configTopic,myEntity.getConfigPayloadJson())
                 #myMqtt.publish(myEntity.configTopic, myEntity.getConfigPayloadJson)
 
             # Publish state of all entities of the device
