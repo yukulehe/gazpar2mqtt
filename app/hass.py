@@ -105,6 +105,8 @@ class Entity:
             self.configPayload["unit_of_measurement"] = self.unit
         self.configPayload["value_template"] = self.valueTemplate
         self.configPayload["device"] = self.device.configPayload
+        
+        print(self.configPayload)
 
         
         
@@ -113,7 +115,6 @@ class Entity:
     
     # Return config payload in Json format
     def getConfigPayloadJson(self):
-        print(self.configPayload)
         return json.dumps(self.configPayload)
     
     # Set state payload
