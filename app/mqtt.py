@@ -51,9 +51,9 @@ class Mqtt:
         logging.debug("Mqtt connect : activation of callbacks")
         self.host = host
         self.port = port
-        self.client.on_connect = onConnect
-        self.client.on_publish = onPublish
-        self.client.on_disconnect = onDisconnect
+        self.client.on_connect = self.onConnect
+        self.client.on_publish = self.onPublish
+        self.client.on_disconnect = self.onDisconnect
 
         # Connect
         logging.debug("Mqtt connect : connection to broker...")
