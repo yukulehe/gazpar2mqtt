@@ -10,7 +10,7 @@ BINARY = "binary_sensor"
 GAS_TYPE = "gas"
 ENERGY_TYPE = "energy"
 CONNECTIVITY_TYPE = "connectivity"
-NONE_TYPE = ""
+NONE_TYPE = None
 MANUFACTURER = "GRDF"
 UNIT_BY_CLASS = {
     "gas": "m3",
