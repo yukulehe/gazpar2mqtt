@@ -92,15 +92,25 @@ class Entity:
         self.stateTopic = f"{self.device.hass.prefix}/{type}/{self.device.id}/state"
         
         # Set config payload
-        self.configPayload = {
-            "device_class": self.deviceClass,
-            "name": f"{self.device.name} {self.name}",
-            "unique_id": f"{self.device.id}_{self.id}",
-            "state_topic": self.stateTopic,
-            "unit_of_measurement": self.unit,
-            "value_template": self.valueTemplate,
-            "device": self.device.configPayload
-            }
+        self.configPayload = {}
+        self.configPayload["device_class"] = self.deviceClass
+        self.configPayload["name"] = f"{self.device.name} {self.name}"
+        self.configPayload["unique_id"] = f"{self.device.id}_{self.id}"
+        self.configPayload["state_topic"] = self.stateTopic
+        if self.unit is not None:
+            self.configPayload["unit_of_measurement"] = self.unit
+        self.configPayload["value_template"] = self.valueTemplate
+        self.configPayload["device"] = self.device.configPayload
+        
+        #self.configPayload = {
+        #    "device_class": self.deviceClass,
+        #    "name": f"{self.device.name} {self.name}",
+        #    "unique_id": f"{self.device.id}_{self.id}",
+        #    "state_topic": self.stateTopic,
+        #    "unit_of_measurement": self.unit,
+        #    "value_template": self.valueTemplate,
+        #    "device": self.device.configPayload
+        #    }
         
         self.statePayload = None
         
