@@ -316,57 +316,57 @@ def run(params):
         and params['hass','discovery'].lower() == 'true' \
         and myGrdf.isConnected:
 
-        try:
+        #try:
 
-            logging.info("-----------------------------------------------------------")
-            logging.info("Home assistant publication mode")
-            logging.info("-----------------------------------------------------------")
-            
-            # Create hass instance
-            myHass = hass.Hass(params['hass','prefix'])
+        logging.info("-----------------------------------------------------------")
+        logging.info("Home assistant publication mode")
+        logging.info("-----------------------------------------------------------")
 
-            # Loop on PCEs
-            for myPce in myGrdf.pceList:
-                     
-                logging.info("Publishing values of PCE %s alias %s...",myPce.pceId,myPce.alias)
-                logging.info("---------------------------------")
-            
-                
-                # Create the device corresponding to the PCE
-                deviceId = params['hass','device_name'].replace(" ","_") + "_" +  myPce.pceId
-                deviceName = params['hass','device_name'] + " " +  myPce.alias
-                myDevice = hass.Device(myHass,myPce.pceId,deviceId,deviceName)
+        # Create hass instance
+        myHass = hass.Hass(params['hass','prefix'])
 
-                # Process values
-                if not myPce.isOk(): # Values when PCE is not correct
-                    
-                    # Create entities and set values
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'connectivity','Connectivity',hass.CONNECTIVITY_TYPE).setValue('ON')
-                    
-                else: # Values when PCE is correct   
-                    
-                    # Get last daily measure
-                    myDailyMeasure = myPce.getLastMeasureOk()
+        # Loop on PCEs
+        for myPce in myGrdf.pceList:
 
-                    # Create entities and set values
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'daily_gas','Daily gas',hass.GAS_TYPE).setValue(myDailyMeasure.volume)
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'daily_energy','Daily energy',hass.ENERGY_TYPE).setValue(myDailyMeasure.energy)
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'consumption_date','Consumption date',hass.NONE_TYPE).setValue(str(myDailyMeasure.gasDate))
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'connectivity','Connectivity',hass.CONNECTIVITY_TYPE).setValue('ON')
-                    
-
-                # Publish config
-                #for myEntity in myDevice.entityList:
-                    #myMqtt.publish(myEntity.configTopic, myEntity.getConfigPayloadJson)
-
-                # Publish state of all entities of the device
-                #myMqtt.publish(myDevice.configState,myDevice.getStatePayload)
+            logging.info("Publishing values of PCE %s alias %s...",myPce.pceId,myPce.alias)
+            logging.info("---------------------------------")
 
 
+            # Create the device corresponding to the PCE
+            deviceId = params['hass','device_name'].replace(" ","_") + "_" +  myPce.pceId
+            deviceName = params['hass','device_name'] + " " +  myPce.alias
+            myDevice = hass.Device(myHass,myPce.pceId,deviceId,deviceName)
 
-        except:
-            logging.error("Home Assistant discovery mode : unable to publish value to mqtt broker")
-            sys.exit(1)
+            # Process values
+            if not myPce.isOk(): # Values when PCE is not correct
+
+                # Create entities and set values
+                myEntity = hass.Entity(myDevice,hass.SENSOR,'connectivity','Connectivity',hass.CONNECTIVITY_TYPE).setValue('ON')
+
+            else: # Values when PCE is correct   
+
+                # Get last daily measure
+                myDailyMeasure = myPce.getLastMeasureOk()
+
+                # Create entities and set values
+                myEntity = hass.Entity(myDevice,hass.SENSOR,'daily_gas','Daily gas',hass.GAS_TYPE).setValue(myDailyMeasure.volume)
+                myEntity = hass.Entity(myDevice,hass.SENSOR,'daily_energy','Daily energy',hass.ENERGY_TYPE).setValue(myDailyMeasure.energy)
+                myEntity = hass.Entity(myDevice,hass.SENSOR,'consumption_date','Consumption date',hass.NONE_TYPE).setValue(str(myDailyMeasure.gasDate))
+                myEntity = hass.Entity(myDevice,hass.SENSOR,'connectivity','Connectivity',hass.CONNECTIVITY_TYPE).setValue('ON')
+
+
+            # Publish config
+            #for myEntity in myDevice.entityList:
+                #myMqtt.publish(myEntity.configTopic, myEntity.getConfigPayloadJson)
+
+            # Publish state of all entities of the device
+            #myMqtt.publish(myDevice.configState,myDevice.getStatePayload)
+
+
+
+        #except:
+            #logging.error("Home Assistant discovery mode : unable to publish value to mqtt broker")
+            #sys.exit(1)
 
 
     # STEP 5 : Disconnect mqtt broker
