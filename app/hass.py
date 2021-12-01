@@ -89,6 +89,7 @@ class Entity:
         self.deviceClass = deviceClass
         self.unit = _getUnitFromClass(self.deviceClass)
         self.valueTemplate = "{{ value_json. " + self.id + " }}"
+        self.statePayload = None
         
         # Set topics
         self.configTopic = f"{self.device.hass.prefix}/{type}/{self.device.id}/{self.id}/config"
@@ -104,24 +105,15 @@ class Entity:
             self.configPayload["unit_of_measurement"] = self.unit
         self.configPayload["value_template"] = self.valueTemplate
         self.configPayload["device"] = self.device.configPayload
+
         
-        #self.configPayload = {
-        #    "device_class": self.deviceClass,
-        #    "name": f"{self.device.name} {self.name}",
-        #    "unique_id": f"{self.device.id}_{self.id}",
-        #    "state_topic": self.stateTopic,
-        #    "unit_of_measurement": self.unit,
-        #    "value_template": self.valueTemplate,
-        #    "device": self.device.configPayload
-        #    }
-        
-        self.statePayload = None
         
         # Add entity to device
         self.device.addEntity(self)
     
     # Return config payload in Json format
     def getConfigPayloadJson(self):
+        print(self.configPayload)
         return json.dumps(self.configPayload)
     
     # Set state payload
