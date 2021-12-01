@@ -349,10 +349,10 @@ def run(params):
                 myDailyMeasure = myPce.getLastMeasureOk()
 
                 # Create entities and set values
-                myEntity = hass.Entity(myDevice,hass.SENSOR,'daily_gas','Daily gas',hass.GAS_TYPE).setValue(myDailyMeasure.volume)
-                myEntity = hass.Entity(myDevice,hass.SENSOR,'daily_energy','Daily energy',hass.ENERGY_TYPE).setValue(myDailyMeasure.energy)
-                myEntity = hass.Entity(myDevice,hass.SENSOR,'consumption_date','Consumption date',hass.NONE_TYPE).setValue(str(myDailyMeasure.gasDate))
-                myEntity = hass.Entity(myDevice,hass.BINARY,'connectivity','Connectivity',hass.CONNECTIVITY_TYPE).setValue('ON')
+                myEntity = hass.Entity(myDevice,hass.SENSOR,'daily_gas','daily gas',hass.GAS_TYPE).setValue(myDailyMeasure.volume)
+                myEntity = hass.Entity(myDevice,hass.SENSOR,'daily_energy','daily energy',hass.ENERGY_TYPE).setValue(myDailyMeasure.energy)
+                myEntity = hass.Entity(myDevice,hass.SENSOR,'consumption_date','consumption date',hass.NONE_TYPE).setValue(str(myDailyMeasure.gasDate))
+                myEntity = hass.Entity(myDevice,hass.BINARY,'connectivity','connectivity',hass.CONNECTIVITY_TYPE).setValue('ON')
 
 
             # Publish config
