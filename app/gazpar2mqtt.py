@@ -339,10 +339,10 @@ def run(params):
                 myDevice =hass.Device(myHass,myPce.pceId,deviceId,deviceName)
                 
                 # Create entities
-                myDevice.addEntity(hass.Entity(SENSOR,'daily_gas','Daily gas',hass.GAS_TYPE))
-                myDevice.addEntity(hass.Entity(SENSOR,'daily_energy','Daily energy',hass.ENERGY_TYPE))
-                myDevice.addEntity(hass.Entity(SENSOR,'consumption_date','Consumption date',hass.NONE_TYPE))
-                myDevice.addEntity(hass.Entity(SENSOR,'connectivity','Connectivity',hass.CONNECTIVITY_TYPE))
+                myEntity = hass.Entity(myDevice,hass.SENSOR,'daily_gas','Daily gas',hass.GAS_TYPE)
+                myEntity = hass.Entity(myDevice,hass.SENSOR,'daily_energy','Daily energy',hass.ENERGY_TYPE)
+                myEntity = hass.Entity(myDevice,hass.SENSOR,'consumption_date','Consumption date',hass.NONE_TYPE)
+                myEntity = hass.Entity(myDevice,hass.SENSOR,'connectivity','Connectivity',hass.CONNECTIVITY_TYPE)
 
                 # Pubish config of each entities to mqtt
                 logging.info("Update of Home Assistant configurations...")
