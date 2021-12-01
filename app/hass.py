@@ -29,9 +29,13 @@ class Hass:
     def __init__(self,prefix):
         
         self.prefix = prefix # discovery prefix
+        self.deviceList = []
         
-           
+    def addDevice(self,device):
+        self.deviceList.append(device)
+        return device
               
+
 # Class Home assistant Device
 class Device:
     
@@ -53,19 +57,23 @@ class Device:
         self.deviceId = deviceId
         self.deviceName = deviceName
         
+        # Add device to hass
+        hass.addDevice(self)
+        
         
     # Add entity
     def addEntity(self,entity):
         self.entityList.append(entity)
-        return entity
+
     
     
 # Class Home assistant Entity
 class Entity:
     
     # Constructor
-    def __init__(self,type,id,name,deviceClass):
+    def __init__(self,device,type,id,name,deviceClass):
         
+        self.device = device
         self.type = type
         self.id = id
         self.name = name
@@ -89,6 +97,9 @@ class Entity:
             }
         
         self.statePayload = None
+        
+        # Add entity to device
+        self.device.addEntity(self)
     
     # Return config payload in Json format
     def getConfigPayloadJson(self):
