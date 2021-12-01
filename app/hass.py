@@ -51,13 +51,11 @@ class Device:
         self.entityList = []
         
         self.configPayload = config = {
-            "identifiers": [device_id],
-            "name": device_name,
+            "identifiers": [self.id],
+            "name": self.name,
             "model": pceId,
             "manufacturer": MANUFACTURER
             }
-        self.deviceId = deviceId
-        self.deviceName = deviceName
         
         # Add device to hass
         hass.addDevice(self)
