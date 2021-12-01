@@ -21,19 +21,7 @@ ST_TTI = 'total_increasing'
 
 # Hass Others
 MANUFACTURER = "GRDF"
-UNIT_BY_CLASS = {
-    "gas": "m3",
-    "energy": "kWh",
-    "connectivity": None,
-}
 
-
-# Return the unit related to the device class
-def _getUnitFromClass(deviceClass):
-    if deviceClass is not None:
-        return UNIT_BY_CLASS[deviceClass]
-    else:
-        return None
 
 
 # Class Home assistant
@@ -99,7 +87,7 @@ class Device:
 class Entity:
     
     # Constructor
-    def __init__(self,device,type,id,name,deviceClass=None,stateClass=None):
+    def __init__(self,device,type,id,name,deviceClass=None,stateClass=None,unit=None):
         
         self.device = device
         self.type = type
@@ -107,7 +95,7 @@ class Entity:
         self.name = name
         self.deviceClass = deviceClass
         self.stateClass = stateClass
-        self.unit = _getUnitFromClass(self.deviceClass)
+        self.unit = unit
         self.valueTemplate = "{{ value_json. " + self.id + " }}"
         self.statePayload = None
         
