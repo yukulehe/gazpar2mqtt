@@ -363,8 +363,8 @@ def run(params):
 
             # Publish state of all entities of the device, one call by device class
             logging.info("Publishing devices state ...")
-            logging.info(myDevice.getStatePayload())
-            #myMqtt.publish(myDevice.configState,myDevice.getStatePayload(hass.SENSOR))
+            for topic,payload in myDevice.getStatePayload():
+                myMqtt.publish(topic,payload)
             logging.info("Devices state published !")
 
 
