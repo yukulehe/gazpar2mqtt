@@ -20,11 +20,13 @@ import logging
 import pprint
 from envparse import env
 
+# gazpar2mqtt constants
+G2M_VERSION = '0.5.2'
+
 # Grdf API constants
 GRDF_API_MAX_RETRIES = 5 # number of retries max to get accurate data from GRDF
 GRDF_API_WAIT_BTW_RETRIES = 10 # number of seconds between two tries
 GRDF_API_ERRONEOUS_COUNT = 1 # Erroneous number of results send by GRDF 
-
 
 # Sensors topics for standalone mode
 
@@ -410,7 +412,7 @@ if __name__ == "__main__":
     
     logging.info("Welcome to gazpar2mqtt")
     logging.info("-----------------------------------------------------------")
-    logging.info("Version 0.5.1")
+    logging.info("Version " + G2M_VERSION)
     logging.info("Please note that the the tool is still under development, various functions may disappear or be modified.")
     logging.info("-----------------------------------------------------------")
     
