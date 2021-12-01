@@ -70,7 +70,15 @@ class Device:
     
     # Return the state payload of all entities of the device
     def getStatePayload(self):
+        
+        # Init payload
         payload = {}
+        
+        # Initialize list of state topic
+        for myEntity in self.entityList:
+            payload[myEntity.stateTopic] = {}
+        
+        # Append value to list in the corresponding state topic
         for myEntity in self.entityList:
             payload[myEntity.stateTopic][myEntity.id]=myEntity.value
         return payload
