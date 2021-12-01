@@ -12,7 +12,9 @@ global JAVAVXS
 GRDF_DATE_FORMAT = "%Y-%m-%d"
 GRDF_DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
-# Tools
+#######################################################################
+#### Usefull functions
+#######################################################################
 
 # Convert GRDF datetime string to date
 def _convertDate(dateString):
@@ -35,17 +37,20 @@ def _convertGrdfDate(date):
     return date.strftime(GRDF_DATE_FORMAT)
 
 
-# Class GRDF
+#######################################################################
+#### Class GRDF
+#######################################################################
 class Grdf:
     
+    # Constructor
     def __init__(self):
         
+        # Initialize instance variables
         self.session = None
         self.auth_nonce = None
         self.pceList = []
         self.whoiam = None
-        
-        
+        self.isConnected = False
         self.session = requests.Session()
         self.session.headers = {
             'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Mobile Safari/537.36',
@@ -53,6 +58,7 @@ class Grdf:
             'Accept':'application/json, */*',
             'Connection': 'keep-alive'
         }
+    
     
     # Login
     def login(self,username,password):
@@ -80,13 +86,29 @@ class Grdf:
         if not 'XSRF-TOKEN' in self.session.cookies:
             raise GazparLoginException("Login unsuccessful. Check your credentials.")
         else:
-            logging.info("Login sucessfull.")
+            logging.debug("Login sucessfull.")
             
         
         # Login step 2
         req = self.session.get('https://sofa-connexion.grdf.fr:443/openam/oauth2/externeGrdf/authorize?response_type=code&scope=openid%20profile%20email%20infotravaux%20%2Fv1%2Faccreditation%20%2Fv1%2Faccreditations%20%2Fdigiconso%2Fv1%20%2Fdigiconso%2Fv1%2Fconsommations%20new_meg%20%2FDemande.read%20%2FDemande.write&client_id=prod_espaceclient&state=0&redirect_uri=https%3A%2F%2Fmonespace.grdf.fr%2F_codexch&nonce=' + self.auth_nonce + '&by_pass_okta=1&capp=meg')
+        # ! missing a check for step  2!
+        
+        
+        # When everything is ok
+        self.isConnected = True
     
-        return req
+    
+    
+    # Return GRDF quality status
+    def isOk(self):
+        
+        # GRDF is ok when contains at least one valid PCE
+        if self.countPce() == 0 or self.countPce() is None:
+            return False
+        elif self.countPceOk() == 0 or self.countPceOk() is None:
+            return False
+        else:
+            return True
         
     
     # Get account info
@@ -113,9 +135,17 @@ class Grdf:
     def addPce(self, pce):
         self.pceList.append(pce)
         
-    # Count PCEs in list
+    # Return the number of PCE
     def countPce(self):
         return len(self.pceList)
+    
+    # Return the number of valid PCE
+    def countPceOk(self):
+        i = 0
+        for myPce in self.pceList:
+            if myPce.isOk() == True:
+                i += 1
+        return i
     
     # Get measures of a single PCE for a period range
     def getPceDailyMeasures(self,pce, startDate, endDate):
@@ -127,21 +157,26 @@ class Grdf:
         req = self.session.get('https://monespace.grdf.fr/api/e-conso/pce/consommation/informatives?dateDebut=' + myStartDate + '&dateFin=' + myEndDate + '&pceList%5B%5D=' + pce.pceId)
         measureList = json.loads(req.text)
         
+        # Update PCE range of date
+        pce.dailyMeasureStart = startDate
+        pce.dailyMeasureEnd = endDate
+        
         for measure in measureList[pce.pceId]["releves"]:
             
             # Create the measure
             myDailyMeasure = DailyMeasure(measure)
             
             # Append measure to the PCE's measure list
-            pce.dailyMeasureStart = startDate
-            pce.dailyMeasureEnd = endDate
             pce.addDailyMeasure(myDailyMeasure)
             
             
 
-# Account class
+#######################################################################
+#### Class Account
+#######################################################################
 class Account:
     
+    # Constructor
     def __init__(self, account):
         
         self.type = account["type"]
@@ -149,10 +184,13 @@ class Account:
         self.lastName = account["last_name"]
         self.lastName = account["email"]
 
-        
-# PCE class      
+
+#######################################################################
+#### Class PCE
+#######################################################################    
 class Pce:
     
+    # Constructor
     def __init__(self, pce):
         
         self.alias = pce["alias"]
@@ -168,13 +206,15 @@ class Pce:
         self.dailyMeasureEnd = None
         
         
-        
+    # Add a measure to the PCE    
     def addDailyMeasure(self, measure):
         self.dailyMeasureList.append(measure)
         
+    # Return the number of measure for the PCE
     def countDailyMeasure(self):
         return len(self.dailyMeasureList)
     
+    # Return the number of valid measure for the PCE
     def countDailyMeasureOk(self):
         i = 0
         for myMeasure in self.dailyMeasureList:
@@ -182,7 +222,17 @@ class Pce:
                 i += 1
         return i
     
-    # Return the last valid measure
+    # Return PCE quality status
+    def isOk(self):
+         # To be ok, the PCE must contains at least one valid measure
+         if self.countDailyMeasure() == 0 or self.countDailyMeasure() is None:
+            return False
+         elif self.countDailyMeasureOk() == 0 or self.countDailyMeasureOk() is None:
+            return False
+         else:
+            return True 
+    
+    # Return the last valid measure for the PCE
     def getLastMeasureOk(self):
         
         i = self.countDailyMeasure() - 1
@@ -228,10 +278,12 @@ class Pce:
         
         
         
-        
-# Daily Measure class          
+#######################################################################
+#### Class Daily Measure
+#######################################################################                
 class DailyMeasure:
     
+    # Constructor
     def __init__(self, measure):
         
         self.startDateTime = _convertDateTime(measure["dateDebutReleve"])
@@ -244,7 +296,7 @@ class DailyMeasure:
         self.temperature = measure["temperature"]
         
         
-    # Check measure quality
+    # Return measure measure quality status
     def isOk(self):
         
         if self.volume == None: return False

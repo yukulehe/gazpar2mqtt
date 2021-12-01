@@ -24,6 +24,9 @@ Important : the tool is still under development, various functions may disappear
 
 ## Changelogs :
 
+- v0.5.x :
+  - Hard redesign of the application after new GRDF website released on 23/11/2021 . Thanks to **echauvet** for his contribution.
+  - Home assistant : Add entity last index which can be integrated in Hass Energy panel
 - v0.4.x : 
   - Home assistant mqtt discovery available
   - Home assistant add-on available : https://github.com/alexbelgium/hassio-addons/tree/master/gazpar2mqtt (special thx to [alexbelgium](https://github.com/alexbelgium))
@@ -36,9 +39,7 @@ Important : the tool is still under development, various functions may disappear
 
 ## Roadmap :
 
-- Get weekly consumptions
-- Set alerts when threshold reached
-- Get most economic and most energivor consumption in local environment
+- Calculation of monthly/weekly consumptions
 - Provide an exemple of Home assistant card
 
 
@@ -56,10 +57,10 @@ pip3 install -r app/requirement.txt
 
 Verify you have gazpar data available on [GRDF Portal](https://monespace.grdf.fr/monespace/connexion)
 
-Data provided are :
-- the previous day and the current month consumptions of gas (in m3) and energy (kwh)
-- the consumptions of the previous year for the current month
-- the threshold (seuil) of the current month defined in Grdf portal
+For each PCE (Point de Comptage et d'Estimation) linked to GRDF account, data provided are :
+- the previous day ~~and the current month consumptions~~ of gas (in m3) and energy (kwh)
+- ~~the consumptions of the previous year for the current month~~
+- ~~the threshold (seuil) of the current month defined in Grdf portal~~
 
 Remember, kWh provided is conversion factor dependant. Please verify it's coherent with your provider bills.
 
@@ -153,17 +154,17 @@ You can replace the default topic prefix *gazpar* (see mqtt broker requirements 
 
 | Topic | Description |
 | --- | --- |
-| gazpar/daily/date | Date of the last daily statement |
-| gazpar/daily/kwh | Consumption in kwh of the last daily statement |
-| gazpar/daily/mcube | Consumption in cube meter of the last daily statement  |
-| gazpar/daily/delta | Variation in percentage between the last and the previous daily statement  |
+| gazpar/PCE/daily/date | Date of the last daily statement |
+| gazpar/PCE/daily/kwh | Consumption in kwh of the last daily statement |
+| gazpar/PCE/daily/mcube | Consumption in cube meter of the last daily statement  |
+| gazpar/PCE/daily/delta | Variation in percentage between the last and the previous daily statement  |
 
 ### Status values :
 
 | Topic | Description |
 | --- | --- |
-| gazpar/status/date | Last execution date time of gazpar2mqtt |
-| gazpar/status/value | Last execution status of  gazpar2mqtt |
+| gazpar/PCE/status/date | Last execution date time of gazpar2mqtt |
+| gazpar/PCE/status/value | Last execution status of  gazpar2mqtt |
 
 
 ## Home Assistant discovery mode
@@ -176,7 +177,7 @@ Have a look to [Home Assistant Mqtt discovery documentation](https://www.home-as
 ### Device :
 | Device name | Device ID | Model | Manufacturer |
 | --- | --- | --- | --- |
-| gazpar | gazpar | monespace.grdf.fr | GRDF |
+| gazpar | gazpar_PCE | monespace.grdf.fr | GRDF |
 
 Note : you can replace the default device name *gazpar* by editing the related parameter.
 
@@ -184,19 +185,20 @@ Note : you can replace the default device name *gazpar* by editing the related p
 
 | Sensor name | Component | Device class | Description |
 | --- | --- | --- | --- |
-| gazpar_daily_gas | Sensor | Gas | Gas consumption in m3 of the last daily statement |
-| gazpar_daily_energy | Sensor | Energy | Gas consumption in kWh of the last daily statement |
-| gazpar_consumption_date | Sensor | Date | Date of the last daily statement |
-| gazpar_connectivity | Binary sensor | Connectivity | Binary sensor which indicates if the last gazpar statement succeeded (ON) or failed (OFF) |
+| gazpar_PCE_index | Sensor | Gas | Gas index in m3 of the last statement |
+| gazpar_PCE_daily_gas | Sensor | Gas | Gas consumption in m3 of the last daily statement |
+| gazpar_PCE_daily_energy | Sensor | Energy | Gas consumption in kWh of the last daily statement |
+| gazpar_PCE_consumption_date | Sensor | Date | Date of the last daily statement |
+| gazpar_PCE_connectivity | Binary sensor | Connectivity | Binary sensor which indicates if the last gazpar statement succeeded (ON) or failed (OFF) |
 
 
 ### List of topics :
 | Topic | Description
 | --- | --- 
-| homeassistant/sensor/gazpar/config | Sensor's configuration topic |
-| homeassistant/sensor/gazpar/state | Sensor's state topic |
-| homeassistant/binary_sensor/gazpar/config | Binary sensor's configuration topic |
-| homeassistant/binary_sensor/gazpar/state | Binary sensor's state topic |
+| homeassistant/sensor/gazpar_PCE/config | Sensor's configuration topic |
+| homeassistant/sensor/gazpar_PCE/state | Sensor's state topic |
+| homeassistant/binary_sensor/gazpar_PCE/config | Binary sensor's configuration topic |
+| homeassistant/binary_sensor/gazpar_PCE/state | Binary sensor's state topic |
 
 Note : you can replace the default topic prefix *homeasssistant* by editing the related parameter.
 

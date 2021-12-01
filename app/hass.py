@@ -4,184 +4,126 @@
 import json
 from importlib import import_module
 
-# Return a formatted device Id
-def getDeviceId(device_name):
-    
-    device_id = device_name.replace(' ','_')
-    return device_id
+# Constants
+SENSOR = "sensor"
+BINARY = "binary_sensor"
 
-# Return the device config
-def getDeviceConfig(prefix,device_id,device_name):
-    
-    config = {
-        "identifiers": [device_id],
-        "name": device_name,
-        "model": "monespace.grdf.fr",
-        "manufacturer": "GRDF"
-    }
-    
-    return config
-                        
-# Return the state topic for sensors
-def getStateTopicSensor(prefix,device_id):
-    
-    topic = f"{prefix}/sensor/{device_id}/state"
-    return topic
+# Hass device class
+GAS_TYPE = "gas"
+ENERGY_TYPE = "energy"
+CONNECTIVITY_TYPE = "connectivity"
+NONE_TYPE = None
 
-# Return the state topic for binary sensors
-def getStateTopicBinary(prefix,device_id):
-    
-    topic = f"{prefix}/binary_sensor/{device_id}/state"
-    return topic
+# Hass state_class
+ST_MEAS = 'measurement'
+ST_TT = 'total'
+ST_TTI = 'total_increasing'
 
-# Return the configuration topic for sensors
-def getConfigTopicSensor(prefix,device_id,sensor):
-    
-    topic = f"{prefix}/sensor/{device_id}/{sensor}/config"
-    return topic
+# Hass Others
+MANUFACTURER = "GRDF"
 
 
-# Return the configuration topic for binary sensors
-def getConfigTopicBinary(prefix,device_id,sensor):
-    
-    topic = f"{prefix}/binary_sensor/{device_id}/{sensor}/config"
-    return topic
-    
-    
-# Return the configuration payload    
-def getConfigPayload(prefix,device_name,sensor):
-    
-    # Get device Id
-    device_id = getDeviceId(device_name)
-    
-    # Gas consumption daily
-    if sensor == 'daily_gas':
-        
-        configPayload= {
-            "device_class": "gas",
-            "name": f"{device_id}_{sensor}",
-            "unique_id": f"{device_id}_{sensor}",
-            "state_topic": getStateTopicSensor(prefix,device_id),
-            "unit_of_measurement": "m3",
-            "value_template": "{{ value_json.daily_gas}}",
-            "device": getDeviceConfig(prefix,device_id,device_name)
-        }
-    
-    # Gas consumption monthly
-    elif sensor == 'monthly_gas':
-        
-        configPayload= {
-            "device_class": "gas",
-            "name": f"{device_id}_{sensor}",
-            "unique_id": f"{device_id}_{sensor}",
-            "state_topic": getStateTopicSensor(prefix,device_id),
-            "unit_of_measurement": "m3",
-            "value_template": "{{ value_json.monthly_gas}}",
-            "device": getDeviceConfig(prefix,device_id,device_name)
-        }
-        
-    
-    # Gas consumption monthly of previous year
-    elif sensor == 'monthly_gas_prev':
-        
-        configPayload= {
-            "device_class": "gas",
-            "name": f"{device_id}_{sensor}",
-            "unique_id": f"{device_id}_{sensor}",
-            "state_topic": getStateTopicSensor(prefix,device_id),
-            "unit_of_measurement": "m3",
-            "value_template": "{{ value_json.monthly_gas_prev}}",
-            "device": getDeviceConfig(prefix,device_id,device_name)
-        }
-    
-    # Energy consumption daily
-    elif sensor == 'daily_energy':
-        
-        configPayload= {
-            "device_class": "energy",
-            "name": f"{device_id}_{sensor}",
-            "unique_id": f"{device_id}_{sensor}",
-            "state_topic": getStateTopicSensor(prefix,device_id),
-            "unit_of_measurement": "kWh",
-            "value_template": "{{ value_json.daily_energy}}",
-            "device": getDeviceConfig(prefix,device_id,device_name)
-        }
-    
-    # Energy consumption monthly
-    elif sensor == 'monthly_energy':
-        
-        configPayload= {
-            "device_class": "energy",
-            "name": f"{device_id}_{sensor}",
-            "unique_id": f"{device_id}_{sensor}",
-            "state_topic": getStateTopicSensor(prefix,device_id),
-            "unit_of_measurement": "kWh",
-            "value_template": "{{ value_json.monthly_energy}}",
-            "device": getDeviceConfig(prefix,device_id,device_name)
-        }
-    
-    # Energy consumption monthly threshold
-    elif sensor == 'monthly_energy_tsh':
-        
-        configPayload= {
-            "device_class": "energy",
-            "name": f"{device_id}_{sensor}",
-            "unique_id": f"{device_id}_{sensor}",
-            "state_topic": getStateTopicSensor(prefix,device_id),
-            "unit_of_measurement": "kWh",
-            "value_template": "{{ value_json.monthly_energy_tsh}}",
-            "device": getDeviceConfig(prefix,device_id,device_name)
-        }
-    
-    # Energy consumption monthly of previous year
-    elif sensor == 'monthly_energy_prev':
-        
-        configPayload= {
-            "device_class": "energy",
-            "name": f"{device_id}_{sensor}",
-            "unique_id": f"{device_id}_{sensor}",
-            "state_topic": getStateTopicSensor(prefix,device_id),
-            "unit_of_measurement": "kWh",
-            "value_template": "{{ value_json.monthly_energy_prev}}",
-            "device": getDeviceConfig(prefix,device_id,device_name)
-        }
-        
-    # Gazpar consumption date
-    elif sensor == 'consumption_date':
-        
-        configPayload= {
-            "name": f"{device_id}_{sensor}",
-            "unique_id": f"{device_id}_{sensor}",
-            "state_topic": getStateTopicSensor(prefix,device_id),
-            "value_template": "{{ value_json.consumption_date}}",
-            "device": getDeviceConfig(prefix,device_id,device_name)
-        }
-    
-    # Gazpar consumption month
-    elif sensor == 'consumption_month':
-        
-        configPayload= {
-            "name": f"{device_id}_{sensor}",
-            "unique_id": f"{device_id}_{sensor}",
-            "state_topic": getStateTopicSensor(prefix,device_id),
-            "value_template": "{{ value_json.consumption_month}}",
-            "device": getDeviceConfig(prefix,device_id,device_name)
-        }
-    
-    # Gazpar connectivity
-    elif sensor == 'connectivity':
-        
-        configPayload= {
-            "device_class": "connectivity",
-            "name": f"{device_id}_{sensor}",
-            "unique_id": f"{device_id}_{sensor}",
-            "state_topic": getStateTopicBinary(prefix,device_id),
-            "value_template": "{{ value_json.connectivity}}",
-            "device": getDeviceConfig(prefix,device_id,device_name)
-        }
-        
-    else:
-        topic = "error"
-    
 
-    return configPayload
+# Class Home assistant
+class Hass:
+    
+    # Constructor
+    def __init__(self,prefix):
+        
+        self.prefix = prefix # discovery prefix
+        self.deviceList = []
+        
+    def addDevice(self,device):
+        self.deviceList.append(device)
+        return device
+              
+
+# Class Home assistant Device
+class Device:
+    
+    # Constructor
+    def __init__(self,hass,pceId,deviceId, deviceName):
+        
+        self.hass = hass
+        self.id = deviceId
+        self.name = deviceName
+        
+        self.entityList = []
+        
+        self.configPayload = config = {
+            "identifiers": [self.id],
+            "name": self.name,
+            "model": pceId,
+            "manufacturer": MANUFACTURER
+            }
+        
+        # Add device to hass
+        hass.addDevice(self)
+        
+        
+    # Add entity
+    def addEntity(self,entity):
+        self.entityList.append(entity)
+    
+    # Return the state payload of all entities of the device
+    def getStatePayload(self):
+        
+        # Init payload
+        payload = {}
+        
+        # Initialize list of state topic
+        for myEntity in self.entityList:
+            payload[myEntity.stateTopic] = {}
+        
+        # Append value to list in the corresponding state topic
+        for myEntity in self.entityList:
+            payload[myEntity.stateTopic][myEntity.id]=myEntity.value
+        
+        # Return json formatted
+        return payload
+    
+    
+# Class Home assistant Entity
+class Entity:
+    
+    # Constructor
+    def __init__(self,device,type,id,name,deviceClass=None,stateClass=None,unit=None):
+        
+        self.device = device
+        self.type = type
+        self.id = id
+        self.name = name
+        self.deviceClass = deviceClass
+        self.stateClass = stateClass
+        self.unit = unit
+        self.valueTemplate = "{{ value_json. " + self.id + " }}"
+        self.statePayload = None
+        
+        # Set topics
+        self.configTopic = f"{self.device.hass.prefix}/{type}/{self.device.id}/{self.id}/config"
+        self.stateTopic = f"{self.device.hass.prefix}/{type}/{self.device.id}/state"
+        
+        # Set config payload
+        self.configPayload = {}
+        if self.deviceClass is not None:
+            self.configPayload["device_class"] = self.deviceClass
+        if self.stateClass is not None:
+            self.configPayload["state_class"] = self.stateClass
+        self.configPayload["name"] = f"{self.device.name} {self.name}"
+        self.configPayload["unique_id"] = f"{self.device.id}_{self.id}"
+        self.configPayload["state_topic"] = self.stateTopic
+        if self.unit is not None:
+            self.configPayload["unit_of_measurement"] = self.unit
+        self.configPayload["value_template"] = self.valueTemplate
+        self.configPayload["device"] = self.device.configPayload
+
+        # Add entity to device
+        self.device.addEntity(self)
+    
+    # Return config payload in Json format
+    def getConfigPayloadJson(self):
+        return json.dumps(self.configPayload)
+    
+    # Set state payload
+    def setValue(self,value):
+        self.value = value

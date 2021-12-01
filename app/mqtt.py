@@ -4,85 +4,82 @@ import logging
 import sys
 import ssl
 
-MQTT_IS_CONNECTED = False
+class Mqtt:
 
-# Callback on_connect
-def on_connect(client, userdata, flags, rc):
-    global MQTT_IS_CONNECTED
-    logging.debug("Mqtt on_connect : %s", mqtt.connack_string(rc))
-    MQTT_IS_CONNECTED = True
+    def __init__(self,clientId,username,password,isSsl,qos,retain):
+        
+        self.isConnected = False
+        self.isSsl = isSsl.lower() in ("t","true","1","yes","y","yup","oui","si","da")
+        self.qos = qos
+        self.retain = retain.lower() in ("t","true","1","yes","y","yup","oui","si","da")
+        
+        # Create instance
+        self.client = mqtt.Client(clientId)
+        
+        # Set authentification
+        if username != "" and password != "":
+            client.username_pw_set(username, password)
+            
+        # Set SSL if required
+        if self.isSsl:
+            self.client.tls_set(cert_reqs=ssl.CERT_NONE)
+            self.client.tls_insecure_set(True)
     
 
-# Callback on_disconnect
-def on_disconnect(client, userdata, rc):
-    global MQTT_IS_CONNECTED
-    if rc != 0:
-        logging.debug("Mqtt on_disconnect : unexpected disconnection %s", mqtt.connack_string(rc))
-        logging.error("MQTT broker has been disconnected unexpectly")
-        MQTT_IS_CONNECTED = False
-        sys.exit(1)
+    # Callback on_connect
+    def onConnect(self,client, userdata, flags, rc):
+        logging.debug("Mqtt on_connect : %s", mqtt.connack_string(rc))
+        self.isConnected = True
+    
 
-# Callback on_publish
-def on_publish(client, userdata, mid):
-    logging.debug("Mqtt on_publish : message published")
+    # Callback on_disconnect
+    def onDisconnect(self,client, userdata, rc):
+        if rc != 0:
+            logging.debug("Mqtt on_disconnect : unexpected disconnection %s", mqtt.connack_string(rc))
+            logging.error("MQTT broker has been disconnected unexpectly")
+            self.isConnected = False
 
-# Sub constructor
-def create_client(clientId,username,password,ssl_enable):
-    
-    # Create instance
-    client = mqtt.Client(clientId)
-    
-    # Set authentification
-    if username != "" and password != "":
-        client.username_pw_set(username, password)
-    
-    # Set SSL if required
-    ssl_boolean = False
-    ssl_boolean = ssl_enable.lower() in ("t","true","1","yes","y","yup","oui","si","da")
-    if ssl_boolean:
-        client.tls_set(cert_reqs=ssl.CERT_NONE)
-        client.tls_insecure_set(True)
-    
-    return client
+    # Callback on_publish
+    def onPublish(self,client, userdata, mid):
+        logging.debug("Mqtt on_publish : message published")
 
-# Sub connect
-def connect(client,host,port):
-    
-    # Activate callbacks
-    logging.debug("Mqtt connect : activation of callbacks")
-    client.on_connect = on_connect
-    client.on_publish = on_publish
-    client.on_disconnect = on_disconnect
-    
+
     # Connect
-    logging.debug("Mqtt connect : connection to broker...")
-    client.connect(host,port, 60)
-    time.sleep(5)
-    
-    # Start loop
-    client.loop_start()
+    def connect(self,host,port):
 
-    
-# Sub disconnect
-def disconnect(client):
-    
-    # End loop
-    client.loop_stop()
+        # Activate callbacks
+        logging.debug("Mqtt connect : activation of callbacks")
+        self.host = host
+        self.port = port
+        self.client.on_connect = self.onConnect
+        self.client.on_publish = self.onPublish
+        self.client.on_disconnect = self.onDisconnect
+
+        # Connect
+        logging.debug("Mqtt connect : connection to broker...")
+        self.client.connect(host,port, 60)
+        time.sleep(5)
+
+        # Start loop
+        self.client.loop_start()
+
     
     # Disconnect
-    logging.debug("Mqtt disconnect : disconnection...")
-    client.disconnect
+    def disconnect(self):
+
+        # End loop
+        self.client.loop_stop()
+
+        # Disconnect
+        logging.debug("Mqtt disconnect : disconnection...")
+        self.client.disconnect
   
-# Sub publish
-def publish(client,topic,payload,qos,retain):
-    
-    logging.debug("Mqtt publish : publication...")
-    
-    retain_boolean = False
-    retain_boolean = retain.lower() in ("t","true","1","yes","y","yup","oui","si","da")
-    
-    myPayload = str(payload)
-    
-    logging.debug("Publishing payload %s to topic %s, qos %s, retain %s",payload,topic, qos, retain_boolean)
-    client.publish(topic, payload=myPayload, qos=qos, retain=retain_boolean)
-    time.sleep(1)
+
+    # Publish
+    def publish(self,topic,payload):
+
+        logging.debug("Mqtt publish : publication...")
+        myPayload = str(payload)
+        logging.debug("Publishing payload %s to topic %s, qos %s, retain %s",payload,topic, self.qos, self.retain)
+        self.client.publish(topic, payload=myPayload, qos=self.qos, retain=self.retain)
+        time.sleep(1)
