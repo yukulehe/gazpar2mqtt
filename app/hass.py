@@ -66,7 +66,13 @@ class Device:
     # Add entity
     def addEntity(self,entity):
         self.entityList.append(entity)
-
+    
+    # Return the state payload of all entities of the device
+    def getStatePayload(self,entityType):
+        payload = {}
+        for myEntity in self.entityList:
+            payload[myEntity.id]=myEntity.value
+        return payload
     
     
 # Class Home assistant Entity
