@@ -107,7 +107,8 @@ class Entity:
         
         # Set config payload
         self.configPayload = {}
-        self.configPayload["device_class"] = self.deviceClass
+        if self.deviceClass is not None:
+            self.configPayload["device_class"] = self.deviceClass
         self.configPayload["name"] = f"{self.device.name} {self.name}"
         self.configPayload["unique_id"] = f"{self.device.id}_{self.id}"
         self.configPayload["state_topic"] = self.stateTopic
