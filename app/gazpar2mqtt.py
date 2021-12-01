@@ -356,11 +356,11 @@ def run(params):
                     
 
                 # Publish config
-                for myEntity in myDevice.entityList:
-                    myMqtt.publish(myEntity.configTopic, myEntity.getConfigPayloadJson)
+                #for myEntity in myDevice.entityList:
+                    #myMqtt.publish(myEntity.configTopic, myEntity.getConfigPayloadJson)
 
                 # Publish state of all entities of the device
-                myMqtt.publish(myDevice.configState,myDevice.getStatePayload)
+                #myMqtt.publish(myDevice.configState,myDevice.getStatePayload)
 
 
 
