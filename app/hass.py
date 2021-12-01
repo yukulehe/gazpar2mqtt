@@ -69,7 +69,7 @@ class Device:
         self.entityList.append(entity)
     
     # Return the state payload of all entities of the device
-    def getStatePayload(self):
+    def getStatePayloadJson(self):
         
         # Init payload
         payload = {}
@@ -81,7 +81,9 @@ class Device:
         # Append value to list in the corresponding state topic
         for myEntity in self.entityList:
             payload[myEntity.stateTopic][myEntity.id]=myEntity.value
-        return payload
+        
+        # Return json formatted
+        return json.dumps(payload)
     
     
 # Class Home assistant Entity
