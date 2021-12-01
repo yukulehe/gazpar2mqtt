@@ -337,11 +337,11 @@ def run(params):
             deviceName = params['hass','device_name'] + " " +  myPce.alias
             myDevice = hass.Device(myHass,myPce.pceId,deviceId,deviceName)
 
-            # Process values
+            # Process hass's entities to be valuated
             if not myPce.isOk(): # Values when PCE is not correct
 
                 # Create entities and set values
-                myEntity = hass.Entity(myDevice,hass.SENSOR,'connectivity','Connectivity',hass.CONNECTIVITY_TYPE).setValue('ON')
+                myEntity = hass.Entity(myDevice,hass.SENSOR,'connectivity','Connectivity',hass.CONNECTIVITY_TYPE,None,None).setValue('ON')
 
             else: # Values when PCE is correct   
 
@@ -349,11 +349,11 @@ def run(params):
                 myDailyMeasure = myPce.getLastMeasureOk()
 
                 # Create entities and set values
-                myEntity = hass.Entity(myDevice,hass.SENSOR,'last_index','index',hass.GAS_TYPE,hass.ST_TTI,'m³').setValue(myDailyMeasure.endIndex)
+                myEntity = hass.Entity(myDevice,hass.SENSOR,'index','index',hass.GAS_TYPE,hass.ST_TTI,'m³').setValue(myDailyMeasure.endIndex)
                 myEntity = hass.Entity(myDevice,hass.SENSOR,'daily_gas','daily gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myDailyMeasure.volume)
                 myEntity = hass.Entity(myDevice,hass.SENSOR,'daily_energy','daily energy',hass.ENERGY_TYPE,hass.ST_MEAS,'kWh').setValue(myDailyMeasure.energy)
-                myEntity = hass.Entity(myDevice,hass.SENSOR,'consumption_date','consumption date',hass.NONE_TYPE).setValue(str(myDailyMeasure.gasDate))
-                myEntity = hass.Entity(myDevice,hass.BINARY,'connectivity','connectivity',hass.CONNECTIVITY_TYPE).setValue('ON')
+                myEntity = hass.Entity(myDevice,hass.SENSOR,'consumption_date','consumption date',hass.NONE_TYPE,None,None).setValue(str(myDailyMeasure.gasDate))
+                myEntity = hass.Entity(myDevice,hass.BINARY,'connectivity','connectivity',hass.CONNECTIVITY_TYPE,None,None).setValue('ON')
 
 
             # Publish config
