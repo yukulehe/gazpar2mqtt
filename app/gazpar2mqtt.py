@@ -179,12 +179,12 @@ def run(params):
         myMqtt = Mqtt(params['mqtt','clientId'],params['mqtt','username'],params['mqtt','password'],params['mqtt','ssl'])
     
         # Connect mqtt brocker
-        myMqtt.connect(client,params['mqtt','host'],params['mqtt','port'])
+        myMqtt.connect(params['mqtt','host'],params['mqtt','port'])
         
         # Wait mqtt callback (connection confirmation)
         time.sleep(2)
         
-        if mqtt.MQTT_IS_CONNECTED:
+        if myMqtt.isConnected:
             logging.info("Mqtt broker connected !")
         
     except:
@@ -244,7 +244,7 @@ def run(params):
         
     
     # STEP 4A : Standalone mode
-    if mqtt.MQTT_IS_CONNECTED \
+    if myMqtt.isConnected \
         and params['standalone','mode'].lower()=="true" \
         and myGrdf.isConnected:   
 
@@ -270,8 +270,8 @@ def run(params):
 
                     ## Publish status values
                     logging.info("Publishing to Mqtt status values...")
-                    mqtt.publish(client, prefixTopic + TOPIC_STATUS_DATE, dtn, qos, retain)
-                    mqtt.publish(client, prefixTopic + TOPIC_STATUS_VALUE, "Failed", qos, retain)
+                    mqtt.publish(prefixTopic + TOPIC_STATUS_DATE, dtn, qos, retain)
+                    mqtt.publish(prefixTopic + TOPIC_STATUS_VALUE, "Failed", qos, retain)
                     logging.info("Status values published !")
 
 
@@ -283,9 +283,9 @@ def run(params):
                     # Publish daily values
                     logging.info("Publishing to Mqtt the last daily values...")
                     logging.debug("Date %s, Energy = %s, Volume %s",myDailyMeasure.gasDate,myDailyMeasure.energy,myDailyMeasure.volume)
-                    mqtt.publish(client, prefixTopic + TOPIC_DAILY_DATE, myDailyMeasure.gasDate, qos, retain)
-                    mqtt.publish(client, prefixTopic + TOPIC_DAILY_KWH, myDailyMeasure.energy, qos, retain)
-                    mqtt.publish(client, prefixTopic + TOPIC_DAILY_MCUBE, myDailyMeasure.volume, qos, retain)
+                    myMqtt.publish(prefixTopic + TOPIC_DAILY_DATE, myDailyMeasure.gasDate)
+                    myMqtt.publish(prefixTopic + TOPIC_DAILY_KWH, myDailyMeasure.energy)
+                    myMqtt.publish(prefixTopic + TOPIC_DAILY_MCUBE, myDailyMeasure.volume)
 
                     logging.info("Daily values published !")
 
@@ -301,8 +301,8 @@ def run(params):
 
                     ## Publish status values
                     logging.info("Publishing to Mqtt status values...")
-                    mqtt.publish(client, prefixTopic + TOPIC_STATUS_DATE, dtn, qos, retain)
-                    mqtt.publish(client, prefixTopic + TOPIC_STATUS_VALUE, "Success", qos, retain)
+                    myMqtt.publish(prefixTopic + TOPIC_STATUS_DATE, dtn)
+                    myMqtt.publish(prefixTopic + TOPIC_STATUS_VALUE, "Success")
                     logging.info("Status values published !")
 
         except:
@@ -310,7 +310,7 @@ def run(params):
             sys.exit(1)
 
     # STEP 4B : Home Assistant discovery mode
-    if mqtt.MQTT_IS_CONNECTED \
+    if myMqtt.isConnected \
         and params['hass','discovery'].lower() == 'true' \
         and myGrdf.isConnected:
 
@@ -329,9 +329,6 @@ def run(params):
                 logging.info("Publishing values of PCE %s alias %s...",myPce.pceId,myPce.alias)
                 logging.info("---------------------------------")
             
-                # Set variables
-                retain = params['mqtt','retain']
-                qos = params['mqtt','qos']
                 
                 # Create the device corresponding to the PCE
                 deviceId = params['hass','device_name'].replace(" ","_") + "_" +  myPce.pceId
@@ -358,10 +355,10 @@ def run(params):
 
                 # Publish config
                 for myEntity in myDevice.entityList:
-                    mqtt.publish(client, myEntity.configTopic, myEntity.getConfigPayloadJson, qos, retain)
+                    myMqtt.publish(myEntity.configTopic, myEntity.getConfigPayloadJson)
 
                 # Publish state of all entities of the device
-                mqtt.publish(client, myDevice.configState,myDevice.getStatePayload,qos,retain)
+                myMqtt.publish(myDevice.configState,myDevice.getStatePayload)
 
 
 
@@ -375,9 +372,9 @@ def run(params):
     logging.info("Disconnecion from MQTT")
     logging.info("-----------------------------------------------------------")
     
-    if mqtt.MQTT_IS_CONNECTED:
+    if myMqtt.isConnected:
         try:
-            mqtt.disconnect(client)
+            myMqtt.disconnect()
             logging.info("Mqtt broker disconnected")
         except:
             logging.error("Unable to disconnect mqtt broker")
