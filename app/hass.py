@@ -88,8 +88,8 @@ class Entity:
         self.valueTemplate = "{{ value_json. " + self.id + " }}"
         
         # Set topics
-        self.configTopic = f"{self.device.hass.prefix}/{type}/{self.device_id}/{id}/config"
-        self.stateTopic = f"{self.device.hass.prefix}/{type}/{self.device_id}/state"
+        self.configTopic = f"{self.device.hass.prefix}/{type}/{self.device.id}/{self.id}/config"
+        self.stateTopic = f"{self.device.hass.prefix}/{type}/{self.device.id}/state"
         
         # Set config payload
         self.configPayload = {
