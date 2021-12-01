@@ -185,6 +185,7 @@ Note : you can replace the default device name *gazpar* by editing the related p
 
 | Sensor name | Component | Device class | Description |
 | --- | --- | --- | --- |
+| gazpar_PCE_index | Sensor | Gas | Gas index in m3 of the last statement |
 | gazpar_PCE_daily_gas | Sensor | Gas | Gas consumption in m3 of the last daily statement |
 | gazpar_PCE_daily_energy | Sensor | Energy | Gas consumption in kWh of the last daily statement |
 | gazpar_PCE_consumption_date | Sensor | Date | Date of the last daily statement |
