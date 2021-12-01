@@ -336,58 +336,34 @@ def run(params):
                 # Create the device corresponding to the PCE
                 deviceId = params['hass','device_name'].replace(" ","_") + "_" +  myPce.pceId
                 deviceName = params['hass','device_name'] + " " +  myPce.alias
-                myDevice =hass.Device(myHass,myPce.pceId,deviceId,deviceName)
+                myDevice = hass.Device(myHass,myPce.pceId,deviceId,deviceName)
                 
-                # Create entities
+                # Create entities and set values
                 myEntity = hass.Entity(myDevice,hass.SENSOR,'daily_gas','Daily gas',hass.GAS_TYPE)
                 myEntity = hass.Entity(myDevice,hass.SENSOR,'daily_energy','Daily energy',hass.ENERGY_TYPE)
                 myEntity = hass.Entity(myDevice,hass.SENSOR,'consumption_date','Consumption date',hass.NONE_TYPE)
                 myEntity = hass.Entity(myDevice,hass.SENSOR,'connectivity','Connectivity',hass.CONNECTIVITY_TYPE)
 
-                # Pubish config of each entities to mqtt
-                logging.info("Update of Home Assistant configurations...")
-                for myEntity in myDevice.deviceList:
-                    mqtt.publish(client, myEntity.configTopic, myEntity.getConfigPayloadJson, qos, retain)
-                logging.info("Home assistant configurations updated !")
-
                 # Process values
-                if not myPce.isOk(): # PCE is not correct
-
-                    logging.info("Update of Home Assistant binary sensors values...")
-                    statePayload = {
-                        "connectivity": 'OFF'
-                        }
-                    mqtt.publish(client, hass.getStateTopicBinary(ha_prefix,device_name), json.dumps(statePayload), qos, retain)
-                    logging.info("Home Assistant binary sensors values updated !")
-
-                else: # Values when Grdf succeeded   
+                if not myPce.isOk(): # Values when PCE is not correct
+                    
+                    # Create entities and set values
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'connectivity','Connectivity',hass.CONNECTIVITY_TYPE).setValue('ON')
+                    
+                else: # Values when PCE is correct   
                     
                     # Get last daily measure
                     myDailyMeasure = myPce.getLastMeasureOk()
 
-                    # Publish Hass sensors values
-                    logging.info("Update of Home assistant sensors values...")
-                    statePayload = {
-                        "daily_gas": myDailyMeasure.volume,
-                        #"monthly_gas": m1['mcube'],
-                        #"monthly_gas_prev": m1['mcube_prec'],
-                        "daily_energy": myDailyMeasure.energy,
-                        #"monthly_energy": m1['kwh'],
-                        #"monthly_energy_tsh": m1['kwh_seuil'],
-                        #"monthly_energy_prev": m1['kwh_prec'],
-                        "consumption_date": str(myDailyMeasure.gasDate),
-                        #"consumption_month": m1['date'],
-                        }
-                    mqtt.publish(client, hass.getStateTopicSensor(ha_prefix,device_name), json.dumps(statePayload), qos, retain)
-                    logging.info("Home Assistant sensors values updated !")
+                    # Create entities and set values
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'daily_gas','Daily gas',hass.GAS_TYPE).setValue(myDailyMeasure.volume)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'daily_energy','Daily energy',hass.ENERGY_TYPE).setValue(myDailyMeasure.energy)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'consumption_date','Consumption date',hass.NONE_TYPE).setValue(str(myDailyMeasure.gasDate))
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'connectivity','Connectivity',hass.CONNECTIVITY_TYPE).setValue('ON')
+                    
 
-                    # Publish Hass binary sensors values
-                    logging.info("Update of Home assistant binary sensors values...")
-                    statePayload = {
-                        "connectivity": 'ON'
-                        }
-                    mqtt.publish(client, hass.getStateTopicBinary(ha_prefix,device_name), json.dumps(statePayload), qos, retain)
-                    logging.info("Home Assistant binary sensors values updated !")
+                    # Publish config and state
+                    mqtt.publish(client, myEntity.configTopic, myEntity.getConfigPayloadJson, qos, retain)
 
 
         except:
