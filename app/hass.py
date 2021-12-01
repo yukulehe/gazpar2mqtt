@@ -24,7 +24,7 @@ def _getUnitFromClass(deviceClass):
     print(deviceClass)
     if deviceClass is not None:
         return UNIT_BY_CLASS[deviceClass]
-    else
+    else:
         return None
 
 
