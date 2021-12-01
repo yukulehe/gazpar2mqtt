@@ -86,7 +86,7 @@ class Entity:
         self.id = id
         self.name = name
         self.deviceClass = deviceClass
-        self.unit = _getUnitFromClass(self.class)
+        self.unit = _getUnitFromClass(self.deviceClass)
         self.valueTemplate = "{{ value_json. " + self.id + " }}"
         
         # Set topics
