@@ -7,10 +7,19 @@ from importlib import import_module
 # Constants
 SENSOR = "sensor"
 BINARY = "binary_sensor"
+
+# Hass device class
 GAS_TYPE = "gas"
 ENERGY_TYPE = "energy"
 CONNECTIVITY_TYPE = "connectivity"
 NONE_TYPE = None
+
+# Hass state_class
+ST_MEAS = 'measurement'
+ST_TT = 'total'
+ST_TTI = 'total_increasing'
+
+# Hass Others
 MANUFACTURER = "GRDF"
 UNIT_BY_CLASS = {
     "gas": "m3",
@@ -90,13 +99,14 @@ class Device:
 class Entity:
     
     # Constructor
-    def __init__(self,device,type,id,name,deviceClass):
+    def __init__(self,device,type,id,name,deviceClass=None,stateClass=None):
         
         self.device = device
         self.type = type
         self.id = id
         self.name = name
         self.deviceClass = deviceClass
+        self.stateClass = stateClass
         self.unit = _getUnitFromClass(self.deviceClass)
         self.valueTemplate = "{{ value_json. " + self.id + " }}"
         self.statePayload = None
@@ -109,6 +119,8 @@ class Entity:
         self.configPayload = {}
         if self.deviceClass is not None:
             self.configPayload["device_class"] = self.deviceClass
+        if self.stateClass is not None:
+            self.configPayload["state_class"] = self.stateClass
         self.configPayload["name"] = f"{self.device.name} {self.name}"
         self.configPayload["unique_id"] = f"{self.device.id}_{self.id}"
         self.configPayload["state_topic"] = self.stateTopic
