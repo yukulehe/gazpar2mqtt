@@ -85,7 +85,7 @@ class Entity:
         self.type = type
         self.id = id
         self.name = name
-        self.class = deviceClass
+        self.deviceClass = deviceClass
         self.unit = _getUnitFromClass(self.class)
         self.valueTemplate = "{{ value_json. " + self.id + " }}"
         
@@ -95,7 +95,7 @@ class Entity:
         
         # Set config payload
         self.configPayload = {
-            "device_class": self.class,
+            "device_class": self.deviceClass,
             "name": f"{self.device.name} {self.name}",
             "unique_id": f"{self.device.id}_{self.id}",
             "state_topic": self.stateTopic,
