@@ -337,12 +337,6 @@ def run(params):
                 deviceId = params['hass','device_name'].replace(" ","_") + "_" +  myPce.pceId
                 deviceName = params['hass','device_name'] + " " +  myPce.alias
                 myDevice = hass.Device(myHass,myPce.pceId,deviceId,deviceName)
-                
-                # Create entities and set values
-                myEntity = hass.Entity(myDevice,hass.SENSOR,'daily_gas','Daily gas',hass.GAS_TYPE)
-                myEntity = hass.Entity(myDevice,hass.SENSOR,'daily_energy','Daily energy',hass.ENERGY_TYPE)
-                myEntity = hass.Entity(myDevice,hass.SENSOR,'consumption_date','Consumption date',hass.NONE_TYPE)
-                myEntity = hass.Entity(myDevice,hass.SENSOR,'connectivity','Connectivity',hass.CONNECTIVITY_TYPE)
 
                 # Process values
                 if not myPce.isOk(): # Values when PCE is not correct
@@ -362,8 +356,13 @@ def run(params):
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'connectivity','Connectivity',hass.CONNECTIVITY_TYPE).setValue('ON')
                     
 
-                    # Publish config and state
+                # Publish config
+                for myEntity in myDevice.entityList:
                     mqtt.publish(client, myEntity.configTopic, myEntity.getConfigPayloadJson, qos, retain)
+
+                # Publish state of all entities of the device
+                mqtt.publish(client, myDevice.configState,myDevice.getStatePayload,qos,retain)
+
 
 
         except:
