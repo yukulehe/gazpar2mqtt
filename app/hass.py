@@ -105,11 +105,7 @@ class Entity:
             self.configPayload["unit_of_measurement"] = self.unit
         self.configPayload["value_template"] = self.valueTemplate
         self.configPayload["device"] = self.device.configPayload
-        
-        print(self.configPayload)
 
-        
-        
         # Add entity to device
         self.device.addEntity(self)
     
