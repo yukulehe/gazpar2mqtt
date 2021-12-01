@@ -5,6 +5,8 @@ import json
 from importlib import import_module
 
 # Constants
+SENSOR = "sensor"
+BINARY = "binary_sensor"
 GAS_TYPE = "gas"
 ENERGY_TYPE = "energy"
 CONNECTIVITY_TYPE = "connectivity"
