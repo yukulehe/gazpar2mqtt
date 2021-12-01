@@ -173,19 +173,19 @@ def run(params):
     
     #try:
         
-        logging.info("Connect to Mqtt broker...")
-        
-        # Create mqtt client
-        myMqtt = Mqtt(params['mqtt','clientId'],params['mqtt','username'],params['mqtt','password'],params['mqtt','ssl'])
-    
-        # Connect mqtt brocker
-        myMqtt.connect(params['mqtt','host'],params['mqtt','port'])
-        
-        # Wait mqtt callback (connection confirmation)
-        time.sleep(2)
-        
-        if myMqtt.isConnected:
-            logging.info("Mqtt broker connected !")
+    logging.info("Connect to Mqtt broker...")
+
+    # Create mqtt client
+    myMqtt = Mqtt(params['mqtt','clientId'],params['mqtt','username'],params['mqtt','password'],params['mqtt','ssl'])
+
+    # Connect mqtt brocker
+    myMqtt.connect(params['mqtt','host'],params['mqtt','port'])
+
+    # Wait mqtt callback (connection confirmation)
+    time.sleep(2)
+
+    if myMqtt.isConnected:
+        logging.info("Mqtt broker connected !")
         
     #except:
         #logging.error("Unable to connect to Mqtt broker. Please check that broker is running, or check broker configuration.")
