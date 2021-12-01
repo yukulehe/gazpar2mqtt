@@ -22,7 +22,10 @@ UNIT_BY_CLASS = {
 # Return the unit related to the device class
 def _getUnitFromClass(deviceClass):
     print(deviceClass)
-    return UNIT_BY_CLASS[deviceClass]
+    if deviceClass is not None:
+        return UNIT_BY_CLASS[deviceClass]
+    else
+        return None
 
 
 # Class Home assistant
