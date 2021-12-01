@@ -176,7 +176,7 @@ def run(params):
     logging.info("Connect to Mqtt broker...")
 
     # Create mqtt client
-    myMqtt = mqtt.Mqtt(params['mqtt','clientId'],params['mqtt','username'],params['mqtt','password'],params['mqtt','ssl'])
+    myMqtt = mqtt.Mqtt(params['mqtt','clientId'],params['mqtt','username'],params['mqtt','password'],params['mqtt','ssl'],params['mqtt','qos'],params['mqtt','retain'])
 
     # Connect mqtt brocker
     myMqtt.connect(params['mqtt','host'],params['mqtt','port'])
