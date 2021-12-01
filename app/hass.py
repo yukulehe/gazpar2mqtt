@@ -13,9 +13,9 @@ CONNECTIVITY_TYPE = "connectivity"
 NONE_TYPE = ""
 MANUFACTURER = "GRDF"
 UNIT_BY_CLASS = {
-    "gas": "m3"
-    "energy": "kWh"
-    "connectivity": None
+    "gas": "m3",
+    "energy": "kWh",
+    "connectivity": None,
 }
 
 
