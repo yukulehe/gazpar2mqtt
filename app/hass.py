@@ -21,6 +21,7 @@ UNIT_BY_CLASS = {
 
 # Return the unit related to the device class
 def _getUnitFromClass(deviceClass):
+    print(deviceClass)
     return UNIT_BY_CLASS[deviceClass]
 
 
