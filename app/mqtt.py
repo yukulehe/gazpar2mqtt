@@ -49,6 +49,8 @@ class Mqtt:
 
         # Activate callbacks
         logging.debug("Mqtt connect : activation of callbacks")
+        self.host = host
+        self.port = port
         self.client.on_connect = onConnect
         self.client.on_publish = onPublish
         self.client.on_disconnect = onDisconnect
