@@ -361,9 +361,12 @@ def run(params):
                 myMqtt.publish(myEntity.configTopic, myEntity.getConfigPayloadJson())
             logging.info("Devices configuration published !")
 
-            # Publish state of all entities of the device
+            # Publish state of all entities of the device, one call by device class
             logging.info("Publishing devices state ...")
-            #myMqtt.publish(myDevice.configState,myDevice.getStatePayload)
+            logging.info("%s : %s",myDevice.configState,myDevice.getStatePayload(hass.SENSOR))
+            logging.info("%s : %s",myDevice.configState,myDevice.getStatePayload(hass.BINARY))
+            #myMqtt.publish(myDevice.configState,myDevice.getStatePayload(hass.SENSOR))
+            #myMqtt.publish(myDevice.configState,myDevice.getStatePayload(hass.BINARY))
             logging.info("Devices state published !")
 
 
