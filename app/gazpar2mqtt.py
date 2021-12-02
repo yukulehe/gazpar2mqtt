@@ -488,7 +488,7 @@ if __name__ == "__main__":
     if args.hass_discovery is not None: params['hass','discovery']=args.hass_discovery
     if args.hass_prefix is not None: params['hass','prefix']=args.hass_prefix
     if args.hass_device_name is not None: params['hass','device_name']=args.hass_device_name
-    if args.hass_device_name is not None: params['debug','enable']=args.debug
+    if args.debug is not None: params['debug','enable']=args.debug
         
     # STEP 4 : Check mandatory parameters (fix issue #12)
     if params['grdf','username'] is None:
