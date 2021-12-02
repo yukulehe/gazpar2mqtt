@@ -242,7 +242,7 @@ def run(params):
                 logging.info("%s PCE found !",myGrdf.countPce())
             except:
                 myGrdf.isConnected = False
-                logging.info(Unable to get PCE !)
+                logging.info("Unable to get PCE !")
 
             # Get measures for each PCE
             for pce in myGrdf.pceList:
