@@ -38,9 +38,9 @@ def _convertGrdfDate(date):
 
 
 #######################################################################
-#### Class GRDF
+#### Class GRDF Web
 #######################################################################
-class Grdf:
+class GrdfWeb:
     
     # Constructor
     def __init__(self):
@@ -171,6 +171,7 @@ class Grdf:
         pce.dailyMeasureStart = startDate
         pce.dailyMeasureEnd = endDate
         
+        # Loop on measure list
         for measure in measureList[pce.pceId]["releves"]:
             
             # Create the measure
@@ -179,7 +180,38 @@ class Grdf:
             # Append measure to the PCE's measure list
             pce.addDailyMeasure(myDailyMeasure)
             
+
             
+#######################################################################
+#### Class GRDF Database
+#######################################################################
+class GrdfDb:
+    
+    # Constructor
+    def __init__(self,databaseFile):
+        
+        # Database attributes
+        self.isConnected = False
+        self.con = None
+        self.cur = None
+        
+        # GRDF attributes
+        self.whoiam = None
+        self.pceList = []
+    
+    # Connect to database
+    def connect(self,databaseFile):
+        
+        # implement code here
+        # self.cur = ...
+        # self.cur = ...
+        
+    # Implement other methods here
+    # def ...(self):
+
+    
+    
+    
 
 #######################################################################
 #### Class Account
