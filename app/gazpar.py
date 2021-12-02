@@ -43,12 +43,7 @@ def _convertGrdfDate(date):
 class Grdf:
     
     # Constructor
-    def __init__(self,isDebug):
-        
-        # Set debug
-        self.isDebug = isDebug
-        if self.isDebug:
-            logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
+    def __init__(self):
         
         # Initialize instance variables
         
