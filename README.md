@@ -24,6 +24,7 @@ Important :
   - Published values are now PCE dependent
   - Home assistant : Add entity last index which can be integrated in Hass Energy panel
   - Rework of python code
+  - Add Debug mode in environment variable
 - v0.4.x : 
   - Home assistant mqtt discovery available
   - Home assistant add-on available : https://github.com/alexbelgium/hassio-addons/tree/master/gazpar2mqtt (special thx to [alexbelgium](https://github.com/alexbelgium))
