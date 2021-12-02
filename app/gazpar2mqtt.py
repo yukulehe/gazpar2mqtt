@@ -473,12 +473,15 @@ if __name__ == "__main__":
     # STEP 3 : Set logging
     if params['debug','enable'].lower() == 'true':
         myLevel = logging.DEBUG
-        logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
+        print("coucou")
+        logging.basicConfig(format='%(asctime)s %(message)s', level=myLevel)
     else:
         myLevel = logging.INFO
+        print("adios")
     logging.basicConfig(format='%(asctime)s %(message)s', level=myLevel)
     
     
+    # STEP 4 : Say welcome and be nice
     logging.info("Welcome to gazpar2mqtt")
     logging.info("-----------------------------------------------------------")
     logging.info("Version " + G2M_VERSION)
@@ -487,7 +490,7 @@ if __name__ == "__main__":
     logging.info("-----------------------------------------------------------")
     
     
-    # STEP 3 :  Overwrite for declared args
+    # STEP 5 :  Overwrite for declared args
     if args.grdf_username is not None: params['grdf','username']=args.grdf_username
     if args.grdf_password is not None: params['grdf','password']=args.grdf_password
     if args.schedule is not None: params['schedule','time']=args.schedule
@@ -506,7 +509,7 @@ if __name__ == "__main__":
     if args.hass_device_name is not None: params['hass','device_name']=args.hass_device_name
     if args.debug is not None: params['debug','enable']=args.debug
         
-    # STEP 4 : Check mandatory parameters (fix issue #12)
+    # STEP 6 : Check mandatory parameters (fix issue #12)
     if params['grdf','username'] is None:
         logging.error("Parameter GRDF username is mandatory.")
         quit()
@@ -519,7 +522,7 @@ if __name__ == "__main__":
     if params['standalone','mode'] is False and params['hass','discovery'] is False:
         logging.warning("Both Standalone mode and Home assistant discovery are disable. No value will be published to MQTT ! Please check your parameters.")
     
-    # STEP 5 : Log params info
+    # STEP 7 : Log params info
     logging.info("-----------------------------------------------------------")
     logging.info("Program parameters")
     logging.info("-----------------------------------------------------------")
@@ -534,7 +537,7 @@ if __name__ == "__main__":
     logging.info("Debug mode : Enable = %s", params['debug','enable'])
     
 
-    # STEP 7 : Run
+    # STEP 8 : Run
     if params['schedule','time'] is not None:
         
         # Run once at lauch
