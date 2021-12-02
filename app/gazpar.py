@@ -48,7 +48,7 @@ class Grdf:
         # Set debug
         self.isDebug = isDebug
         if self.isDebug:
-            logging.basicConfig(level=logging.DEBUG)
+            logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
         
         # Initialize instance variables
         
