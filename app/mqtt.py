@@ -18,7 +18,7 @@ class Mqtt:
         
         # Set authentification
         if username != "" and password != "":
-            client.username_pw_set(username, password)
+            self.client.username_pw_set(username, password)
             
         # Set SSL if required
         if self.isSsl:
