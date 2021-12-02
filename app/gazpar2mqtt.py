@@ -21,7 +21,7 @@ import pprint
 from envparse import env
 
 # gazpar2mqtt constants
-G2M_VERSION = '0.5.3'
+G2M_VERSION = '0.5.2'
 
 # Grdf API constants
 GRDF_API_MAX_RETRIES = 5 # number of retries max to get accurate data from GRDF
@@ -211,9 +211,9 @@ def run(params):
         # Connexion
         try:
 
-            # Create Grdf web instance
-            logging.info("Connexion to GRDF website...")
-            myGrdf = gazpar.GrdfWeb()
+            # Create Grdf instance
+            logging.info("Connexion to GRDF...")
+            myGrdf = gazpar.Grdf()
 
             # Connect to Grdf website
             myGrdf.login(params['grdf','username'],params['grdf','password'])
