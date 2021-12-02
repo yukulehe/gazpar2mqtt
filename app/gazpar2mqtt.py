@@ -179,24 +179,24 @@ def run(params):
     logging.info("Connexion to Mqtt broker")
     logging.info("-----------------------------------------------------------")
     
-    #try:
+    try:
         
-    logging.info("Connect to Mqtt broker...")
+        logging.info("Connect to Mqtt broker...")
 
-    # Create mqtt client
-    myMqtt = mqtt.Mqtt(params['mqtt','clientId'],params['mqtt','username'],params['mqtt','password'],params['mqtt','ssl'],params['mqtt','qos'],params['mqtt','retain'])
+        # Create mqtt client
+        myMqtt = mqtt.Mqtt(params['mqtt','clientId'],params['mqtt','username'],params['mqtt','password'],params['mqtt','ssl'],params['mqtt','qos'],params['mqtt','retain'])
 
-    # Connect mqtt brocker
-    myMqtt.connect(params['mqtt','host'],params['mqtt','port'])
+        # Connect mqtt brocker
+        myMqtt.connect(params['mqtt','host'],params['mqtt','port'])
 
-    # Wait mqtt callback (connection confirmation)
-    time.sleep(2)
+        # Wait mqtt callback (connection confirmation)
+        time.sleep(2)
 
-    if myMqtt.isConnected:
-        logging.info("Mqtt broker connected !")
+        if myMqtt.isConnected:
+            logging.info("Mqtt broker connected !")
         
-    #except:
-        #logging.error("Unable to connect to Mqtt broker. Please check that broker is running, or check broker configuration.")
+    except:
+        logging.error("Unable to connect to Mqtt broker. Please check that broker is running, or check broker configuration.")
         
     
      
@@ -220,6 +220,7 @@ def run(params):
             logging.info("GRDF connected !")
 
         except:
+            myGrdf.isConnected = False
             logging.info("Unable to login to GRDF website")
 
         # When GRDF is connected
@@ -227,13 +228,21 @@ def run(params):
 
             # Get account informations
             logging.info("Retrieve account informations")
-            myGrdf.getWhoami()
-            logging.info("GRDF account informations retrieved !")
+            try:
+                myGrdf.getWhoami()
+                logging.info("GRDF account informations retrieved !")
+            except:
+                myGrdf.isConnected = False
+                logging.info("Unable to get GRDF account informations !")
 
             # Get list of PCE
             logging.info("Retrieve list of PCEs...")
-            myGrdf.getPceList()
-            logging.info("%s PCE found !",myGrdf.countPce())
+            try:
+                myGrdf.getPceList()
+                logging.info("%s PCE found !",myGrdf.countPce())
+            except:
+                myGrdf.isConnected = False
+                logging.info(Unable to get PCE !)
 
             # Get measures for each PCE
             for pce in myGrdf.pceList:
