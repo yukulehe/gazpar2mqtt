@@ -470,27 +470,7 @@ if __name__ == "__main__":
     params = _getEnvParams()
     
     
-    # STEP 3 : Set logging
-    if params['debug','enable'].lower() == 'true':
-        myLevel = logging.DEBUG
-        print("coucou")
-        logging.basicConfig(format='%(asctime)s %(message)s', level=myLevel)
-    else:
-        myLevel = logging.INFO
-        print("adios")
-    logging.basicConfig(format='%(asctime)s %(message)s', level=myLevel)
-    
-    
-    # STEP 4 : Say welcome and be nice
-    logging.info("Welcome to gazpar2mqtt")
-    logging.info("-----------------------------------------------------------")
-    logging.info("Version " + G2M_VERSION)
-    logging.info("Please note that the the tool is still under development, various functions may disappear or be modified.")
-    logging.debug("If you see this line, you are in DEBUG.")
-    logging.info("-----------------------------------------------------------")
-    
-    
-    # STEP 5 :  Overwrite for declared args
+    # STEP 3 :  Overwrite for declared args
     if args.grdf_username is not None: params['grdf','username']=args.grdf_username
     if args.grdf_password is not None: params['grdf','password']=args.grdf_password
     if args.schedule is not None: params['schedule','time']=args.schedule
@@ -508,6 +488,28 @@ if __name__ == "__main__":
     if args.hass_prefix is not None: params['hass','prefix']=args.hass_prefix
     if args.hass_device_name is not None: params['hass','device_name']=args.hass_device_name
     if args.debug is not None: params['debug','enable']=args.debug
+        
+        
+    # STEP 4 : Set logging
+    if params['debug','enable'].lower() == 'true':
+        myLevel = logging.DEBUG
+        print("coucou")
+        logging.basicConfig(format='%(asctime)s %(message)s', level=myLevel)
+    else:
+        myLevel = logging.INFO
+        print("adios")
+    
+    logging.basicConfig(format='%(asctime)s %(message)s', level=myLevel)
+    
+    
+    # STEP 5 : Say welcome and be nice
+    logging.info("Welcome to gazpar2mqtt")
+    logging.info("-----------------------------------------------------------")
+    logging.info("Version " + G2M_VERSION)
+    logging.info("Please note that the the tool is still under development, various functions may disappear or be modified.")
+    logging.debug("If you see this line, you are in DEBUG.")
+    logging.info("-----------------------------------------------------------")
+        
         
     # STEP 6 : Check mandatory parameters (fix issue #12)
     if params['grdf','username'] is None:
