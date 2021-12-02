@@ -6,8 +6,13 @@ import ssl
 
 class Mqtt:
 
-    def __init__(self,clientId,username,password,isSsl,qos,retain):
+    def __init__(self,clientId,username,password,isSsl,qos,retain,isDebug):
         
+        # Set debug
+        self.isDebug = isDebug
+        if self.isDebug:
+            logging.basicConfig(level=logging.DEBUG)
+            
         self.isConnected = False
         self.isSsl = isSsl.lower() in ("t","true","1","yes","y","yup","oui","si","da")
         self.qos = qos
