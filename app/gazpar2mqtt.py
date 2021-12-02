@@ -170,12 +170,6 @@ def _getEnvParams():
 #######################################################################
 def run(params):
     
-    # Set debug mode if required
-    if params['debug','enable'].lower() == 'true':
-        logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
-        isDebug = True
-    else:
-        isDebug = False
     
     # Store time now
     dtn = _dateTimeToStr(datetime.datetime.now())
@@ -519,8 +513,12 @@ if __name__ == "__main__":
     logging.info("Home Assistant discovery : Enable = %s, Topic prefix = %s, Device name = %s", \
                  params['hass','discovery'], params['hass','prefix'], params['hass','device_name'])
     logging.info("Debug mode : Enable = %s", params['debug','enable'])
+    
+    # STEP 6 : Set debug
+    if params['debug','enable'].lower() == 'true':
+        logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
 
-    # STEP 6 : Run
+    # STEP 7 : Run
     if params['schedule','time'] is not None:
         
         # Run once at lauch
