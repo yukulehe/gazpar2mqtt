@@ -423,13 +423,6 @@ def run(params):
 if __name__ == "__main__":
     
     
-    logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
-    
-    logging.info("Welcome to gazpar2mqtt")
-    logging.info("-----------------------------------------------------------")
-    logging.info("Version " + G2M_VERSION)
-    logging.info("Please note that the the tool is still under development, various functions may disappear or be modified.")
-    logging.info("-----------------------------------------------------------")
     
     # STEP 1 : Get params from args
     
@@ -475,6 +468,21 @@ if __name__ == "__main__":
     
     # STEP 2 : Get params from environment OS
     params = _getEnvParams()
+    
+    
+    # Set logging
+    
+    
+    if params['debug','enable'].lower() == 'true':
+        logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
+    else:
+        logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
+    
+    logging.info("Welcome to gazpar2mqtt")
+    logging.info("-----------------------------------------------------------")
+    logging.info("Version " + G2M_VERSION)
+    logging.info("Please note that the the tool is still under development, various functions may disappear or be modified.")
+    logging.info("-----------------------------------------------------------")
     
     
     # STEP 3 :  Overwrite for declared args
@@ -523,10 +531,6 @@ if __name__ == "__main__":
                  params['hass','discovery'], params['hass','prefix'], params['hass','device_name'])
     logging.info("Debug mode : Enable = %s", params['debug','enable'])
     
-    # STEP 6 : Set debug
-    if params['debug','enable'].lower() == 'true':
-        print("coucou")
-        logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
 
     # STEP 7 : Run
     if params['schedule','time'] is not None:
