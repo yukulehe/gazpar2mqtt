@@ -474,10 +474,8 @@ if __name__ == "__main__":
     if params['debug','enable'].lower() == 'true':
         logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
     else:
-        logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
+        logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
     
-    print("Logging level:" + str(logging.root.level))
-        
     
     logging.debug("Coucou debug")
     
@@ -485,6 +483,7 @@ if __name__ == "__main__":
     logging.info("-----------------------------------------------------------")
     logging.info("Version " + G2M_VERSION)
     logging.info("Please note that the the tool is still under development, various functions may disappear or be modified.")
+    logging.debug("If you see this line, you are in DEBUG.")
     logging.info("-----------------------------------------------------------")
     
     
