@@ -211,9 +211,9 @@ def run(params):
         # Connexion
         try:
 
-            # Create Grdf instance
-            logging.info("Connexion to GRDF...")
-            myGrdf = gazpar.Grdf()
+            # Create Grdf web instance
+            logging.info("Connexion to GRDF website...")
+            myGrdf = gazpar.GrdfWeb()
 
             # Connect to Grdf website
             myGrdf.login(params['grdf','username'],params['grdf','password'])
