@@ -190,7 +190,7 @@ def run(params):
     logging.info("Connect to Mqtt broker...")
 
     # Create mqtt client
-    myMqtt = mqtt.Mqtt(params['mqtt','clientId'],params['mqtt','username'],params['mqtt','password'],params['mqtt','ssl'],params['mqtt','qos'],params['mqtt','retain'],isDebug)
+    myMqtt = mqtt.Mqtt(params['mqtt','clientId'],params['mqtt','username'],params['mqtt','password'],params['mqtt','ssl'],params['mqtt','qos'],params['mqtt','retain'])
 
     # Connect mqtt brocker
     myMqtt.connect(params['mqtt','host'],params['mqtt','port'])
@@ -219,7 +219,7 @@ def run(params):
 
             # Create Grdf instance
             logging.info("Connexion to GRDF...")
-            myGrdf = gazpar.Grdf(isDebug)
+            myGrdf = gazpar.Grdf()
 
             # Connect to Grdf website
             myGrdf.login(params['grdf','username'],params['grdf','password'])
