@@ -11,7 +11,8 @@ class Mqtt:
         # Set debug
         self.isDebug = isDebug
         if self.isDebug:
-            logging.basicConfig(level=logging.DEBUG)
+            print("coucou")
+            logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
             
         self.isConnected = False
         self.isSsl = isSsl.lower() in ("t","true","1","yes","y","yup","oui","si","da")
