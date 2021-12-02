@@ -46,6 +46,7 @@ class Grdf:
     def __init__(self):
         
         # Initialize instance variables
+        
         self.session = None
         self.auth_nonce = None
         self.pceList = []
@@ -82,15 +83,20 @@ class Grdf:
         }
         
         # Login step 1
+        logging.debug("Logging step 1...")
         req = self.session.post('https://login.monespace.grdf.fr/sofit-account-api/api/v1/auth', data=payload, allow_redirects=False)
+        logging.debug("Logging step 1 request : %s",req.text)
+                      
         if not 'XSRF-TOKEN' in self.session.cookies:
             raise GazparLoginException("Login unsuccessful. Check your credentials.")
         else:
-            logging.debug("Login sucessfull.")
+            logging.debug("Login step 1 sucessfull.")
             
         
         # Login step 2
+        logging.debug("Logging step 2...")
         req = self.session.get('https://sofa-connexion.grdf.fr:443/openam/oauth2/externeGrdf/authorize?response_type=code&scope=openid%20profile%20email%20infotravaux%20%2Fv1%2Faccreditation%20%2Fv1%2Faccreditations%20%2Fdigiconso%2Fv1%20%2Fdigiconso%2Fv1%2Fconsommations%20new_meg%20%2FDemande.read%20%2FDemande.write&client_id=prod_espaceclient&state=0&redirect_uri=https%3A%2F%2Fmonespace.grdf.fr%2F_codexch&nonce=' + self.auth_nonce + '&by_pass_okta=1&capp=meg')
+        logging.debug("Logging step 2 request : %s",req.text)
         # ! missing a check for step  2!
         
         
@@ -114,7 +120,9 @@ class Grdf:
     # Get account info
     def getWhoami(self):
         
+        logging.debug("Get whoami...")
         req = self.session.get('https://monespace.grdf.fr/api/e-connexion/users/whoami')
+        logging.debug("Req whoami : %s",req.text)
         account = json.loads(req.text)
         self.account = Account(account)
         
@@ -122,7 +130,9 @@ class Grdf:
     # Get list of PCE
     def getPceList(self):
         
+        logging.debug("Get pce...")
         req = self.session.get('https://monespace.grdf.fr/api/e-conso/pce')
+        logging.debug("Req pce : %s",req.text)
         pceList = json.loads(req.text)
         
         for item in pceList:

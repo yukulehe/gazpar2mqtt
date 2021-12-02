@@ -20,11 +20,13 @@ import logging
 import pprint
 from envparse import env
 
+# gazpar2mqtt constants
+G2M_VERSION = '0.5.2'
+
 # Grdf API constants
 GRDF_API_MAX_RETRIES = 5 # number of retries max to get accurate data from GRDF
 GRDF_API_WAIT_BTW_RETRIES = 10 # number of seconds between two tries
 GRDF_API_ERRONEOUS_COUNT = 1 # Erroneous number of results send by GRDF 
-
 
 # Sensors topics for standalone mode
 
@@ -154,6 +156,11 @@ def _getEnvParams():
         params['hass','device_name'] = "gazpar"
     else:
         params['hass','device_name'] = os.environ['HASS_DEVICE_NAME']
+        
+    if not "DEBUG" in os.environ:
+        params['debug','enable'] = "False"
+    else:
+        params['debug','enable'] = os.environ['DEBUG']
     
     return params
 
@@ -163,6 +170,7 @@ def _getEnvParams():
 #######################################################################
 def run(params):
     
+    
     # Store time now
     dtn = _dateTimeToStr(datetime.datetime.now())
     
@@ -171,24 +179,24 @@ def run(params):
     logging.info("Connexion to Mqtt broker")
     logging.info("-----------------------------------------------------------")
     
-    #try:
+    try:
         
-    logging.info("Connect to Mqtt broker...")
+        logging.info("Connect to Mqtt broker...")
 
-    # Create mqtt client
-    myMqtt = mqtt.Mqtt(params['mqtt','clientId'],params['mqtt','username'],params['mqtt','password'],params['mqtt','ssl'],params['mqtt','qos'],params['mqtt','retain'])
+        # Create mqtt client
+        myMqtt = mqtt.Mqtt(params['mqtt','clientId'],params['mqtt','username'],params['mqtt','password'],params['mqtt','ssl'],params['mqtt','qos'],params['mqtt','retain'])
 
-    # Connect mqtt brocker
-    myMqtt.connect(params['mqtt','host'],params['mqtt','port'])
+        # Connect mqtt brocker
+        myMqtt.connect(params['mqtt','host'],params['mqtt','port'])
 
-    # Wait mqtt callback (connection confirmation)
-    time.sleep(2)
+        # Wait mqtt callback (connection confirmation)
+        time.sleep(2)
 
-    if myMqtt.isConnected:
-        logging.info("Mqtt broker connected !")
+        if myMqtt.isConnected:
+            logging.info("Mqtt broker connected !")
         
-    #except:
-        #logging.error("Unable to connect to Mqtt broker. Please check that broker is running, or check broker configuration.")
+    except:
+        logging.error("Unable to connect to Mqtt broker. Please check that broker is running, or check broker configuration.")
         
     
      
@@ -212,6 +220,7 @@ def run(params):
             logging.info("GRDF connected !")
 
         except:
+            myGrdf.isConnected = False
             logging.info("Unable to login to GRDF website")
 
         # When GRDF is connected
@@ -219,13 +228,21 @@ def run(params):
 
             # Get account informations
             logging.info("Retrieve account informations")
-            myGrdf.getWhoami()
-            logging.info("GRDF account informations retrieved !")
+            try:
+                myGrdf.getWhoami()
+                logging.info("GRDF account informations retrieved !")
+            except:
+                myGrdf.isConnected = False
+                logging.info("Unable to get GRDF account informations !")
 
             # Get list of PCE
-            logging.info("Retrieve list of PCEs..")
-            myGrdf.getPceList()
-            logging.info("%s PCE found !",myGrdf.countPce())
+            logging.info("Retrieve list of PCEs...")
+            try:
+                myGrdf.getPceList()
+                logging.info("%s PCE found !",myGrdf.countPce())
+            except:
+                myGrdf.isConnected = False
+                logging.info("Unable to get PCE !")
 
             # Get measures for each PCE
             for pce in myGrdf.pceList:
@@ -406,13 +423,6 @@ def run(params):
 if __name__ == "__main__":
     
     
-    logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
-    
-    logging.info("Welcome to gazpar2mqtt")
-    logging.info("-----------------------------------------------------------")
-    logging.info("Version 0.5.1")
-    logging.info("Please note that the the tool is still under development, various functions may disappear or be modified.")
-    logging.info("-----------------------------------------------------------")
     
     # STEP 1 : Get params from args
     
@@ -441,7 +451,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--mqtt_retain",      help="Retain flag of the messages to be published to the Mqtt broker, possible values : True or False")
     parser.add_argument(
-        "--mqtt_ssl",      help="Enable MQTT SSL connexion, possible values : True or False")
+        "--mqtt_ssl",         help="Enable MQTT SSL connexion, possible values : True or False")
     parser.add_argument(
         "--standalone_mode",  help="Enable standalone publication mode, possible values : True or False")
     parser.add_argument(
@@ -449,7 +459,9 @@ if __name__ == "__main__":
     parser.add_argument(
         "--hass_prefix",      help="Home Assistant discovery Mqtt topic prefix")
     parser.add_argument(
-        "--hass_device_name",      help="Home Assistant device name")
+        "--hass_device_name", help="Home Assistant device name")
+    parser.add_argument(
+        "--debug",            help="Enable debug mode")
     
     args = parser.parse_args()
     
@@ -475,8 +487,31 @@ if __name__ == "__main__":
     if args.hass_discovery is not None: params['hass','discovery']=args.hass_discovery
     if args.hass_prefix is not None: params['hass','prefix']=args.hass_prefix
     if args.hass_device_name is not None: params['hass','device_name']=args.hass_device_name
+    if args.debug is not None: params['debug','enable']=args.debug
         
-    # STEP 4 : Check mandatory parameters (fix issue #12)
+        
+    # STEP 4 : Set logging
+    if params['debug','enable'].lower() == 'true':
+        myLevel = logging.DEBUG
+        print("coucou")
+        logging.basicConfig(format='%(asctime)s %(message)s', level=myLevel)
+    else:
+        myLevel = logging.INFO
+        print("adios")
+    
+    logging.basicConfig(format='%(asctime)s %(message)s', level=myLevel)
+    
+    
+    # STEP 5 : Say welcome and be nice
+    logging.info("Welcome to gazpar2mqtt")
+    logging.info("-----------------------------------------------------------")
+    logging.info("Version " + G2M_VERSION)
+    logging.info("Please note that the the tool is still under development, various functions may disappear or be modified.")
+    logging.debug("If you see this line, you are in DEBUG.")
+    logging.info("-----------------------------------------------------------")
+        
+        
+    # STEP 6 : Check mandatory parameters (fix issue #12)
     if params['grdf','username'] is None:
         logging.error("Parameter GRDF username is mandatory.")
         quit()
@@ -489,7 +524,7 @@ if __name__ == "__main__":
     if params['standalone','mode'] is False and params['hass','discovery'] is False:
         logging.warning("Both Standalone mode and Home assistant discovery are disable. No value will be published to MQTT ! Please check your parameters.")
     
-    # STEP 5 : Log params info
+    # STEP 7 : Log params info
     logging.info("-----------------------------------------------------------")
     logging.info("Program parameters")
     logging.info("-----------------------------------------------------------")
@@ -501,8 +536,10 @@ if __name__ == "__main__":
     logging.info("Standlone mode : Enable = %s", params['standalone','mode'])
     logging.info("Home Assistant discovery : Enable = %s, Topic prefix = %s, Device name = %s", \
                  params['hass','discovery'], params['hass','prefix'], params['hass','device_name'])
+    logging.info("Debug mode : Enable = %s", params['debug','enable'])
+    
 
-    # STEP 6 : Run
+    # STEP 8 : Run
     if params['schedule','time'] is not None:
         
         # Run once at lauch
