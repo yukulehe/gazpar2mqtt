@@ -97,6 +97,7 @@ Optionnal :
 | **HASS_DISCOVERY** | Enable Home assistant dicovery mode | False |
 | **HASS_PREFIX** | Home assistant topic prefix | homeassistant |
 | **HASS_DEVICE_NAME** | Home assistant device name | gazpar |
+| **DEBUG** | Enable debug mode| False |
 
 
 # Usage
