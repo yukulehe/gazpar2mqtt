@@ -172,8 +172,10 @@ def run(params):
     
     # Set debug mode if required
     if params['debug','enable'].lower() == 'true':
-        print("coucou")
         logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
+        isDebug = True
+    else:
+        isDebug = False
     
     # Store time now
     dtn = _dateTimeToStr(datetime.datetime.now())
@@ -188,7 +190,7 @@ def run(params):
     logging.info("Connect to Mqtt broker...")
 
     # Create mqtt client
-    myMqtt = mqtt.Mqtt(params['mqtt','clientId'],params['mqtt','username'],params['mqtt','password'],params['mqtt','ssl'],params['mqtt','qos'],params['mqtt','retain'])
+    myMqtt = mqtt.Mqtt(params['mqtt','clientId'],params['mqtt','username'],params['mqtt','password'],params['mqtt','ssl'],params['mqtt','qos'],params['mqtt','retain'],isDebug)
 
     # Connect mqtt brocker
     myMqtt.connect(params['mqtt','host'],params['mqtt','port'])
@@ -217,7 +219,7 @@ def run(params):
 
             # Create Grdf instance
             logging.info("Connexion to GRDF...")
-            myGrdf = gazpar.Grdf()
+            myGrdf = gazpar.Grdf(isDebug)
 
             # Connect to Grdf website
             myGrdf.login(params['grdf','username'],params['grdf','password'])
