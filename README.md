@@ -26,6 +26,7 @@ Important : the tool is still under development, various functions may disappear
 
 - v0.5.x :
   - Hard redesign of the application after new GRDF website released on 23/11/2021 . Thanks to **echauvet** for his contribution.
+  - Published values are now PCE dependent
   - Home assistant : Add entity last index which can be integrated in Hass Energy panel
 - v0.4.x : 
   - Home assistant mqtt discovery available
