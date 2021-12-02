@@ -474,7 +474,7 @@ if __name__ == "__main__":
     logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
     if params['debug','enable'].lower() == 'true':
         logging.setLevel(logging.DEBUG)
-    print("Logging level:"+logging.root.level)
+    print("Logging level:" + str(logging.root.level))
         
     
     logging.debug("Coucou debug")
