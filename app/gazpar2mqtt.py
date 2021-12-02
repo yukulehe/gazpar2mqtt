@@ -171,7 +171,7 @@ def _getEnvParams():
 def run(params):
     
     # Set debug mode if required
-    if params['debug','enable'].lower() = 'true':
+    if params['debug','enable'].lower() == 'true':
         logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
     
     # Store time now
