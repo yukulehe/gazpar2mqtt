@@ -478,6 +478,8 @@ if __name__ == "__main__":
     else:
         logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
     
+    logging.debug("Coucou debug")
+    
     logging.info("Welcome to gazpar2mqtt")
     logging.info("-----------------------------------------------------------")
     logging.info("Version " + G2M_VERSION)
