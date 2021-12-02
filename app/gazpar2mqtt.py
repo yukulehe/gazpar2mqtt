@@ -21,7 +21,7 @@ import pprint
 from envparse import env
 
 # gazpar2mqtt constants
-G2M_VERSION = '0.5.2'
+G2M_VERSION = '0.5.3'
 
 # Grdf API constants
 GRDF_API_MAX_RETRIES = 5 # number of retries max to get accurate data from GRDF
