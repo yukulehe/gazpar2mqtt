@@ -525,6 +525,7 @@ if __name__ == "__main__":
     
     # STEP 6 : Set debug
     if params['debug','enable'].lower() == 'true':
+        print("coucou")
         logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
 
     # STEP 7 : Run
