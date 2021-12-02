@@ -156,6 +156,11 @@ def _getEnvParams():
         params['hass','device_name'] = "gazpar"
     else:
         params['hass','device_name'] = os.environ['HASS_DEVICE_NAME']
+        
+    if not "DEBUG" in os.environ:
+        params['debug','enable'] = "False"
+    else:
+        params['debug','enable'] = os.environ['DEBUG']
     
     return params
 
@@ -443,7 +448,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--mqtt_retain",      help="Retain flag of the messages to be published to the Mqtt broker, possible values : True or False")
     parser.add_argument(
-        "--mqtt_ssl",      help="Enable MQTT SSL connexion, possible values : True or False")
+        "--mqtt_ssl",         help="Enable MQTT SSL connexion, possible values : True or False")
     parser.add_argument(
         "--standalone_mode",  help="Enable standalone publication mode, possible values : True or False")
     parser.add_argument(
@@ -451,7 +456,9 @@ if __name__ == "__main__":
     parser.add_argument(
         "--hass_prefix",      help="Home Assistant discovery Mqtt topic prefix")
     parser.add_argument(
-        "--hass_device_name",      help="Home Assistant device name")
+        "--hass_device_name", help="Home Assistant device name")
+    parser.add_argument(
+        "--debug",            help="Enable debug mode")
     
     args = parser.parse_args()
     
@@ -477,6 +484,7 @@ if __name__ == "__main__":
     if args.hass_discovery is not None: params['hass','discovery']=args.hass_discovery
     if args.hass_prefix is not None: params['hass','prefix']=args.hass_prefix
     if args.hass_device_name is not None: params['hass','device_name']=args.hass_device_name
+    if args.hass_device_name is not None: params['debug','enable']=args.debug
         
     # STEP 4 : Check mandatory parameters (fix issue #12)
     if params['grdf','username'] is None:
@@ -503,6 +511,7 @@ if __name__ == "__main__":
     logging.info("Standlone mode : Enable = %s", params['standalone','mode'])
     logging.info("Home Assistant discovery : Enable = %s, Topic prefix = %s, Device name = %s", \
                  params['hass','discovery'], params['hass','prefix'], params['hass','device_name'])
+    logging.info("Debug mode : Enable = %s", params['debug','enable'])
 
     # STEP 6 : Run
     if params['schedule','time'] is not None:
