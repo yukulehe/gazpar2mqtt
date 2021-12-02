@@ -83,7 +83,7 @@ class Grdf:
         }
         
         # Login step 1
-        logging.debug("Logging step 1...)
+        logging.debug("Logging step 1...")
         req = self.session.post('https://login.monespace.grdf.fr/sofit-account-api/api/v1/auth', data=payload, allow_redirects=False)
         logging.debug("Logging step 1 request : %s",req.text)
                       
