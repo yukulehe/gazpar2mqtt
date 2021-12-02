@@ -231,7 +231,7 @@ def run(params):
             logging.info("GRDF account informations retrieved !")
 
             # Get list of PCE
-            logging.info("Retrieve list of PCEs..")
+            logging.info("Retrieve list of PCEs...")
             myGrdf.getPceList()
             logging.info("%s PCE found !",myGrdf.countPce())
 
