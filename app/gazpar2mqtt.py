@@ -470,14 +470,14 @@ if __name__ == "__main__":
     params = _getEnvParams()
     
     
-    # Set logging
+    # STEP 3 : Set logging
     if params['debug','enable'].lower() == 'true':
+        myLevel = logging.DEBUG
         logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
     else:
-        logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
+        myLevel = logging.INFO
+    logging.basicConfig(format='%(asctime)s %(message)s', level=myLevel)
     
-    
-    logging.debug("Coucou debug")
     
     logging.info("Welcome to gazpar2mqtt")
     logging.info("-----------------------------------------------------------")
