@@ -166,7 +166,7 @@ def run(params):
         # Connect mqtt brocker
         myMqtt.connect(params['mqtt','host'],params['mqtt','port'])
 
-        # Wait mqtt callback (connection confirmation)
+        # Wait mqtt callback (connexion confirmation)
         time.sleep(2)
 
         if myMqtt.isConnected:
@@ -198,8 +198,6 @@ def run(params):
 
                 # Connect to Grdf website
                 myGrdf.login(params['grdf','username'],params['grdf','password'])
-                
-                raise Exception('test')
                 
                 # Check connexion
                 if myGrdf.isConnected:
