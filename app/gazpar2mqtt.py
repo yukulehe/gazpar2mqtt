@@ -198,14 +198,21 @@ def run(params):
 
                 # Connect to Grdf website
                 myGrdf.login(params['grdf','username'],params['grdf','password'])
-                logging.info("GRDF connected !")
                 
+                # Check connexion
                 if myGrdf.isConnected:
+                    logging.info("GRDF connected !")
                     break
+                else:
+                    logging.info("Unable to login to GRDF website")
+                    logging.info("Wait %s seconds berfore next try",gazpar.GRDF_API_WAIT_BTW_RETRIES)
+                    wait(gazpar.GRDF_API_WAIT_BTW_RETRIES)
 
             except:
                 myGrdf.isConnected = False
                 logging.info("Unable to login to GRDF website")
+                logging.info("Wait %s seconds berfore next try",gazpar.GRDF_API_WAIT_BTW_RETRIES)
+                wait(gazpar.GRDF_API_WAIT_BTW_RETRIES)
             
 
         # When GRDF is connected
