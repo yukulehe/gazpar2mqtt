@@ -185,20 +185,28 @@ def run(params):
         logging.info("Get data from GRDF website")
         logging.info("-----------------------------------------------------------")
 
+        tryCount = 0
         # Connexion
-        try:
+        while tryCount < gazpar.GRDF_API_MAX_RETRIES :
+            try:
+                
+                tryCount += 1
+                
+                # Create Grdf instance
+                logging.info("Connexion to GRDF, try number %s...",tryCount)
+                myGrdf = gazpar.Grdf()
 
-            # Create Grdf instance
-            logging.info("Connexion to GRDF...")
-            myGrdf = gazpar.Grdf()
+                # Connect to Grdf website
+                myGrdf.login(params['grdf','username'],params['grdf','password'])
+                logging.info("GRDF connected !")
+                
+                if myGrdf.isConnected:
+                    break
 
-            # Connect to Grdf website
-            myGrdf.login(params['grdf','username'],params['grdf','password'])
-            logging.info("GRDF connected !")
-
-        except:
-            myGrdf.isConnected = False
-            logging.info("Unable to login to GRDF website")
+            except:
+                myGrdf.isConnected = False
+                logging.info("Unable to login to GRDF website")
+            
 
         # When GRDF is connected
         if myGrdf.isConnected:
