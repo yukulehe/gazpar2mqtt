@@ -271,13 +271,12 @@ def run(params):
 
                 ## Publish status values
                 logging.info("Publishing to Mqtt status values...")
-                myMqtt.publish(mySa.statusDate, dtn)
-                myMqtt.publish(mySa.statusValue, 'OFF')
+                myMqtt.publish(mySa.statusDateTopic, dtn)
+                myMqtt.publish(mySa.statusValueTopic, 'OFF')
                 logging.info("Status values published !")
 
 
             else: # Values when Grdf succeeded
-
 
                 myDailyMeasure = myPce.getLastMeasureOk()
 
@@ -293,8 +292,8 @@ def run(params):
 
                 ## Publish status values
                 logging.info("Publishing to Mqtt status values...")
-                myMqtt.publish(mySa.statusDate, dtn)
-                myMqtt.publish(mySa.statusValue, 'ON')
+                myMqtt.publish(mySa.statusDateTopic, dtn)
+                myMqtt.publish(mySa.statusValueTopic, 'ON')
                 logging.info("Status values published !")
 
         #except:
