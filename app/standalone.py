@@ -21,11 +21,11 @@ class Standalone:
     self.prefix = prefix
     
     self.statusDateTopic = prefix + TOPIC_STATUS_DATE
-    self.statusValue = prefix + TOPIC_STATUS_VALUE
+    self.statusValueTopic = prefix + TOPIC_STATUS_VALUE
     
-    self.daily_date = prefix + TOPIC_DAILY_DATE
-    self.daily_kwh = prefix + TOPIC_DAILY_KWH
-    self.daily_mcube = prefix + TOPIC_DAILY_MCUBE
-    self.daily_index = prefix + TOPIC_DAILY_INDEX
+    self.dailyDateTopic = prefix + TOPIC_DAILY_DATE
+    self.dailyKwhTopic = prefix + TOPIC_DAILY_KWH
+    self.dailyMcubeTopic = prefix + TOPIC_DAILY_MCUBE
+    self.dailyIndexTopic = prefix + TOPIC_DAILY_INDEX
     
     
