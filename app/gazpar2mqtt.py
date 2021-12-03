@@ -370,8 +370,8 @@ def run(params):
 
 
         except:
-            #logging.error("Home Assistant discovery mode : unable to publish value to mqtt broker")
-            #sys.exit(1)
+            logging.error("Home Assistant discovery mode : unable to publish value to mqtt broker")
+            sys.exit(1)
 
 
     # STEP 5 : Disconnect mqtt broker
