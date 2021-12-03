@@ -22,9 +22,11 @@ Important :
 - v0.5.x :
   - Hard redesign of the application after new GRDF website released on 23/11/2021 . Thanks to **echauvet** for his contribution.
   - Published values are now PCE dependent
+  - Add last index
   - Home assistant : Add entity last index which can be integrated in Hass Energy panel
   - Rework of python code
   - Add Debug mode in environment variable
+  - Add connexion retries to GRDF when it failed
 - v0.4.x : 
   - Home assistant mqtt discovery available
   - Home assistant add-on available : https://github.com/alexbelgium/hassio-addons/tree/master/gazpar2mqtt (special thx to [alexbelgium](https://github.com/alexbelgium))
