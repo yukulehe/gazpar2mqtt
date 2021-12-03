@@ -50,8 +50,6 @@ class Mqtt:
     def onPublish(self,client, userdata, mid):
         logging.debug("Mqtt on_publish callback : message published")
             
-
-
     # Connect
     def connect(self,host,port):
 
