@@ -261,56 +261,56 @@ def run(params):
         and params['standalone','mode'].lower()=="true" \
         and myGrdf.isConnected:   
 
-        #try:
+        try:
 
-        logging.info("-----------------------------------------------------------")
-        logging.info("Stand alone publication mode")
-        logging.info("-----------------------------------------------------------")
+            logging.info("-----------------------------------------------------------")
+            logging.info("Stand alone publication mode")
+            logging.info("-----------------------------------------------------------")
 
-        # Loop on PCEs
-        for myPce in myGrdf.pceList:
+            # Loop on PCEs
+            for myPce in myGrdf.pceList:
 
-            logging.info("Publishing values of PCE %s alias %s...",myPce.pceId,myPce.alias)
-            logging.info("---------------------------------")
+                logging.info("Publishing values of PCE %s alias %s...",myPce.pceId,myPce.alias)
+                logging.info("---------------------------------")
 
-            # Set parameters
-            prefix = params['mqtt','topic'] + '/' + myPce.pceId
+                # Set parameters
+                prefix = params['mqtt','topic'] + '/' + myPce.pceId
 
-            # Instantiate Standalone class by PCE
-            mySa = standalone.Standalone(prefix)
+                # Instantiate Standalone class by PCE
+                mySa = standalone.Standalone(prefix)
 
-            # Set values
-            if not myPce.isOk(): # PCE is not correct
+                # Set values
+                if not myPce.isOk(): # PCE is not correct
 
-                ## Publish status values
-                logging.info("Publishing to Mqtt status values...")
-                myMqtt.publish(mySa.statusDateTopic, dtn)
-                myMqtt.publish(mySa.statusValueTopic, 'OFF')
-                logging.info("Status values published !")
-
-
-            else: # Values when Grdf succeeded
-
-                myDailyMeasure = myPce.getLastMeasureOk()
-
-                # Publish daily values
-                logging.info("Publishing to Mqtt the last daily values...")
-                logging.debug("Date %s, Energy = %s, Volume %s",myDailyMeasure.gasDate,myDailyMeasure.energy,myDailyMeasure.volume)
-                myMqtt.publish(mySa.dailyDateTopic, myDailyMeasure.gasDate)
-                myMqtt.publish(mySa.dailyKwhTopic, myDailyMeasure.energy)
-                myMqtt.publish(mySa.dailyMcubeTopic, myDailyMeasure.volume)
-                myMqtt.publish(mySa.dailyIndexTopic, myDailyMeasure.endIndex)
-                logging.info("Daily values published !")
+                    ## Publish status values
+                    logging.info("Publishing to Mqtt status values...")
+                    myMqtt.publish(mySa.statusDateTopic, dtn)
+                    myMqtt.publish(mySa.statusValueTopic, 'OFF')
+                    logging.info("Status values published !")
 
 
-                ## Publish status values
-                logging.info("Publishing to Mqtt status values...")
-                myMqtt.publish(mySa.statusDateTopic, dtn)
-                myMqtt.publish(mySa.statusValueTopic, 'ON')
-                logging.info("Status values published !")
+                else: # Values when Grdf succeeded
 
-        #except:
-            #logging.error("Standalone mode : unable to publish value to mqtt broker")
+                    myDailyMeasure = myPce.getLastMeasureOk()
+
+                    # Publish daily values
+                    logging.info("Publishing to Mqtt the last daily values...")
+                    logging.debug("Date %s, Energy = %s, Volume %s",myDailyMeasure.gasDate,myDailyMeasure.energy,myDailyMeasure.volume)
+                    myMqtt.publish(mySa.dailyDateTopic, myDailyMeasure.gasDate)
+                    myMqtt.publish(mySa.dailyKwhTopic, myDailyMeasure.energy)
+                    myMqtt.publish(mySa.dailyMcubeTopic, myDailyMeasure.volume)
+                    myMqtt.publish(mySa.dailyIndexTopic, myDailyMeasure.endIndex)
+                    logging.info("Daily values published !")
+
+
+                    ## Publish status values
+                    logging.info("Publishing to Mqtt status values...")
+                    myMqtt.publish(mySa.statusDateTopic, dtn)
+                    myMqtt.publish(mySa.statusValueTopic, 'ON')
+                    logging.info("Status values published !")
+
+        except:
+            logging.error("Standalone mode : unable to publish value to mqtt broker")
 
     # STEP 4B : Home Assistant discovery mode
     if myMqtt.isConnected \
