@@ -28,6 +28,7 @@ class Standalone:
     self.dailyDateTopic = prefix + TOPIC_DAILY_DATE
     self.dailyKwhTopic = prefix + TOPIC_DAILY_KWH
     self.dailyMcubeTopic = prefix + TOPIC_DAILY_MCUBE
-    self.dailyIndexTopic = prefix + TOPIC_INDEX
+    
+    self.IndexTopic = prefix + TOPIC_INDEX
     
     
