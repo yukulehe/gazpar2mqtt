@@ -297,7 +297,7 @@ def run(params):
                     myMqtt.publish(mySa.dailyDateTopic, myDailyMeasure.gasDate)
                     myMqtt.publish(mySa.dailyKwhTopic, myDailyMeasure.energy)
                     myMqtt.publish(mySa.dailyMcubeTopic, myDailyMeasure.volume)
-                    myMqtt.publish(mySa.dailyIndexTopic, myDailyMeasure.endIndex)
+                    myMqtt.publish(mySa.indexTopic, myDailyMeasure.endIndex)
                     logging.info("Daily values published !")
 
 
