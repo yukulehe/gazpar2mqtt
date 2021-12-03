@@ -12,6 +12,7 @@ import locale
 from dateutil.relativedelta import relativedelta
 import gazpar
 import mqtt
+import standalone
 import hass
 import json
 import requests
