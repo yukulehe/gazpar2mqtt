@@ -213,7 +213,7 @@ def run(params):
             except:
                 myGrdf.isConnected = False
                 logging.info("Unable to login to GRDF website")
-                logging.info("Wait %s seconds berfore next try",gazpar.GRDF_API_WAIT_BTW_RETRIES)
+                logging.info("Wait %s seconds before next try",gazpar.GRDF_API_WAIT_BTW_RETRIES)
                 time.sleep(gazpar.GRDF_API_WAIT_BTW_RETRIES)
             
 
@@ -377,11 +377,12 @@ def run(params):
 
 
     # STEP 5 : Disconnect mqtt broker
-    logging.info("-----------------------------------------------------------")
-    logging.info("Disconnecion from MQTT")
-    logging.info("-----------------------------------------------------------")
-    
     if myMqtt.isConnected:
+        
+        logging.info("-----------------------------------------------------------")
+        logging.info("Disconnexion from MQTT")
+        logging.info("-----------------------------------------------------------")
+        
         try:
             myMqtt.disconnect()
             logging.info("Mqtt broker disconnected")
