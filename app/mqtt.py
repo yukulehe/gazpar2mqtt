@@ -47,11 +47,8 @@ class Mqtt:
             
 
     # Callback on_publish
-    def onPublish(self,client, userdata, mid,rc):
-        logging.debug("Mqtt on_publish callback : %s",mqtt.connack_string(rc))
-        if rc != 0:
-            logging.error("Mqtt on_publish callback : publish failed")
-        else: logging.debug("Mqtt on_publish callback : message published")
+    def onPublish(self,client, userdata, mid):
+        logging.debug("Mqtt on_publish callback : message published")
             
 
 
