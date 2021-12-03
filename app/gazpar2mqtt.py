@@ -199,6 +199,8 @@ def run(params):
                 # Connect to Grdf website
                 myGrdf.login(params['grdf','username'],params['grdf','password'])
                 
+                raise Exception('test')
+                
                 # Check connexion
                 if myGrdf.isConnected:
                     logging.info("GRDF connected !")
