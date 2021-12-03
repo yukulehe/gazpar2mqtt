@@ -24,10 +24,6 @@ from envparse import env
 # gazpar2mqtt constants
 G2M_VERSION = '0.5.3'
 
-# Grdf API constants
-GRDF_API_MAX_RETRIES = 5 # number of retries max to get accurate data from GRDF
-GRDF_API_WAIT_BTW_RETRIES = 10 # number of seconds between two tries
-GRDF_API_ERRONEOUS_COUNT = 1 # Erroneous number of results send by GRDF 
 
 # Hass global
 HASS_AUTODISCOVERY_PREFIX = None
