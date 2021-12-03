@@ -28,31 +28,20 @@ class Mqtt:
 
     # Callback on_connect
     def onConnect(self,client, userdata, flags, rc):
-        logging.debug("Mqtt on_connect callback : %s",mqtt.connack_string(rc))
-        if rc != 0:
-            logging.error("Mqtt on_connect callback : connexion failed")
-            self.isConnected = False
-        else: 
-            logging.debug("Mqtt on_connect callback : connected")
-            self.isConnected = True
+        logging.debug("Mqtt on_connect : %s", mqtt.connack_string(rc))
+        self.isConnected = True
     
 
     # Callback on_disconnect
     def onDisconnect(self,client, userdata, rc):
-        logging.debug("Mqtt on_disconnect callback : %s",mqtt.connack_string(rc))
         if rc != 0:
-            logging.error("Mqtt on_disconnect callback : broker has been disconnected unexpectly")
+            logging.debug("Mqtt on_disconnect : unexpected disconnection %s", mqtt.connack_string(rc))
+            logging.error("MQTT broker has been disconnected unexpectly")
             self.isConnected = False
-        else: logging.debug("Mqtt on_disconnect callback : disconnected")
-            
 
     # Callback on_publish
-    def onPublish(self,client, userdata, mid,rc):
-        logging.debug("Mqtt on_publish callback : %s",mqtt.connack_string(rc))
-        if rc != 0:
-            logging.error("Mqtt on_publish callback : publish failed")
-        else: logging.debug("Mqtt on_publish callback : message published")
-            
+    def onPublish(self,client, userdata, mid):
+        logging.debug("Mqtt on_publish : message published")
 
 
     # Connect
