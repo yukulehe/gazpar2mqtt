@@ -256,25 +256,26 @@ def run(params):
             logging.info("-----------------------------------------------------------")
             logging.info("Stand alone publication mode")
             logging.info("-----------------------------------------------------------")
-
+            
             # Loop on PCEs
             for myPce in myGrdf.pceList:
                 
                 logging.info("Publishing values of PCE %s alias %s...",myPce.pceId,myPce.alias)
                 logging.info("---------------------------------")
                 
-                # Set variables
-                prefixTopic = params['mqtt','topic'] + '/' + myPce.pceId
-                retain = params['mqtt','retain']
-                qos = params['mqtt','qos']
-
+                # Set parameters
+                prefix = params['mqtt','topic'] + '/' + myPce.pceId
+                
+                # Instantiate Standalone class by PCE
+                mySa = standalone.Standalone(prefixTopic)
+                
                 # Set values
                 if not myPce.isOk(): # PCE is not correct
 
                     ## Publish status values
                     logging.info("Publishing to Mqtt status values...")
-                    mqtt.publish(prefixTopic + TOPIC_STATUS_DATE, dtn, qos, retain)
-                    mqtt.publish(prefixTopic + TOPIC_STATUS_VALUE, "Failed", qos, retain)
+                    myMqtt.publish(mySa.statusDate, dtn)
+                    myMqtt.publish(mySa.statusValue, 'OFF')
                     logging.info("Status values published !")
 
 
@@ -286,31 +287,21 @@ def run(params):
                     # Publish daily values
                     logging.info("Publishing to Mqtt the last daily values...")
                     logging.debug("Date %s, Energy = %s, Volume %s",myDailyMeasure.gasDate,myDailyMeasure.energy,myDailyMeasure.volume)
-                    myMqtt.publish(prefixTopic + TOPIC_DAILY_DATE, myDailyMeasure.gasDate)
-                    myMqtt.publish(prefixTopic + TOPIC_DAILY_KWH, myDailyMeasure.energy)
-                    myMqtt.publish(prefixTopic + TOPIC_DAILY_MCUBE, myDailyMeasure.volume)
-
+                    myMqtt.publish(mySa.dailyDateTopic, myDailyMeasure.gasDate)
+                    myMqtt.publish(mySa.dailyKwhTopic, myDailyMeasure.energy)
+                    myMqtt.publish(mySa.dailyMcubeTopic, myDailyMeasure.volume)
+                    myMqtt.publish(mySa.dailyIndexTopic, myDailyMeasure.endIndex)
                     logging.info("Daily values published !")
 
-                    # Publish monthly values
-                    #logging.info("Publishing to Mqtt the last monthly values...")
-                    #mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_DATE, m1['date'], qos, retain)
-                    #mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_KWH, m1['kwh'], qos, retain)
-                    #mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_KWH_TSH, m1['kwh_seuil'], qos, retain)
-                    #mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_KWH_PREV, m1['kwh_prec'], qos, retain)
-                    #mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_MCUBE, m1['mcube'], qos, retain)
-                    #mqtt.publish(client, prefixTopic + TOPIC_MONTHLY_MCUBE_PREV, m1['mcube_prec'], qos, retain)
-                    #logging.info("Monthly values published !")
 
                     ## Publish status values
                     logging.info("Publishing to Mqtt status values...")
-                    myMqtt.publish(prefixTopic + TOPIC_STATUS_DATE, dtn)
-                    myMqtt.publish(prefixTopic + TOPIC_STATUS_VALUE, "Success")
+                    myMqtt.publish(mySa.statusDate, dtn)
+                    myMqtt.publish(mySa.statusValue, 'ON')
                     logging.info("Status values published !")
 
         except:
             logging.error("Standalone mode : unable to publish value to mqtt broker")
-            sys.exit(1)
 
     # STEP 4B : Home Assistant discovery mode
     if myMqtt.isConnected \
