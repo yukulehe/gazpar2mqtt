@@ -2,11 +2,13 @@
 
 # Constants for topics
 
+TOPIC_INDEX = "/index"
+
 ## Daily
 TOPIC_DAILY_DATE = "/daily/date"
 TOPIC_DAILY_KWH = "/daily/kwh"
 TOPIC_DAILY_MCUBE = "/daily/mcube"
-TOPIC_DAILY_INDEX = "/daily/index"
+
 
 ## Status
 TOPIC_STATUS_DATE = "/status/date"
@@ -26,6 +28,6 @@ class Standalone:
     self.dailyDateTopic = prefix + TOPIC_DAILY_DATE
     self.dailyKwhTopic = prefix + TOPIC_DAILY_KWH
     self.dailyMcubeTopic = prefix + TOPIC_DAILY_MCUBE
-    self.dailyIndexTopic = prefix + TOPIC_DAILY_INDEX
+    self.dailyIndexTopic = prefix + TOPIC_INDEX
     
     
