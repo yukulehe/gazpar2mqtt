@@ -193,7 +193,7 @@ def run(params):
                 tryCount += 1
                 
                 # Create Grdf instance
-                logging.info("Connexion to GRDF, try number %s/%s...",tryCount,gazpar.GRDF_API_MAX_RETRIES)
+                logging.info("Connexion to GRDF, try %s/%s...",tryCount,gazpar.GRDF_API_MAX_RETRIES)
                 myGrdf = gazpar.Grdf()
 
                 # Connect to Grdf website
