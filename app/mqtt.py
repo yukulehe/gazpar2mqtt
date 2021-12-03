@@ -28,8 +28,13 @@ class Mqtt:
 
     # Callback on_connect
     def onConnect(self,client, userdata, flags, rc):
-        logging.debug("Mqtt on_connect : %s", mqtt.connack_string(rc))
-        self.isConnected = True
+        if rc != 0:
+            logging.debug("Mqtt onConnect : connexion failed, %s", mqtt.connack_string(rc))
+            logging.error("MQTT broker could not connect")
+            self.isConnected = False
+        else: 
+            logging.debug("Mqtt on_connect : %s", mqtt.connack_string(rc))
+            self.isConnected = True
     
 
     # Callback on_disconnect
@@ -40,8 +45,12 @@ class Mqtt:
             self.isConnected = False
 
     # Callback on_publish
-    def onPublish(self,client, userdata, mid):
-        logging.debug("Mqtt on_publish : message published")
+    def onPublish(self,client, userdata, mid,rc):
+        if rc != 0:
+            logging.debug("Mqtt on_publish : publish failed %s",mqtt.connack_string(rc))
+            logging.error("MQTT broker could not publish the message")
+        else: logging.debug("Mqtt on_publish : message published")
+            
 
 
     # Connect
