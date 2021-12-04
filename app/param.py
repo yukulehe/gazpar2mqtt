@@ -98,7 +98,7 @@ class Params:
     self.parser.add_argument(
         "--debug",            help="Enable debug mode")
     
-    return parser.parse_args()
+    return self.parser.parse_args()
   
   
       
