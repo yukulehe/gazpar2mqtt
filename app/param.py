@@ -11,7 +11,7 @@ def _isItTrue(val):
   else:
     return False
 
-class Param:
+class Params:
   
   def __init(self):
     
@@ -151,7 +151,7 @@ class Param:
     if self.args.debug is not None: self.debug = isItTrue(args.debug)
     
     
-  # Check mandatory parameters
+  # Check parameters
   def checkParams(self):
     
     if self.grdfUsername is None:
@@ -169,6 +169,7 @@ class Param:
       else:
         return True
   
+  # Display parameters in log
   def logParams(self):
     
     logging.info("GRDF config : username = %s, password = %s", "******@****.**", "******")
