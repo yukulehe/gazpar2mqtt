@@ -16,7 +16,7 @@ def _isItTrue(val):
 # Class Params
 class Params:
   
-  def __init(self):
+  def __init__(self):
     
     # Step 1 : set default params
     
