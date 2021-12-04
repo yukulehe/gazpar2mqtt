@@ -169,6 +169,7 @@ class Params:
     else:
       if self.standalone == False and self.hassDiscovery == False:
         logging.warning("Both Standalone mode and Home assistant discovery are disable. No value will be published to MQTT ! Please check your parameters.")
+        return True
       else:
         return True
   
