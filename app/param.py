@@ -2,6 +2,7 @@
 
 import argparse
 import os
+import logging
 
 def _isItTrue(val):
   
@@ -40,7 +41,9 @@ class Param:
     
     # Debug param
     self.debug = False
-
+    
+    
+      
   # Load params from Os environment variables 
   def getFromOs(self):
     
@@ -69,3 +72,19 @@ class Param:
   # Get params from arguments in command line
   def getFromArgs(self,args):
     
+    # do something
+    
+  # Check mandatory parameters
+  def checkMandatory(self):
+    
+    if self.grdfUsername is None:
+      logging.error("Parameter GRDF username is mandatory.")
+      return False
+    elif self.grdfPassword is None:
+      logging.error("Parameter GRDF password is mandatory.")
+      return False
+    elif self.mqttHost is None:
+      logging.error("Parameter MQTT host is mandatory.")
+      return False
+    else:
+      return True
