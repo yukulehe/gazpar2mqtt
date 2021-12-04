@@ -11,9 +11,9 @@ class Mqtt:
     def __init__(self,clientId,username,password,isSsl,qos,retain):
         
         self.isConnected = False
-        self.isSsl = isSsl.lower() in ("t","true","1","yes","y","yup","oui","si","da")
+        self.isSsl = isSsl
         self.qos = qos
-        self.retain = retain.lower() in ("t","true","1","yes","y","yup","oui","si","da")
+        self.retain = retain
         
         # Create instance
         self.client = mqtt.Client(clientId)
