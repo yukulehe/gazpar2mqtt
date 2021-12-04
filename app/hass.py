@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 ### Define Home Assistant-related functionality. ###
 # More info on HA discovery : https://www.home-assistant.io/docs/mqtt/discovery
 
