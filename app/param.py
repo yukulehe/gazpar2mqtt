@@ -37,7 +37,7 @@ class Params:
     self.mqttSsl = False
     
     # Run params
-    scheduleTime = None
+    self.scheduleTime = None
     
     # Publication params
     self.standalone = True
@@ -48,14 +48,13 @@ class Params:
     # Debug param
     self.debug = False
     
-    
-    # Init arguments for command line
+    # Step 2 : Init arguments for command line
     self.args = initArg(self)
     
-    # Get params from env variables
+    # Step 3 : Get params from env variables
     getFromOs(self)
     
-    # Get args from command line and overwrite if needed
+    # Step 4 : Get args from command line and overwrite env if needed
     getFromArgs(self)
     
     
