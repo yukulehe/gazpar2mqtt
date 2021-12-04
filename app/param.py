@@ -49,13 +49,13 @@ class Params:
     self.debug = False
     
     # Step 2 : Init arguments for command line
-    self.args = initArg(self)
+    self.args = self.initArg()
     
     # Step 3 : Get params from env variables
-    getFromOs(self)
+    self.getFromOs()
     
     # Step 4 : Get args from command line and overwrite env if needed
-    getFromArgs(self)
+    self.getFromArgs()
     
     
   # Set arguments list
