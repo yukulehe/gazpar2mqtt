@@ -141,17 +141,17 @@ class Params:
     if self.args.mqtt_password is not None: self.mqttPassword = args.mqtt_password
     if self.args.mqtt_qos is not None: self.mqttQos = int(args.mqtt_qos)
     if self.args.mqtt_topic is not None: self.mqttTopic = args.mqtt_topic
-    if self.args.mqtt_retain is not None: self.mqttRetain = isItTrue(args.mqtt_retain)
-    if self.args.mqtt_ssl is not None: self.mqttSsl = isItTrue(args.mqtt_ssl)
+    if self.args.mqtt_retain is not None: self.mqttRetain = _isItTrue(args.mqtt_retain)
+    if self.args.mqtt_ssl is not None: self.mqttSsl = _isItTrue(args.mqtt_ssl)
       
     if self.args.schedule is not None: self.scheduleTime = args.schedule
       
-    if self.args.standalone_mode is not None: self.standalone = isItTrue(args.standalone_mode)
-    if self.args.hass_discovery is not None: self.hassDiscovery = isItTrue(args.hass_discovery)
+    if self.args.standalone_mode is not None: self.standalone = _isItTrue(args.standalone_mode)
+    if self.args.hass_discovery is not None: self.hassDiscovery = _isItTrue(args.hass_discovery)
     if self.args.hass_prefix is not None: self.hassPrefix = args.hass_prefix
     if self.args.hass_device_name is not None: self.hassDeviceName = args.hass_device_name
       
-    if self.args.debug is not None: self.debug = isItTrue(args.debug)
+    if self.args.debug is not None: self.debug = _isItTrue(args.debug)
     
     
   # Check parameters
