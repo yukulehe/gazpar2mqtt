@@ -443,7 +443,7 @@ if __name__ == "__main__":
     logging.info("Check parameters...")
     if myParams.checkParams():
         logging.info("Parameters are ok !")
-    elif:
+    else:
         logging.error("Error on parameters. End of program.")
         quit()
 
