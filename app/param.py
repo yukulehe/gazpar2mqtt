@@ -15,6 +15,8 @@ class Param:
   
   def __init(self):
     
+    # Step 1 : set default params
+    
     # Grdf params
     self.grdfUsername = None
     self.grdfPassword = None
@@ -43,6 +45,61 @@ class Param:
     self.debug = False
     
     
+    # Init arguments for command line
+    self.args = initArg(self)
+    
+    # Get params from env variables
+    getFromOs(self)
+    
+    # Get args from command line and overwrite if needed
+    getFromArgs(self)
+    
+    # Check mandatory params
+    checkMandatory(self)
+    
+  
+  def setArg(self)
+    
+    self.parser = argparse.ArgumentParser()
+    
+    self.parser.add_argument(
+        "--grdf_username",    help="GRDF user name, ex : myemail@email.com")
+    self.parser.add_argument(
+        "--grdf_password",    help="GRDF password")
+    self.parser.add_argument(
+        "-s", "--schedule",   help="Schedule the launch of the script at hh:mm everyday")
+    self.parser.add_argument(
+        "--mqtt_host",        help="Hostname or ip adress of the Mqtt broker")
+    self.parser.add_argument(
+        "--mqtt_port",        help="Port of the Mqtt broker")
+    self.parser.add_argument(
+        "--mqtt_clientId",    help="Client Id to connect to the Mqtt broker")
+    self.parser.add_argument(
+        "--mqtt_username",    help="Username to connect to the Mqtt broker")
+    self.parser.add_argument(
+        "--mqtt_password",    help="Password to connect to the Mqtt broker")
+    self.parser.add_argument(
+        "--mqtt_qos",         help="QOS of the messages to be published to the Mqtt broker")
+    self.parser.add_argument(
+        "--mqtt_topic",       help="Topic prefix of the messages to be published to the Mqtt broker")
+    self.parser.add_argument(
+        "--mqtt_retain",      help="Retain flag of the messages to be published to the Mqtt broker, possible values : True or False")
+    self.parser.add_argument(
+        "--mqtt_ssl",         help="Enable MQTT SSL connexion, possible values : True or False")
+    self.parser.add_argument(
+        "--standalone_mode",  help="Enable standalone publication mode, possible values : True or False")
+    self.parser.add_argument(
+        "--hass_discovery",   help="Enable Home Assistant discovery, possible values : True or False")
+    self.parser.add_argument(
+        "--hass_prefix",      help="Home Assistant discovery Mqtt topic prefix")
+    self.parser.add_argument(
+        "--hass_device_name", help="Home Assistant device name")
+    self.parser.add_argument(
+        "--debug",            help="Enable debug mode")
+    
+    return parser.parse_args()
+  
+  
       
   # Load params from Os environment variables 
   def getFromOs(self):
@@ -71,29 +128,29 @@ class Param:
   
   
   # Get params from arguments in command line
-  def getFromArgs(self,args):
+  def getFromArgs(self):
     
-    if args.grdf_username is not None: self.grdfUsername = args.grdf_username
-    if args.grdf_password is not None: self.grdfPassword = args.grdf_password
+    if self.args.grdf_username is not None: self.grdfUsername = args.grdf_username
+    if self.args.grdf_password is not None: self.grdfPassword = args.grdf_password
       
-    if args.mqtt_host is not None: self.mqttHost = args.mqtt_host
-    if args.mqtt_port is not None: self.mqttPort = int(args.mqtt_port)
-    if args.mqtt_clientId is not None: self.mqttClientId = args.mqtt_clientId
-    if args.mqtt_username is not None: self.mqttUsername = args.mqtt_username
-    if args.mqtt_password is not None: self.mqttPassword = args.mqtt_password
-    if args.mqtt_qos is not None: self.mqttQos = int(args.mqtt_qos)
-    if args.mqtt_topic is not None: self.mqttTopic = args.mqtt_topic
-    if args.mqtt_retain is not None: self.mqttRetain = isItTrue(args.mqtt_retain)
-    if args.mqtt_ssl is not None: self.mqttSsl = isItTrue(args.mqtt_ssl)
+    if self.args.mqtt_host is not None: self.mqttHost = args.mqtt_host
+    if self.args.mqtt_port is not None: self.mqttPort = int(args.mqtt_port)
+    if self.args.mqtt_clientId is not None: self.mqttClientId = args.mqtt_clientId
+    if self.args.mqtt_username is not None: self.mqttUsername = args.mqtt_username
+    if self.args.mqtt_password is not None: self.mqttPassword = args.mqtt_password
+    if self.args.mqtt_qos is not None: self.mqttQos = int(args.mqtt_qos)
+    if self.args.mqtt_topic is not None: self.mqttTopic = args.mqtt_topic
+    if self.args.mqtt_retain is not None: self.mqttRetain = isItTrue(args.mqtt_retain)
+    if self.args.mqtt_ssl is not None: self.mqttSsl = isItTrue(args.mqtt_ssl)
       
-    if args.schedule is not None: self.scheduleTime = args.schedule
+    if self.args.schedule is not None: self.scheduleTime = args.schedule
       
-    if args.standalone_mode is not None: self.standalone = isItTrue(args.standalone_mode)
-    if args.hass_discovery is not None: self.hassDiscovery = isItTrue(args.hass_discovery)
-    if args.hass_prefix is not None: self.hassPrefix = args.hass_prefix
-    if args.hass_device_name is not None: self.hassDeviceName = args.hass_device_name
+    if self.args.standalone_mode is not None: self.standalone = isItTrue(args.standalone_mode)
+    if self.args.hass_discovery is not None: self.hassDiscovery = isItTrue(args.hass_discovery)
+    if self.args.hass_prefix is not None: self.hassPrefix = args.hass_prefix
+    if self.args.hass_device_name is not None: self.hassDeviceName = args.hass_device_name
       
-    if args.debug is not None: self.debug = isItTrue(args.debug)
+    if self.args.debug is not None: self.debug = isItTrue(args.debug)
     
     
   # Check mandatory parameters
