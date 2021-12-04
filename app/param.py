@@ -45,7 +45,7 @@ class Params:
     self.hassDeviceName = 'gazpar'
     
     # Debug param
-    self.debugMode = False
+    self.debug = False
     
     
     # Init arguments for command line
@@ -125,7 +125,7 @@ class Params:
     if "HASS_PREFIX" in os.environ: self.hassPrefix = os.environ["HASS_PREFIX"]
     if "HASS_DEVICE_NAME" in os.environ: self.hassDeviceName = os.environ["HASS_DEVICE_NAME"]
     
-    if "DEBUG" in os.environ: self.debugMode = _isItTrue(os.environ["DEBUG"])
+    if "DEBUG" in os.environ: self.debug = _isItTrue(os.environ["DEBUG"])
   
   
   # Get params from arguments in command line
@@ -151,7 +151,7 @@ class Params:
     if self.args.hass_prefix is not None: self.hassPrefix = args.hass_prefix
     if self.args.hass_device_name is not None: self.hassDeviceName = args.hass_device_name
       
-    if self.args.debug is not None: self.debugMode = isItTrue(args.debug)
+    if self.args.debug is not None: self.debug = isItTrue(args.debug)
     
     
   # Check parameters
