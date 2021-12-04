@@ -15,7 +15,7 @@ import mqtt
 import standalone
 import hass
 import json
-import requests
+#import requests
 import argparse
 import logging
 import pprint
@@ -406,75 +406,14 @@ def run(params):
 if __name__ == "__main__":
     
     
+    # Load params
+    myParams = param.Params
     
-    # STEP 1 : Get params from args
-    
-    parser = argparse.ArgumentParser()
-    
-    parser.add_argument(
-        "--grdf_username",    help="GRDF user name, ex : myemail@email.com")
-    parser.add_argument(
-        "--grdf_password",    help="GRDF password")
-    parser.add_argument(
-        "-s", "--schedule",   help="Schedule the launch of the script at hh:mm everyday")
-    parser.add_argument(
-        "--mqtt_host",        help="Hostname or ip adress of the Mqtt broker")
-    parser.add_argument(
-        "--mqtt_port",        help="Port of the Mqtt broker")
-    parser.add_argument(
-        "--mqtt_clientId",    help="Client Id to connect to the Mqtt broker")
-    parser.add_argument(
-        "--mqtt_username",    help="Username to connect to the Mqtt broker")
-    parser.add_argument(
-        "--mqtt_password",    help="Password to connect to the Mqtt broker")
-    parser.add_argument(
-        "--mqtt_qos",         help="QOS of the messages to be published to the Mqtt broker")
-    parser.add_argument(
-        "--mqtt_topic",       help="Topic prefix of the messages to be published to the Mqtt broker")
-    parser.add_argument(
-        "--mqtt_retain",      help="Retain flag of the messages to be published to the Mqtt broker, possible values : True or False")
-    parser.add_argument(
-        "--mqtt_ssl",         help="Enable MQTT SSL connexion, possible values : True or False")
-    parser.add_argument(
-        "--standalone_mode",  help="Enable standalone publication mode, possible values : True or False")
-    parser.add_argument(
-        "--hass_discovery",   help="Enable Home Assistant discovery, possible values : True or False")
-    parser.add_argument(
-        "--hass_prefix",      help="Home Assistant discovery Mqtt topic prefix")
-    parser.add_argument(
-        "--hass_device_name", help="Home Assistant device name")
-    parser.add_argument(
-        "--debug",            help="Enable debug mode")
-    
-    args = parser.parse_args()
-    
-    
-    # STEP 2 : Get params from environment OS
-    params = _getEnvParams()
-    
-    
-    # STEP 3 :  Overwrite for declared args
-    if args.grdf_username is not None: params['grdf','username']=args.grdf_username
-    if args.grdf_password is not None: params['grdf','password']=args.grdf_password
-    if args.schedule is not None: params['schedule','time']=args.schedule
-    if args.mqtt_host is not None: params['mqtt','host']=args.mqtt_host
-    if args.mqtt_port is not None: params['mqtt','port']=int(args.mqtt_port)
-    if args.mqtt_clientId is not None: params['mqtt','clientId']=args.mqtt_clientId
-    if args.mqtt_username is not None: params['mqtt','username']=args.mqtt_username
-    if args.mqtt_password is not None: params['mqtt','password']=args.mqtt_password
-    if args.mqtt_qos is not None: params['mqtt','qos']=int(args.mqtt_qos)
-    if args.mqtt_topic is not None: params['mqtt','topic']=args.mqtt_topic
-    if args.mqtt_retain is not None: params['mqtt','retain']=args.mqtt_retain
-    if args.mqtt_ssl is not None: params['mqtt','ssl']=args.mqtt_ssl
-    if args.standalone_mode is not None: params['standalone','mode']=args.standalone_mode
-    if args.hass_discovery is not None: params['hass','discovery']=args.hass_discovery
-    if args.hass_prefix is not None: params['hass','prefix']=args.hass_prefix
-    if args.hass_device_name is not None: params['hass','device_name']=args.hass_device_name
-    if args.debug is not None: params['debug','enable']=args.debug
+    # Check params
+    myParams.checkParams()
         
-        
-    # STEP 4 : Set logging
-    if params['debug','enable'].lower() == 'true':
+    # Set logging
+    if myParams.debug:
         myLevel = logging.DEBUG
         print("coucou")
         logging.basicConfig(format='%(asctime)s %(message)s', level=myLevel)
@@ -484,7 +423,7 @@ if __name__ == "__main__":
     logging.basicConfig(format='%(asctime)s %(message)s', level=myLevel)
     
     
-    # STEP 5 : Say welcome and be nice
+    # Say welcome and be nice
     logging.info("Welcome to gazpar2mqtt")
     logging.info("-----------------------------------------------------------")
     logging.info("Version " + G2M_VERSION)
@@ -492,33 +431,14 @@ if __name__ == "__main__":
     logging.debug("If you can read this line, you are in DEBUG mode.")
     logging.info("-----------------------------------------------------------")
         
-        
-    # STEP 6 : Check mandatory parameters (fix issue #12)
-    if params['grdf','username'] is None:
-        logging.error("Parameter GRDF username is mandatory.")
-        quit()
-    if params['grdf','password'] is None:
-        logging.error("Parameter GRDF password is mandatory.")
-        quit()
-    if params['mqtt','host'] is None:
-        logging.error("Parameter MQTT host is mandatory.")
-        quit()
-    if params['standalone','mode'] is False and params['hass','discovery'] is False:
-        logging.warning("Both Standalone mode and Home assistant discovery are disable. No value will be published to MQTT ! Please check your parameters.")
+    
     
     # STEP 7 : Log params info
     logging.info("-----------------------------------------------------------")
     logging.info("Program parameters")
     logging.info("-----------------------------------------------------------")
-    logging.info("GRDF config : username = %s, password = %s", "******@****.**", "******")
-    logging.info("MQTT broker config : host = %s, port = %s, clientId = %s, qos = %s, topic = %s, retain = %s, ssl = %s", \
-                 params['mqtt','host'], params['mqtt','port'], params['mqtt','clientId'], \
-                 params['mqtt','qos'],params['mqtt','topic'],params['mqtt','retain'], \
-                 params['mqtt','ssl']),
-    logging.info("Standlone mode : Enable = %s", params['standalone','mode'])
-    logging.info("Home Assistant discovery : Enable = %s, Topic prefix = %s, Device name = %s", \
-                 params['hass','discovery'], params['hass','prefix'], params['hass','device_name'])
-    logging.info("Debug mode : Enable = %s", params['debug','enable'])
+    myParams.logParams()
+
     
 
     # STEP 8 : Run
