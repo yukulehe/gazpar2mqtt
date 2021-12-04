@@ -49,103 +49,6 @@ def _getMonthOfssetDate(day, number):
 def _dateTimeToStr(datetime):
     return datetime.strftime("%d/%m/%Y - %H:%M:%S")
 
-# Get environment parameters
-def _getEnvParams():
-    
-    # Check and get mandatory environment parameters
-    params = {}
-    
-    if not "GRDF_USERNAME" in os.environ:
-        params['grdf','username'] = None
-    else:
-        params['grdf','username'] = os.environ['GRDF_USERNAME']
-        
-    if not "GRDF_PASSWORD" in os.environ:
-        params['grdf','password'] = None
-    else:
-        params['grdf','password'] = os.environ['GRDF_PASSWORD']
-        
-    if not "MQTT_HOST" in os.environ:
-        params['mqtt','host'] = None
-    else:
-        params['mqtt','host'] = os.environ['MQTT_HOST']
-        
-    # Check and get optional environment parameters
-    
-    if not "SCHEDULE_TIME" in os.environ:
-        params['schedule','time'] = None
-    else:
-        params['schedule','time'] = os.environ['SCHEDULE_TIME']
-        
-    if not "MQTT_PORT" in os.environ:
-        params['mqtt','port'] = 1883
-    else:
-        myPort = os.environ['MQTT_PORT'].replace('"','') # Fix issue #13
-        params['mqtt','port'] = int(myPort)
-        
-    if not "MQTT_CLIENTID" in os.environ:
-        params['mqtt','clientId'] = 'gazpar2mqtt'
-    else:
-        params['mqtt','clientId'] = os.environ['MQTT_CLIENTID']
-    
-    if not "MQTT_USERNAME" in os.environ:
-        params['mqtt','username'] = ''
-    else:
-        params['mqtt','username'] = os.environ['MQTT_USERNAME']
-    
-    if not "MQTT_PASSWORD" in os.environ:
-        params['mqtt','password'] = ''
-    else:
-        params['mqtt','password'] = os.environ['MQTT_PASSWORD']
-        
-    if not "MQTT_QOS" in os.environ:
-        params['mqtt','qos'] = 1
-    else:
-        params['mqtt','qos'] = int(os.environ['MQTT_QOS'])
-        
-    if not "MQTT_TOPIC" in os.environ:
-        params['mqtt','topic'] = "gazpar"
-    else:
-        params['mqtt','topic'] = os.environ['MQTT_TOPIC']
-        
-    if not "MQTT_RETAIN" in os.environ:
-        params['mqtt','retain'] = "False"
-    else:
-        params['mqtt','retain'] = os.environ['MQTT_RETAIN']
-    
-    if not "MQTT_SSL" in os.environ:
-        params['mqtt','ssl'] = "False"
-    else:
-        params['mqtt','ssl'] = os.environ['MQTT_SSL']
-    
-    if not "STANDALONE_MODE" in os.environ:
-        params['standalone','mode'] = "True"
-    else:
-        params['standalone','mode'] = os.environ['STANDALONE_MODE']
-        
-    if not "HASS_DISCOVERY" in os.environ:
-        params['hass','discovery'] = "False"
-    else:
-        params['hass','discovery'] = os.environ['HASS_DISCOVERY']
-    
-    if not "HASS_PREFIX" in os.environ:
-        params['hass','prefix'] = "homeassistant"
-    else:
-        params['hass','prefix'] = os.environ['HASS_PREFIX']
-    
-    if not "HASS_DEVICE_NAME" in os.environ:
-        params['hass','device_name'] = "gazpar"
-    else:
-        params['hass','device_name'] = os.environ['HASS_DEVICE_NAME']
-        
-    if not "DEBUG" in os.environ:
-        params['debug','enable'] = "False"
-    else:
-        params['debug','enable'] = os.environ['DEBUG']
-    
-    return params
-
-
 #######################################################################
 #### Running program
 #######################################################################
@@ -411,7 +314,7 @@ if __name__ == "__main__":
     
     
     # Load params
-    myParams = param.Params
+    myParams = param.Params()
         
     # Set logging
     if myParams.debug:
