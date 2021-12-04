@@ -57,7 +57,7 @@ class Params:
     
     
   
-  def setArg(self)
+  def setArg(self):
     
     self.parser = argparse.ArgumentParser()
     
