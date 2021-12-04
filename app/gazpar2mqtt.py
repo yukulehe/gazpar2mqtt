@@ -16,10 +16,10 @@ import standalone
 import hass
 import json
 #import requests
-import argparse
+#import argparse
 import logging
-import pprint
-from envparse import env
+#import pprint
+#from envparse import env
 
 # gazpar2mqtt constants
 G2M_VERSION = '0.5.3'
