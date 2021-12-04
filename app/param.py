@@ -168,3 +168,15 @@ class Param:
         logging.warning("Both Standalone mode and Home assistant discovery are disable. No value will be published to MQTT ! Please check your parameters.")
       else:
         return True
+  
+  def logParams(self):
+    
+    logging.info("GRDF config : username = %s, password = %s", "******@****.**", "******")
+    logging.info("MQTT broker config : host = %s, port = %s, clientId = %s, qos = %s, topic = %s, retain = %s, ssl = %s", \
+                 self.mqttHost, self.mqttPort, self.mqttClientId, \
+                 self.mqttQos,self.mqttTopic,self.mqttRetain, \
+                 self.mqttSsl),
+    logging.info("Standlone mode : Enable = %s", self.standalone)
+    logging.info("Home Assistant discovery : Enable = %s, Topic prefix = %s, Device name = %s", \
+                 self.hassDiscovery, self.hassPrefix, self.hassDeviceName)
+    logging.info("Debug mode : Enable = %s", self.hassDebug)
