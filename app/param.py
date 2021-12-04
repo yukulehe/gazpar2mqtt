@@ -183,4 +183,4 @@ class Params:
     logging.info("Standlone mode : Enable = %s", self.standalone)
     logging.info("Home Assistant discovery : Enable = %s, Topic prefix = %s, Device name = %s", \
                  self.hassDiscovery, self.hassPrefix, self.hassDeviceName)
-    logging.info("Debug mode : Enable = %s", self.Debug)
+    logging.info("Debug mode : Enable = %s", self.debug)
