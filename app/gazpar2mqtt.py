@@ -414,7 +414,7 @@ if __name__ == "__main__":
     myParams = param.Params
     
     # Check params
-    myParams.checkParams()
+    i = myParams.checkParams()
         
     # Set logging
     if myParams.debug:
