@@ -68,10 +68,10 @@ def run(params):
         logging.info("Connect to Mqtt broker...")
 
         # Create mqtt client
-        myMqtt = mqtt.Mqtt(params['mqtt','clientId'],params['mqtt','username'],params['mqtt','password'],params['mqtt','ssl'],params['mqtt','qos'],params['mqtt','retain'])
+        myMqtt = mqtt.Mqtt(myParams.mqttClientId,myParams.mqttUsername,myParams.mqttPassword,myParams.mqttSsl,myParams.mqttQos,myParams.mqttRetain)
 
         # Connect mqtt brocker
-        myMqtt.connect(params['mqtt','host'],params['mqtt','port'])
+        myMqtt.connect(myParams.mqttHost,myParams.mqttPort)
 
         # Wait mqtt callback (connexion confirmation)
         time.sleep(2)
@@ -104,7 +104,7 @@ def run(params):
                 myGrdf = gazpar.Grdf()
 
                 # Connect to Grdf website
-                myGrdf.login(params['grdf','username'],params['grdf','password'])
+                myGrdf.login(myParams.grdfUsername,myParams.grdfPassword)
                 
                 # Check connexion
                 if myGrdf.isConnected:
@@ -163,7 +163,7 @@ def run(params):
     
     # STEP 3A : Standalone mode
     if myMqtt.isConnected \
-        and params['standalone','mode'].lower()=="true" \
+        and myParams.standalone \
         and myGrdf.isConnected:   
 
         try:
@@ -179,7 +179,7 @@ def run(params):
                 logging.info("---------------------------------")
 
                 # Set parameters
-                prefix = params['mqtt','topic'] + '/' + myPce.pceId
+                prefix = myParams.mqttTopic + '/' + myPce.pceId
 
                 # Instantiate Standalone class by PCE
                 mySa = standalone.Standalone(prefix)
@@ -219,7 +219,7 @@ def run(params):
 
     # STEP 3B : Home Assistant discovery mode
     if myMqtt.isConnected \
-        and params['hass','discovery'].lower() == 'true' \
+        and myParams.hassDiscorery \
         and myGrdf.isConnected:
 
         try:
@@ -229,7 +229,7 @@ def run(params):
             logging.info("-----------------------------------------------------------")
 
             # Create hass instance
-            myHass = hass.Hass(params['hass','prefix'])
+            myHass = hass.Hass(myParams.hassPrefix)
 
             # Loop on PCEs
             for myPce in myGrdf.pceList:
@@ -239,8 +239,8 @@ def run(params):
 
 
                 # Create the device corresponding to the PCE
-                deviceId = params['hass','device_name'].replace(" ","_") + "_" +  myPce.pceId
-                deviceName = params['hass','device_name'] + " " +  myPce.alias
+                deviceId = myParams.hassDeviceName.replace(" ","_") + "_" +  myPce.pceId
+                deviceName = myParams.hassDeviceName + " " +  myPce.alias
                 myDevice = hass.Device(myHass,myPce.pceId,deviceId,deviceName)
 
                 # Process hass's entities to be valuated
@@ -296,8 +296,8 @@ def run(params):
             sys.exit(1)
             
     
-    if params['schedule','time'] is not None:
-        logging.info("gazpar2mqtt next run scheduled at %s",params['schedule','time'])
+    if myParams.scheduleTime is not None:
+        logging.info("gazpar2mqtt next run scheduled at %s",myParams.scheduleTime)
     
     logging.info("-----------------------------------------------------------")
     logging.info("End of program")
