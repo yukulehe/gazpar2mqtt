@@ -11,6 +11,9 @@ global JAVAVXS
 # Constants
 GRDF_DATE_FORMAT = "%Y-%m-%d"
 GRDF_DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
+GRDF_API_MAX_RETRIES = 5 # number of retries max to get accurate data from GRDF
+GRDF_API_WAIT_BTW_RETRIES = 10 # number of seconds between two tries
+GRDF_API_ERRONEOUS_COUNT = 1 # Erroneous number of results send by GRDF 
 
 #######################################################################
 #### Usefull functions

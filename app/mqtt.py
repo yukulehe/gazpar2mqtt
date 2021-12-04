@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import paho.mqtt.client as mqtt
 import time
 import logging
@@ -9,9 +11,9 @@ class Mqtt:
     def __init__(self,clientId,username,password,isSsl,qos,retain):
         
         self.isConnected = False
-        self.isSsl = isSsl.lower() in ("t","true","1","yes","y","yup","oui","si","da")
+        self.isSsl = isSsl
         self.qos = qos
-        self.retain = retain.lower() in ("t","true","1","yes","y","yup","oui","si","da")
+        self.retain = retain
         
         # Create instance
         self.client = mqtt.Client(clientId)
@@ -28,22 +30,28 @@ class Mqtt:
 
     # Callback on_connect
     def onConnect(self,client, userdata, flags, rc):
-        logging.debug("Mqtt on_connect : %s", mqtt.connack_string(rc))
-        self.isConnected = True
+        logging.debug("Mqtt on_connect callback : %s",mqtt.connack_string(rc))
+        if rc != 0:
+            logging.error("Mqtt on_connect callback : connexion failed")
+            self.isConnected = False
+        else: 
+            logging.debug("Mqtt on_connect callback : connected")
+            self.isConnected = True
     
 
     # Callback on_disconnect
     def onDisconnect(self,client, userdata, rc):
+        logging.debug("Mqtt on_disconnect callback : %s",mqtt.connack_string(rc))
         if rc != 0:
-            logging.debug("Mqtt on_disconnect : unexpected disconnection %s", mqtt.connack_string(rc))
-            logging.error("MQTT broker has been disconnected unexpectly")
+            logging.error("Mqtt on_disconnect callback : broker has been disconnected unexpectly")
             self.isConnected = False
+        else: logging.debug("Mqtt on_disconnect callback : disconnected")
+            
 
     # Callback on_publish
     def onPublish(self,client, userdata, mid):
-        logging.debug("Mqtt on_publish : message published")
-
-
+        logging.debug("Mqtt on_publish callback : message published")
+            
     # Connect
     def connect(self,host,port):
 
@@ -56,8 +64,8 @@ class Mqtt:
         self.client.on_disconnect = self.onDisconnect
 
         # Connect
-        logging.debug("Mqtt connect : connection to broker...")
-        self.client.connect(host,port, 60)
+        logging.debug("Mqtt connect : connection to broker %s:%s...",self.host,self.port)
+        self.client.connect(self.host,self.port, 60)
         time.sleep(5)
 
         # Start loop
