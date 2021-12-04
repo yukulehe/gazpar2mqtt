@@ -219,7 +219,7 @@ def run(params):
 
     # STEP 3B : Home Assistant discovery mode
     if myMqtt.isConnected \
-        and myParams.hassDiscorery \
+        and myParams.hassDiscovery \
         and myGrdf.isConnected:
 
         try:
