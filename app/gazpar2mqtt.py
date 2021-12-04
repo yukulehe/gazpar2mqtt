@@ -414,7 +414,7 @@ if __name__ == "__main__":
     myParams = param.Params
         
     # Set logging
-    if myParams.debug:
+    if myParams.debugMode:
         myLevel = logging.DEBUG
         logging.basicConfig(format='%(asctime)s %(message)s', level=myLevel)
     else:
