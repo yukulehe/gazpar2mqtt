@@ -1,7 +1,9 @@
+#!/usr/bin/env python3
 ### Define Standalone functionality. ###
 
 # Constants for topics
 
+## Index
 TOPIC_INDEX = "/index"
 
 ## Daily
