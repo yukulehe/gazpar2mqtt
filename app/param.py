@@ -12,6 +12,8 @@ def _isItTrue(val):
   else:
     return False
 
+  
+# Class Params
 class Params:
   
   def __init(self):
@@ -56,7 +58,7 @@ class Params:
     getFromArgs(self)
     
     
-  
+  # Set arguments list
   def setArg(self):
     
     self.parser = argparse.ArgumentParser()
