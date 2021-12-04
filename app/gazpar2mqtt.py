@@ -70,7 +70,7 @@ def run(params):
         # Create mqtt client
         myMqtt = mqtt.Mqtt(myParams.mqttClientId,myParams.mqttUsername,myParams.mqttPassword,myParams.mqttSsl,myParams.mqttQos,myParams.mqttRetain)
 
-        # Connect mqtt brocker
+        # Connect mqtt broker
         myMqtt.connect(myParams.mqttHost,myParams.mqttPort)
 
         # Wait mqtt callback (connexion confirmation)
