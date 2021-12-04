@@ -54,8 +54,6 @@ class Param:
     # Get args from command line and overwrite if needed
     getFromArgs(self)
     
-    # Check mandatory params
-    checkMandatory(self)
     
   
   def setArg(self)
@@ -154,7 +152,7 @@ class Param:
     
     
   # Check mandatory parameters
-  def checkMandatory(self):
+  def checkParams(self):
     
     if self.grdfUsername is None:
       logging.error("Parameter GRDF username is mandatory.")
@@ -166,4 +164,7 @@ class Param:
       logging.error("Parameter MQTT host is mandatory.")
       return False
     else:
-      return True
+      if self.standalone == False and self.hassDiscovery == False
+        logging.warning("Both Standalone mode and Home assistant discovery are disable. No value will be published to MQTT ! Please check your parameters.")
+      else:
+        return True
