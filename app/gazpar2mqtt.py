@@ -442,13 +442,13 @@ if __name__ == "__main__":
     
 
     # STEP 8 : Run
-    if params['schedule','time'] is not None:
+    if myParams.scheduleTime is not None:
         
         # Run once at lauch
-        run(params)
+        run(myParams)
 
         # Then run at scheduled time
-        schedule.every().day.at(params['schedule','time']).do(run,params)
+        schedule.every().day.at(myParams.scheduleTime).do(run,myParams)
         while True:
             schedule.run_pending()
             time.sleep(1)
@@ -457,5 +457,5 @@ if __name__ == "__main__":
     else:
         
         # Run once
-        run(params)
+        run(myParams)
         logging.info("End of gazpar2mqtt. See u...")
