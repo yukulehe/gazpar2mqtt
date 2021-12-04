@@ -64,8 +64,8 @@ class Mqtt:
         self.client.on_disconnect = self.onDisconnect
 
         # Connect
-        logging.debug("Mqtt connect : connection to broker...")
-        self.client.connect(host,port, 60)
+        logging.debug("Mqtt connect : connection to broker %s:%s...",self.host,self.port)
+        self.client.connect(self.host,self.port, 60)
         time.sleep(5)
 
         # Start loop
