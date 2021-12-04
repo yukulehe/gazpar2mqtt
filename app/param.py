@@ -165,7 +165,7 @@ class Params:
       logging.error("Parameter MQTT host is mandatory.")
       return False
     else:
-      if self.standalone == False and self.hassDiscovery == False
+      if self.standalone == False and self.hassDiscovery == False:
         logging.warning("Both Standalone mode and Home assistant discovery are disable. No value will be published to MQTT ! Please check your parameters.")
       else:
         return True
