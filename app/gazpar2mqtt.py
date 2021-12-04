@@ -412,9 +412,6 @@ if __name__ == "__main__":
     
     # Load params
     myParams = param.Params
-    
-    # Check params
-    myParams.checkParams()
         
     # Set logging
     if myParams.debug:
@@ -436,15 +433,22 @@ if __name__ == "__main__":
         
     
     
-    # STEP 7 : Log params info
+    # Log params info
     logging.info("-----------------------------------------------------------")
     logging.info("Program parameters")
     logging.info("-----------------------------------------------------------")
     myParams.logParams()
+    
+    # Check params
+    logging.info("Check parameters...")
+    if myParams.checkParams():
+        logging.info("Parameters are ok !")
+    elif:
+        logging.error("Error on parameters. End of program.")
+        quit()
 
     
-
-    # STEP 8 : Run
+    # Run
     if myParams.scheduleTime is not None:
         
         # Run once at lauch
