@@ -59,7 +59,7 @@ class Params:
     
     
   # Set arguments list
-  def setArg(self):
+  def initArg(self):
     
     self.parser = argparse.ArgumentParser()
     
