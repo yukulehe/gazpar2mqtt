@@ -131,27 +131,27 @@ class Params:
   # Get params from arguments in command line
   def getFromArgs(self):
     
-    if self.args.grdf_username is not None: self.grdfUsername = args.grdf_username
-    if self.args.grdf_password is not None: self.grdfPassword = args.grdf_password
+    if self.args.grdf_username is not None: self.grdfUsername = self.args.grdf_username
+    if self.args.grdf_password is not None: self.grdfPassword = self.args.grdf_password
       
-    if self.args.mqtt_host is not None: self.mqttHost = args.mqtt_host
-    if self.args.mqtt_port is not None: self.mqttPort = int(args.mqtt_port)
-    if self.args.mqtt_clientId is not None: self.mqttClientId = args.mqtt_clientId
-    if self.args.mqtt_username is not None: self.mqttUsername = args.mqtt_username
-    if self.args.mqtt_password is not None: self.mqttPassword = args.mqtt_password
-    if self.args.mqtt_qos is not None: self.mqttQos = int(args.mqtt_qos)
-    if self.args.mqtt_topic is not None: self.mqttTopic = args.mqtt_topic
-    if self.args.mqtt_retain is not None: self.mqttRetain = _isItTrue(args.mqtt_retain)
-    if self.args.mqtt_ssl is not None: self.mqttSsl = _isItTrue(args.mqtt_ssl)
+    if self.args.mqtt_host is not None: self.mqttHost = self.args.mqtt_host
+    if self.args.mqtt_port is not None: self.mqttPort = int(self.args.mqtt_port)
+    if self.args.mqtt_clientId is not None: self.mqttClientId = self.args.mqtt_clientId
+    if self.args.mqtt_username is not None: self.mqttUsername = self.args.mqtt_username
+    if self.args.mqtt_password is not None: self.mqttPassword = self.args.mqtt_password
+    if self.args.mqtt_qos is not None: self.mqttQos = int(self.args.mqtt_qos)
+    if self.args.mqtt_topic is not None: self.mqttTopic = self.args.mqtt_topic
+    if self.args.mqtt_retain is not None: self.mqttRetain = _isItTrue(self.args.mqtt_retain)
+    if self.args.mqtt_ssl is not None: self.mqttSsl = _isItTrue(self.args.mqtt_ssl)
       
-    if self.args.schedule is not None: self.scheduleTime = args.schedule
+    if self.args.schedule is not None: self.scheduleTime = self.args.schedule
       
-    if self.args.standalone_mode is not None: self.standalone = _isItTrue(args.standalone_mode)
-    if self.args.hass_discovery is not None: self.hassDiscovery = _isItTrue(args.hass_discovery)
-    if self.args.hass_prefix is not None: self.hassPrefix = args.hass_prefix
-    if self.args.hass_device_name is not None: self.hassDeviceName = args.hass_device_name
+    if self.args.standalone_mode is not None: self.standalone = _isItTrue(self.args.standalone_mode)
+    if self.args.hass_discovery is not None: self.hassDiscovery = _isItTrue(self.args.hass_discovery)
+    if self.args.hass_prefix is not None: self.hassPrefix = self.args.hass_prefix
+    if self.args.hass_device_name is not None: self.hassDeviceName = self.args.hass_device_name
       
-    if self.args.debug is not None: self.debug = _isItTrue(args.debug)
+    if self.args.debug is not None: self.debug = _isItTrue(self.args.debug)
     
     
   # Check parameters
