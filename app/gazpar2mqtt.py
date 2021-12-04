@@ -8,7 +8,6 @@ import sys
 import datetime
 import schedule
 import time
-#import locale
 from dateutil.relativedelta import relativedelta
 import json
 import logging
@@ -19,19 +18,10 @@ import standalone
 import hass
 import param
 
-#import requests
-#import argparse
-
-#import pprint
-#from envparse import env
 
 # gazpar2mqtt constants
 G2M_VERSION = '0.5.3'
 
-
-# Hass global
-HASS_AUTODISCOVERY_PREFIX = None
-HASS_DEVICE_NAME = None
 
 #######################################################################
 #### Functions
@@ -302,16 +292,12 @@ def run(params):
     logging.info("-----------------------------------------------------------")
     logging.info("End of program")
     logging.info("-----------------------------------------------------------")
-    
-
-        
         
         
 #######################################################################
 #### Main
 #######################################################################                
 if __name__ == "__main__":
-    
     
     # Load params
     myParams = param.Params()
@@ -322,7 +308,6 @@ if __name__ == "__main__":
         logging.basicConfig(format='%(asctime)s %(message)s', level=myLevel)
     else:
         myLevel = logging.INFO
-    
     logging.basicConfig(format='%(asctime)s %(message)s', level=myLevel)
     
     
@@ -333,7 +318,6 @@ if __name__ == "__main__":
     logging.info("Please note that the the tool is still under development, various functions may disappear or be modified.")
     logging.debug("If you can read this line, you are in DEBUG mode.")
     logging.info("-----------------------------------------------------------")
-        
     
     
     # Log params info
@@ -349,7 +333,6 @@ if __name__ == "__main__":
     else:
         logging.error("Error on parameters. End of program.")
         quit()
-
     
     # Run
     if myParams.scheduleTime is not None:
