@@ -331,6 +331,8 @@ def run(myParams,myDb):
     logging.info("-----------------------------------------------------------")
     if myParams.scheduleTime is not None:
         logging.info("gazpar2mqtt next run scheduled at %s",myParams.scheduleTime)
+    else:
+        logging.info("No schedule define. It was a oneshot.")
     
     logging.info("-----------------------------------------------------------")
     logging.info("End of program")
