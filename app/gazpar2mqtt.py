@@ -71,7 +71,7 @@ def run(params):
         myMqtt = mqtt.Mqtt(myParams.mqttClientId,myParams.mqttUsername,myParams.mqttPassword,myParams.mqttSsl,myParams.mqttQos,myParams.mqttRetain)
 
         # Connect mqtt broker
-        myMqtt.connect(myParams.mqttHost,myParams.mqttPort)
+        #myMqtt.connect(myParams.mqttHost,myParams.mqttPort)
 
         # Wait mqtt callback (connexion confirmation)
         time.sleep(2)
