@@ -18,6 +18,7 @@ import mqtt
 import standalone
 import hass
 import param
+import database
 
 
 # gazpar2mqtt constants
