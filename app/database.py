@@ -3,6 +3,7 @@ import os
 import sys
 import logging
 import datetime
+import json
 
 # Constants
 DATABASE_NAME = "gazpar2mqtt.db"
