@@ -15,7 +15,6 @@ class Database:
   
     self.con = None
     self.cur = None
-    self.isConnected = False
   
   # Connexion to database
   def connect(self):
