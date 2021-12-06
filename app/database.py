@@ -2,6 +2,7 @@ import sqlite3
 import os
 import sys
 import logging
+import datetime
 
 # Constants
 DATABASE_NAME = "gazpar2mqtt.db"
