@@ -6,6 +6,8 @@ import requests
 import json
 import datetime
 
+import database
+
 global JAVAVXS
 
 # Constants
@@ -249,6 +251,16 @@ class Account:
         self.firstName = account["first_name"]
         self.lastName = account["last_name"]
         self.lastName = account["email"]
+        self.json = account
+        
+    # Store in db
+    def store(self,db):
+        
+        if self.account is not None:
+        config_query = f"INSERT OR REPLACE INTO config VALUES (?, ?)"
+        db.cur.execute(config_query, ["whoami", json.dumps(self.account)])
+        
+        db.commit()
 
 
 #######################################################################
