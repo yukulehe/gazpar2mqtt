@@ -43,7 +43,11 @@ def _getYearOfssetDate(day, number):
 def _dateTimeToStr(datetime):
     return datetime.strftime("%d/%m/%Y - %H:%M:%S")
 
-
+# Sub to wait between 2 GRDF tries
+def _waitBeforeRetry(tryCount):
+    waitTime = gazpar._getRetryTimeSleep(tryCount)
+    logging.info("Wait %s seconds berfore next try",waitTime)
+    time.sleep(waitTime)
 
 #######################################################################
 #### Running program
@@ -108,16 +112,12 @@ def run(params):
                     break
                 else:
                     logging.info("Unable to login to GRDF website")
-                    waitTime = gazpar._getRetryTimeSleep(tryCount)
-                    logging.info("Wait %s seconds berfore next try",waitTime)
-                    time.sleep(waitTime)
+                    _waitBeforeRetry(tryCount)
 
             except:
                 myGrdf.isConnected = False
                 logging.info("Unable to login to GRDF website")
-                waitTime = gazpar._getRetryTimeSleep(tryCount)
-                logging.info("Wait %s seconds berfore next try",waitTime)
-                time.sleep(waitTime)
+                _waitBeforeRetry(tryCount)
             
 
         # When GRDF is connected
