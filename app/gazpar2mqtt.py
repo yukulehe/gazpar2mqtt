@@ -162,21 +162,28 @@ def run(myParams):
                 logging.info("Unable to get PCE !")
 
             # Get measures for each PCE
-            for pce in myGrdf.pceList:
+            if myGrdf.pceList:
+                for myPce in myGrdf.pceList:
+                    
+                    # Store PCE in database
+                    myPce.store(myDb)
 
-                # Set date range
-                startDate = _getYearOfssetDate(datetime.date.today(), 3)
-                endDate = datetime.date.today()
+                    # Set date range
+                    startDate = _getYearOfssetDate(datetime.date.today(), 3)
+                    endDate = datetime.date.today()
 
-                # Get measures of the PCE
-                logging.info("Get measures of PCE %s alias %s",pce.pceId,pce.alias)
-                logging.info("Range period : from %s to %s...",startDate,endDate)
-                myGrdf.getPceDailyMeasures(pce,startDate,endDate)
-                logging.info("%s measures retrieved, %s seems ok !",pce.countDailyMeasure(), pce.countDailyMeasureOk() )
+                    # Get measures of the PCE
+                    logging.info("Get measures of PCE %s alias %s",myPce.pceId,pce.alias)
+                    logging.info("Range period : from %s to %s...",startDate,endDate)
+                    myGrdf.getPceDailyMeasures(pce,startDate,endDate)
+                    logging.info("%s measures retrieved, %s seems ok !",myPce.countDailyMeasure(), myPce.countDailyMeasureOk() )
 
-                # Log last valid measure
-                myMeasure = pce.getLastMeasureOk()
-                logging.info("Last valid measure : Date = %s, Volume = %s m3, Energy = %s kWh.",myMeasure.gasDate,myMeasure.volume,myMeasure.energy)
+                    # Log last valid measure
+                    myMeasure = myPce.getLastMeasureOk()
+                    logging.info("Last valid measure : Date = %s, Volume = %s m3, Energy = %s kWh.",myMeasure.gasDate,myMeasure.volume,myMeasure.energy)
+                    
+            else:
+                logging.info("No PCE retrieved.")
         
     
     # STEP 4A : Standalone mode
