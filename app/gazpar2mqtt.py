@@ -150,8 +150,8 @@ def run(myParams):
             logging.info("Retrieve account informations")
             myAccount = myGrdf.getWhoami()
             myAccount.store(myDb)
+            myDb.commit()
             
-
             # Get list of PCE
             logging.info("Retrieve list of PCEs...")
             try:
@@ -159,7 +159,7 @@ def run(myParams):
                 logging.info("%s PCE found !",myGrdf.countPce())
             except:
                 myGrdf.isConnected = False
-                logging.info("Unable to get PCE !")
+                logging.info("Unable to get any PCE !")
 
             # Get measures for each PCE
             if myGrdf.pceList:
@@ -167,6 +167,10 @@ def run(myParams):
                     
                     # Store PCE in database
                     myPce.store(myDb)
+                    myDb.commit()
+                    
+                    # Get the latest slot
+                    # TO BE COMPLETED IF REQUIRED
 
                     # Set date range
                     startDate = _getYearOfssetDate(datetime.date.today(), 3)
@@ -177,10 +181,20 @@ def run(myParams):
                     logging.info("Range period : from %s to %s...",startDate,endDate)
                     myGrdf.getPceDailyMeasures(myPce,startDate,endDate)
                     logging.info("%s measures retrieved, %s seems ok !",myPce.countDailyMeasure(), myPce.countDailyMeasureOk() )
-
-                    # Log last valid measure
-                    myMeasure = myPce.getLastMeasureOk()
-                    logging.info("Last valid measure : Date = %s, Volume = %s m3, Energy = %s kWh.",myMeasure.gasDate,myMeasure.volume,myMeasure.energy)
+                    
+                    if myPce.dailyMeasureList:
+                        for myMeasure in myPce.dailyMeasureList:
+                            # Store measure into database
+                            myMeasure.store(myDb)
+                        
+                        # When everything is fine
+                        myMeasure = myPce.getLastMeasureOk()
+                        logging.info("Last valid measure : Date = %s, Volume = %s m3, Energy = %s kWh.",myMeasure.gasDate,myMeasure.volume,myMeasure.energy)
+                        myDb.commit()
+                            
+                    else:
+                        logging.info("Unable to get any measure for PCE !",myPce.pceId)
+                        
                     
             else:
                 logging.info("No PCE retrieved.")
