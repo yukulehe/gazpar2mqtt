@@ -233,7 +233,7 @@ def run(myParams,myDb):
         except:
             logging.error("Standalone mode : unable to publish value to mqtt broker")
 
-    # STEP 5B : Home Assistant discovery mode
+    # STEP 4B : Home Assistant discovery mode
     if myMqtt.isConnected \
         and myParams.hassDiscovery \
         and myGrdf.isConnected:
@@ -311,7 +311,24 @@ def run(myParams,myDb):
             logging.error("Unable to disconnect mqtt broker")
             sys.exit(1)
             
+    # STEP 6 : Disconnect from database
+    logging.info("-----------------------------------------------------------")
+    logging.info("Disconnexion from SQLite database...")
+    logging.info("-----------------------------------------------------------")
+      
+    if myDb.isConnected() :
+        myDb.close()
     
+    if not myDb.isConnected():
+        logging.info("SQLite database disconnected")
+    else:
+        logging.info("Unable to disconnect SQLit database")
+            
+    
+    # STEP 7 : Schedule next run
+    logging.info("-----------------------------------------------------------")
+    logging.info("Next run...")
+    logging.info("-----------------------------------------------------------")
     if myParams.scheduleTime is not None:
         logging.info("gazpar2mqtt next run scheduled at %s",myParams.scheduleTime)
     
