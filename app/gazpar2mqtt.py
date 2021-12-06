@@ -70,7 +70,7 @@ def run(myParams):
     
     # Create/Check database
     logging.info("Check local database/cache")
-    myDb = database.Database()
+    myDb = database.Database(G2M_VERSION)
     
     # Connect to database
     myDb.connect()
