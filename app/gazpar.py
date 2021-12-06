@@ -317,7 +317,7 @@ class Pce:
         if self.json is not None:
             logging.debug("Store PCE %s into database",self.pceId)
             pce_query = f"INSERT OR REPLACE INTO pces VALUES (?, ?, ?)"
-            db.cur.execute(pce_query, [pce['pce'], json.dumps(self.json), 0])
+            db.cur.execute(pce_query, [self.pceId, json.dumps(self.json), 0])
         
         
     
