@@ -148,8 +148,8 @@ def run(myParams):
 
             # Get account informations and store it to db
             logging.info("Retrieve account informations")
-            myGrdf.getWhoami()
-            myGrdf.account.store(myDb)
+            myAccount = myGrdf.getWhoami()
+            myAccount.store(myDb)
             
 
             # Get list of PCE
