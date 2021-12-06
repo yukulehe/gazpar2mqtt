@@ -86,6 +86,7 @@ class Database:
         logging.debug("Connexion to database")
         self.con = sqlite3.connect(DATABASE_NAME, timeout=DATABASE_TIMEOUT)
         self.cur = self.con.cursor()
+        self.init()
         
         
   # Check if connected
