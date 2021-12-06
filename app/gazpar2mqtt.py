@@ -65,14 +65,18 @@ def run(myParams,myDb):
     
     # STEP 1 : Connect to database
     logging.info("-----------------------------------------------------------")
-    logging.info("Connexion to SQLite database")
+    logging.info("Connexion to SQLite database...")
     logging.info("-----------------------------------------------------------")
     
     myDb.connect()
+    if myDb.isConnected() :
+        logging.info("SQLite database connected !")
+    else:
+        logging.error("Unable to connect to SQLite database.")
     
     
     
-    # STEP 1 : Log to MQTT broker
+    # STEP 2 : Log to MQTT broker
     logging.info("-----------------------------------------------------------")
     logging.info("Connexion to Mqtt broker")
     logging.info("-----------------------------------------------------------")
@@ -98,7 +102,7 @@ def run(myParams,myDb):
         
     
      
-    # STEP 2 : Get data from GRDF website
+    # STEP 3 : Get data from GRDF website
     
     if myMqtt.isConnected:
     
@@ -173,7 +177,7 @@ def run(myParams,myDb):
                 logging.info("Last valid measure : Date = %s, Volume = %s m3, Energy = %s kWh.",myMeasure.gasDate,myMeasure.volume,myMeasure.energy)
         
     
-    # STEP 3A : Standalone mode
+    # STEP 4A : Standalone mode
     if myMqtt.isConnected \
         and myParams.standalone \
         and myGrdf.isConnected:   
@@ -229,7 +233,7 @@ def run(myParams,myDb):
         except:
             logging.error("Standalone mode : unable to publish value to mqtt broker")
 
-    # STEP 3B : Home Assistant discovery mode
+    # STEP 5B : Home Assistant discovery mode
     if myMqtt.isConnected \
         and myParams.hassDiscovery \
         and myGrdf.isConnected:
@@ -293,7 +297,7 @@ def run(myParams,myDb):
             sys.exit(1)
 
 
-    # STEP 4 : Disconnect mqtt broker
+    # STEP 5 : Disconnect mqtt broker
     if myMqtt.isConnected:
         
         logging.info("-----------------------------------------------------------")
@@ -355,8 +359,8 @@ if __name__ == "__main__":
         logging.error("Error on parameters. End of program.")
         quit()
         
-    # Create/Check database
-    logging.info("Check and connect to database/cache")
+    # Create/Check local database
+    logging.info("Check local database/cache")
     myDb = database.Database()
     
     
