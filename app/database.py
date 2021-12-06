@@ -29,9 +29,17 @@ class Database:
         logging.info("Initialization of the SQLite database...")
         self.con = sqlite3.connect(DATABASE_NAME, timeout=DATABASE_TIMEOUT)
         self.cur = self.con.cursor()
-        init_database(cur)
+        init_database(self.cur)
     else:
         self.con = sqlite3.connect(DATABASE_NAME, timeout=DATABASE_TIMEOUT)
         self.cur = self.con.cursor()
+        
+  
+  def isConnected(self):
+    if self.cur is not None:
+      return True
+    else:
+      return False
+    
     
   
