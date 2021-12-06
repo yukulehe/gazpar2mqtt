@@ -282,6 +282,7 @@ class Account:
     def store(self,db):
         
         if self.json is not None:
+            login.debug("Store account into database")
             config_query = f"INSERT OR REPLACE INTO config VALUES (?, ?)"
             db.cur.execute(config_query, ["whoami", json.dumps(self.json)])
             
@@ -314,6 +315,7 @@ class Pce:
     def store(self,db):
         
         if self.json is not None:
+            login.debug("Store PCE %s into database",self.pceId)
             pce_query = f"INSERT OR REPLACE INTO pces VALUES (?, ?, ?)"
             db.cur.execute(pce_query, [pce['pce'], json.dumps(self.json), 0])
         
