@@ -45,7 +45,7 @@ def _dateTimeToStr(datetime):
 
 # Sub to wait between 2 GRDF tries
 def _waitBeforeRetry(tryCount):
-    waitTime = gazpar._getRetryTimeSleep(tryCount)
+    waitTime = round(gazpar._getRetryTimeSleep(tryCount))
     if waitTime < 200:
         logging.info("Wait %s seconds (%s min) before next try",waitTime,round(waitTime/60))
     else:
