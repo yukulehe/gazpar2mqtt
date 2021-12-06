@@ -50,7 +50,7 @@ def _waitBeforeRetry(tryCount):
         logging.info("Wait %s seconds (%s min) before next try",waitTime,round(waitTime/60))
     else:
         logging.info("Wait %s minutes before next try",round(waitTime/60))
-    #time.sleep(waitTime)
+    time.sleep(waitTime)
 
 #######################################################################
 #### Running program
