@@ -16,6 +16,7 @@ class Database:
   
     self.con = None
     self.cur = None
+    self.version = g2mVersion
   
   # Database initialization
   def init(self):
@@ -62,7 +63,7 @@ class Database:
     config_query = f"INSERT OR REPLACE INTO config VALUES (?, ?)"
     config = {
         "day": datetime.datetime.now().strftime('%Y-%m-%d'),
-        "version": g2mVersion
+        "version": self.version
     }
     logging.info(json.dumps(config))
     self.cur.execute(config_query, ["config", json.dumps(config)])
