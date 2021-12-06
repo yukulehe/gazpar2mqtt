@@ -358,7 +358,7 @@ if __name__ == "__main__":
         run(myParams,myDb)
 
         # Then run at scheduled time
-        schedule.every().day.at(myParams.scheduleTime).do(run,myParams)
+        schedule.every().day.at(myParams.scheduleTime).do(run,myParams,myDb)
         while True:
             schedule.run_pending()
             time.sleep(1)
@@ -367,5 +367,5 @@ if __name__ == "__main__":
     else:
         
         # Run once
-        run(myParams)
+        run(myParams,myDb)
         logging.info("End of gazpar2mqtt. See u...")
