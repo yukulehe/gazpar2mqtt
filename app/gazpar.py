@@ -415,10 +415,10 @@ class DailyMeasure:
     # Store measure to database
     def store(self,db):
         
-        if self.gasDate and self.startIndex:
+        if self.isOk:
             logging.debug("Store measure %s into database",self.gasDate)
             measure_query = f"INSERT OR REPLACE INTO consumption_daily VALUES (?, ?, ?)"
-            db.cur.execute(measure_query, [self.pce.pceId, dailyMeasure.gasDate, dailyMeasure.endIndex])
+            db.cur.execute(measure_query, [self.pce.pceId, self.gasDate, self.endIndex])
         
     
     # Return measure measure quality status
