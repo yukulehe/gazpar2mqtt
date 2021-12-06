@@ -57,7 +57,7 @@ def _waitBeforeRetry(tryCount):
 #######################################################################
 #### Running program
 #######################################################################
-def run(myParams,myDb):
+def run(myParams):
     
     
     # Store time now
@@ -68,6 +68,11 @@ def run(myParams,myDb):
     logging.info("Connexion to SQLite database...")
     logging.info("-----------------------------------------------------------")
     
+    # Create/Check database
+    logging.info("Check local database/cache")
+    myDb = database.Database()
+    
+    # Connect to database
     myDb.connect()
     if myDb.isConnected() :
         logging.info("SQLite database connected !")
@@ -310,7 +315,8 @@ def run(myParams,myDb):
         except:
             logging.error("Unable to disconnect mqtt broker")
             sys.exit(1)
-            
+    
+    
     # STEP 6 : Disconnect from database
     logging.info("-----------------------------------------------------------")
     logging.info("Disconnexion from SQLite database...")
@@ -318,13 +324,8 @@ def run(myParams,myDb):
       
     if myDb.isConnected() :
         myDb.close()
-    
-    if not myDb.isConnected():
         logging.info("SQLite database disconnected")
-    else:
-        logging.info("Unable to disconnect SQLit database")
-            
-    
+
     # STEP 7 : Schedule next run
     logging.info("-----------------------------------------------------------")
     logging.info("Next run...")
@@ -377,20 +378,17 @@ if __name__ == "__main__":
     else:
         logging.error("Error on parameters. End of program.")
         quit()
-        
-    # Create/Check local database
-    logging.info("Check local database/cache")
-    myDb = database.Database()
+       
     
     
     # Run
     if myParams.scheduleTime is not None:
         
         # Run once at lauch
-        run(myParams,myDb)
+        run(myParams)
 
         # Then run at scheduled time
-        schedule.every().day.at(myParams.scheduleTime).do(run,myParams,myDb)
+        schedule.every().day.at(myParams.scheduleTime).do(run,myParams)
         while True:
             schedule.run_pending()
             time.sleep(1)
@@ -399,5 +397,5 @@ if __name__ == "__main__":
     else:
         
         # Run once
-        run(myParams,myDb)
+        run(myParams)
         logging.info("End of gazpar2mqtt. See u...")
