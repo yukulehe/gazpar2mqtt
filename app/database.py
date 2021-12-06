@@ -1,6 +1,7 @@
 import sqlite3
 import os
 import sys
+import logging
 
 # Constants
 DATABASE_NAME = "gazpar2mqtt.db"
@@ -37,10 +38,7 @@ class Database:
         
   # Check if connected
   def isConnected(self):
-    if self.cur is not None:
-      return True
-    else:
-      return False
+    return self.cur
     
   # Disconnect
   def close(self):
