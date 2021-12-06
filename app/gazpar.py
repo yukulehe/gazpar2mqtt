@@ -150,7 +150,7 @@ class Grdf:
 
         logging.debug("Whoami result %s", req.text)
         
-        " Check returned JSON format
+        # Check returned JSON format
         try:
             account = json.loads(req.text)
         except Exception as e:
@@ -160,14 +160,14 @@ class Grdf:
             self.isConnected = False
             return None
         
-        " Check Whoami content
+        # Check Whoami content
         if 'code' in account:
             logging.info(req)
             logging.info("Whoami unsuccessful. Invalid returned information: %s", req.text)
             self.isConnected = False
             return None
 
-        " Check that id is in account
+        # Check that id is in account
         if not 'id' in account or account['id'] <= 0:
             logging.info(req)
             logging.info("Whoami unsuccessful. Invalid returned information: %s", req.text)
