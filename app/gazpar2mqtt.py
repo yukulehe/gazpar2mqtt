@@ -70,6 +70,8 @@ def run(myParams,myDb):
     
     myDb.connect()
     
+    
+    
     # STEP 1 : Log to MQTT broker
     logging.info("-----------------------------------------------------------")
     logging.info("Connexion to Mqtt broker")
