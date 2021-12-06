@@ -34,7 +34,7 @@ class Database:
                         pce TEXT PRIMARY KEY,
                         json json NOT NULL, 
                         count INTEGER)''')
-    self.cur.execute('''CREATE UNIQUE INDEX idx_pces_pce
+    self.cur.execute('''CREATE UNIQUE INDEX IF NOT EXISTS idx_pces_pce
                     ON pces (pce)''')
 
     # Create table for daily consumptions
@@ -43,7 +43,7 @@ class Database:
                         pce TEXT NOT NULL, 
                         date TEXT NOT NULL, 
                         value INTEGER NOT NULL)''')
-    self.cur.execute('''CREATE UNIQUE INDEX idx_date_consumption
+    self.cur.execute('''CREATE UNIQUE INDEX IF NOT EXISTS idx_date_consumption
                     ON consumption_daily (date)''')
     
     # Create table for billing
@@ -54,7 +54,7 @@ class Database:
                         end_date TEXT NOT NULL,
                         end_index  INTEGER NOT NULL,
                         conversion REAL NOT NULL)''')
-    self.cur.execute('''CREATE UNIQUE INDEX idx_start_date_billing
+    self.cur.execute('''CREATE UNIQUE INDEX IF NOT EXISTS idx_start_date_billing
                     ON billing (start_date)''')
 
     # Set default configuration
