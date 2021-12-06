@@ -63,6 +63,13 @@ def run(myParams,myDb):
     # Store time now
     dtn = _dateTimeToStr(datetime.datetime.now())
     
+    # STEP 1 : Connect to database
+    logging.info("-----------------------------------------------------------")
+    logging.info("Connexion to SQLite database")
+    logging.info("-----------------------------------------------------------")
+    
+    myDb.connect()
+    
     # STEP 1 : Log to MQTT broker
     logging.info("-----------------------------------------------------------")
     logging.info("Connexion to Mqtt broker")
@@ -109,7 +116,7 @@ def run(myParams,myDb):
                 myGrdf = gazpar.Grdf()
 
                 # Connect to Grdf website
-                #myGrdf.login(myParams.grdfUsername,myParams.grdfPassword)
+                myGrdf.login(myParams.grdfUsername,myParams.grdfPassword)
                 
                 # Check connexion
                 if myGrdf.isConnected:
@@ -346,7 +353,7 @@ if __name__ == "__main__":
         logging.error("Error on parameters. End of program.")
         quit()
         
-    # Connect database
+    # Create/Check database
     logging.info("Check and connect to database/cache")
     myDb = database.Database()
     
