@@ -43,7 +43,7 @@ def _convertGrdfDate(date):
 def _getRetryTimeSleep(tryNo):
     
     # The time to sleep is exponential 
-    return GRDF_API_WAIT_BTW_RETRIES * pow(tryNo,3)
+    return GRDF_API_WAIT_BTW_RETRIES * pow(tryNo,2.5)
 
 #######################################################################
 #### Class GRDF
