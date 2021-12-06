@@ -173,9 +173,9 @@ def run(myParams):
                     endDate = datetime.date.today()
 
                     # Get measures of the PCE
-                    logging.info("Get measures of PCE %s alias %s",myPce.pceId,pce.alias)
+                    logging.info("Get measures of PCE %s alias %s",myPce.pceId,myPce.alias)
                     logging.info("Range period : from %s to %s...",startDate,endDate)
-                    myGrdf.getPceDailyMeasures(pce,startDate,endDate)
+                    myGrdf.getPceDailyMeasures(myPce,startDate,endDate)
                     logging.info("%s measures retrieved, %s seems ok !",myPce.countDailyMeasure(), myPce.countDailyMeasureOk() )
 
                     # Log last valid measure
