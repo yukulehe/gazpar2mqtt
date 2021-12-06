@@ -21,39 +21,39 @@ class Database:
     
     # Create table config
     logging.debug("Creation of configuration table")
-    cur.execute('''CREATE TABLE config (
+    self.cur.execute('''CREATE TABLE config (
                         key TEXT PRIMARY KEY,
                         value json NOT NULL)''')
-    cur.execute('''CREATE UNIQUE INDEX idx_config_key
+    self.cur.execute('''CREATE UNIQUE INDEX idx_config_key
                     ON config (key)''')
 
     ## Create table of PCEs
     logging.debug("Creation of PCEs table")
-    cur.execute('''CREATE TABLE pces (
+    self.cur.execute('''CREATE TABLE pces (
                         pce TEXT PRIMARY KEY,
                         json json NOT NULL, 
                         count INTEGER)''')
-    cur.execute('''CREATE UNIQUE INDEX idx_pces_pce
+    self.cur.execute('''CREATE UNIQUE INDEX idx_pces_pce
                     ON pces (pce)''')
 
     # Create table for daily consumptions
     logging.debug("Creation of daily consumptions table")
-    cur.execute('''CREATE TABLE consumption_daily (
+    self.cur.execute('''CREATE TABLE consumption_daily (
                         pce TEXT NOT NULL, 
                         date TEXT NOT NULL, 
                         value INTEGER NOT NULL)''')
-    cur.execute('''CREATE UNIQUE INDEX idx_date_consumption
+    self.cur.execute('''CREATE UNIQUE INDEX idx_date_consumption
                     ON consumption_daily (date)''')
     
     # Create table for billing
     logging.debug("Creation of billing table")
-    cur.execute('''CREATE TABLE billing (
+    self.cur.execute('''CREATE TABLE billing (
                         pce TEXT NOT NULL, 
                         start_date TEXT NOT NULL,
                         end_date TEXT NOT NULL,
                         end_index  INTEGER NOT NULL,
                         conversion REAL NOT NULL)''')
-    cur.execute('''CREATE UNIQUE INDEX idx_start_date_billing
+    self.cur.execute('''CREATE UNIQUE INDEX idx_start_date_billing
                     ON billing (start_date)''')
 
     # Set default configuration
