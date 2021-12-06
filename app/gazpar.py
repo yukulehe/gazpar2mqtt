@@ -189,11 +189,35 @@ class Grdf:
     # Get list of PCE
     def getPceList(self):
         
-        logging.debug("Get pce...")
-        req = self.session.get('https://monespace.grdf.fr/api/e-conso/pce')
-        logging.debug("Req pce : %s",req.text)
-        pceList = json.loads(req.text)
+        logging.debug("Get PCEs list...")
         
+        # Get PCEs from website
+        try:
+            req = self.session.get('https://monespace.grdf.fr/api/e-conso/pce')
+        except Exception as e:
+            logging.error("Error while calling pce:")
+            logging.error(str(e))
+            self.isConnected = False
+            
+        logging.debug("Get PCEs list result : %s",req.text)
+        
+        # Check PCEs list
+        try:
+            pceList = json.loads(req.text)
+        except Exception as e:
+            logging.error("PCEs returned invalid JSON:")
+            logging.error(str(e))
+            logging.info(req.text)
+            self.isConnected = False
+            return None
+        
+        if 'code' in pceList:
+            logging.info(req)
+            logging.info("PCEs unsuccessful. Invalid returned information: %s", req.text)
+            self.isConnected = False
+            return None
+        
+        # Ok everything is fine, we can create PCE
         for item in pceList:
             # Create PCE
             myPce = Pce(item)
@@ -260,7 +284,7 @@ class Account:
         if self.json is not None:
             config_query = f"INSERT OR REPLACE INTO config VALUES (?, ?)"
             db.cur.execute(config_query, ["whoami", json.dumps(self.json)])
-            db.commit()
+            
 
 
 #######################################################################
@@ -283,7 +307,18 @@ class Pce:
         self.dailyMeasureStart = None
         self.dailyMeasureEnd = None
         
+        self.json = pce
         
+        
+    # Store PCE into database
+    def store(self,db):
+        
+        if self.json is not None:
+            pce_query = f"INSERT OR REPLACE INTO pces VALUES (?, ?, ?)"
+            db.cur.execute(pce_query, [pce['pce'], json.dumps(self.json), 0])
+        
+        
+    
     # Add a measure to the PCE    
     def addDailyMeasure(self, measure):
         self.dailyMeasureList.append(measure)
