@@ -17,7 +17,7 @@ class Database:
     self.isConnected = False
   
   # Connexion to database
-  def connexion(self):
+  def connect(self):
     
     # Create directory if not exists
     if not os.path.exists('/data'):
