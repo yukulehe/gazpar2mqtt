@@ -85,7 +85,7 @@ class Grdf:
             'goto': 'https://sofa-connexion.grdf.fr:443/openam/oauth2/externeGrdf/authorize'
         }
         
-        # Login step 1
+        # Login
         logging.debug("Logging ...")
         try:
             req = self.session.post('https://login.monespace.grdf.fr/sofit-account-api/api/v1/auth', data=payload, allow_redirects=False)
@@ -103,7 +103,7 @@ class Grdf:
             logging.info("Login unsuccessful. Invalid returned information: %s", req.text)
             return
         
-        " Display return login
+        # Display return login
         logging.info("-----------------------  LOGGING  -------------------------")
         logging.info("Surname: %s", login_return['surname'])
         logging.info("Name: %s", login_return['name'])
