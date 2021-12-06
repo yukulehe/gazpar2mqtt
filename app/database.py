@@ -25,7 +25,7 @@ class Database:
     self.cur.execute('''CREATE TABLE IF NOT EXISTS config (
                         key TEXT PRIMARY KEY,
                         value json NOT NULL)''')
-    self.cur.execute('''CREATE UNIQUE INDEX idx_config_key
+    self.cur.execute('''CREATE UNIQUE INDEX IF NOT EXISTS idx_config_key
                     ON config (key)''')
 
     ## Create table of PCEs
