@@ -257,7 +257,7 @@ class Account:
     # Store in db
     def store(self,db):
         
-        if self.account is not None:
+        if self.json is not None:
             config_query = f"INSERT OR REPLACE INTO config VALUES (?, ?)"
             db.cur.execute(config_query, ["whoami", json.dumps(self.account)])
             db.commit()
