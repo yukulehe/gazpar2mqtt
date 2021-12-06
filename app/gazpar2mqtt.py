@@ -116,8 +116,8 @@ def run(params):
                 myGrdf.isConnected = False
                 logging.info("Unable to login to GRDF website")
                 waitTime = gazpar._getRetryTimeSleep(tryCount)
-                    logging.info("Wait %s seconds berfore next try",waitTime)
-                    time.sleep(waitTime)
+                logging.info("Wait %s seconds berfore next try",waitTime)
+                time.sleep(waitTime)
             
 
         # When GRDF is connected
