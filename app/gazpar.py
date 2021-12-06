@@ -257,7 +257,7 @@ class Grdf:
         for measure in measureList[pce.pceId]["releves"]:
             
             # Create the measure
-            myDailyMeasure = DailyMeasure(measure)
+            myDailyMeasure = DailyMeasure(pce,measure)
             
             # Append measure to the PCE's measure list
             pce.addDailyMeasure(myDailyMeasure)
@@ -399,7 +399,7 @@ class Pce:
 class DailyMeasure:
     
     # Constructor
-    def __init__(self, measure):
+    def __init__(self, pce, measure):
         
         self.startDateTime = _convertDateTime(measure["dateDebutReleve"])
         self.endDateTime = _convertDateTime(measure["dateFinReleve"])
@@ -409,6 +409,7 @@ class DailyMeasure:
         self.volume = measure["volumeBrutConsomme"]
         self.energy = measure["energieConsomme"]
         self.temperature = measure["temperature"]
+        self.pce = pce
         
         
     # Store measure to database
@@ -417,7 +418,7 @@ class DailyMeasure:
         if self.gasDate and self.startIndex:
             logging.debug("Store measure %s into database",self.gasDate)
             measure_query = f"INSERT OR REPLACE INTO consumption_daily VALUES (?, ?, ?)"
-            db.cur.execute(measure_query, [pce.pceId, dailyMeasure.gasDate, dailyMeasure.endIndex])
+            db.cur.execute(measure_query, [self.pce.pceId, dailyMeasure.gasDate, dailyMeasure.endIndex])
         
     
     # Return measure measure quality status
