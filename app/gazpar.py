@@ -411,6 +411,15 @@ class DailyMeasure:
         self.temperature = measure["temperature"]
         
         
+    # Store measure to database
+    def store(self,db):
+        
+        if self.json and self.gasDate and self.startIndex:
+            logging.debug("Store measure %s into database",self.gasDate)
+            measure_query = f"INSERT OR REPLACE INTO consumption_daily VALUES (?, ?, ?)"
+            db.cur.execute(measure_query, [pce.pceId, dailyMeasure.gasDate, dailyMeasure.endIndex])
+        
+    
     # Return measure measure quality status
     def isOk(self):
         
