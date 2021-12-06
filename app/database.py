@@ -26,11 +26,12 @@ class Database:
     
     # Initialize database if not exists
     if not os.path.exists('/data/enedisgateway.db'):
-        logging.info("Initialization of the SQLite database...")
+        logging.debug("Initialization of the SQLite database...")
         self.con = sqlite3.connect(DATABASE_NAME, timeout=DATABASE_TIMEOUT)
         self.cur = self.con.cursor()
         init_database(self.cur)
     else:
+        logging.debug("Connexion to database")
         self.con = sqlite3.connect(DATABASE_NAME, timeout=DATABASE_TIMEOUT)
         self.cur = self.con.cursor()
         
@@ -40,6 +41,10 @@ class Database:
       return True
     else:
       return False
+    
+  def close(self):
+    logging.debug("Disconnexion of the database")
+    self.con.close()
     
     
   
