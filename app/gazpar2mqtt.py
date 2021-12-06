@@ -56,7 +56,7 @@ def _waitBeforeRetry(tryCount):
 #######################################################################
 #### Running program
 #######################################################################
-def run(params):
+def run(myParams,myDb):
     
     
     # Store time now
@@ -345,15 +345,16 @@ if __name__ == "__main__":
         logging.error("Error on parameters. End of program.")
         quit()
         
-    # Manage database
-    logging.info("Check database/cache")
+    # Connect database
+    logging.info("Check and connect to database/cache")
+    myDb = database.Database()
     
     
     # Run
     if myParams.scheduleTime is not None:
         
         # Run once at lauch
-        run(myParams)
+        run(myParams,myDb)
 
         # Then run at scheduled time
         schedule.every().day.at(myParams.scheduleTime).do(run,myParams)
