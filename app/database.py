@@ -22,7 +22,7 @@ class Database:
     
     # Create table config
     logging.debug("Creation of configuration table")
-    self.cur.execute('''CREATE TABLE config (
+    self.cur.execute('''CREATE TABLE IF NOT EXISTS config (
                         key TEXT PRIMARY KEY,
                         value json NOT NULL)''')
     self.cur.execute('''CREATE UNIQUE INDEX idx_config_key
