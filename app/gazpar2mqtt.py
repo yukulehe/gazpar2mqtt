@@ -146,14 +146,11 @@ def run(myParams):
         # When GRDF is connected
         if myGrdf.isConnected:
 
-            # Get account informations
+            # Get account informations and store it to db
             logging.info("Retrieve account informations")
-            try:
-                myGrdf.getWhoami()
-                logging.info("GRDF account informations retrieved !")
-            except:
-                myGrdf.isConnected = False
-                logging.info("Unable to get GRDF account informations !")
+            myGrdf.getWhoami()
+            myGrdf.account.store(myDb)
+            
 
             # Get list of PCE
             logging.info("Retrieve list of PCEs...")
