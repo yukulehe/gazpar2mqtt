@@ -11,8 +11,8 @@ global JAVAVXS
 # Constants
 GRDF_DATE_FORMAT = "%Y-%m-%d"
 GRDF_DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
-GRDF_API_MAX_RETRIES = 5 # number of retries max to get accurate data from GRDF
-GRDF_API_WAIT_BTW_RETRIES = 10 # number of seconds between two tries
+GRDF_API_MAX_RETRIES = 14 # number of retries max to get accurate data from GRDF
+GRDF_API_WAIT_BTW_RETRIES = 20 # number of seconds between try 1 and try 2 (must not exceed 25s)
 GRDF_API_ERRONEOUS_COUNT = 1 # Erroneous number of results send by GRDF 
 
 #######################################################################
@@ -39,6 +39,11 @@ def _convertDateTime(dateTimeString):
 def _convertGrdfDate(date):
     return date.strftime(GRDF_DATE_FORMAT)
 
+# Get the time sleeping between 2 retries
+def _getRetryTimeSleep(tryNo):
+    
+    # The time to sleep is exponential 
+    return GRDF_API_WAIT_BTW_RETRIES * pow(tryNo,3)
 
 #######################################################################
 #### Class GRDF
