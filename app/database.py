@@ -30,7 +30,7 @@ class Database:
 
     ## Create table of PCEs
     logging.debug("Creation of PCEs table")
-    self.cur.execute('''CREATE TABLE pces (
+    self.cur.execute('''CREATE TABLE IF NOT EXISTS pces (
                         pce TEXT PRIMARY KEY,
                         json json NOT NULL, 
                         count INTEGER)''')
@@ -39,7 +39,7 @@ class Database:
 
     # Create table for daily consumptions
     logging.debug("Creation of daily consumptions table")
-    self.cur.execute('''CREATE TABLE consumption_daily (
+    self.cur.execute('''CREATE TABLE IF NOT EXISTS consumption_daily (
                         pce TEXT NOT NULL, 
                         date TEXT NOT NULL, 
                         value INTEGER NOT NULL)''')
@@ -48,7 +48,7 @@ class Database:
     
     # Create table for billing
     logging.debug("Creation of billing table")
-    self.cur.execute('''CREATE TABLE billing (
+    self.cur.execute('''CREATE TABLE IF NOT EXISTS billing (
                         pce TEXT NOT NULL, 
                         start_date TEXT NOT NULL,
                         end_date TEXT NOT NULL,
