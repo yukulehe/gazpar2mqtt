@@ -43,6 +43,8 @@ def _getYearOfssetDate(day, number):
 def _dateTimeToStr(datetime):
     return datetime.strftime("%d/%m/%Y - %H:%M:%S")
 
+
+
 #######################################################################
 #### Running program
 #######################################################################
