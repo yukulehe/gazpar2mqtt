@@ -20,7 +20,7 @@ import param
 
 
 # gazpar2mqtt constants
-G2M_VERSION = '0.5.3'
+G2M_VERSION = '0.6.0'
 
 
 #######################################################################
