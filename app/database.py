@@ -35,16 +35,21 @@ class Database:
         self.con = sqlite3.connect(DATABASE_NAME, timeout=DATABASE_TIMEOUT)
         self.cur = self.con.cursor()
         
-  
+  # Check if connected
   def isConnected(self):
     if self.cur is not None:
       return True
     else:
       return False
     
+  # Disconnect
   def close(self):
     logging.debug("Disconnexion of the database")
     self.con.close()
+    
+  # Commit work
+  def commit(self):
+    self.con.commit()
     
     
   
