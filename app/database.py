@@ -15,7 +15,8 @@ class Database:
   
     self.con = None
     self.cur = None
-    
+  
+  # Database initialization
   def init(self):
     
     # Create table config
@@ -66,6 +67,7 @@ class Database:
     self.cur.execute(config_query, ["config", json.dumps(config)])
     self.commit()
   
+  
   # Connexion to database
   def connect(self):
     
@@ -79,20 +81,23 @@ class Database:
         logging.debug("Initialization of the SQLite database...")
         self.con = sqlite3.connect(DATABASE_NAME, timeout=DATABASE_TIMEOUT)
         self.cur = self.con.cursor()
-        init_database(self.cur)
+        self.init()
     else:
         logging.debug("Connexion to database")
         self.con = sqlite3.connect(DATABASE_NAME, timeout=DATABASE_TIMEOUT)
         self.cur = self.con.cursor()
         
+        
   # Check if connected
   def isConnected(self):
     return self.cur
+    
     
   # Disconnect
   def close(self):
     logging.debug("Disconnexion of the database")
     self.con.close()
+    
     
   # Commit work
   def commit(self):
