@@ -11,6 +11,7 @@ import time
 from dateutil.relativedelta import relativedelta
 import json
 import logging
+import sqlite3
 
 import gazpar
 import mqtt
@@ -330,7 +331,6 @@ if __name__ == "__main__":
     logging.debug("If you can read this line, you are in DEBUG mode.")
     logging.info("-----------------------------------------------------------")
     
-    
     # Log params info
     logging.info("-----------------------------------------------------------")
     logging.info("Program parameters")
@@ -344,6 +344,10 @@ if __name__ == "__main__":
     else:
         logging.error("Error on parameters. End of program.")
         quit()
+        
+    # Manage database
+    logging.info("Check database/cache")
+    
     
     # Run
     if myParams.scheduleTime is not None:
