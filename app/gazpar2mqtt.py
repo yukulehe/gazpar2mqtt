@@ -35,6 +35,10 @@ def _getDayOfssetDate(day, number):
 def _getMonthOfssetDate(day, number):
     return _dayToStr(day - relativedelta(months=number))
 
+# Sub to get date with year offset
+def _getYearOfssetDate(day, number):
+    return day - relativedelta(years=number)
+
 # Sub to return format wanted
 def _dateTimeToStr(datetime):
     return datetime.strftime("%d/%m/%Y - %H:%M:%S")
@@ -137,8 +141,8 @@ def run(params):
             for pce in myGrdf.pceList:
 
                 # Set date range
-                startDate = _getDayOfssetDate(datetime.date.today(), 7)
-                endDate = _getDayOfssetDate(datetime.date.today(), 1)
+                startDate = _getYearOfssetDate(datetime.date.today(), 3)
+                endDate = datetime.date.today()
 
                 # Get measures of the PCE
                 logging.info("Get measures of PCE %s alias %s",pce.pceId,pce.alias)
