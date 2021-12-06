@@ -82,26 +82,41 @@ class Grdf:
             'email': username,
             'password': password,
             'capp': 'meg',
-            'goto': 'https://sofa-connexion.grdf.fr:443/openam/oauth2/externeGrdf/authorize?response_type=code&scope=openid%20profile%20email%20infotravaux%20%2Fv1%2Faccreditation%20%2Fv1%2Faccreditations%20%2Fdigiconso%2Fv1%20%2Fdigiconso%2Fv1%2Fconsommations%20new_meg%20%2FDemande.read%20%2FDemande.write&client_id=prod_espaceclient&state=0&redirect_uri=https%3A%2F%2Fmonespace.grdf.fr%2F_codexch&nonce=' + self.auth_nonce + '&by_pass_okta=1&capp=meg'
+            'goto': 'https://sofa-connexion.grdf.fr:443/openam/oauth2/externeGrdf/authorize'
         }
         
         # Login step 1
-        logging.debug("Logging step 1...")
-        req = self.session.post('https://login.monespace.grdf.fr/sofit-account-api/api/v1/auth', data=payload, allow_redirects=False)
-        logging.debug("Logging step 1 request : %s",req.text)
-                      
-        if not 'XSRF-TOKEN' in self.session.cookies:
-            raise GazparLoginException("Login unsuccessful. Check your credentials.")
-        else:
-            logging.debug("Login step 1 sucessfull.")
-            
+        logging.debug("Logging ...")
+        try:
+            req = self.session.post('https://login.monespace.grdf.fr/sofit-account-api/api/v1/auth', data=payload, allow_redirects=False)
+        except Exception as e:
+            logging.error("Error while authenticating to https://login.monespace.grdf2.fr/sofit-account-api/api/v1/auth:")
+            logging.error(str(e))
+            return
         
-        # Login step 2
-        logging.debug("Logging step 2...")
-        req = self.session.get('https://sofa-connexion.grdf.fr:443/openam/oauth2/externeGrdf/authorize?response_type=code&scope=openid%20profile%20email%20infotravaux%20%2Fv1%2Faccreditation%20%2Fv1%2Faccreditations%20%2Fdigiconso%2Fv1%20%2Fdigiconso%2Fv1%2Fconsommations%20new_meg%20%2FDemande.read%20%2FDemande.write&client_id=prod_espaceclient&state=0&redirect_uri=https%3A%2F%2Fmonespace.grdf.fr%2F_codexch&nonce=' + self.auth_nonce + '&by_pass_okta=1&capp=meg')
-        logging.debug("Logging step 2 request : %s",req.text)
-        # ! missing a check for step  2!
+        logging.debug("Logging returned : %s",req.text)
+     
+        login_return = json.loads(req.text)
+        if login_return['state'] != 'SUCCESS':
+            logging.info(req)
+            logging.info(self.session.cookies)
+            logging.info("Login unsuccessful. Invalid returned information: %s", req.text)
+            return
         
+        " Display return login
+        logging.info("-----------------------  LOGGING  -------------------------")
+        logging.info("Surname: %s", login_return['surname'])
+        logging.info("Name: %s", login_return['name'])
+        logging.info("Email: %s", login_return['email'])
+        logging.info("-----------------------------------------------------------")
+
+        # Call whoami, this seems to complete logging. First time it fails then it is working. Don't call ugly things anymore
+        try:
+            req = self.session.get('https://monespace.grdf.fr/api/e-connexion/users/whoami')
+        except Exception as e:
+            logging.error("Error while authenticating when calling https://monespace.grdf.fr/api/e-connexion/users/whoami:")
+            logging.error(str(e))
+            return
         
         # When everything is ok
         self.isConnected = True
@@ -124,11 +139,44 @@ class Grdf:
     def getWhoami(self):
         
         logging.debug("Get whoami...")
-        req = self.session.get('https://monespace.grdf.fr/api/e-connexion/users/whoami')
-        logging.debug("Req whoami : %s",req.text)
-        account = json.loads(req.text)
-        self.account = Account(account)
         
+        try:
+            req = self.session.get('https://monespace.grdf.fr/api/e-connexion/users/whoami')
+        except Exception as e:
+            logging.error("Error while calling Whoami:")
+            logging.error(str(e))
+            self.isConnected = False
+            return None
+
+        logging.debug("Whoami result %s", req.text)
+        
+        " Check returned JSON format
+        try:
+            account = json.loads(req.text)
+        except Exception as e:
+            logging.error("Whoami returned invalid JSON:")
+            logging.error(str(e))
+            logging.info(req.text)
+            self.isConnected = False
+            return None
+        
+        " Check Whoami content
+        if 'code' in account:
+            logging.info(req)
+            logging.info("Whoami unsuccessful. Invalid returned information: %s", req.text)
+            self.isConnected = False
+            return None
+
+        " Check that id is in account
+        if not 'id' in account or account['id'] <= 0:
+            logging.info(req)
+            logging.info("Whoami unsuccessful. Invalid returned information: %s", req.text)
+            self.isConnected = False
+            return None
+        else:
+            # Create account
+            self.account = Account(account)
+            return account    
                
     # Get list of PCE
     def getPceList(self):
