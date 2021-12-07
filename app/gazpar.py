@@ -410,7 +410,7 @@ class Pce:
     # Return the index difference between 2 measures 
     def _getDeltaDailyCons(self,db,startStr,endStr):
         
-        logging.debug("Retrieve delta conso between %s %s and %s %s",startStr,endStr)
+        logging.debug("Retrieve delta conso between %s and %s",startStr,endStr)
 
         query = f"SELECT max(value) - min(value) FROM consumption_daily WHERE pce = '{self.pceId}' AND date BETWEEN date({startStr}) AND date({endStr}) GROUP BY pce"
         db.cur.execute(query)
