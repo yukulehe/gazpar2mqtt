@@ -416,7 +416,7 @@ if __name__ == "__main__":
         logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', level=myLevel)
     else:
         myLevel = logging.INFO
-    logging.basicConfig(format='%(asctime)s %(levelname) %(message)s', level=myLevel)
+    logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', level=myLevel)
     
     
     # Say welcome and be nice
