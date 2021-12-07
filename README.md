@@ -9,6 +9,7 @@ Python script to fetch GRDF's website data and publish data to a mqtt broker
 
 # Externals/Thanks
 The project has been inspired by job done by [empierre](https://github.com/empierre/domoticz_gaspar) on project domoticz_gazpar and [beufanet](https://github.com/beufanet/gazpar) on project gazinflux availables on Github. I modified a bit the code to work and fit my needs.
+Thanks to [echauvet](https://github.com/echauvet) for his big contribution on GRDF API and the calculation of new sensors.
 
 # Informations
 
