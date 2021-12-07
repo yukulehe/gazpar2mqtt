@@ -429,7 +429,8 @@ class Pce:
             valueResult = int(queryResult[0])
             if valueResult > 0:
                 result = valueResult
-            logging.debug("Delta conso = %s",valueResult)
+                logging.debug("Delta conso = %s",valueResult)
+            logging.debug("Delta conso value is not valid : %s",valueResult)
         else:
             logging.debug("Delta conso is empty")
         return result
