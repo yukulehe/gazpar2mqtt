@@ -368,9 +368,9 @@ class Pce:
         
         # Get current date, week, month and year
         dateNow = datetime.date.today()
-        weekNow = dateNow.strftime("%W")
-        monthNow = dateNow.strftime("%m")
-        yearNow = dateNow.strftime("%Y")
+        weekNow = int(dateNow.strftime("%W"))
+        monthNow = int(dateNow.strftime("%m"))
+        yearNow = int(dateNow.strftime("%Y"))
         logging.debug("Today : date %s, week %s, month %s, year %s",dateNow,weekNow,monthNow,yearNow)
         weekNowFirstDate = dateNow - datetime.timedelta(days=dateNow.weekday() % 7)
         monthNowFirstDate = datetime.datetime(yearNow,monthNow, 1)
