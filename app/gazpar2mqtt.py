@@ -310,7 +310,7 @@ def run(myParams):
                     
                     ## Calculated yearly measures
                     logging.debug("Creation of yearly entities")
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'current_year_gas','current year gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeW0Y0)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'current_year_gas','current year gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeY0)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'previous_year_gas','previous year gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeY1)
                     
                     ## Calculated monthly measures
