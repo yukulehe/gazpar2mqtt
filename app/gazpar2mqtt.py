@@ -316,13 +316,12 @@ def run(myParams):
 
                     # Create entities and set values
                     
-                    ## Current measures
+                    ## Last GRDF measure
                     logging.debug("Creation of current entities")
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'index','index',hass.GAS_TYPE,hass.ST_TTI,'m³').setValue(myDailyMeasure.endIndex)
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'daily_gas','daily gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myDailyMeasure.volume)
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'daily_energy','daily energy',hass.ENERGY_TYPE,hass.ST_MEAS,'kWh').setValue(myDailyMeasure.energy)
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'consumption_date','consumption date',hass.NONE_TYPE,None,None).setValue(str(myDailyMeasure.gasDate))
-                    
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'last_index','index',hass.GAS_TYPE,hass.ST_TTI,'m³').setValue(myDailyMeasure.endIndex)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'last_gas','last daily gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myDailyMeasure.volume)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'last_energy','last daily energy',hass.ENERGY_TYPE,hass.ST_MEAS,'kWh').setValue(myDailyMeasure.energy)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'last_consumption_date','last consumption date',hass.NONE_TYPE,None,None).setValue(str(myDailyMeasure.gasDate))
                     
                     ## Calculated yearly measures
                     logging.debug("Creation of yearly entities")
@@ -343,13 +342,13 @@ def run(myParams):
                     
                     ## Calculated daily measures
                     logging.debug("Creation of daily entities")
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'d1_gas','d-1 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeD1)
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'d2_gas','d-2 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeD2)
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'d3_gas','d-3 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeD3)
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'d4_gas','d-4 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeD4)
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'d5_gas','d-5 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeD5)
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'d6_gas','d-6 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeD6)
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'d7_gas','d-7 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeD7)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'day-1_gas','day-1 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeD1)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'day-2_gas','day-2 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeD2)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'day-3_gas','day-3 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeD3)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'day-4_gas','day-4 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeD4)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'day-5_gas','day-5 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeD5)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'day-6_gas','day-6 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeD6)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'day-7_gas','day-7 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeD7)
                     
                     ## Other
                     logging.debug("Creation of other entities")
