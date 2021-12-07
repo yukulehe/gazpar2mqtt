@@ -382,45 +382,32 @@ class Pce:
         # When db connexion is ok
         if db.cur and myMeasure:
         
-            # Calculate Y-1 volume
-            self.volumeY1 = None
-            volume = None
-            query = f"SELECT max(value) - min(value) FROM consumption_daily WHERE pce = '{self.pceId}' AND date > date('{myMeasure.gasDate}','-1 year') GROUP BY pce"
-            db.cur.execute(query)
-            query_result = db.cur.fetchone()
-            if query_result is not None:
-                volume = query_result[0]
-                if volume > 0:
-                    self.volumeY1 = volume
-            logging.debug("Y-1 volume : %s m3",self.volumeY1)
+            # Calculate Y0 volume
+            self.volumeY0 = self._getDeltaDailyCons(db,yearNowFirstDate,None,myMeasure.gasDate,None)
+            logging.debug("Current year volume : %s m3",self.volumeY0)
             
-            self.volumeY1 = self._getDeltaDailyCons(db,myMeasure.gasDate,"-1 year",myMeasure.gasDate,'-0 day')
-            logging.debug("Y-1 volume : %s m3",self.volumeY1)
-            
-            # Calculate Y-2 volume
-            self.volumeY2 = None
-            volume = None
-            query = f"SELECT max(value) - min(value) FROM consumption_daily WHERE pce = '{self.pceId}' AND date BETWEEN date('{myMeasure.gasDate}','-2 year') AND date('{myMeasure.gasDate}','-1 year') GROUP BY pce"
-            db.cur.execute(query)
-            query_result = db.cur.fetchone()
-            if query_result is not None:
-                volume = query_result[0]
-                if volume > 0:
-                    self.volumeY2 = volume
-            logging.debug("Year -2 volume : %s m3",self.volumeY2)
+            # Calculate Y1 volume
+            self.volumeY1 = self._getDeltaDailyCons(db,yearNowFirstDate,"-1 year",myMeasure.gasDate,"-1 year")
+            logging.debug("Last year volume : %s m3",self.volumeY1)
             
             # Calculate W0 volume
-            self.volumeW0 = self._getDeltaDailyCons(db,weekNowFirstDate,"-1 week",myMeasure.gasDate,"-0 day")
+            self.volumeW0 = self._getDeltaDailyCons(db,weekNowFirstDate,"-1 week",myMeasure.gasDate,None)
             logging.debug("W0 volume : %s m3",self.volumeW0)
             
             # Calculate W1 volume
             self.volumeW1 = self._getDeltaDailyCons(db,weekNowFirstDate,"-2 week",weekNowFirstDate,"-1 week")
             logging.debug("W-1 volume : %s m3",self.volumeW1)
             
+    
     # Return the index difference between 2 measures 
     def _getDeltaDailyCons(self,db,startDate,startOffset,endDate,endOffset):
         
         logging.debug("Retrieve delta conso between %s %s and %s %s",startDate,startOffset,endDate,endOffset)
+        if startOffset is None:
+            startOffset = "-0 day"
+        if endOffset is None:
+            endOffset = "-0 day"
+        
         query = f"SELECT max(value) - min(value) FROM consumption_daily WHERE pce = '{self.pceId}' AND date BETWEEN date('{startDate}','{startOffset}') AND date('{endDate}','{endOffset}') GROUP BY pce"
         db.cur.execute(query)
         queryResult = db.cur.fetchone()
