@@ -95,7 +95,7 @@ class Database:
   
   # Get current G2M version
   def getG2MVersion(self):
-    query = f"SELECT version FROM config"
+    query = f"SELECT value FROM config"
     self.cur.execute(query)
     queryResult = self.cur.fetchone()
     if queryResult is not None:
