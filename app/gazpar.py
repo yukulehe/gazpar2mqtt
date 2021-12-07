@@ -379,7 +379,7 @@ class Pce:
         logging.debug("First dates : week %s, month %s, year %s",weekNowFirstDate,monthNowFirstDate,yearNowFirstDate)
         
         
-        
+        # When db connexion is ok
         if db.cur and myMeasure:
         
             # Calculate Y-1 volume
@@ -407,30 +407,31 @@ class Pce:
             logging.debug("Year -2 volume : %s m3",volume)
             
             # Calculate W0 volume
-            self.volumeW1 = None
-            volume = None
-            query = f"SELECT max(value) - min(value) FROM consumption_daily WHERE pce = '{self.pceId}' AND date > date('{myMeasure.gasDate}','-1 week') GROUP BY pce"
-            db.cur.execute(query)
-            query_result = db.cur.fetchone()
-            if query_result is not None:
-                volume = query_result[0]
-                if volume > 0:
-                    self.volumeW1 = volume
-            logging.debug("W0 volume : %s m3",volume)
+            self.volumeW0 = getDeltaDailyCons(db,weekNowFirstDate,"-1 week",myMeasure.gasDate,'-0 day')
+            logging.debug("W0 volume : %s m3",self.volumeW1)
             
             # Calculate W1 volume
-            self.volumeW1 = None
-            volume = None
-            query = f"SELECT max(value) - min(value) FROM consumption_daily WHERE pce = '{self.pceId}' AND date BETWEEN date('{myMeasure.gasDate}','-2 week') AND date('{myMeasure.gasDate}','-1 week') GROUP BY pce"
+            self.volumeW1 = getDeltaDailyCons(db,weekNowFirstDate,"-2 week",weekNowFirstDate,'-1 week')
+            logging.debug("W-1 volume : %s m3",self.volumeW1)
+            
+        # Return the index difference between 2 measures 
+        def getDeltaDailyCons(self,db,startDate,startOffset,endDate,endOffset):
+            
+            result = None
+            query = f"SELECT max(value) - min(value) FROM consumption_daily WHERE pce = '{self.pceId}' AND date BETWEEN date('{startDate}','{startOffset}') AND date('{endDate}','{endOffset}') GROUP BY pce"
             db.cur.execute(query)
-            query_result = db.cur.fetchone()
-            if query_result is not None:
-                volume = query_result[0]
-                if volume > 0:
-                    self.volumeW1 = volume
-            logging.debug("W-1 volume : %s m3",volume)
+            queryResult = db.cur.fetchone()
+            if queryResult is not None:
+                valueResult = queryResult[0]
+                if valueResult > 0:
+                    result = valueResult
+            return result
+                
+            
             
                 
+            
+            
         
         
         
