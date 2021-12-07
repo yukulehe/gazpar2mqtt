@@ -361,7 +361,7 @@ class Pce:
         return measure
     
     # Calculated measures from database
-    def calculateMeasures(db):
+    def calculateMeasures(self,db):
         
         # Get last valid measure as reference
         myMeasure = getLastMeasureOk()
