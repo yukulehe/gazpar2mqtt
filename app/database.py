@@ -7,6 +7,7 @@ import json
 
 # Constants
 DATABASE_NAME = "gazpar2mqtt.db"
+DATABASE_PATH = '/data'
 DATABASE_TIMEOUT = 10
 
 # Class database
@@ -75,19 +76,19 @@ class Database:
   def connect(self):
     
     # Create directory if not exists
-    if not os.path.exists('/data'):
-        os.mkdir('/data')
-        logging.debug("Directory /data created")
+    if not os.path.exists(DATABASE_PATH):
+        os.mkdir(DATABASE_PATH)
+        logging.debug("Directory %s created",DATABASE_PATH)
     
     # Initialize database if not exists
-    if not os.path.exists(DATABASE_NAME):
+    if not os.path.exists(DATABASE_PATH + "/" + DATABASE_NAME):
         logging.debug("Initialization of the SQLite database...")
-        self.con = sqlite3.connect(DATABASE_NAME, timeout=DATABASE_TIMEOUT)
+        self.con = sqlite3.connect(DATABASE_PATH + "/" + DATABASE_NAME, timeout=DATABASE_TIMEOUT)
         self.cur = self.con.cursor()
         self.init()
     else:
         logging.debug("Connexion to database")
-        self.con = sqlite3.connect(DATABASE_NAME, timeout=DATABASE_TIMEOUT)
+        self.con = sqlite3.connect(DATABASE_PATH + "/" + DATABASE_NAME, timeout=DATABASE_TIMEOUT)
         self.cur = self.con.cursor()
         self.init()
         
