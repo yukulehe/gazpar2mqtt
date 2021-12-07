@@ -434,43 +434,43 @@ class Pce:
             # Daily measures
             
             ## Calculate D1 volume
-            startStr = f"'{dateNow}','-1 day'"
+            startStr = f"'{dateNow}','-2 day'"
             endStr = f"'{dateNow}','-1 day'"
             self.volumeD1 = self._getDeltaDailyCons(db,startStr,endStr)
             logging.debug("D-1 volume : %s m3",self.volumeD1)
             
             ## Calculate D2 volume
-            startStr = f"'{dateNow}','-2 day'"
+            startStr = f"'{dateNow}','-3 day'"
             endStr = f"'{dateNow}','-2 day'"
             self.volumeD2 = self._getDeltaDailyCons(db,startStr,endStr)
             logging.debug("D-2 volume : %s m3",self.volumeD2)
             
             ## Calculate D3 volume
-            startStr = f"'{dateNow}','-3 day'"
+            startStr = f"'{dateNow}','-4 day'"
             endStr = f"'{dateNow}','-3 day'"
             self.volumeD3 = self._getDeltaDailyCons(db,startStr,endStr)
             logging.debug("D-3 volume : %s m3",self.volumeD3)
             
             ## Calculate D4 volume
-            startStr = f"'{dateNow}','-4 day'"
+            startStr = f"'{dateNow}','-5 day'"
             endStr = f"'{dateNow}','-4 day'"
             self.volumeD4 = self._getDeltaDailyCons(db,startStr,endStr)
             logging.debug("D-4 volume : %s m3",self.volumeD4)
             
             ## Calculate D5 volume
-            startStr = f"'{dateNow}','-5 day'"
+            startStr = f"'{dateNow}','-6 day'"
             endStr = f"'{dateNow}','-5 day'"
             self.volumeD5 = self._getDeltaDailyCons(db,startStr,endStr)
             logging.debug("D-5 volume : %s m3",self.volumeD5)
             
             ## Calculate D6 volume
-            startStr = f"'{dateNow}','-6 day'"
+            startStr = f"'{dateNow}','-7 day'"
             endStr = f"'{dateNow}','-6 day'"
             self.volumeD6 = self._getDeltaDailyCons(db,startStr,endStr)
             logging.debug("D-6 volume : %s m3",self.volumeD6)
             
             ## Calculate D7 volume
-            startStr = f"'{dateNow}','-7 day'"
+            startStr = f"'{dateNow}','-8 day'"
             endStr = f"'{dateNow}','-7 day'"
             self.volumeD7 = self._getDeltaDailyCons(db,startStr,endStr)
             logging.debug("D-7 volume : %s m3",self.volumeD7)
