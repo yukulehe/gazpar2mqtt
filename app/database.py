@@ -94,10 +94,10 @@ class Database:
   
   
   # Get current G2M version
-  def getG2MVersion(self)
+  def getG2MVersion(self):
     query = f"SELECT version FROM config"
     self.cur.execute(query)
-    queryResult = db.cur.fetchone()
+    queryResult = self.cur.fetchone()
     if queryResult is not None:
       return queryResult[0]
     else:
