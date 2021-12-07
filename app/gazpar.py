@@ -441,7 +441,7 @@ class Pce:
         queryResult = db.cur.fetchone()
         if queryResult is not None:
             valueResult = int(queryResult[0])
-            if valueResult > 0:
+            if valueResult >= 0:
                 return valueResult
             else:
                 logging.debug("Delta conso value is not valid : %s",valueResult)
@@ -450,14 +450,7 @@ class Pce:
             logging.debug("Delta conso could not be calculated")
             return None
         
-                
-            
-            
-                
-            
-            
-        
-        
+ 
         
 #######################################################################
 #### Class Daily Measure
