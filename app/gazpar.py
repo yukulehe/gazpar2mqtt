@@ -414,18 +414,18 @@ class Pce:
             self.volumeW1 = self._getDeltaDailyCons(db,weekNowFirstDate,"-2 week",weekNowFirstDate,'-1 week')
             logging.debug("W-1 volume : %s m3",self.volumeW1)
             
-        # Return the index difference between 2 measures 
-        def _getDeltaDailyCons(self,db,startDate,startOffset,endDate,endOffset):
-            
-            result = None
-            query = f"SELECT max(value) - min(value) FROM consumption_daily WHERE pce = '{self.pceId}' AND date BETWEEN date('{startDate}','{startOffset}') AND date('{endDate}','{endOffset}') GROUP BY pce"
-            db.cur.execute(query)
-            queryResult = db.cur.fetchone()
-            if queryResult is not None:
-                valueResult = queryResult[0]
-                if valueResult > 0:
-                    result = valueResult
-            return result
+    # Return the index difference between 2 measures 
+    def _getDeltaDailyCons(self,db,startDate,startOffset,endDate,endOffset):
+
+        result = None
+        query = f"SELECT max(value) - min(value) FROM consumption_daily WHERE pce = '{self.pceId}' AND date BETWEEN date('{startDate}','{startOffset}') AND date('{endDate}','{endOffset}') GROUP BY pce"
+        db.cur.execute(query)
+        queryResult = db.cur.fetchone()
+        if queryResult is not None:
+            valueResult = queryResult[0]
+            if valueResult > 0:
+                result = valueResult
+        return result
                 
             
             
