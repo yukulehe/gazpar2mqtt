@@ -318,8 +318,7 @@ class Pce:
             logging.debug("Store PCE %s into database",self.pceId)
             pce_query = f"INSERT OR REPLACE INTO pces VALUES (?, ?, ?)"
             db.cur.execute(pce_query, [self.pceId, json.dumps(self.json), 0])
-        
-        
+               
     
     # Add a measure to the PCE    
     def addDailyMeasure(self, measure):
@@ -361,35 +360,39 @@ class Pce:
         
         return measure
     
-    # Return a measure by date
-    def getDailyMeasureByDate(self,date):
+    # Calculated measures
+    def calculateMeasures(db):
         
-        result = None
-        for measure in self.dailyMeasureList:
-            if measure.gasDate == date:
-                result = measure
-                break
-        return result
-    
-    # Return volume difference for a range of date
-    def getDailyMeasureVolumeDiff(self,startDate,endDate):
+        " Get last valid measure as reference
+        myMeasure = getLastMeasureOk()
         
-        # Get the first measure:
-        firstMeasure = self.getDailyMeasureByDate(startDate)
+        if db.cur and myMeasure:
         
-        # Get the last measure:
-        lastMeasure = self.getDailyMeasureByDate(endDate)
-        
-        if firstMeasure == None or lastMeasure == None:
-            return None
-        elif firstMeasure.isOk() == False or lastMeasure.isOk() == False:
-            return None
-        else:
-            # Calculate the volume difference
-            result = lastMeasure.volume - firstMeasure.volume
-            return result
+            " Calculate Y-1 volume
+            self.volumeY1 = None
+            query = f"SELECT max(value) - min(value) FROM consumption_daily WHERE pce = '{pce.pceId}' AND date > date('{myMeasure.gasDate}','-1 year') GROUP BY pce"
+            db.cur.execute(query)
+            query_result = db.cur.fetchone()
+            if query_result is not None:
+                volumeY1 = query_result[0]
+                if volumeY1 > 0:
+                    self.volumeY1 = volumeY1
+            logging.debug("Year -1 consumption : %s",self.volumeY1)
             
-        
+            " Calculate Y-2 volume
+            self.volumeY1 = None
+            query = f"SELECT max(value) - min(value) FROM consumption_daily WHERE pce = '{pce.pceId}' AND date BETWEEN date('{myMeasure.gasDate}','-2 year') AND date('{myMeasure.gasDate}','-1 year') GROUP BY pce"
+            db.cur.execute(query)
+            query_result = db.cur.fetchone()
+            if query_result is not None:
+                volumeY2 = query_result[0]
+                if volumeY2 > 0:
+                    self.volumeY2 = volumeY2
+            logging.debug("Year -2 consumption : %s",self.volumeY2)
+            
+            
+            
+                
         
         
         
