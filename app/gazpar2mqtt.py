@@ -331,6 +331,7 @@ def run(myParams):
                 logging.info("Devices configuration published !")
 
                 # Publish state of all entities of the device, one call by device class
+                # Note : only entities with value not none are published
                 logging.info("Publishing devices state ...")
                 for topic,payload in myDevice.getStatePayload().items():
                     myMqtt.publish(topic,json.dumps(payload))
