@@ -91,7 +91,7 @@ def run(myParams):
             logging.info("Reinitialization of the database...")
             myDb.reInit()
             dbVersion = myDb.getG2MVersion()
-            logging.info("Database reinitialized in version %s",dbVersion)
+            logging.info("Database reinitialized in version %s !",dbVersion)
     else:
         logging.warning("Unable to get database version.")
     
