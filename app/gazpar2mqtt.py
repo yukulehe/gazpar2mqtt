@@ -341,6 +341,16 @@ def run(myParams):
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'previous_week_gas','previous week gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeW1Y0)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'current_week_last_year_gas','previous week of last year gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeW0Y1)
                     
+                    ## Calculated daily measures
+                    logging.debug("Creation of daily entities")
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'d1_gas','d-1 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeD1)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'d2_gas','d-2 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeD2)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'d3_gas','d-3 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeD3)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'d4_gas','d-4 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeD4)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'d5_gas','d-5 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeD5)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'d6_gas','d-6 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeD6)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'d7_gas','d-7 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeD7)
+                    
                     ## Other
                     logging.debug("Creation of other entities")
                     myEntity = hass.Entity(myDevice,hass.BINARY,'connectivity','connectivity',hass.CONNECTIVITY_TYPE,None,None).setValue('ON')
