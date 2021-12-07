@@ -6,11 +6,13 @@
 ## Index
 TOPIC_INDEX = "/index"
 
-## Daily
-TOPIC_DAILY_DATE = "/daily/date"
-TOPIC_DAILY_KWH = "/daily/kwh"
-TOPIC_DAILY_MCUBE = "/daily/mcube"
+## Last measure
+TOPIC_LAST_DATE = "/last/date"
+TOPIC_LAST_KWH = "/last/kwh"
+TOPIC_LAST_MCUBE = "/last/mcube"
 
+## Calculated measure
+TOPIC_HISTO_MCUBE = "/histo/mcube"
 
 ## Status
 TOPIC_STATUS_DATE = "/status/date"
