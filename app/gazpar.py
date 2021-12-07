@@ -391,11 +391,11 @@ class Pce:
             if query_result is not None:
                 volume = query_result[0]
                 if volume > 0:
-                    self.volumeY1 = volume = None
-            logging.debug("Y-1 volume : %s m3",volume)
+                    self.volumeY1 = volume
+            logging.debug("Y-1 volume : %s m3",self.volumeY1)
             
             self.volumeY1 = self._getDeltaDailyCons(db,myMeasure.gasDate,"-1 year",myMeasure.gasDate,'-0 day')
-            logging.debug("Y-1 volume v2 : %s m3",volumeY1)
+            logging.debug("Y-1 volume : %s m3",volumeY1)
             
             # Calculate Y-2 volume
             self.volumeY1 = None
@@ -407,7 +407,7 @@ class Pce:
                 volume = query_result[0]
                 if volume > 0:
                     self.volumeY2 = volume
-            logging.debug("Year -2 volume : %s m3",volume)
+            logging.debug("Year -2 volume : %s m3",self.volumeY2)
             
             # Calculate W0 volume
             self.volumeW0 = self._getDeltaDailyCons(db,weekNowFirstDate,"-1 week",myMeasure.gasDate,"-0 day")
