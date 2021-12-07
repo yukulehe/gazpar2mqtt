@@ -374,8 +374,8 @@ class Pce:
         logging.debug("Today : date %s, week %s, month %s, year %s",dateNow,weekNow,monthNow,yearNow)
         weekNowFirstDate = dateNow - datetime.timedelta(days=dateNow.weekday() % 7)
         weekNowFirstDate = weekNowFirstDate
-        monthNowFirstDate = datetime.datetime(yearNow,monthNow, 1).date
-        yearNowFirstDate = datetime.datetime(yearNow, 1, 1).date
+        monthNowFirstDate = datetime.datetime(yearNow,monthNow, 1).date()
+        yearNowFirstDate = datetime.datetime(yearNow, 1, 1).date()
         logging.debug("First dates : week %s, month %s, year %s",weekNowFirstDate,monthNowFirstDate,yearNowFirstDate)
         
         
