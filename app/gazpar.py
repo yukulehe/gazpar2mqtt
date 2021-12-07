@@ -112,11 +112,7 @@ class Grdf:
             return
         
         # Display return login
-        logging.info("-----------------------  LOGGING  -------------------------")
-        logging.info("Surname: %s", login_return['surname'])
-        logging.info("Name: %s", login_return['name'])
-        logging.info("Email: %s", login_return['email'])
-        logging.info("-----------------------------------------------------------")
+        logging.debug("Logging return : surname = %s, name = %s, email = %s",login_return['surname'],login_return['name'],login_return['email'])
 
         # Call whoami, this seems to complete logging. First time it fails then it is working. Don't call ugly things anymore
         try:
