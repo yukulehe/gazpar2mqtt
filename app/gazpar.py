@@ -370,27 +370,51 @@ class Pce:
         
             # Calculate Y-1 volume
             self.volumeY1 = None
+            volume = None
             query = f"SELECT max(value) - min(value) FROM consumption_daily WHERE pce = '{self.pceId}' AND date > date('{myMeasure.gasDate}','-1 year') GROUP BY pce"
             db.cur.execute(query)
             query_result = db.cur.fetchone()
             if query_result is not None:
-                volumeY1 = query_result[0]
-                if volumeY1 > 0:
-                    self.volumeY1 = volumeY1
-            logging.debug("Year -1 consumption : %s",self.volumeY1)
+                volume = query_result[0]
+                if volume > 0:
+                    self.volumeY1 = volume = None
+            logging.debug("Y-1 volume : %s m3",volume)
             
             # Calculate Y-2 volume
             self.volumeY1 = None
+            volume = None
             query = f"SELECT max(value) - min(value) FROM consumption_daily WHERE pce = '{self.pceId}' AND date BETWEEN date('{myMeasure.gasDate}','-2 year') AND date('{myMeasure.gasDate}','-1 year') GROUP BY pce"
             db.cur.execute(query)
             query_result = db.cur.fetchone()
             if query_result is not None:
-                volumeY2 = query_result[0]
-                if volumeY2 > 0:
-                    self.volumeY2 = volumeY2
-            logging.debug("Year -2 consumption : %s",self.volumeY2)
+                volume = query_result[0]
+                if volume > 0:
+                    self.volumeY2 = volume
+            logging.debug("Year -2 volume : %s m3",volume)
             
+            # Calculate W0 volume
+            self.volumeW1 = None
+            volume = None
+            query = f"SELECT max(value) - min(value) FROM consumption_daily WHERE pce = '{self.pceId}' AND date > date('{myMeasure.gasDate}','-1 week') GROUP BY pce"
+            db.cur.execute(query)
+            query_result = db.cur.fetchone()
+            if query_result is not None:
+                volume = query_result[0]
+                if volume > 0:
+                    self.volumeW1 = volume
+            logging.debug("W0 volume : %s m3",volume)
             
+            # Calculate W1 volume
+            self.volumeW1 = None
+            volume = None
+            query = f"SELECT max(value) - min(value) FROM consumption_daily WHERE pce = '{self.pceId}' AND date BETWEEN date('{myMeasure.gasDate}','-2 week') AND date('{myMeasure.gasDate}','-1 week') GROUP BY pce"
+            db.cur.execute(query)
+            query_result = db.cur.fetchone()
+            if query_result is not None:
+                volume = query_result[0]
+                if volume > 0:
+                    self.volumeW1 = volume
+            logging.debug("W-1 volume : %s m3",volume)
             
                 
         
