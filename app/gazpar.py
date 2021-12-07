@@ -394,6 +394,9 @@ class Pce:
                     self.volumeY1 = volume = None
             logging.debug("Y-1 volume : %s m3",volume)
             
+            self.volumeY1 = self._getDeltaDailyCons(db,myMeasure.gasDate,"-1 year",myMeasure.gasDate,'-0 day')
+            logging.debug("Y-1 volume v2 : %s m3",volume)
+            
             # Calculate Y-2 volume
             self.volumeY1 = None
             volume = None
