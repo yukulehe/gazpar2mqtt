@@ -317,7 +317,7 @@ def run(myParams):
                     logging.debug("Creation of monthly entities")
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'current_month_gas','current month gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeM0Y0)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'previous_month_gas','previous year gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeM1Y0)
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'current_month_last_year_gas','current month of last year gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeM1Y1)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'current_month_last_year_gas','current month of last year gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeM0Y1)
                     
                     ## Calculated weekly measures
                     logging.debug("Creation of weekly entities")
