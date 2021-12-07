@@ -67,7 +67,7 @@ class Database:
         "day": datetime.datetime.now().strftime('%Y-%m-%d'),
         "version": self.version
     }
-    logging.info(json.dumps(config))
+    logging.debug("Database new config : %s", json.dumps(config))
     self.cur.execute(config_query, ["config", json.dumps(config)])
     self.commit()
   
@@ -91,7 +91,18 @@ class Database:
         self.con = sqlite3.connect(DATABASE_PATH + "/" + DATABASE_NAME, timeout=DATABASE_TIMEOUT)
         self.cur = self.con.cursor()
         self.init()
-        
+  
+  # Get current G2M version
+  def getG2MVersion(self)
+    query = f"SELECT version FROM config"
+    self.cur.execute(query)
+    queryResult = db.cur.fetchone()
+    if queryResult is not None:
+      return queryResult[0]
+    else:
+      return None
+      
+    
         
   # Check if connected
   def isConnected(self):
