@@ -412,11 +412,6 @@ class Pce:
             self.volumeM0Y1 = self._getDeltaDailyCons(db,startStr,endStr)
             logging.debug("M0Y1 volume : %s m3",self.volumeM0Y1)
             
-            # Calculate M1Y0 volume
-            startStr = f"'{dateNow}','start of month','-1 month','-1 day'"
-            endStr = f"'{dateNow}','-1 month'"
-            self.volumeM1Y0 = self._getDeltaDailyCons(db,startStr,endStr)
-            logging.debug("M1Y0 volume : %s m3",self.volumeM1Y0)
             
             # Calculate W0Y0 volume
             startStr = f"'{weekNowFirstDate}','-1 day'"
@@ -429,6 +424,12 @@ class Pce:
             endStr = f"'{weekNowFirstDate}','-1 days'"
             self.volumeW1Y0 = self._getDeltaDailyCons(db,startStr,endStr)
             logging.debug("W1Y0 volume : %s m3",self.volumeW1Y0)
+            
+            # Calculate W0Y1 volume
+            startStr = f"'{weekNowFirstDate}','-1 year','-1 day'"
+            endStr = f"'{dateNow}','-1 year'"
+            self.volumeW0Y1 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("W0Y1 volume : %s m3",self.volumeW0Y1)
             
     
     # Return the index difference between 2 measures 
