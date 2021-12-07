@@ -90,7 +90,8 @@ class Database:
         logging.debug("Connexion to database")
         self.con = sqlite3.connect(DATABASE_PATH + "/" + DATABASE_NAME, timeout=DATABASE_TIMEOUT)
         self.cur = self.con.cursor()
-        self.init()
+
+  
   
   # Get current G2M version
   def getG2MVersion(self)
