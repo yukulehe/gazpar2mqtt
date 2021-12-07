@@ -76,9 +76,10 @@ class Device:
         for myEntity in self.entityList:
             payload[myEntity.stateTopic] = {}
         
-        # Append value to list in the corresponding state topic
+        # Append not none value to list in the corresponding state topic
         for myEntity in self.entityList:
-            payload[myEntity.stateTopic][myEntity.id]=myEntity.value
+            if myEntity.value is not None:
+                payload[myEntity.stateTopic][myEntity.id]=myEntity.value
         
         # Return json formatted
         return payload
@@ -99,6 +100,7 @@ class Entity:
         self.unit = unit
         self.valueTemplate = "{{ value_json. " + self.id + " }}"
         self.statePayload = None
+        self.value = None
         
         # Set topics
         self.configTopic = f"{self.device.hass.prefix}/{type}/{self.device.id}/{self.id}/config"
