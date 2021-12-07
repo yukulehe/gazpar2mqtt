@@ -364,7 +364,7 @@ class Pce:
     def calculateMeasures(self,db):
         
         # Get last valid measure as reference
-        myMeasure = getLastMeasureOk()
+        myMeasure = self.getLastMeasureOk()
         
         if db.cur and myMeasure:
         
