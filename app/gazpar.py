@@ -367,7 +367,12 @@ class Pce:
         myMeasure = self.getLastMeasureOk()
         
         # Get current date, week, month and year
-        dateNow = toto
+        dateNow = datetime.date.today()
+        weekNow = dateNow.strftime("%W")
+        monthNow = dateNow.strftime("%m")
+        yearNow = dateNow.strftime("%Y")
+        logging.debug("Today : date %s, week %s, month %s, year %s",dateNow,weekNow,monthNow,yearNow)
+        
         
         if db.cur and myMeasure:
         
