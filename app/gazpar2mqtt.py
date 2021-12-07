@@ -195,7 +195,7 @@ def run(myParams):
                         logging.info("Last valid measure : Date = %s, Volume = %s m3, Energy = %s kWh.",myMeasure.gasDate,myMeasure.volume,myMeasure.energy)
                         
                         # Read calculated measures from database
-                        myPce.calculateMeasure(myDb)
+                        myPce.calculateMeasures(myDb)
                             
                     else:
                         logging.info("Unable to get any measure for PCE !",myPce.pceId)
