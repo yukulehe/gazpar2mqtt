@@ -360,15 +360,15 @@ class Pce:
         
         return measure
     
-    # Calculated measures
+    # Calculated measures from database
     def calculateMeasures(db):
         
-        " Get last valid measure as reference
+        # Get last valid measure as reference
         myMeasure = getLastMeasureOk()
         
         if db.cur and myMeasure:
         
-            " Calculate Y-1 volume
+            # Calculate Y-1 volume
             self.volumeY1 = None
             query = f"SELECT max(value) - min(value) FROM consumption_daily WHERE pce = '{pce.pceId}' AND date > date('{myMeasure.gasDate}','-1 year') GROUP BY pce"
             db.cur.execute(query)
@@ -379,7 +379,7 @@ class Pce:
                     self.volumeY1 = volumeY1
             logging.debug("Year -1 consumption : %s",self.volumeY1)
             
-            " Calculate Y-2 volume
+            # Calculate Y-2 volume
             self.volumeY1 = None
             query = f"SELECT max(value) - min(value) FROM consumption_daily WHERE pce = '{pce.pceId}' AND date BETWEEN date('{myMeasure.gasDate}','-2 year') AND date('{myMeasure.gasDate}','-1 year') GROUP BY pce"
             db.cur.execute(query)
