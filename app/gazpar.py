@@ -383,7 +383,7 @@ class Pce:
         if db.cur and myMeasure:
         
             # Calculate Y0 volume
-            self.volumeY0 = self._getDeltaDailyCons(db,yearNowFirstDate,None,myMeasure.gasDate,None)
+            self.volumeY0 = self._getDeltaDailyCons(db,myMeasure.gasDate,"start of year",myMeasure.gasDate,None)
             logging.debug("Current year volume : %s m3",self.volumeY0)
             
             # Calculate Y1 volume
@@ -391,11 +391,11 @@ class Pce:
             logging.debug("Last year volume : %s m3",self.volumeY1)
             
             # Calculate W0 volume
-            self.volumeW0 = self._getDeltaDailyCons(db,weekNowFirstDate,"-1 week",myMeasure.gasDate,None)
+            self.volumeW0 = self._getDeltaDailyCons(db,weekNowFirstDate,"-7 days",myMeasure.gasDate,None)
             logging.debug("W0 volume : %s m3",self.volumeW0)
             
             # Calculate W1 volume
-            self.volumeW1 = self._getDeltaDailyCons(db,weekNowFirstDate,"-2 week",weekNowFirstDate,"-1 week")
+            self.volumeW1 = self._getDeltaDailyCons(db,weekNowFirstDate,"-14 days",weekNowFirstDate,"-7 days")
             logging.debug("W-1 volume : %s m3",self.volumeW1)
             
     
