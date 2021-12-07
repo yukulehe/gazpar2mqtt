@@ -61,12 +61,6 @@ pip3 install -r app/requirement.txt
 ## GRDF Gazpar API
 
 Verify you have gazpar data available on [GRDF Portal](https://monespace.grdf.fr/monespace/connexion)
-
-For each PCE (Point de Comptage et d'Estimation) linked to GRDF account, data provided are :
-- the previous day ~~and the current month consumptions~~ of gas (in m3) and energy (kwh)
-- ~~the consumptions of the previous year for the current month~~
-- ~~the threshold (seuil) of the current month defined in Grdf portal~~
-
 Remember, kWh provided is conversion factor dependant. Please verify it's coherent with your provider bills.
 
 
