@@ -21,7 +21,9 @@ Important :
 ## Changelogs :
 
 - v0.6.x :
-  - To be completed
+  - Implementation of a sqlite database
+  - Calculation of aggregated consumptions at year, month and week level
+  - Exponential wait between retries when the application failed to retrieve data
 - v0.5.x :
   - Hard redesign of the application after new GRDF website released on 23/11/2021 . Thanks to **echauvet** for his contribution.
   - Published values are now PCE dependent
