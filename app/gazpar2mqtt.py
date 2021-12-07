@@ -187,10 +187,15 @@ def run(myParams):
                             # Store measure into database
                             myMeasure.store(myDb)
                         
-                        # When everything is fine
+                        # Commmit database
+                        myDb.commit()
+                        
+                        # Get last measure info
                         myMeasure = myPce.getLastMeasureOk()
                         logging.info("Last valid measure : Date = %s, Volume = %s m3, Energy = %s kWh.",myMeasure.gasDate,myMeasure.volume,myMeasure.energy)
-                        myDb.commit()
+                        
+                        # Read calculated measures from database
+                        myPCe.calculateMeasure(myDb)
                             
                     else:
                         logging.info("Unable to get any measure for PCE !",myPce.pceId)
