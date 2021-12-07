@@ -82,7 +82,7 @@ def run(myParams):
     
     # Compare G2M version
     logging.info("Checking database version...")
-    dbVersion = myDb.getVersion()
+    dbVersion = myDb.getG2MVersion()
     if dbVersion is not None:
         if dbVersion == G2M_VERSION:
             logging.info("Program and database are both at version %s.",G2M_VERSION)
