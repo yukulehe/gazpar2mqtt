@@ -370,7 +370,7 @@ class Pce:
         
             # Calculate Y-1 volume
             self.volumeY1 = None
-            query = f"SELECT max(value) - min(value) FROM consumption_daily WHERE pce = '{pce.pceId}' AND date > date('{myMeasure.gasDate}','-1 year') GROUP BY pce"
+            query = f"SELECT max(value) - min(value) FROM consumption_daily WHERE pce = '{self.pceId}' AND date > date('{myMeasure.gasDate}','-1 year') GROUP BY pce"
             db.cur.execute(query)
             query_result = db.cur.fetchone()
             if query_result is not None:
@@ -381,7 +381,7 @@ class Pce:
             
             # Calculate Y-2 volume
             self.volumeY1 = None
-            query = f"SELECT max(value) - min(value) FROM consumption_daily WHERE pce = '{pce.pceId}' AND date BETWEEN date('{myMeasure.gasDate}','-2 year') AND date('{myMeasure.gasDate}','-1 year') GROUP BY pce"
+            query = f"SELECT max(value) - min(value) FROM consumption_daily WHERE pce = '{self.pceId}' AND date BETWEEN date('{myMeasure.gasDate}','-2 year') AND date('{myMeasure.gasDate}','-1 year') GROUP BY pce"
             db.cur.execute(query)
             query_result = db.cur.fetchone()
             if query_result is not None:
