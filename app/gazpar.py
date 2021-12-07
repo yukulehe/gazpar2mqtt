@@ -421,19 +421,21 @@ class Pce:
     def _getDeltaDailyCons(self,db,startDate,startOffset,endDate,endOffset):
         
         logging.debug("Retrieve delta conso between %s %s and %s %s",startDate,startOffset,endDate,endOffset)
-        result = None
         query = f"SELECT max(value) - min(value) FROM consumption_daily WHERE pce = '{self.pceId}' AND date BETWEEN date('{startDate}','{startOffset}') AND date('{endDate}','{endOffset}') GROUP BY pce"
         db.cur.execute(query)
         queryResult = db.cur.fetchone()
         if queryResult is not None:
             valueResult = int(queryResult[0])
             if valueResult > 0:
-                result = valueResult
                 logging.debug("Delta conso = %s",valueResult)
-            logging.debug("Delta conso value is not valid : %s",valueResult)
+                return valueResult
+            else:
+                logging.debug("Delta conso value is not valid : %s",valueResult)
+                return None
         else:
-            logging.debug("Delta conso is empty")
-        return result
+            logging.debug("Delta conso could not be calculated")
+            return None
+        
                 
             
             
