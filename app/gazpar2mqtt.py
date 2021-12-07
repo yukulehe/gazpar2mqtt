@@ -301,32 +301,39 @@ def run(myParams):
                     # Create entities and set values
                     
                     ## Current measures
+                    logging.debug("Creation of current entities")
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'index','index',hass.GAS_TYPE,hass.ST_TTI,'m³').setValue(myDailyMeasure.endIndex)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'daily_gas','daily gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myDailyMeasure.volume)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'daily_energy','daily energy',hass.ENERGY_TYPE,hass.ST_MEAS,'kWh').setValue(myDailyMeasure.energy)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'consumption_date','consumption date',hass.NONE_TYPE,None,None).setValue(str(myDailyMeasure.gasDate))
                     
+                    
                     ## Calculated yearly measures
+                    logging.debug("Creation of yearly entities")
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'current_year_gas','current year gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeW0Y0)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'previous_year_gas','previous year gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeY1)
                     
                     ## Calculated monthly measures
+                    logging.debug("Creation of monthly entities")
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'current_month_gas','current month gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeM0Y0)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'previous_month_gas','previous year gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeM1Y0)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'current_month_last_year_gas','current month of last year gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeM1Y1)
                     
                     ## Calculated weekly measures
+                    logging.debug("Creation of weekly entities")
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'current_week_gas','current week gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeW0Y0)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'previous_week_gas','previous week gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeW1Y0)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'current_week_last_year_gas','previous week of last year gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.volumeW0Y1)
                     
                     ## Other
+                    logging.debug("Creation of other entities")
                     myEntity = hass.Entity(myDevice,hass.BINARY,'connectivity','connectivity',hass.CONNECTIVITY_TYPE,None,None).setValue('ON')
 
 
                 # Publish config
                 logging.info("Publishing devices configuration ...")
                 for myEntity in myDevice.entityList:
+                    logging.debug("Publish configuration of entity %s",myEntity.id)
                     myMqtt.publish(myEntity.configTopic, myEntity.getConfigPayloadJson())
                 logging.info("Devices configuration published !")
 
@@ -334,6 +341,7 @@ def run(myParams):
                 # Note : only entities with value not none are published
                 logging.info("Publishing devices state ...")
                 for topic,payload in myDevice.getStatePayload().items():
+                    logging.debug("Publish states of topic %s",topic)
                     myMqtt.publish(topic,json.dumps(payload))
                 logging.info("Devices state published !")
 
