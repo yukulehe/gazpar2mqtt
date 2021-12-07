@@ -414,7 +414,7 @@ class Pce:
             
             # Calculate M1Y0 volume
             startStr = f"'{dateNow}','start of month','-1 month','-1 day'"
-            endStr = f"'{dateNow}','-1 month"
+            endStr = f"'{dateNow}','-1 month'"
             self.volumeM1Y0 = self._getDeltaDailyCons(db,startStr,endStr)
             logging.debug("M1Y0 volume : %s m3",self.volumeM1Y0)
             
