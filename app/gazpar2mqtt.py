@@ -261,9 +261,9 @@ def run(myParams):
                     # Publish daily values
                     logging.info("Publishing to Mqtt the last daily values...")
                     logging.debug("Date %s, Energy = %s, Volume %s",myDailyMeasure.gasDate,myDailyMeasure.energy,myDailyMeasure.volume)
-                    myMqtt.publish(mySa.dailyDateTopic, myDailyMeasure.gasDate)
-                    myMqtt.publish(mySa.dailyKwhTopic, myDailyMeasure.energy)
-                    myMqtt.publish(mySa.dailyMcubeTopic, myDailyMeasure.volume)
+                    myMqtt.publish(mySa.kastDateTopic, myDailyMeasure.gasDate)
+                    myMqtt.publish(mySa.lastKwhTopic, myDailyMeasure.energy)
+                    myMqtt.publish(mySa.lastMcubeTopic, myDailyMeasure.volume)
                     myMqtt.publish(mySa.indexTopic, myDailyMeasure.endIndex)
                     logging.info("Daily values published !")
 
