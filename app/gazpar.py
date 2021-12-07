@@ -426,7 +426,7 @@ class Pce:
         queryResult = db.cur.fetchone()
         if queryResult is not None:
             valueResult = int(queryResult[0])
-            logging.debug("Query result : %s",queryResult)
+            logging.debug("Integer ? %s",isinstance(valueResult, int))
             if valueResult > 0:
                 logging.debug("Delta conso = %s",valueResult)
                 return valueResult
