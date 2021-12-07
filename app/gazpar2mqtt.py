@@ -257,14 +257,44 @@ def run(myParams):
                 else: # Values when Grdf succeeded
 
                     myDailyMeasure = myPce.getLastMeasureOk()
+                    logging.debug("Date %s, Energy = %s, Volume %s",myDailyMeasure.gasDate,myDailyMeasure.energy,myDailyMeasure.volume)
 
                     # Publish daily values
                     logging.info("Publishing to Mqtt the last daily values...")
-                    logging.debug("Date %s, Energy = %s, Volume %s",myDailyMeasure.gasDate,myDailyMeasure.energy,myDailyMeasure.volume)
-                    myMqtt.publish(mySa.kastDateTopic, myDailyMeasure.gasDate)
+                    
+                    ## Last measures
+                    myMqtt.publish(mySa.lastDateTopic, myDailyMeasure.gasDate)
                     myMqtt.publish(mySa.lastKwhTopic, myDailyMeasure.energy)
                     myMqtt.publish(mySa.lastMcubeTopic, myDailyMeasure.volume)
                     myMqtt.publish(mySa.indexTopic, myDailyMeasure.endIndex)
+                    
+                    ## Calculated yearly measures
+                    logging.debug("Creation of yearly entities")
+                    myMqtt.publish(mySa.histoMcubeTopic+"/current_year", myPce.gasY0)
+                    myMqtt.publish(mySa.histoMcubeTopic+"/previous_year", myPce.gasY1)
+                    
+                    ## Calculated monthly measures
+                    logging.debug("Creation of monthly entities")
+                    myMqtt.publish(mySa.histoMcubeTopic+"/current_month", myPce.gasM0Y0)
+                    myMqtt.publish(mySa.histoMcubeTopic+"/previous_month", myPce.gasM1Y0)
+                    myMqtt.publish(mySa.histoMcubeTopic+"/current_month_previous_year", myPce.gasM0Y1)
+                    
+                    ## Calculated weekly measures
+                    logging.debug("Creation of weekly entities")
+                    myMqtt.publish(mySa.histoMcubeTopic+"/current_week", myPce.gasW0Y0)
+                    myMqtt.publish(mySa.histoMcubeTopic+"/previous_week", myPce.gasW1Y0)
+                    myMqtt.publish(mySa.histoMcubeTopic+"/current_week_previous_year", myPce.gasW0Y1)
+                    
+                    ## Calculated daily measures
+                    logging.debug("Creation of daily entities")
+                    myMqtt.publish(mySa.histoMcubeTopic+"/day-1", myPce.gasD1)
+                    myMqtt.publish(mySa.histoMcubeTopic+"/day-2", myPce.gasD2)
+                    myMqtt.publish(mySa.histoMcubeTopic+"/day-3", myPce.gasD3)
+                    myMqtt.publish(mySa.histoMcubeTopic+"/day-4", myPce.gasD4)
+                    myMqtt.publish(mySa.histoMcubeTopic+"/day-5", myPce.gasD5)
+                    myMqtt.publish(mySa.histoMcubeTopic+"/day-6", myPce.gasD6)
+                    myMqtt.publish(mySa.histoMcubeTopic+"/day-7", myPce.gasD7) 
+                    
                     logging.info("Daily values published !")
 
 
