@@ -91,8 +91,6 @@ class Database:
         self.con = sqlite3.connect(DATABASE_PATH + "/" + DATABASE_NAME, timeout=DATABASE_TIMEOUT)
         self.cur = self.con.cursor()
 
-  
-  
   # Get current G2M version
   def getG2MVersion(self):
     query = f"SELECT value FROM config"
@@ -103,8 +101,31 @@ class Database:
       return resultValue["version"]
     else:
       return None
-      
     
+    
+  # Re-initialize the database
+  def reInit(self):
+    
+    logging.debug("Reinitialization of the database.")
+    
+    logging.debug("Drop configuration table")
+    self.cur.execute('''DROP TABLE IF EXISTS config''')
+    
+    logging.debug("Drop PCEs table")
+    self.cur.execute('''DROP TABLE IF EXISTS pces''')
+    
+    logging.debug("Drop daily consumptions table")
+    self.cur.execute('''DROP TABLE IF EXISTS consumption_daily''')
+    
+    logging.debug("Drop billing table")
+    self.cur.execute('''DROP TABLE IF EXISTS billing''')
+    
+    # Commit work
+    self.commit()
+    
+    # Initialize tables
+    self.init()
+      
         
   # Check if connected
   def isConnected(self):
