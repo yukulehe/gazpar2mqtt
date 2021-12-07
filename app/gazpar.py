@@ -383,26 +383,26 @@ class Pce:
         if db.cur and myMeasure:
         
             # Calculate Y0 volume
-            startStr = f"'{myMeasure.gasDate}','start of year','-1 day'"
-            endStr = f"'{myMeasure.gasDate}'"
+            startStr = f"'{dateNow}','start of year','-1 day'"
+            endStr = f"'{dateNow}'"
             self.volumeY0 = self._getDeltaDailyCons(db,startStr,endStr)
             logging.debug("Current year volume : %s m3",self.volumeY0)
             
             # Calculate Y1 volume
-            startStr = f"'{myMeasure.gasDate}','start of year','-1 year','-1 day'"
-            endStr = f"'{myMeasure.gasDate}','-1 year'"
+            startStr = f"'{dateNow}','start of year','-1 year','-1 day'"
+            endStr = f"'{dateNow}','-1 year'"
             self.volumeY1 = self._getDeltaDailyCons(db,startStr,endStr)
             logging.debug("Last year volume : %s m3",self.volumeY1)
             
             # Calculate W0 volume
-            startStr = f"'{myMeasure.gasDate}','-7 days'"
-            endStr = f"'{myMeasure.gasDate}'"
+            startStr = f"'{weekNowFirstDate}'"
+            endStr = f"'{dateNow}'"
             self.volumeW0 = self._getDeltaDailyCons(db,startStr,endStr)
             logging.debug("W0 volume : %s m3",self.volumeW0)
             
             # Calculate W1 volume
-            startStr = f"'{myMeasure.gasDate}','-15 days'"
-            endStr = f"'{myMeasure.gasDate}','-8 days'"
+            startStr = f"'{dateNow}','-15 days'"
+            endStr = f"'{dateNow}','-8 days'"
             self.volumeW1 = self._getDeltaDailyCons(db,startStr,endStr)
             logging.debug("W-1 volume : %s m3",self.volumeW1)
             
