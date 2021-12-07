@@ -408,7 +408,7 @@ class Pce:
             
             # Calculate W0 volume
             self.volumeW0 = self._getDeltaDailyCons(db,weekNowFirstDate,"-1 week",myMeasure.gasDate,'-0 day')
-            logging.debug("W0 volume : %s m3",self.volumeW1)
+            logging.debug("W0 volume : %s m3",self.volumeW0)
             
             # Calculate W1 volume
             self.volumeW1 = self._getDeltaDailyCons(db,weekNowFirstDate,"-2 week",weekNowFirstDate,'-1 week')
