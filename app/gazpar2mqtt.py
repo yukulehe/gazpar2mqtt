@@ -68,9 +68,10 @@ def run(myParams):
     logging.info("Connexion to SQLite database...")
     logging.info("-----------------------------------------------------------")
     
-    # Create/Check database
+    # Create/Update database
     logging.info("Check local database/cache")
     myDb = database.Database(G2M_VERSION)
+    
     
     # Connect to database
     myDb.connect()
@@ -78,6 +79,17 @@ def run(myParams):
         logging.info("SQLite database connected !")
     else:
         logging.error("Unable to connect to SQLite database.")
+    
+    # Compare G2M version
+    logging.info("Checking database version...")
+    dbVersion = myDb.getVersion()
+    if dbVersion is not None:
+        if dbVersion = G2M_VERSION:
+            logging.info("Program and database are both at version %s.",G2M_VERSION)
+        elif:
+            logging.warning("Program (%s) and database (%s) are both at the same version.",G2M_VERSION,dbVersion)
+    elif:
+        logging.warning("Unable to get database version.")
     
     
     
