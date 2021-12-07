@@ -99,7 +99,8 @@ class Database:
     self.cur.execute(query)
     queryResult = self.cur.fetchone()
     if queryResult is not None:
-      return queryResult[0]
+      resultValue = json.loads(queryResult[0])
+      return resultValue["version"]
     else:
       return None
       
