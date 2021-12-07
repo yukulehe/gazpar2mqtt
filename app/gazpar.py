@@ -410,11 +410,11 @@ class Pce:
             logging.debug("Year -2 volume : %s m3",volume)
             
             # Calculate W0 volume
-            self.volumeW0 = self._getDeltaDailyCons(db,weekNowFirstDate,"-1 week",myMeasure.gasDate,'-0 day')
+            self.volumeW0 = self._getDeltaDailyCons(db,weekNowFirstDate,"-1 week",myMeasure.gasDate,"-0 day")
             logging.debug("W0 volume : %s m3",self.volumeW0)
             
             # Calculate W1 volume
-            self.volumeW1 = self._getDeltaDailyCons(db,weekNowFirstDate,"-2 week",weekNowFirstDate,'-1 week')
+            self.volumeW1 = self._getDeltaDailyCons(db,weekNowFirstDate,"-2 week",weekNowFirstDate,"-1 week")
             logging.debug("W-1 volume : %s m3",self.volumeW1)
             
     # Return the index difference between 2 measures 
@@ -426,7 +426,7 @@ class Pce:
         db.cur.execute(query)
         queryResult = db.cur.fetchone()
         if queryResult is not None:
-            valueResult = queryResult[0]
+            valueResult = int(queryResult[0])
             if valueResult > 0:
                 result = valueResult
             logging.debug("Delta conso = %s",valueResult)
