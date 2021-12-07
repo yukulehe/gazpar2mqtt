@@ -379,101 +379,101 @@ class Pce:
         
             # Yearly measures
             
-            ## Calculate Y0 volume
+            ## Calculate Y0 gas
             startStr = f"'{dateNow}','start of year','-1 day'"
             endStr = f"'{dateNow}'"
-            self.volumeY0 = self._getDeltaDailyCons(db,startStr,endStr)
-            logging.debug("Y0 volume : %s m3",self.volumeY0)
+            self.gasY0 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("Y0 gas : %s m3",self.gasY0)
             
-            ## Calculate Y1 volume
+            ## Calculate Y1 gas
             startStr = f"'{dateNow}','start of year','-1 year','-1 day'"
             endStr = f"'{dateNow}','-1 year'"
-            self.volumeY1 = self._getDeltaDailyCons(db,startStr,endStr)
-            logging.debug("Y1 volume : %s m3",self.volumeY1)
+            self.gasY1 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("Y1 gas : %s m3",self.gasY1)
             
             # Monthly measures
             
-            ## Calculate M0Y0 volume
+            ## Calculate M0Y0 gas
             startStr = f"'{dateNow}','start of month','-1 day'"
             endStr = f"'{dateNow}'"
-            self.volumeM0Y0 = self._getDeltaDailyCons(db,startStr,endStr)
-            logging.debug("M0Y0 volume : %s m3",self.volumeM0Y0)
+            self.gasM0Y0 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("M0Y0 gas : %s m3",self.gasM0Y0)
             
-            ## Calculate M1Y0 volume
+            ## Calculate M1Y0 gas
             startStr = f"'{dateNow}','start of month','-1 month','-1 day'"
             endStr = f"'{dateNow}','-1 month'"
-            self.volumeM1Y0 = self._getDeltaDailyCons(db,startStr,endStr)
-            logging.debug("M1Y0 volume : %s m3",self.volumeM1Y0)
+            self.gasM1Y0 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("M1Y0 gas : %s m3",self.gasM1Y0)
             
-            ## Calculate M0Y1 volume
+            ## Calculate M0Y1 gas
             startStr = f"'{dateNow}','start of month','-1 year','-1 day'"
             endStr = f"'{dateNow}','-1 year'"
-            self.volumeM0Y1 = self._getDeltaDailyCons(db,startStr,endStr)
-            logging.debug("M0Y1 volume : %s m3",self.volumeM0Y1)
+            self.gasM0Y1 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("M0Y1 gas : %s m3",self.gasM0Y1)
             
             # Weekly measures
             
-            ## Calculate W0Y0 volume
+            ## Calculate W0Y0 gas
             startStr = f"'{weekNowFirstDate}','-1 day'"
             endStr = f"'{dateNow}'"
-            self.volumeW0Y0 = self._getDeltaDailyCons(db,startStr,endStr)
-            logging.debug("W0Y0 volume : %s m3",self.volumeW0Y0)
+            self.gasW0Y0 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("W0Y0 gas : %s m3",self.gasW0Y0)
             
-            ## Calculate W1Y0 volume
+            ## Calculate W1Y0 gas
             startStr = f"'{weekNowFirstDate}','-8 days'"
             endStr = f"'{weekNowFirstDate}','-1 days'"
-            self.volumeW1Y0 = self._getDeltaDailyCons(db,startStr,endStr)
-            logging.debug("W1Y0 volume : %s m3",self.volumeW1Y0)
+            self.gasW1Y0 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("W1Y0 gas : %s m3",self.gasW1Y0)
             
-            ## Calculate W0Y1 volume
+            ## Calculate W0Y1 gas
             startStr = f"'{weekNowFirstDate}','-1 year','-1 day'"
             endStr = f"'{dateNow}','-1 year'"
-            self.volumeW0Y1 = self._getDeltaDailyCons(db,startStr,endStr)
-            logging.debug("W0Y1 volume : %s m3",self.volumeW0Y1)
+            self.gasW0Y1 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("W0Y1 gas : %s m3",self.gasW0Y1)
             
             # Daily measures
             
-            ## Calculate D1 volume
+            ## Calculate D1 gas
             startStr = f"'{dateNow}','-2 day'"
             endStr = f"'{dateNow}','-1 day'"
-            self.volumeD1 = self._getDeltaDailyCons(db,startStr,endStr)
-            logging.debug("D-1 volume : %s m3",self.volumeD1)
+            self.gasD1 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("D-1 gas : %s m3",self.gasD1)
             
-            ## Calculate D2 volume
+            ## Calculate D2 gas
             startStr = f"'{dateNow}','-3 day'"
             endStr = f"'{dateNow}','-2 day'"
-            self.volumeD2 = self._getDeltaDailyCons(db,startStr,endStr)
-            logging.debug("D-2 volume : %s m3",self.volumeD2)
+            self.gasD2 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("D-2 gas : %s m3",self.gasD2)
             
-            ## Calculate D3 volume
+            ## Calculate D3 gas
             startStr = f"'{dateNow}','-4 day'"
             endStr = f"'{dateNow}','-3 day'"
-            self.volumeD3 = self._getDeltaDailyCons(db,startStr,endStr)
-            logging.debug("D-3 volume : %s m3",self.volumeD3)
+            self.gasD3 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("D-3 gas : %s m3",self.gasD3)
             
-            ## Calculate D4 volume
+            ## Calculate D4 gas
             startStr = f"'{dateNow}','-5 day'"
             endStr = f"'{dateNow}','-4 day'"
-            self.volumeD4 = self._getDeltaDailyCons(db,startStr,endStr)
-            logging.debug("D-4 volume : %s m3",self.volumeD4)
+            self.gasD4 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("D-4 gas : %s m3",self.gasD4)
             
-            ## Calculate D5 volume
+            ## Calculate D5 gas
             startStr = f"'{dateNow}','-6 day'"
             endStr = f"'{dateNow}','-5 day'"
-            self.volumeD5 = self._getDeltaDailyCons(db,startStr,endStr)
-            logging.debug("D-5 volume : %s m3",self.volumeD5)
+            self.gasD5 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("D-5 gas : %s m3",self.gasD5)
             
-            ## Calculate D6 volume
+            ## Calculate D6 gas
             startStr = f"'{dateNow}','-7 day'"
             endStr = f"'{dateNow}','-6 day'"
-            self.volumeD6 = self._getDeltaDailyCons(db,startStr,endStr)
-            logging.debug("D-6 volume : %s m3",self.volumeD6)
+            self.gasD6 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("D-6 gas : %s m3",self.gasD6)
             
-            ## Calculate D7 volume
+            ## Calculate D7 gas
             startStr = f"'{dateNow}','-8 day'"
             endStr = f"'{dateNow}','-7 day'"
-            self.volumeD7 = self._getDeltaDailyCons(db,startStr,endStr)
-            logging.debug("D-7 volume : %s m3",self.volumeD7)
+            self.gasD7 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("D-7 gas : %s m3",self.gasD7)
             
             
     
