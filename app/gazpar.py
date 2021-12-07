@@ -401,8 +401,8 @@ class Pce:
             logging.debug("W0 volume : %s m3",self.volumeW0)
             
             # Calculate W1 volume
-            startStr = f"'{weekNowFirstDate}','-15 days'"
-            endStr = f"'{weekNowFirstDate}','-8 days'"
+            startStr = f"'{weekNowFirstDate}','-8 days'"
+            endStr = f"'{weekNowFirstDate}','-1 days'"
             self.volumeW1 = self._getDeltaDailyCons(db,startStr,endStr)
             logging.debug("W-1 volume : %s m3",self.volumeW1)
             
