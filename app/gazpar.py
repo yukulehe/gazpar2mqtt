@@ -366,6 +366,9 @@ class Pce:
         # Get last valid measure as reference
         myMeasure = self.getLastMeasureOk()
         
+        # Get current date, week, month and year
+        dateNow = toto
+        
         if db.cur and myMeasure:
         
             # Calculate Y-1 volume
