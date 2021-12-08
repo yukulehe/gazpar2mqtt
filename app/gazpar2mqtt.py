@@ -242,7 +242,7 @@ def run(myParams):
                 prefix = myParams.mqttTopic + '/' + myPce.pceId
                 
                 # Display topic root
-                logging.info("State values are published in the topic %s/#",prefix)
+                logging.info("You can retrieve published values subscribing topic %s/#",prefix)
 
                 # Instantiate Standalone class by PCE
                 mySa = standalone.Standalone(prefix)
@@ -420,7 +420,7 @@ def run(myParams):
 
                 # Publish config, state (when value not none), attributes (when not none)
                 logging.info("Publishing devices...")
-                logging.info("You can retrieved published values in the topic %s",myDevice.hass.prefix + "/+/" + myDevice.id + "/#")
+                logging.info("You can retrieve published values subscribing topic %s",myDevice.hass.prefix + "/+/" + myDevice.id + "/#")
                 for topic,payload in myDevice.getStatePayload().items():
                     myMqtt.publish(topic,payload)
                 logging.info("Devices published !")
