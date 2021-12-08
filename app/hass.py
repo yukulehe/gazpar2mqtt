@@ -98,7 +98,7 @@ class Entity:
         self.deviceClass = deviceClass
         self.stateClass = stateClass
         self.unit = unit
-        self.valueTemplate = "{{ value_json." + self.id + " }}"
+        #self.valueTemplate = "{{ value_json." + self.id + " }}"
         self.statePayload = None
         self.value = None
         self.attributes = None
