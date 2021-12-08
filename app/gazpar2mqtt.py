@@ -390,7 +390,7 @@ def run(myParams):
 
                 # Publish config, state (when value not none), attributes (when not none)
                 logging.info("Publishing devices...")
-                logging.info("You can retrieved published values in the topic %s",myDevice.hass.prefix + "/#/" + myDevice.id)
+                logging.info("You can retrieved published values in the topic %s",myDevice.hass.prefix + "/#/" + myDevice.id + "/#")
                 for topic,payload in myDevice.getStatePayload().items():
                     myMqtt.publish(topic,payload)
                 logging.info("Devices published !")
