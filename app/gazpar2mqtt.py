@@ -335,12 +335,21 @@ def run(myParams):
                 deviceId = myParams.hassDeviceName.replace(" ","_") + "_" +  myPce.pceId
                 deviceName = myParams.hassDeviceName + " " +  myPce.alias
                 myDevice = hass.Device(myHass,myPce.pceId,deviceId,deviceName)
+                
+                # Create entity PCE
+                myEntity = hass.Entity(myDevice,hass.SENSOR,'pce','pce',hass.NONE,None,None).setValue(myPCE.state)
+                myEntity.addAttribute("pce_alias",myPce.alias)
+                myEntity.addAttribute("pce_id",myPce.id)
+                myEntity.addAttribute("freqence",myPce.freqenceReleve)
+                myEntity.addAttribute("activation_date ",myPce.activationDate)
+                myEntity.addAttribute("owner_name",myPce.ownerName)
+                myEntity.addAttribute("postal_code",myPce.postalCode)
 
                 # Process hass's entities to be valuated
                 if not myPce.isOk(): # Values when PCE is not correct
 
                     # Create entities and set values
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'connectivity','Connectivity',hass.CONNECTIVITY_TYPE,None,None).setValue('ON')
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'connectivity','Connectivity',hass.CONNECTIVITY_TYPE,None,None).setValue('OFF')
 
                 else: # Values when PCE is correct   
 
