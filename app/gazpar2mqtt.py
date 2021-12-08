@@ -444,6 +444,7 @@ def run(myParams):
         logging.info("No schedule define. It was a oneshot.")
     
     # Release objects
+    logging.debug("Release instance objects.")
     myDb = None
     myMqtt = None
     myGrdf = None
