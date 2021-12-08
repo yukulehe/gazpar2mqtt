@@ -375,13 +375,13 @@ def run(myParams):
                     
                     ## Calculated daily measures
                     logging.debug("Creation of daily entities")
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'day-1_gas','day-1 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasD1)
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'day-2_gas','day-2 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasD2)
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'day-3_gas','day-3 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasD3)
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'day-4_gas','day-4 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasD4)
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'day-5_gas','day-5 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasD5)
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'day-6_gas','day-6 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasD6)
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'day-7_gas','day-7 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasD7)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'day_1_gas','day-1 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasD1)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'day_2_gas','day-2 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasD2)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'day_3_gas','day-3 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasD3)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'day_4_gas','day-4 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasD4)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'day_5_gas','day-5 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasD5)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'day_6_gas','day-6 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasD6)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'day_7_gas','day-7 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasD7)
                     
                     ## Other
                     logging.debug("Creation of other entities")
