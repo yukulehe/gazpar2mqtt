@@ -66,7 +66,10 @@ class Mqtt:
         # Connect
         logging.debug("Mqtt connect : connection to broker %s:%s...",self.host,self.port)
         self.client.connect(self.host,self.port, 60)
-        time.sleep(5)
+        if self.isSsl:
+            time.sleep(5)
+        else:
+            time.sleep(2)
 
         # Start loop
         self.client.loop_start()
@@ -90,4 +93,7 @@ class Mqtt:
         myPayload = str(payload)
         logging.debug("Publishing payload %s to topic %s, qos %s, retain %s",payload,topic, self.qos, self.retain)
         self.client.publish(topic, payload=myPayload, qos=self.qos, retain=self.retain)
-        time.sleep(200/1000) # ms
+        if self.isSsl:
+            time.sleep(1)
+        else:
+            time.sleep(200/1000) # 200ms
