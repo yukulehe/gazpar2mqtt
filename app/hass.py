@@ -105,7 +105,7 @@ class Entity:
         
         # Set topics
         self.configTopic = f"{self.device.hass.prefix}/{type}/{self.device.id}/{self.id}/config"
-        self.stateTopic = f"{self.device.hass.prefix}/{type}/{self.device.id}/state"
+        self.stateTopic = f"{self.device.hass.prefix}/{type}/{self.device.id}/{self.id}/state"
         self.attributesTopic = f"{self.device.hass.prefix}/{type}/{self.device.id}/{self.id}/attributes"
         
         # Set config payload
