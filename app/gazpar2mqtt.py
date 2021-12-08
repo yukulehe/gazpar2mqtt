@@ -341,7 +341,7 @@ def run(myParams):
                 myEntity = hass.Entity(myDevice,hass.SENSOR,'pce','pce',hass.NONE_TYPE,None,None)
                 myEntity.setValue(myPce.state)
                 myEntity.addAttribute("pce_alias",myPce.alias)
-                myEntity.addAttribute("pce_id",myPce.id)
+                myEntity.addAttribute("pce_id",myPce.pceId)
                 myEntity.addAttribute("freqence",myPce.freqenceReleve)
                 myEntity.addAttribute("activation_date ",myPce.activationDate)
                 myEntity.addAttribute("owner_name",myPce.ownerName)
