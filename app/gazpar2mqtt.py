@@ -363,8 +363,8 @@ def run(myParams):
                     ## Last GRDF measure
                     logging.debug("Creation of current entities")
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'last_index','index',hass.GAS_TYPE,hass.ST_TTI,'m³').setValue(myMeasure.endIndex)
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'last_gas','last daily gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myMeasure.volume)
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'last_energy','last daily energy',hass.ENERGY_TYPE,hass.ST_MEAS,'kWh').setValue(myMeasure.energy)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'last_gas','last gas consumption',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myMeasure.volume)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'last_energy','last energy consumption',hass.ENERGY_TYPE,hass.ST_MEAS,'kWh').setValue(myMeasure.energy)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'last_consumption_date','last consumption date',hass.NONE_TYPE,None,None).setValue(str(myMeasure.gasDate))
                     
                     ## Calculated calendar measures
