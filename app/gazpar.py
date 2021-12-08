@@ -481,17 +481,21 @@ class Pce:
     def _getDeltaDailyCons(self,db,startStr,endStr):
         
         logging.debug("Retrieve delta conso between %s and %s",startStr,endStr)
-
+        
+        # We need to have at least 2 records to measure a delta index
         query = f"SELECT CASE WHEN COUNT(ALL) > 1 THEN max(value) - min(value) ELSE NULL END FROM consumption_daily WHERE pce = '{self.pceId}' AND date BETWEEN date({startStr}) AND date({endStr}) GROUP BY pce"
         db.cur.execute(query)
         queryResult = db.cur.fetchone()
         if queryResult is not None:
-            logging.debug(queryResult[0])
-            valueResult = int(queryResult[0])
-            if valueResult >= 0:
-                return valueResult
+            if queryResult[0] is not None:
+                valueResult = int(queryResult[0])
+                if valueResult >= 0:
+                    return valueResult
+                else:
+                    logging.debug("Delta conso value is not valid : %s",valueResult)
+                    return None
             else:
-                logging.debug("Delta conso value is not valid : %s",valueResult)
+                logging.debug("Delta conso could not be calculated because only 1 record has been found.")
                 return None
         else:
             logging.debug("Delta conso could not be calculated")
