@@ -90,4 +90,4 @@ class Mqtt:
         myPayload = str(payload)
         logging.debug("Publishing payload %s to topic %s, qos %s, retain %s",payload,topic, self.qos, self.retain)
         self.client.publish(topic, payload=myPayload, qos=self.qos, retain=self.retain)
-        time.sleep(1)
+        time.sleep(200/1000) # ms
