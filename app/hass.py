@@ -119,7 +119,7 @@ class Entity:
         self.configPayload["state_topic"] = self.stateTopic
         if self.unit is not None:
             self.configPayload["unit_of_measurement"] = self.unit
-        self.configPayload["value_template"] = self.valueTemplate
+        #self.configPayload["value_template"] = self.valueTemplate
         self.configPayload["device"] = self.device.configPayload
 
         # Add entity to device
