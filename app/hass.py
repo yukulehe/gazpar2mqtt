@@ -126,7 +126,6 @@ class Entity:
         # Add entity to device
         self.device.addEntity(self)
         
-        return self
     
     # Return config payload in Json format
     def getConfigPayloadJson(self):
