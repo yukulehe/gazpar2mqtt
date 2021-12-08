@@ -51,7 +51,7 @@ class Device:
         
         self.entityList = []
         
-        self.configPayload = config = {
+        self.configPayload = {
             "identifiers": [self.id],
             "name": self.name,
             "model": pceId,
@@ -72,13 +72,13 @@ class Device:
         # Init payload
         payload = {}
         
-        # Initialize list of state topic
-        for myEntity in self.entityList:
-            payload[myEntity.stateTopic] = {}
-        
         # Append value to list in the corresponding state topic
         for myEntity in self.entityList:
-            payload[myEntity.stateTopic][myEntity.id]=myEntity.value
+            payload[myEntity.configTopic] = myEntity.getConfigPayloadJson()
+            if myEntity.value is not None:
+                payload[myEntity.stateTopic]  = myEntity.value
+            if myEntity.attributes is not None:
+                payload[myEntity.attributesTopic] = myEntity.attributes
         
         # Return json formatted
         return payload
@@ -90,6 +90,7 @@ class Entity:
     # Constructor
     def __init__(self,device,type,id,name,deviceClass=None,stateClass=None,unit=None):
         
+        # Variables
         self.device = device
         self.type = type
         self.id = id
@@ -99,10 +100,13 @@ class Entity:
         self.unit = unit
         self.valueTemplate = "{{ value_json. " + self.id + " }}"
         self.statePayload = None
+        self.value = None
+        self.attributes = None
         
         # Set topics
         self.configTopic = f"{self.device.hass.prefix}/{type}/{self.device.id}/{self.id}/config"
         self.stateTopic = f"{self.device.hass.prefix}/{type}/{self.device.id}/state"
+        self.attributesTopic = f"{self.device.hass.prefix}/{type}/{self.device.id}/{self.id}/attributes"
         
         # Set config payload
         self.configPayload = {}
