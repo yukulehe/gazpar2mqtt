@@ -377,7 +377,7 @@ class Pce:
         # When db connexion is ok
         if db.cur and myMeasure:
         
-            # Yearly measures
+            # Calendar measures
             
             ## Calculate Y0 gas
             startStr = f"'{dateNow}','start of year','-1 day'"
@@ -390,8 +390,6 @@ class Pce:
             endStr = f"'{dateNow}','-1 year'"
             self.gasY1 = self._getDeltaDailyCons(db,startStr,endStr)
             logging.debug("Y1 gas : %s m3",self.gasY1)
-            
-            # Monthly measures
             
             ## Calculate M0Y0 gas
             startStr = f"'{dateNow}','start of month','-1 day'"
@@ -411,8 +409,6 @@ class Pce:
             self.gasM0Y1 = self._getDeltaDailyCons(db,startStr,endStr)
             logging.debug("M0Y1 gas : %s m3",self.gasM0Y1)
             
-            # Weekly measures
-            
             ## Calculate W0Y0 gas
             startStr = f"'{weekNowFirstDate}','-1 day'"
             endStr = f"'{dateNow}'"
@@ -430,8 +426,6 @@ class Pce:
             endStr = f"'{dateNow}','-1 year'"
             self.gasW0Y1 = self._getDeltaDailyCons(db,startStr,endStr)
             logging.debug("W0Y1 gas : %s m3",self.gasW0Y1)
-            
-            # Daily measures
             
             ## Calculate D1 gas
             startStr = f"'{dateNow}','-2 day'"
@@ -478,41 +472,65 @@ class Pce:
             
             # Rolling measures
             
-            ## Calculate RY1
+            ## Calculate R1Y
             startStr = f"'{dateNow}','-1 year'"
             endStr = f"'{dateNow}'"
-            self.gasRY1 = self._getDeltaDailyCons(db,startStr,endStr)
-            logging.debug("RY1 gas : %s m3",self.gasRY1)
+            self.gasR1Y = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("R1Y gas : %s m3",self.gasR1Y)
             
-            ## Calculate RY2Y1
+            ## Calculate R2Y1Y
             startStr = f"'{dateNow}','-2 year'"
             endStr = f"'{dateNow}','-1 year'"
-            self.gasRY2Y1 = self._getDeltaDailyCons(db,startStr,endStr)
-            logging.debug("RY2Y1 gas : %s m3",self.gasRY2Y1)
+            self.gasR2Y1Y = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("R2Y1Y gas : %s m3",self.gasR2Y1Y)
             
-            ## Calculate RM1
+            ## Calculate R1M
             startStr = f"'{dateNow}','-1 month'"
             endStr = f"'{dateNow}'"
-            self.gasRM1 = self._getDeltaDailyCons(db,startStr,endStr)
-            logging.debug("RM1 gas : %s m3",self.gasRM1)
+            self.gasR1M = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("R1M gas : %s m3",self.gasR1M)
             
-            ## Calculate RM2M1
+            ## Calculate R2M1M
             startStr = f"'{dateNow}','-2 month'"
             endStr = f"'{dateNow}','-1 month'"
-            self.gasRM2M1 = self._getDeltaDailyCons(db,startStr,endStr)
-            logging.debug("RM2M1 gas : %s m3",self.gasRM2M1)
+            self.gasR2M1M = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("R2M1M gas : %s m3",self.gasR2M1M)
             
-            ## Calculate RW1
+            ## Calculate R1MY1
+            startStr = f"'{dateNow}','-1 month','-1 year'"
+            endStr = f"'{dateNow}','-1 year'"
+            self.gasR1MY1 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("R1MY1 gas : %s m3",self.gasR1MY1)
+            
+            ## Calculate R1MY2
+            startStr = f"'{dateNow}','-1 month','-2 year'"
+            endStr = f"'{dateNow}','-2 year'"
+            self.gasR1MY2 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("R1MY2 gas : %s m3",self.gasR1MY2)
+            
+            ## Calculate R1W
             startStr = f"'{dateNow}','-7 days'"
             endStr = f"'{dateNow}'"
-            self.gasRW1 = self._getDeltaDailyCons(db,startStr,endStr)
-            logging.debug("RW1 gas : %s m3",self.gasRW1)
+            self.gasR1W = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("R1W gas : %s m3",self.gasR1W)
             
-             ## Calculate RW2W1
+            ## Calculate R2W1W
             startStr = f"'{dateNow}','-14 days'"
             endStr = f"'{dateNow}','-7 days'"
-            self.gasRW2W1 = self._getDeltaDailyCons(db,startStr,endStr)
-            logging.debug("RW2W1 gas : %s m3",self.gasRW2W1)
+            self.gasR2W1W = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("R2W1W gas : %s m3",self.gasR2W1W)
+            
+            ## Calculate R1WY1
+            startStr = f"'{dateNow}','-7 days','-1 year'"
+            endStr = f"'{dateNow}','-1 year'"
+            self.gasR1WY1 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("R1WY1 gas : %s m3",self.gasR1WY1)
+            
+            ## Calculate R1WY2
+            startStr = f"'{dateNow}','-7 days','-2 year'"
+            endStr = f"'{dateNow}','-2 year'"
+            self.gasR1WY2 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("R1WY2 gas : %s m3",self.gasR1WY2)
             
     
     # Return the index difference between 2 measures 
