@@ -338,7 +338,7 @@ def run(myParams):
                 
                 # Create entity PCE
                 logging.debug("Creation of the PCE entity")
-                myEntity = hass.Entity(myDevice,hass.SENSOR,'pce','pce',hass.NONE_TYPE,None,None)
+                myEntity = hass.Entity(myDevice,hass.SENSOR,'pce_state','pce_state',hass.NONE_TYPE,None,None)
                 myEntity.setValue(myPce.state)
                 myEntity.addAttribute("pce_alias",myPce.alias)
                 myEntity.addAttribute("pce_id",myPce.pceId)
