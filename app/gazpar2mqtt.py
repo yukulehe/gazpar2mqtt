@@ -260,7 +260,7 @@ def run(myParams):
                 logging.debug("Date %s, Energy = %s, Volume %s",myDailyMeasure.gasDate,myDailyMeasure.energy,myDailyMeasure.volume)
 
                 # Publish daily values
-                logging.info("Publishing to Mqtt the last daily values...")
+                logging.info("Publishing to Mqtt...")
 
                 ## Last measures
                 myMqtt.publish(mySa.lastDateTopic, myDailyMeasure.gasDate)
@@ -342,16 +342,16 @@ def run(myParams):
                 else: # Values when PCE is correct   
 
                     # Get last daily measure
-                    myDailyMeasure = myPce.getLastMeasureOk()
+                    myMeasure = myPce.getLastMeasureOk()
 
                     # Create entities and set values
                     
                     ## Last GRDF measure
                     logging.debug("Creation of current entities")
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'last_index','index',hass.GAS_TYPE,hass.ST_TTI,'m³').setValue(myDailyMeasure.endIndex)
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'last_gas','last daily gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myDailyMeasure.volume)
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'last_energy','last daily energy',hass.ENERGY_TYPE,hass.ST_MEAS,'kWh').setValue(myDailyMeasure.energy)
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'last_consumption_date','last consumption date',hass.NONE_TYPE,None,None).setValue(str(myDailyMeasure.gasDate))
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'last_index','index',hass.GAS_TYPE,hass.ST_TTI,'m³').setValue(myMeasure.endIndex)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'last_gas','last daily gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myMeasure.volume)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'last_energy','last daily energy',hass.ENERGY_TYPE,hass.ST_MEAS,'kWh').setValue(myMeasure.energy)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'last_consumption_date','last consumption date',hass.NONE_TYPE,None,None).setValue(str(myMeasure.gasDate))
                     
                     ## Calculated yearly measures
                     logging.debug("Creation of yearly entities")
@@ -430,8 +430,8 @@ def run(myParams):
     if myDb.isConnected() :
         myDb.close()
         logging.info("SQLite database disconnected")
-
-    # STEP 7 : Schedule next run
+    
+    # STEP 7 : Display next run info and end of program
     logging.info("-----------------------------------------------------------")
     logging.info("Next run...")
     logging.info("-----------------------------------------------------------")
@@ -439,6 +439,17 @@ def run(myParams):
         logging.info("gazpar2mqtt next run scheduled at %s",myParams.scheduleTime)
     else:
         logging.info("No schedule define. It was a oneshot.")
+    
+    # Release objects
+    myDb = None
+    myMqtt = None
+    myGrdf = None
+    myHass = None
+    mySa = None
+    myPce = None
+    myDailyMeasure = None
+    myDevice = None
+    myEntity = None
     
     logging.info("-----------------------------------------------------------")
     logging.info("End of program")
