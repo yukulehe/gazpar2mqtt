@@ -486,6 +486,7 @@ class Pce:
         db.cur.execute(query)
         queryResult = db.cur.fetchone()
         if queryResult is not None:
+            logging.debug(queryResult[0])
             valueResult = int(queryResult[0])
             if valueResult >= 0:
                 return valueResult
