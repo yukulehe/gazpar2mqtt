@@ -476,6 +476,44 @@ class Pce:
             logging.debug("D-7 gas : %s m3",self.gasD7)
             
             
+            # Rolling measures
+            
+            ## Calculate RY1
+            startStr = f"'{dateNow}','-1 year'"
+            endStr = f"'{dateNow}'"
+            self.gasRY1 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("RY1 gas : %s m3",self.gasRY1)
+            
+            ## Calculate RY2Y1
+            startStr = f"'{dateNow}','-2 year'"
+            endStr = f"'{dateNow}','-1 year'"
+            self.gasRY2Y1 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("RY2Y1 gas : %s m3",self.gasRY2Y1)
+            
+            ## Calculate RM1
+            startStr = f"'{dateNow}','-1 month'"
+            endStr = f"'{dateNow}'"
+            self.gasRM1 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("RM1 gas : %s m3",self.gasRM1)
+            
+            ## Calculate RM2M1
+            startStr = f"'{dateNow}','-2 month'"
+            endStr = f"'{dateNow}','-1 month'"
+            self.gasRM2M1 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("RM2M1 gas : %s m3",self.gasRM2M1)
+            
+            ## Calculate RW1
+            startStr = f"'{dateNow}','-7 days'"
+            endStr = f"'{dateNow}'"
+            self.gasRW1 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("RW1 gas : %s m3",self.gasRW1)
+            
+             ## Calculate RW2W1
+            startStr = f"'{dateNow}','-14 days'"
+            endStr = f"'{dateNow}','-7 days'"
+            self.gasRW2W1 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("RW2W1 gas : %s m3",self.gasRW2W1)
+            
     
     # Return the index difference between 2 measures 
     def _getDeltaDailyCons(self,db,startStr,endStr):
