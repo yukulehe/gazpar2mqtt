@@ -399,7 +399,7 @@ def run(myParams):
                 # Note : only entities with value not none are published
                 logging.info("Publishing devices state ...")
                 for topic,payload in myDevice.getStatePayload().items():
-                    logging.debug("Publish states of topic %s",topic)
+                    logging.info("State values are published to topic %s",topic)
                     myMqtt.publish(topic,json.dumps(payload))
                 logging.info("Devices state published !")
 
