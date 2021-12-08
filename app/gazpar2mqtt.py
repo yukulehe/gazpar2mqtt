@@ -388,20 +388,12 @@ def run(myParams):
                     myEntity = hass.Entity(myDevice,hass.BINARY,'connectivity','connectivity',hass.CONNECTIVITY_TYPE,None,None).setValue('ON')
 
 
-                # Publish config
-                logging.info("Publishing devices configuration ...")
-                for myEntity in myDevice.entityList:
-                    logging.debug("Publish configuration of entity %s",myEntity.id)
-                    myMqtt.publish(myEntity.configTopic, myEntity.getConfigPayloadJson())
-                logging.info("Devices configuration published !")
-
-                # Publish state of all entities of the device, one call by device type
-                # Note : only entities with value not none are published
-                logging.info("Publishing devices state ...")
+                # Publish config, state (when value not none), attributes (when not none)
+                logging.info("Publishing devices...")
+                logging.info("You can retrieved published values in the topic %s","toto")
                 for topic,payload in myDevice.getStatePayload().items():
-                    logging.info("State values are published in the topic %s",topic)
-                    myMqtt.publish(topic,json.dumps(payload))
-                logging.info("Devices state published !")
+                    myMqtt.publish(topic,payload)
+                logging.info("Devices published !")
 
 
 
