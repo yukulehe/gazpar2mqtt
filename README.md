@@ -181,15 +181,55 @@ Have a look to [Home Assistant Mqtt discovery documentation](https://www.home-as
 
 Note : you can replace the default device name *gazpar* by editing the related parameter.
 
-### List of available sensors :
+### List of entities :
 
-| Sensor name | Component | Device class | Description |
+Last measure entities :
+
+| Entity name | Component | Device class | Description |
 | --- | --- | --- | --- |
-| gazpar_PCE_index | Sensor | Gas | Gas index in m3 of the last measure |
-| gazpar_PCE_daily_gas | Sensor | Gas | Gas consumption in m3 of the last measure |
-| gazpar_PCE_daily_energy | Sensor | Energy | Gas consumption in kWh of the last measure |
-| gazpar_PCE_consumption_date | Sensor | Date | Date of the last measure |
+| gazpar_PCE_last_index | Sensor | Gas | Gas index in m3 of the last measure |
+| gazpar_PCE_last_gas | Sensor | Gas | Gas consumption in m3 of the last measure |
+| gazpar_PCE_last_energy | Sensor | Energy | Gas consumption in kWh of the last measure |
+| gazpar_PCE_last_consumption_date | Sensor | Date | Date of the last measure |
 | gazpar_PCE_connectivity | Binary sensor | Connectivity | Binary sensor which indicates if the last gazpar statement succeeded (ON) or failed (OFF) |
+
+
+Calendar measure entities :
+
+| Entity name | Component | Device class | Description |
+| --- | --- | --- | --- |
+| gazpar_PCE_current_year_gas | Sensor | Gas | Gas consumption in m3 of current year |
+| gazpar_PCE_previous_year_gas | Sensor | Gas | Gas consumption in m3 of previous year |
+| gazpar_PCE_previous_2_year_gas | Sensor | Gas | Gas consumption in m3 of previous 2 years |
+| gazpar_PCE_current_month_gas | Sensor | Gas | Gas consumption in m3 of current month |
+| gazpar_PCE_previous_month_gas | Sensor | Gas | Gas consumption in m3 of previous month |
+| gazpar_PCE_current_month_last_year_gas | Sensor | Gas | Gas consumption in m3 of current month, 1 year ago |
+| gazpar_PCE_current_week_gas | Sensor | Gas | Gas consumption in m3 of current week |
+| gazpar_PCE_previous_week_gas | Sensor | Gas | Gas consumption in m3 of current week |
+| gazpar_PCE_current_week_last_year_gas | Sensor | Gas | Gas consumption in m3 of current week, 1 year ago |
+| gazpar_PCE_current_day_1_gas | Sensor | Gas | Gas consumption in m3 of day -1 |
+| gazpar_PCE_current_day_2_gas | Sensor | Gas | Gas consumption in m3 of day -2 |
+| gazpar_PCE_current_day_3_gas | Sensor | Gas | Gas consumption in m3 of day -3 |
+| gazpar_PCE_current_day_4_gas | Sensor | Gas | Gas consumption in m3 of day -4 |
+| gazpar_PCE_current_day_5_gas | Sensor | Gas | Gas consumption in m3 of day -5 |
+| gazpar_PCE_current_day_6_gas | Sensor | Gas | Gas consumption in m3 of day -6 |
+| gazpar_PCE_current_day_7_gas | Sensor | Gas | Gas consumption in m3 of day -7 |
+
+
+Rolling measure entities :
+
+| Entity name | Component | Device class | Description |
+| --- | --- | --- | --- |
+| gazpar_PCE_rolling_year_gas | Sensor | Gas | Gas consumption in m3 for 1 rolling year |
+| gazpar_PCE_rolling_year_last_year_gas | Sensor | Gas | Gas consumption in m3 for 1 rolling year, 1 year ago |
+| gazpar_PCE_rolling_rolling_month_gas | Sensor | Gas | Gas consumption in m3 for 1 rolling month |
+| gazpar_PCE_rolling_month_last_month_gas | Sensor | Gas | Gas consumption in m3 for 1 rolling month, 1 month ago |
+| gazpar_PCE_rolling_month_last_year_gas | Sensor | Gas | Gas consumption in m3 for 1 rolling month, 1 year ago |
+| gazpar_PCE_rolling_month_last_2_year_gas | Sensor | Gas | Gas consumption in m3 for 1 rolling month, 2 years ago |
+| gazpar_PCE_rolling_rolling_week_gas | Sensor | Gas | Gas consumption in m3 for 1 rolling week |
+| gazpar_PCE_rolling_week_last_week_gas | Sensor | Gas | Gas consumption in m3 for 1 rolling week, 1 week ago |
+| gazpar_PCE_rolling_week_last_year_gas | Sensor | Gas | Gas consumption in m3 for 1 rolling week, 1 year ago |
+| gazpar_PCE_rolling_week_last_2_year_gas | Sensor | Gas | Gas consumption in m3 for 1 rolling week, 2 years ago |
 
 
 ### List of topics :
