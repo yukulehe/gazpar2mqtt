@@ -315,7 +315,7 @@ def run(myParams):
         and myParams.hassDiscovery \
         and myGrdf.isConnected:
 
-        try:
+        #try:
 
             logging.info("-----------------------------------------------------------")
             logging.info("Home assistant publication mode")
@@ -406,9 +406,8 @@ def run(myParams):
 
 
 
-        except:
-            logging.error("Home Assistant discovery mode : unable to publish value to mqtt broker")
-            sys.exit(1)
+        #except:
+            #logging.error("Home Assistant discovery mode : unable to publish value to mqtt broker")
 
 
     # STEP 5 : Disconnect mqtt broker
