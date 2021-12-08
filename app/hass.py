@@ -75,9 +75,9 @@ class Device:
         # Append value to list in the corresponding state topic
         for myEntity in self.entityList:
             payload[myEntity.configTopic] = myEntity.getConfigPayloadJson()
-            if myEntity.value is not None:
+            if myEntity.value:
                 payload[myEntity.stateTopic]  = myEntity.value
-            if myEntity.attributes is not None:
+            if myEntity.attributes:
                 payload[myEntity.attributesTopic] = myEntity.attributes
         
         # Return json formatted
@@ -100,7 +100,7 @@ class Entity:
         self.unit = unit
         self.statePayload = None
         self.value = None
-        self.attributes = None
+        self.attributes = {}
         
         # Set topics
         self.configTopic = f"{self.device.hass.prefix}/{type}/{self.device.id}/{self.id}/config"
@@ -127,6 +127,14 @@ class Entity:
     def getConfigPayloadJson(self):
         return json.dumps(self.configPayload)
     
-    # Set state payload
+    # Set state value
     def setValue(self,value):
         self.value = value
+        
+    # Add attributes
+    def addAttribute(self,key,value):
+        self.attributes[key] = value
+        
+    # Get attributes payload
+    def getAttribute(self):
+        return json.dumps(self.attributes)
