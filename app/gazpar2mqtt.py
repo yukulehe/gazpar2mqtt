@@ -242,7 +242,7 @@ def run(myParams):
                 prefix = myParams.mqttTopic + '/' + myPce.pceId
                 
                 # Display topic root
-                logging.info("Values will be published into topic %s/#",prefix)
+                logging.info("State values are published in the topic %s/#",prefix)
 
                 # Instantiate Standalone class by PCE
                 mySa = standalone.Standalone(prefix)
@@ -395,11 +395,11 @@ def run(myParams):
                     myMqtt.publish(myEntity.configTopic, myEntity.getConfigPayloadJson())
                 logging.info("Devices configuration published !")
 
-                # Publish state of all entities of the device, one call by device class
+                # Publish state of all entities of the device, one call by device type
                 # Note : only entities with value not none are published
                 logging.info("Publishing devices state ...")
                 for topic,payload in myDevice.getStatePayload().items():
-                    logging.info("State values are published to topic %s",topic)
+                    logging.info("State values are published in the topic %s",topic)
                     myMqtt.publish(topic,json.dumps(payload))
                 logging.info("Devices state published !")
 
