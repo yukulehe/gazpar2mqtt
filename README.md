@@ -232,16 +232,6 @@ Rolling measure entities :
 | gazpar_PCE_rolling_week_last_2_year_gas | Sensor | Gas | Gas consumption in m3 for 1 rolling week, 2 years ago |
 
 
-### List of topics :
-| Topic | Description
-| --- | --- 
-| homeassistant/sensor/gazpar_PCE/config | Sensor's configuration topic |
-| homeassistant/sensor/gazpar_PCE/state | Sensor's state topic |
-| homeassistant/binary_sensor/gazpar_PCE/config | Binary sensor's configuration topic |
-| homeassistant/binary_sensor/gazpar_PCE/state | Binary sensor's state topic |
-
-Note : you can replace the default topic prefix *homeasssistant* by editing the related parameter.
-
 
 ### Add-on
 For Hass.io users, gazpar2mqtt is also available as an add-on provided by [alexbelgium](https://github.com/alexbelgium) (thanks you to him). Please visit the dedicated [repository](https://github.com/alexbelgium/hassio-addons/tree/master/gazpar2mqtt).
