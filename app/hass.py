@@ -98,7 +98,6 @@ class Entity:
         self.deviceClass = deviceClass
         self.stateClass = stateClass
         self.unit = unit
-        #self.valueTemplate = "{{ value_json." + self.id + " }}"
         self.statePayload = None
         self.value = None
         self.attributes = None
@@ -119,7 +118,6 @@ class Entity:
         self.configPayload["state_topic"] = self.stateTopic
         if self.unit is not None:
             self.configPayload["unit_of_measurement"] = self.unit
-        #self.configPayload["value_template"] = self.valueTemplate
         self.configPayload["device"] = self.device.configPayload
 
         # Add entity to device
