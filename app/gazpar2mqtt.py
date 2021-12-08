@@ -337,7 +337,7 @@ def run(myParams):
                 myDevice = hass.Device(myHass,myPce.pceId,deviceId,deviceName)
                 
                 # Create entity PCE
-                myEntity = hass.Entity(myDevice,hass.SENSOR,'pce','pce',hass.NONE,None,None).setValue(myPCE.state)
+                myEntity = hass.Entity(myDevice,hass.SENSOR,'pce','pce',hass.NONE_TYPE,None,None).setValue(myPCE.state)
                 myEntity.addAttribute("pce_alias",myPce.alias)
                 myEntity.addAttribute("pce_id",myPce.id)
                 myEntity.addAttribute("freqence",myPce.freqenceReleve)
