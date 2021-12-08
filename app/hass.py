@@ -90,6 +90,8 @@ class Entity:
     # Constructor
     def __init__(self,device,type,id,name,deviceClass=None,stateClass=None,unit=None):
         
+        logging.debug("Initialise hass device %s",id)
+        
         # Variables
         self.device = device
         self.type = type
@@ -122,6 +124,8 @@ class Entity:
 
         # Add entity to device
         self.device.addEntity(self)
+        
+        return self
     
     # Return config payload in Json format
     def getConfigPayloadJson(self):
