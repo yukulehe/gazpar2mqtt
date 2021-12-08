@@ -4,6 +4,7 @@
 
 import json
 from importlib import import_module
+import logging
 
 # Constants
 SENSOR = "sensor"
