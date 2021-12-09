@@ -379,7 +379,7 @@ def run(myParams):
                     
                     ### Month
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'current_month_gas','current month gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasM0Y0)
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'previous_month_gas','previous year gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasM1Y0)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'previous_month_gas','previous month gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasM1Y0)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'current_month_last_year_gas','current month of last year gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasM0Y1)
                     
                     ### Week
