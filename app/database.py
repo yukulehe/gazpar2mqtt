@@ -44,9 +44,10 @@ class Database:
     logging.debug("Creation of daily consumptions table")
     self.cur.execute('''CREATE TABLE IF NOT EXISTS consumption_daily (
                         pce TEXT NOT NULL, 
-                        date TEXT NOT NULL, 
-                        volume INT8 NOT NULL,
-                        energy INT8 NOT NULL,
+                        date TEXT NOT NULL,
+                        index INT8 NOT NULL,
+                        volume INTEGER NOT NULL,
+                        energy INTEGER NOT NULL,
                         conversion REAL)''')
     self.cur.execute('''CREATE UNIQUE INDEX IF NOT EXISTS idx_date_consumption
                     ON consumption_daily (date)''')
