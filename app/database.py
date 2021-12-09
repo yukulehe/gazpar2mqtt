@@ -45,7 +45,7 @@ class Database:
     self.cur.execute('''CREATE TABLE IF NOT EXISTS consumption_daily (
                         pce TEXT NOT NULL, 
                         date TEXT NOT NULL, 
-                        gas INT8 NOT NULL,
+                        volume INT8 NOT NULL,
                         energy INT8 NOT NULL,
                         conversion REAL)''')
     self.cur.execute('''CREATE UNIQUE INDEX IF NOT EXISTS idx_date_consumption
