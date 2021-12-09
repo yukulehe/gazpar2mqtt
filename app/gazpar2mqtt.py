@@ -213,8 +213,11 @@ def run(myParams):
                         
                         # Get last measure info
                         myMeasure = myPce.getLastMeasureOk()
-                        logging.info("Last valid measure provided by GRDF : Date = %s, start index = %s, end index = %s, Volume = %s m3, Energy = %s kWh, Factor = %s.",myMeasure.gasDate,myMeasure.startIndex,myMeasure.endIndex,myMeasure.volume,myMeasure.energy,myMeasure.conversionFactor)
-                        
+                        logging.info("Last valid measure provided by GRDF : ")
+                        logging.info("Date = %s",myMeasure.gasDate)
+                        logging.info("Start index = %s, End index = %s",myMeasure.startIndex,myMeasure.endIndex)
+                        logging.info("Volume = %s m3, Energy = %s kWh, Factor = %s",myMeasure.volume,myMeasure.energy,myMeasure.conversionFactor)
+
                         # Read calculated measures from database
                         myPce.calculateMeasures(myDb)
                             
