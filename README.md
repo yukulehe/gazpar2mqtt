@@ -82,7 +82,7 @@ Mandatory :
 | **GRDF_PASSWORD** | Your GRDF password |
 | **MQTT_HOST** | Hostname or ip adress of the MQTT broker |
 
-Optionnal :
+Optional :
 
 | Variable | Description | Default value |
 | --- | --- | --- |
