@@ -213,7 +213,7 @@ def run(myParams):
                         
                         # Get last measure info
                         myMeasure = myPce.getLastMeasureOk()
-                        logging.info("Last valid measure : Date = %s, Volume = %s m3, Energy = %s kWh.",myMeasure.gasDate,myMeasure.volume,myMeasure.energy)
+                        logging.info("Last valid measure : Date = %s, Index = %s, Volume = %s m3, Energy = %s kWh, Factor = %s.",myMeasure.gasDate,myMeasure.index,myMeasure.volume,myMeasure.energy,myMeasure.conversionFactor)
                         
                         # Read calculated measures from database
                         myPce.calculateMeasures(myDb)
