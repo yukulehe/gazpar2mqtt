@@ -277,27 +277,27 @@ def run(myParams):
                     logging.debug("Creation of calendar measures")
                     
                     ### Year
-                    myMqtt.publish(mySa.histoGasTopic+"current_year", myPce.gasY0)
-                    myMqtt.publish(mySa.histoGasTopic+"previous_year", myPce.gasY1)
+                    myMqtt.publish(mySa.histoGasTopic+"current_year_gas", myPce.gasY0)
+                    myMqtt.publish(mySa.histoGasTopic+"previous_year_gas", myPce.gasY1)
 
                     ### Month
-                    myMqtt.publish(mySa.histoGasTopic+"current_month", myPce.gasM0Y0)
-                    myMqtt.publish(mySa.histoGasTopic+"previous_month", myPce.gasM1Y0)
-                    myMqtt.publish(mySa.histoGasTopic+"current_month_previous_year", myPce.gasM0Y1)
+                    myMqtt.publish(mySa.histoGasTopic+"current_month_gas", myPce.gasM0Y0)
+                    myMqtt.publish(mySa.histoGasTopic+"previous_month_gas", myPce.gasM1Y0)
+                    myMqtt.publish(mySa.histoGasTopic+"current_month_previous_year_gas", myPce.gasM0Y1)
 
                     ### Week
-                    myMqtt.publish(mySa.histoGasTopic+"current_week", myPce.gasW0Y0)
-                    myMqtt.publish(mySa.histoGasTopic+"previous_week", myPce.gasW1Y0)
-                    myMqtt.publish(mySa.histoGasTopic+"current_week_previous_year", myPce.gasW0Y1)
+                    myMqtt.publish(mySa.histoGasTopic+"current_week_gas", myPce.gasW0Y0)
+                    myMqtt.publish(mySa.histoGasTopic+"previous_week_gas", myPce.gasW1Y0)
+                    myMqtt.publish(mySa.histoGasTopic+"current_week_previous_year-gas", myPce.gasW0Y1)
 
                     ### Day
-                    myMqtt.publish(mySa.histoGasTopic+"day-1", myPce.gasD1)
-                    myMqtt.publish(mySa.histoGasTopic+"day-2", myPce.gasD2)
-                    myMqtt.publish(mySa.histoGasTopic+"day-3", myPce.gasD3)
-                    myMqtt.publish(mySa.histoGasTopic+"day-4", myPce.gasD4)
-                    myMqtt.publish(mySa.histoGasTopic+"day-5", myPce.gasD5)
-                    myMqtt.publish(mySa.histoGasTopic+"day-6", myPce.gasD6)
-                    myMqtt.publish(mySa.histoGasTopic+"day-7", myPce.gasD7)
+                    myMqtt.publish(mySa.histoGasTopic+"day-1_gas", myPce.gasD1)
+                    myMqtt.publish(mySa.histoGasTopic+"day-2_gas", myPce.gasD2)
+                    myMqtt.publish(mySa.histoGasTopic+"day-3_gas", myPce.gasD3)
+                    myMqtt.publish(mySa.histoGasTopic+"day-4_gas", myPce.gasD4)
+                    myMqtt.publish(mySa.histoGasTopic+"day-5_gas", myPce.gasD5)
+                    myMqtt.publish(mySa.histoGasTopic+"day-6_gas", myPce.gasD6)
+                    myMqtt.publish(mySa.histoGasTopic+"day-7_gas", myPce.gasD7)
                     
                     ## Calculated rolling measures
                     logging.debug("Creation of rolling measures")
