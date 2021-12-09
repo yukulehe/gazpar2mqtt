@@ -22,7 +22,8 @@ Important :
 
 - v0.6.x :
   - Implementation of a sqlite database
-  - Calculation of aggregated consumptions at year, month and week level
+  - Addition of converter factor from Grdf
+  - Calculation of aggregated consumptions  for calendar periods (year, month, week and day) and rolling periods (1 year, 1 month, 1 week)
   - Exponential wait between retries when the application failed to retrieve data
 - v0.5.x :
   - Hard redesign of the application after new GRDF website released on 23/11/2021 . Thanks to **echauvet** for his contribution.
