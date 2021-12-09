@@ -480,61 +480,61 @@ class Pce:
             
             ## Calculate R1Y
             startStr = f"'{dateNow}','-1 year'"
-            endStr = f"'{dateNow}'"
+            endStr = f"'{dateNow},'-1 day'"
             self.gasR1Y = self._getDeltaDailyCons(db,startStr,endStr)
             logging.debug("R1Y gas : %s m3",self.gasR1Y)
             
             ## Calculate R2Y1Y
             startStr = f"'{dateNow}','-2 year'"
-            endStr = f"'{dateNow}','-1 year'"
+            endStr = f"'{dateNow}','-1 year','-1 day'"
             self.gasR2Y1Y = self._getDeltaDailyCons(db,startStr,endStr)
             logging.debug("R2Y1Y gas : %s m3",self.gasR2Y1Y)
             
             ## Calculate R1M
             startStr = f"'{dateNow}','-1 month'"
-            endStr = f"'{dateNow}'"
+            endStr = f"'{dateNow}','-1 day'"
             self.gasR1M = self._getDeltaDailyCons(db,startStr,endStr)
             logging.debug("R1M gas : %s m3",self.gasR1M)
             
             ## Calculate R2M1M
             startStr = f"'{dateNow}','-2 month'"
-            endStr = f"'{dateNow}','-1 month'"
+            endStr = f"'{dateNow}','-1 month','-1 day'"
             self.gasR2M1M = self._getDeltaDailyCons(db,startStr,endStr)
             logging.debug("R2M1M gas : %s m3",self.gasR2M1M)
             
             ## Calculate R1MY1
             startStr = f"'{dateNow}','-1 month','-1 year'"
-            endStr = f"'{dateNow}','-1 year'"
+            endStr = f"'{dateNow}','-1 year','-1 day'"
             self.gasR1MY1 = self._getDeltaDailyCons(db,startStr,endStr)
             logging.debug("R1MY1 gas : %s m3",self.gasR1MY1)
             
             ## Calculate R1MY2
             startStr = f"'{dateNow}','-1 month','-2 year'"
-            endStr = f"'{dateNow}','-2 year'"
+            endStr = f"'{dateNow}','-2 year','-1 day'"
             self.gasR1MY2 = self._getDeltaDailyCons(db,startStr,endStr)
             logging.debug("R1MY2 gas : %s m3",self.gasR1MY2)
             
             ## Calculate R1W
             startStr = f"'{dateNow}','-7 days'"
-            endStr = f"'{dateNow}'"
+            endStr = f"'{dateNow}','-1 day'"
             self.gasR1W = self._getDeltaDailyCons(db,startStr,endStr)
             logging.debug("R1W gas : %s m3",self.gasR1W)
             
             ## Calculate R2W1W
             startStr = f"'{dateNow}','-14 days'"
-            endStr = f"'{dateNow}','-7 days'"
+            endStr = f"'{dateNow}','-7 days','-1 day'"
             self.gasR2W1W = self._getDeltaDailyCons(db,startStr,endStr)
             logging.debug("R2W1W gas : %s m3",self.gasR2W1W)
             
             ## Calculate R1WY1
             startStr = f"'{dateNow}','-7 days','-1 year'"
-            endStr = f"'{dateNow}','-1 year'"
+            endStr = f"'{dateNow}','-1 year','-1 day'"
             self.gasR1WY1 = self._getDeltaDailyCons(db,startStr,endStr)
             logging.debug("R1WY1 gas : %s m3",self.gasR1WY1)
             
             ## Calculate R1WY2
             startStr = f"'{dateNow}','-7 days','-2 year'"
-            endStr = f"'{dateNow}','-2 year'"
+            endStr = f"'{dateNow}','-2 year','-1 day'"
             self.gasR1WY2 = self._getDeltaDailyCons(db,startStr,endStr)
             logging.debug("R1WY2 gas : %s m3",self.gasR1WY2)
             
