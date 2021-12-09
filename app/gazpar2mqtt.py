@@ -364,7 +364,7 @@ def run(myParams):
                     ## Last GRDF measure
                     logging.debug("Creation of current entities")
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'index','index',hass.GAS_TYPE,hass.ST_TTI,'m³').setValue(myMeasure.endIndex)
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'conversion_factor','conversion factor',hass.GAS_TYPE,hass.ST_TTI,'m³').setValue(myMeasure.conversionFactor)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'conversion_factor','conversion factor',hass.GAS_TYPE,hass.ST_MEAS,'kWh/m³').setValue(myMeasure.conversionFactor)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'gas','gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myMeasure.volume)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'energy','energy',hass.ENERGY_TYPE,hass.ST_MEAS,'kWh').setValue(myMeasure.energy)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'consumption_date','consumption date',hass.NONE_TYPE,None,None).setValue(str(myMeasure.gasDate))
