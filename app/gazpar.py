@@ -411,7 +411,7 @@ class Pce:
             
             ## Calculate M0Y1 gas
             startStr = f"'{dateNow}','start of month','-1 year','-1 day'"
-            startStr = f"'{dateNow}','start of month','+1 month','-1 day','-1 year'"
+            startStr = f"'{dateNow}','-1 year','start of month','+1 month','-1 day'"
             self.gasM0Y1 = self._getDeltaDailyCons(db,startStr,endStr)
             logging.debug("M0Y1 gas : %s m3",self.gasM0Y1)
             
