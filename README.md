@@ -188,10 +188,10 @@ Last measure entities :
 
 | Entity name | Component | Device class | Description |
 | --- | --- | --- | --- |
-| gazpar_PCE_last_index | Sensor | Gas | Gas index in m3 of the last measure |
-| gazpar_PCE_last_gas | Sensor | Gas | Gas consumption in m3 of the last measure |
-| gazpar_PCE_last_energy | Sensor | Energy | Gas consumption in kWh of the last measure |
-| gazpar_PCE_last_consumption_date | Sensor | Date | Date of the last measure |
+| gazpar_PCE_index | Sensor | Gas | Gas index in m3 of the last measure |
+| gazpar_PCE_gas | Sensor | Gas | Gas consumption in m3 of the last measure |
+| gazpar_PCE_energy | Sensor | Energy | Gas consumption in kWh of the last measure |
+| gazpar_PCE_consumption_date | Sensor | Date | Date of the last measure |
 | gazpar_PCE_connectivity | Binary sensor | Connectivity | Binary sensor which indicates if the last gazpar statement succeeded (ON) or failed (OFF) |
 
 
