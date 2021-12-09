@@ -7,7 +7,7 @@
 TOPIC_LAST = "/last"
 
 ## Calculated measure
-TOPIC_HISTO_GAS = "/histo/gas"
+TOPIC_HISTO = "/histo"
 
 ## Status
 TOPIC_STATUS = "/status"
@@ -21,6 +21,6 @@ class Standalone:
     self.prefix = prefix
     
     self.lastTopic = prefix + TOPIC_LAST + '/'
-    self.histoGasTopic = prefix + TOPIC_HISTO_GAS + '/'
+    self.histoTopic = prefix + TOPIC_HISTO + '/'
     self.statusTopic = prefix + TOPIC_STATUS + '/'
     
