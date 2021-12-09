@@ -252,8 +252,8 @@ def run(myParams):
 
                     ## Publish status values
                     logging.info("Publishing to Mqtt status values...")
-                    myMqtt.publish(mySa.statusDateTopic, dtn)
-                    myMqtt.publish(mySa.statusValueTopic, 'OFF')
+                    myMqtt.publish(mySa.statusTopic+"date", dtn)
+                    myMqtt.publish(mySa.statusValueTopic+"connectivity", "OFF")
                     logging.info("Status values published !")
 
 
@@ -266,46 +266,64 @@ def run(myParams):
                     logging.info("Publishing to Mqtt...")
 
                     ## Last measures
-                    myMqtt.publish(mySa.lastDateTopic, myMeasure.gasDate)
-                    myMqtt.publish(mySa.lastKwhTopic, myMeasure.energy)
-                    myMqtt.publish(mySa.lastMcubeTopic, myMeasure.volume)
-                    myMqtt.publish(mySa.indexTopic, myMeasure.endIndex)
-                    myMqtt.publish(mySa.conversionFactorTopic, myMeasure.conversionFactor)
+                    logging.debug("Creation of last measures")
+                    myMqtt.publish(mySa.lastTopic+"date", myMeasure.gasDate)
+                    myMqtt.publish(mySa.lastTopic+"energy", myMeasure.energy)
+                    myMqtt.publish(mySa.lastTopic+"volume", myMeasure.volume)
+                    myMqtt.publish(mySa.lastTopic+"index", myMeasure.endIndex)
+                    myMqtt.publish(mySa.lastTopic+"conversion_Factor", myMeasure.conversionFactor)
 
-                    ## Calculated yearly measures
-                    logging.debug("Creation of yearly entities")
-                    myMqtt.publish(mySa.histoMcubeTopic+"/current_year", myPce.gasY0)
-                    myMqtt.publish(mySa.histoMcubeTopic+"/previous_year", myPce.gasY1)
+                    ## Calculated calendar measures
+                    logging.debug("Creation of calendar measures")
+                    
+                    ### Year
+                    myMqtt.publish(mySa.histoGasTopic+"current_year", myPce.gasY0)
+                    myMqtt.publish(mySa.histoGasTopic+"previous_year", myPce.gasY1)
 
-                    ## Calculated monthly measures
-                    logging.debug("Creation of monthly entities")
-                    myMqtt.publish(mySa.histoMcubeTopic+"/current_month", myPce.gasM0Y0)
-                    myMqtt.publish(mySa.histoMcubeTopic+"/previous_month", myPce.gasM1Y0)
-                    myMqtt.publish(mySa.histoMcubeTopic+"/current_month_previous_year", myPce.gasM0Y1)
+                    ### Month
+                    myMqtt.publish(mySa.histoGasTopic+"current_month", myPce.gasM0Y0)
+                    myMqtt.publish(mySa.histoGasTopic+"previous_month", myPce.gasM1Y0)
+                    myMqtt.publish(mySa.histoGasTopic+"current_month_previous_year", myPce.gasM0Y1)
 
-                    ## Calculated weekly measures
-                    logging.debug("Creation of weekly entities")
-                    myMqtt.publish(mySa.histoMcubeTopic+"/current_week", myPce.gasW0Y0)
-                    myMqtt.publish(mySa.histoMcubeTopic+"/previous_week", myPce.gasW1Y0)
-                    myMqtt.publish(mySa.histoMcubeTopic+"/current_week_previous_year", myPce.gasW0Y1)
+                    ### Week
+                    myMqtt.publish(mySa.histoGasTopic+"current_week", myPce.gasW0Y0)
+                    myMqtt.publish(mySa.histoGasTopic+"previous_week", myPce.gasW1Y0)
+                    myMqtt.publish(mySa.histoGasTopic+"current_week_previous_year", myPce.gasW0Y1)
 
-                    ## Calculated daily measures
-                    logging.debug("Creation of daily entities")
-                    myMqtt.publish(mySa.histoMcubeTopic+"/day-1", myPce.gasD1)
-                    myMqtt.publish(mySa.histoMcubeTopic+"/day-2", myPce.gasD2)
-                    myMqtt.publish(mySa.histoMcubeTopic+"/day-3", myPce.gasD3)
-                    myMqtt.publish(mySa.histoMcubeTopic+"/day-4", myPce.gasD4)
-                    myMqtt.publish(mySa.histoMcubeTopic+"/day-5", myPce.gasD5)
-                    myMqtt.publish(mySa.histoMcubeTopic+"/day-6", myPce.gasD6)
-                    myMqtt.publish(mySa.histoMcubeTopic+"/day-7", myPce.gasD7) 
-
-                    logging.info("Daily values published !")
-
+                    ### Day
+                    myMqtt.publish(mySa.histoGasTopic+"day-1", myPce.gasD1)
+                    myMqtt.publish(mySa.histoGasTopic+"day-2", myPce.gasD2)
+                    myMqtt.publish(mySa.histoGasTopic+"day-3", myPce.gasD3)
+                    myMqtt.publish(mySa.histoGasTopic+"day-4", myPce.gasD4)
+                    myMqtt.publish(mySa.histoGasTopic+"day-5", myPce.gasD5)
+                    myMqtt.publish(mySa.histoGasTopic+"day-6", myPce.gasD6)
+                    myMqtt.publish(mySa.histoGasTopic+"day-7", myPce.gasD7)
+                    
+                    ## Calculated rolling measures
+                    logging.debug("Creation of rolling measures")
+                    
+                    ### Rolling year
+                    myMqtt.publish(mySa.histoGasTopic+"rolling_year_gas", myPce.gasR1Y)
+                    myMqtt.publish(mySa.histoGasTopic+"rolling_year_last_year_gas", myPce.gasR2Y1Y)
+                    
+                    ### Rolling month
+                    myMqtt.publish(mySa.histoGasTopic+"rolling_month_gas", myPce.gasR1M)
+                    myMqtt.publish(mySa.histoGasTopic+"rolling_month_last_month_gas", myPce.gasR2M1M)
+                    myMqtt.publish(mySa.histoGasTopic+"rolling_month_last_year_gas", myPce.gasR1MY1)
+                    myMqtt.publish(mySa.histoGasTopic+"rolling_month_last_2_year_gas", myPce.gasR1MY2)
+                    
+                    ### Rolling week
+                    myMqtt.publish(mySa.histoGasTopic+"rolling_week_gas", myPce.gasR1W)
+                    myMqtt.publish(mySa.histoGasTopic+"rolling_week_last_week_gas", myPce.gasR2W1W)
+                    myMqtt.publish(mySa.histoGasTopic+"rolling_week_last_year_gas", myPce.gasR1WY1)
+                    myMqtt.publish(mySa.histoGasTopic+"rolling_week_last_2_year_gas", myPce.gasR1WY2)
+                    
+                    logging.info("All measures published !")
 
                     ## Publish status values
                     logging.info("Publishing to Mqtt status values...")
-                    myMqtt.publish(mySa.statusDateTopic, dtn)
-                    myMqtt.publish(mySa.statusValueTopic, 'ON')
+                    myMqtt.publish(mySa.statusTopic+"date", dtn)
+                    myMqtt.publish(mySa.statusValueTopic+"connectivity", "ON")
                     logging.info("Status values published !")
 
         except:
