@@ -328,7 +328,7 @@ def run(myParams):
                     ## Publish status values
                     logging.info("Publishing to Mqtt status values...")
                     myMqtt.publish(mySa.statusTopic+"date", dtn)
-                    myMqtt.publish(mySa.statusValueTopic+"connectivity", "ON")
+                    myMqtt.publish(mySa.statusTopic+"connectivity", "ON")
                     logging.info("Status values published !")
 
         except:
