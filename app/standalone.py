@@ -10,6 +10,7 @@ TOPIC_INDEX = "/index"
 TOPIC_LAST_DATE = "/last/date"
 TOPIC_LAST_KWH = "/last/kwh"
 TOPIC_LAST_MCUBE = "/last/mcube"
+TOPIC_CONVERSION_FACTOR = "/last/conversion_factor"
 
 ## Calculated measure
 TOPIC_HISTO_MCUBE = "/histo/mcube"
@@ -36,5 +37,6 @@ class Standalone:
     self.histoMcubeTopic = prefix + TOPIC_HISTO_MCUBE
     
     self.indexTopic = prefix + TOPIC_INDEX
+    self.conversionFactorTopic = prefix + TOPIC_CONVERSION_FACTOR
     
     
