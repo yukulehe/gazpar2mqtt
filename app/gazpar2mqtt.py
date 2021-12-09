@@ -143,7 +143,7 @@ def run(myParams):
                 myGrdf = gazpar.Grdf()
 
                 # Connect to Grdf website
-                #myGrdf.login(myParams.grdfUsername,myParams.grdfPassword)
+                myGrdf.login(myParams.grdfUsername,myParams.grdfPassword)
                 
                 # Check connexion
                 if myGrdf.isConnected:
