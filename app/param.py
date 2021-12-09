@@ -130,7 +130,7 @@ class Params:
     if "HASS_PREFIX" in os.environ: self.hassPrefix = os.environ["HASS_PREFIX"]
     if "HASS_DEVICE_NAME" in os.environ: self.hassDeviceName = os.environ["HASS_DEVICE_NAME"]
       
-    if "DB_INIT" in os.environ: self.hassDeviceName = _isItTrue(os.environ["DB_INIT"])
+    if "DB_INIT" in os.environ: self.dbInit = _isItTrue(os.environ["DB_INIT"])
     
     if "DEBUG" in os.environ: self.debug = _isItTrue(os.environ["DEBUG"])
   
@@ -158,7 +158,7 @@ class Params:
     if self.args.hass_prefix is not None: self.hassPrefix = self.args.hass_prefix
     if self.args.hass_device_name is not None: self.hassDeviceName = self.args.hass_device_name
       
-    if self.args.db_init is not None: self.db_init = _isItTrue(self.args.db_init)
+    if self.args.db_init is not None: self.dbInit = _isItTrue(self.args.db_init)
       
     if self.args.debug is not None: self.debug = _isItTrue(self.args.debug)
     
@@ -193,4 +193,5 @@ class Params:
     logging.info("Standlone mode : Enable = %s", self.standalone)
     logging.info("Home Assistant discovery : Enable = %s, Topic prefix = %s, Device name = %s", \
                  self.hassDiscovery, self.hassPrefix, self.hassDeviceName)
+    logging.info("Database options : Force reinitialization = %s", self.dbInit)
     logging.info("Debug mode : Enable = %s", self.debug)
