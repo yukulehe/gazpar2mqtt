@@ -80,6 +80,11 @@ def run(myParams):
     else:
         logging.error("Unable to connect to SQLite database.")
     
+    # Reinit database when required :
+    if myParams.dbInit:
+        logging.info("Reinitialization of the database...")
+        myDb.reInit()
+    
     # Compare G2M version
     logging.info("Checking database version...")
     dbVersion = myDb.getG2MVersion()
