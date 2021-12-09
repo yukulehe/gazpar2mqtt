@@ -269,7 +269,7 @@ def run(myParams):
                     logging.debug("Creation of last measures")
                     myMqtt.publish(mySa.lastTopic+"date", myMeasure.gasDate)
                     myMqtt.publish(mySa.lastTopic+"energy", myMeasure.energy)
-                    myMqtt.publish(mySa.lastTopic+"volume", myMeasure.volume)
+                    myMqtt.publish(mySa.lastTopic+"gas", myMeasure.volume)
                     myMqtt.publish(mySa.lastTopic+"index", myMeasure.endIndex)
                     myMqtt.publish(mySa.lastTopic+"conversion_Factor", myMeasure.conversionFactor)
 
