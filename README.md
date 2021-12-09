@@ -192,11 +192,11 @@ Calculated rolling measures :
 | gazpar/PCE/histo/rolling_month_gas | Gas consumption in m3 for 1 rolling month |
 | gazpar/PCE/histo/rolling_month_last_month_gas | Gas consumption in m3 for 1 rolling month, 1 month ago |
 | gazpar/PCE/histo/rolling_month_last_year_gas | Gas consumption in m3 for 1 rolling month, 1 year ago |
-| gazpar/PCE/histo/rolling_month_last_2_year_gas | Gas consumption in m3 for 1 rolling month, 2 year ago |
+| gazpar/PCE/histo/rolling_month_last_2_year_gas | Gas consumption in m3 for 1 rolling month, 2 years ago |
 | gazpar/PCE/histo/rolling_week_gas | Gas consumption in m3 for 1 rolling week |
 | gazpar/PCE/histo/rolling_week_last_week_gas | Gas consumption in m3 for 1 rolling week, 1 week ago |
 | gazpar/PCE/histo/rolling_week_last_year_gas | Gas consumption in m3 for 1 rolling week, 1 year ago |
-| gazpar/PCE/histo/rolling_week_last_2_year_gas | Gas consumption in m3 for 1 rolling week, 2 year ago |
+| gazpar/PCE/histo/rolling_week_last_2_year_gas | Gas consumption in m3 for 1 rolling week, 2 years ago |
 
 
 
