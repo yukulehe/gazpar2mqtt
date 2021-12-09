@@ -153,12 +153,49 @@ You can replace the default topic prefix *gazpar* (see mqtt broker requirements 
 
 ### Measures :
 
+Last measures :
+
 | Topic | Description |
 | --- | --- |
-| gazpar/PCE/index | Index in cube meter of the last measure |
-| gazpar/PCE/daily/date | Date of the last measure |
-| gazpar/PCE/daily/kwh | Consumption in kwh of the last measure |
-| gazpar/PCE/daily/mcube | Consumption in cube meter of the last measure  |
+| gazpar/PCE/index | Gas index in m3 of the last measure |
+| gazpar/PCE/date | Date of the last measure |
+| gazpar/PCE/energy | Gas consumption in kWh of the last measure |
+| gazpar/PCE/gas | Gas consumption in m3 of the last measure  |
+| gazpar/PCE/conversion_factor | Conversion factor in kWh/m3 of the last measure  |
+
+Calculated calendar measures :
+
+| Topic | Description |
+| --- | --- |
+| gazpar/PCE/histo/current_year_gas | Gas consumption in m3 of current year |
+| gazpar/PCE/histo/previous_year_gas | Gas consumption in m3 of previous year |
+| gazpar/PCE/histo/current_month_gas | Gas consumption in m3 of current month |
+| gazpar/PCE/histo/previous_month_gas | Gas consumption in m3 of previous month |
+| gazpar/PCE/histo/current_month_previous_year_gas | Gas consumption in m3 of current month, 1 year ago |
+| gazpar/PCE/histo/current_week_gas | Gas consumption in m3 of current week |
+| gazpar/PCE/histo/previous_week_gas | Gas consumption in m3 of previous week |
+| gazpar/PCE/histo/current_week_previous_year | Gas consumption in m3 of current week, 1 year ago |
+| gazpar/PCE/histo/day-1_gas | Gas consumption in m3, 1 day ago |
+| gazpar/PCE/histo/day-2_gas | Gas consumption in m3, 2 day ago |
+| gazpar/PCE/histo/day-3_gas | Gas consumption in m3, 3 day ago |
+| gazpar/PCE/histo/day-4_gas | Gas consumption in m3, 4 day ago |
+| gazpar/PCE/histo/day-5_gas | Gas consumption in m3, 5 day ago |
+| gazpar/PCE/histo/day-6_gas | Gas consumption in m3, 6 day ago |
+| gazpar/PCE/histo/day-7_gas | Gas consumption in m3, 7 day ago |
+
+Calculated rolling measures :
+| gazpar/PCE/histo/rolling_year_gas | Gas consumption in m3 for 1 rolling year |
+| gazpar/PCE/histo/rolling_year_last_year_gas | Gas consumption in m3 for 1 rolling year, 1 year ago |
+| gazpar/PCE/histo/rolling_month_gas | Gas consumption in m3 for 1 rolling month |
+| gazpar/PCE/histo/rolling_month_last_month_gas | Gas consumption in m3 for 1 rolling month, 1 month ago |
+| gazpar/PCE/histo/rolling_month_last_year_gas | Gas consumption in m3 for 1 rolling month, 1 year ago |
+| gazpar/PCE/histo/rolling_month_last_2_year_gas | Gas consumption in m3 for 1 rolling month, 2 year ago |
+| gazpar/PCE/histo/rolling_week_gas | Gas consumption in m3 for 1 rolling week |
+| gazpar/PCE/histo/rolling_week_last_week_gas | Gas consumption in m3 for 1 rolling week, 1 week ago |
+| gazpar/PCE/histo/rolling_week_last_year_gas | Gas consumption in m3 for 1 rolling week, 1 year ago |
+| gazpar/PCE/histo/rolling_week_last_2_year_gas | Gas consumption in m3 for 1 rolling week, 2 year ago |
+
+
 
 ### Status :
 
