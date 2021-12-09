@@ -184,6 +184,9 @@ Calculated calendar measures :
 | gazpar/PCE/histo/day-7_gas | Gas consumption in m3, 7 day ago |
 
 Calculated rolling measures :
+
+| Topic | Description |
+| --- | --- |
 | gazpar/PCE/histo/rolling_year_gas | Gas consumption in m3 for 1 rolling year |
 | gazpar/PCE/histo/rolling_year_last_year_gas | Gas consumption in m3 for 1 rolling year, 1 year ago |
 | gazpar/PCE/histo/rolling_month_gas | Gas consumption in m3 for 1 rolling month |
