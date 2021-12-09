@@ -545,7 +545,7 @@ class Pce:
         logging.debug("Retrieve delta conso between %s and %s",startStr,endStr)
         
         # We need to have at least 2 records to measure a delta index
-        query = f"SELECT CASE WHEN COUNT(ALL) > 1 THEN max(index) - min(index) ELSE NULL END FROM consumption_daily WHERE pce = '{self.pceId}' AND date BETWEEN date({startStr}) AND date({endStr}) GROUP BY pce"
+        query = f"SELECT CASE WHEN COUNT(ALL) > 1 THEN max(end_index) - min(end_index) ELSE NULL END FROM consumption_daily WHERE pce = '{self.pceId}' AND date BETWEEN date({startStr}) AND date({endStr}) GROUP BY pce"
         db.cur.execute(query)
         queryResult = db.cur.fetchone()
         if queryResult is not None:
