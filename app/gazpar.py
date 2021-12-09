@@ -480,7 +480,7 @@ class Pce:
             
             ## Calculate R1Y
             startStr = f"'{dateNow}','-1 year'"
-            endStr = f"'{dateNow},'-1 day'"
+            endStr = f"'{dateNow}','-1 day'"
             self.gasR1Y = self._getDeltaDailyCons(db,startStr,endStr)
             logging.debug("R1Y gas : %s m3",self.gasR1Y)
             
