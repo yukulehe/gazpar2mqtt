@@ -259,17 +259,18 @@ def run(myParams):
 
                 else: # Values when Grdf succeeded
 
-                    myDailyMeasure = myPce.getLastMeasureOk()
-                    logging.debug("Date %s, Energy = %s, Volume %s",myDailyMeasure.gasDate,myDailyMeasure.energy,myDailyMeasure.volume)
+                    myMeasure = myPce.getLastMeasureOk()
+                    logging.debug("Date %s, Energy = %s, Volume %s",myMeasure.gasDate,myMeasure.energy,myMeasure.volume)
 
                     # Publish daily values
                     logging.info("Publishing to Mqtt...")
 
                     ## Last measures
-                    myMqtt.publish(mySa.lastDateTopic, myDailyMeasure.gasDate)
-                    myMqtt.publish(mySa.lastKwhTopic, myDailyMeasure.energy)
-                    myMqtt.publish(mySa.lastMcubeTopic, myDailyMeasure.volume)
-                    myMqtt.publish(mySa.indexTopic, myDailyMeasure.endIndex)
+                    myMqtt.publish(mySa.lastDateTopic, myMeasure.gasDate)
+                    myMqtt.publish(mySa.lastKwhTopic, myMeasure.energy)
+                    myMqtt.publish(mySa.lastMcubeTopic, myMeasure.volume)
+                    myMqtt.publish(mySa.indexTopic, myMeasure.endIndex)
+                    myMqtt.publish(mySa.conversionFactorTopic, myMeasure.conversionFactor)
 
                     ## Calculated yearly measures
                     logging.debug("Creation of yearly entities")
@@ -362,10 +363,11 @@ def run(myParams):
                     
                     ## Last GRDF measure
                     logging.debug("Creation of current entities")
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'last_index','index',hass.GAS_TYPE,hass.ST_TTI,'m³').setValue(myMeasure.endIndex)
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'last_gas','last gas consumption',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myMeasure.volume)
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'last_energy','last energy consumption',hass.ENERGY_TYPE,hass.ST_MEAS,'kWh').setValue(myMeasure.energy)
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'last_consumption_date','last consumption date',hass.NONE_TYPE,None,None).setValue(str(myMeasure.gasDate))
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'index','index',hass.GAS_TYPE,hass.ST_TTI,'m³').setValue(myMeasure.endIndex)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'conversion_factor','conversion factor',hass.GAS_TYPE,hass.ST_TTI,'m³').setValue(myMeasure.conversionFactor)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'gas','gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myMeasure.volume)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'energy','energy',hass.ENERGY_TYPE,hass.ST_MEAS,'kWh').setValue(myMeasure.energy)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'consumption_date','consumption date',hass.NONE_TYPE,None,None).setValue(str(myMeasure.gasDate))
                     
                     ## Calculated calendar measures
                     logging.debug("Creation of calendar entities")
