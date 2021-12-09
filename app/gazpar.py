@@ -581,6 +581,7 @@ class DailyMeasure:
         self.volume = measure["volumeBrutConsomme"]
         self.energy = measure["energieConsomme"]
         self.temperature = measure["temperature"]
+        self.conversionFactor = measure["coeffConversion"]
         self.pce = pce
         
         
