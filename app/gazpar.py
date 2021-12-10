@@ -628,7 +628,7 @@ class DailyMeasure:
     def store(self,db):
         
         if self.isOk():
-            logging.debug("Store measure %s, %s, %s m3, %s kWh",str(self.gasDate),str(self.endIndex), str(self.volume), str(self.energy), str(self.conversionFactor))
+            logging.debug("Store measure %s, %s, %s m3, %s kWh, %s kwh/m3",str(self.gasDate),str(self.endIndex), str(self.volume), str(self.energy), str(self.conversionFactor))
             measure_query = f"INSERT OR REPLACE INTO consumption_daily VALUES (?, ?, ?, ?, ?, ?)"
             db.cur.execute(measure_query, [self.pce.pceId, self.gasDate, self.endIndex, self.volume, self.energy, self.conversionFactor])
         
