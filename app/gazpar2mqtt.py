@@ -559,7 +559,6 @@ if __name__ == "__main__":
     logging.info("Version " + G2M_VERSION)
     logging.info("Please note that the the tool is still under development, various functions may disappear or be modified.")
     logging.debug("If you can read this line, you are in DEBUG mode.")
-    logging.info("-----------------------------------------------------------")
     
     # Log params info
     logging.info("-----------------------------------------------------------")
