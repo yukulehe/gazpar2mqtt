@@ -586,7 +586,7 @@ class DailyMeasure:
         self.pce = None
 
         # Set attributes
-        dateFinReleveself.dateDebutReleve = _convertDateTime(measure["dateDebutReleve"])
+        if measure["dateDebutReleve"] != "null": self.dateDebutReleve = _convertDateTime(measure["dateDebutReleve"])
         if measure["dateFinReleve"] != "null": self.endDateTime = _convertDateTime(measure["dateFinReleve"])
         if measure["journeeGaziere"] != "null": self.gasDate = _convertDate(measure["journeeGaziere"])
         if measure["indexDebut"] != "null": self.startIndex = int(measure["indexDebut"])
