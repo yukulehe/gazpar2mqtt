@@ -190,20 +190,22 @@ def run(myParams):
                     myPce.store(myDb)
                     myDb.commit()
                     
+                    # Get measures of the PCE
+                    logging.info("Get measures of PCE %s alias %s",myPce.pceId,myPce.alias)
+                    logging.info("---------------------------------")
 
                     # Set date range
                     if myPce.activationDate:
                         # We take the activation date
                         startDate = myPce.activationDate
+                        logging.info("PCE activation date : ",myPce.activationDate)
                     else:
                         # Default start date : 3 years ago
                         startDate = _getYearOfssetDate(datetime.date.today(), 3)
                     endDate = datetime.date.today()
-
-                    # Get measures of the PCE
-                    logging.info("Get measures of PCE %s alias %s",myPce.pceId,myPce.alias)
-                    logging.info("---------------------------------")
                     logging.info("Range period : from %s to %s...",startDate,endDate)
+                    
+                    # Get data
                     myGrdf.getPceDailyMeasures(myPce,startDate,endDate)
                     logging.info("%s measures retrieved, %s seems ok !",myPce.countDailyMeasure(), myPce.countDailyMeasureOk() )
                     
