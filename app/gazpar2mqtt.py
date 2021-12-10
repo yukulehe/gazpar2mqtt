@@ -218,7 +218,8 @@ def run(myParams):
                         logging.info("Start index = %s, End index = %s",myMeasure.startIndex,myMeasure.endIndex)
                         logging.info("Volume = %s m3, Energy = %s kWh, Factor = %s",myMeasure.volume,myMeasure.energy,myMeasure.conversionFactor)
                         if myMeasure.isDeltaIndex :
-                            logging.warning("Inconsistencies detected on the measure : volume provided by Grdf has been replaced by the volume between start index and end index (%s m3)",myMeasure.volume)
+                            logging.warning("Inconsistencies detected on the measure : ")
+                            logging.warning("Volume provided by Grdf (%s m3) has been replaced by the volume between start index and end index (%s m3)",myMeasure.volumeInitial,myMeasure.volume)
 
                         # Read calculated measures from database
                         myPce.calculateMeasures(myDb)
