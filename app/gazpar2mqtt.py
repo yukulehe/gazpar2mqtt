@@ -99,6 +99,10 @@ def run(myParams):
             logging.info("Database reinitialized in version %s !",dbVersion)
     else:
         logging.warning("Unable to get database version.")
+        
+    # Display current database statistics
+    logging.info("Calculate database statistics..")
+    logging.info("%s measures stored",myDb.getMeasuresCount())
     
     
     
