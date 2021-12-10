@@ -24,7 +24,7 @@ Important :
   - Implementation of a sqlite database
   - Addition of converter factor from Grdf
   - Calculation of aggregated consumptions  for calendar periods (year, month, week and day) and rolling periods (1 year, 1 month, 1 week)
-  - Exponential wait between retries when the application failed to retrieve data
+  - Exponential wait between retries when the application failed to connect to GRDF website
 - v0.5.x :
   - Hard redesign of the application after new GRDF website released on 23/11/2021 . Thanks to **echauvet** for his contribution.
   - Published values are now PCE dependent
@@ -45,9 +45,8 @@ Important :
 
 ## Roadmap :
 
-- Calculation of monthly/weekly consumptions
-- Provide an exemple of Home assistant card
-
+- Retrieve threesolds
+- Home assistant custom entity card
 
 # Requirements
 
@@ -149,7 +148,6 @@ docker run --name app/gazpar2mqtt -e GRDF_USERNAME=gazou@email.com -e GRDF_PASSW
 ## Standalone mode
 
 Default mode, gazpar2mqtt is autonomous and is not dependent of any third-party tool.
-Please note that only GRDF's **last values** are published in the MQTT broker in the topics bellow.
 You can replace the default topic prefix *gazpar* (see mqtt broker requirements chapter)
 
 ### Measures :
