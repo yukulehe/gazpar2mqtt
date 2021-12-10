@@ -107,7 +107,7 @@ class Database:
     
   # Get measures statistics
   def getMeasuresCount(self):
-    valueResult = []
+    valueResult = {}
     query = f"SELECT count(date), min(date), max(date) FROM consumption_daily"
     self.cur.execute(query)
     queryResult = self.cur.fetchone()
