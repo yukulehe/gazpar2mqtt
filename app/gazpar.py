@@ -292,18 +292,27 @@ class Pce:
     # Constructor
     def __init__(self, pce):
         
-        self.alias = pce["alias"]
-        self.pceId = pce["pce"]
-        self.activationDate = pce["dateActivation"]
-        self.freqenceReleve = pce["frequenceReleve"]
-        self.state = pce["etat"]
-        self.ownerName = pce["nomTitulaire"]
-        self.postalCode = pce["codePostal"]
-        
+        # Init attributes
+        self.alias = None
+        self.pceId = None
+        self.activationDate = None
+        self.freqenceReleve = None
+        self.state = None
+        self.ownerName = None
+        self.postalCode = None
+        self.alias = None
         self.dailyMeasureList = []
         self.dailyMeasureStart = None
         self.dailyMeasureEnd = None
         
+        # Set attributes
+        self.alias = pce["alias"]
+        self.pceId = pce["pce"]
+        self.activationDate = _convertDateTime(pce["dateActivation"])
+        self.freqenceReleve = pce["frequenceReleve"]
+        self.state = pce["etat"]
+        self.ownerName = pce["nomTitulaire"]
+        self.postalCode = pce["codePostal"]
         self.json = pce
         
         
