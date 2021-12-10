@@ -133,7 +133,7 @@ def run(myParams):
     if myMqtt.isConnected:
     
         logging.info("-----------------------------------------------------------")
-        logging.info("#            Get data from GRDF website                    #")
+        logging.info("#            Get data from GRDF website                   #")
         logging.info("-----------------------------------------------------------")
 
         tryCount = 0
@@ -237,7 +237,7 @@ def run(myParams):
         try:
 
             logging.info("-----------------------------------------------------------")
-            logging.info("#           Stand alone publication mode                   #")
+            logging.info("#           Stand alone publication mode                  #")
             logging.info("-----------------------------------------------------------")
 
             # Loop on PCEs
@@ -463,7 +463,7 @@ def run(myParams):
     if myMqtt.isConnected:
         
         logging.info("-----------------------------------------------------------")
-        logging.info("#               Disconnexion from MQTT                     #")
+        logging.info("#               Disconnexion from MQTT                    #")
         logging.info("-----------------------------------------------------------")
         
         try:
@@ -476,7 +476,7 @@ def run(myParams):
     
     # STEP 6 : Disconnect from database
     logging.info("-----------------------------------------------------------")
-    logging.info("#          Disconnexion from SQLite database               #")
+    logging.info("#          Disconnexion from SQLite database              #")
     logging.info("-----------------------------------------------------------")
       
     if myDb.isConnected() :
@@ -485,7 +485,7 @@ def run(myParams):
     
     # STEP 7 : Display next run info and end of program
     logging.info("-----------------------------------------------------------")
-    logging.info("#                Next run                                  #")
+    logging.info("#                Next run                                 #")
     logging.info("-----------------------------------------------------------")
     if myParams.scheduleTime is not None:
         logging.info("gazpar2mqtt next run scheduled at %s",myParams.scheduleTime)
@@ -528,7 +528,7 @@ if __name__ == "__main__":
     
     # Say welcome and be nice
     logging.info("-----------------------------------------------------------")
-    logging.info("#               Welcome to gazpar2mqtt                     #")
+    logging.info("#               Welcome to gazpar2mqtt                    #")
     logging.info("-----------------------------------------------------------")
     logging.info("Version " + G2M_VERSION)
     logging.info("Please note that the the tool is still under development, various functions may disappear or be modified.")
@@ -537,7 +537,7 @@ if __name__ == "__main__":
     
     # Log params info
     logging.info("-----------------------------------------------------------")
-    logging.info("#                Program parameters                        #")
+    logging.info("#                Program parameters                       #")
     logging.info("-----------------------------------------------------------")
     myParams.logParams()
     
