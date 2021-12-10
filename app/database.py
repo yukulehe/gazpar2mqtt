@@ -53,15 +53,15 @@ class Database:
                     ON consumption_daily (date)''')
     
     # Create table for billing
-    logging.debug("Creation of billing table")
-    self.cur.execute('''CREATE TABLE IF NOT EXISTS billing (
-                        pce TEXT NOT NULL 
-                        , start_date TEXT NOT NULL
-                        , end_date TEXT NOT NULL
-                        , end_index  INTEGER NOT NULL
-                        , conversion REAL NOT NULL)''')
-    self.cur.execute('''CREATE UNIQUE INDEX IF NOT EXISTS idx_start_date_billing
-                    ON billing (start_date)''')
+    #logging.debug("Creation of billing table")
+    #self.cur.execute('''CREATE TABLE IF NOT EXISTS billing (
+    #                    pce TEXT NOT NULL 
+    #                    , start_date TEXT NOT NULL
+    #                    , end_date TEXT NOT NULL
+    #                    , end_index  INTEGER NOT NULL
+    #                    , conversion REAL NOT NULL)''')
+    #self.cur.execute('''CREATE UNIQUE INDEX IF NOT EXISTS idx_start_date_billing
+    #                ON billing (start_date)''')
 
     # Set default configuration
     logging.debug("Store default configuration")
@@ -104,6 +104,15 @@ class Database:
       return resultValue["version"]
     else:
       return None
+    
+  # Get count of measures
+  def getMeasuresCount(self):
+    query = f"SELECT count(date) FROM consumption_daily"
+    self.cur.execute(query)
+    queryResult = self.cur.fetchone()
+    if queryResult is not None:
+      resultValue = json.loads(queryResult[0])
+      return resultValue["version"]
     
     
   # Re-initialize the database
