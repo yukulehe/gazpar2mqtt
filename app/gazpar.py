@@ -620,7 +620,7 @@ class DailyMeasure:
                 self.volume = deltaIndex
                 self.isDeltaIndex = True
                 if self.conversionFactor:
-                    self.energy = self.volume * self.conversionFactor
+                    self.energy = round(self.volume * self.conversionFactor)
         
         
         
