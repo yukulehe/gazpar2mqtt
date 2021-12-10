@@ -102,8 +102,10 @@ def run(myParams):
         
     # Display current database statistics
     logging.info("Calculate database statistics..")
-    logging.info("%s measures stored",myDb.getMeasuresCount())
-    
+    dbStats = myDb.getMeasuresCount()
+    logging.info("%s measures stored",dbStats["count"])
+    logging.info("First date %s",dbStats["minDate"])
+    logging.info("First date %s",dbStats["maxDate"])
     
     
     # STEP 2 : Log to MQTT broker
