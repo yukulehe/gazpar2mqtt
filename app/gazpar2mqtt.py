@@ -201,8 +201,8 @@ def run(myParams):
                     # Set date range
                     if myPce.activationDate:
                         # We take the activation date
-                        startDate = myPce.activationDate
-                        logging.info("PCE activation date : %s",myPce.activationDate)
+                        startDate = myPce.activationDate.date()
+                        logging.info("PCE activation date : %s",startDate)
                     else:
                         # Default start date : 3 years ago
                         startDate = _getYearOfssetDate(datetime.date.today(), 3)
