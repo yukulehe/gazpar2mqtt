@@ -66,6 +66,7 @@ class Mqtt:
         # Connect
         logging.debug("Mqtt connect : connection to broker %s:%s...",self.host,self.port)
         self.client.connect(self.host,self.port, 60)
+        logging.debug("Wait for conexion callback")
         if self.isSsl:
             time.sleep(5)
         else:
