@@ -198,7 +198,7 @@ def run(myParams):
                     if myPce.activationDate:
                         # We take the activation date
                         startDate = myPce.activationDate
-                        logging.info("PCE activation date : ",myPce.activationDate)
+                        logging.info("PCE activation date : %s",myPce.activationDate)
                     else:
                         # Default start date : 3 years ago
                         startDate = _getYearOfssetDate(datetime.date.today(), 3)
