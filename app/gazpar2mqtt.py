@@ -217,7 +217,7 @@ def run(myParams):
                     if measureCount != 0: accuracy = round(measureOkCount//measureCount)*100
                     logging.info("%s measures provided by Grdf",measureCount)
                     logging.info("%s measures are ok",measureOkCount )
-                    logging.info("The accuracy is %s %",accuracy )
+                    logging.info("Accuracy is %s percent",accuracy )
                     
                     if myPce.dailyMeasureList:
                         for myMeasure in myPce.dailyMeasureList:
