@@ -9,6 +9,7 @@ Python script to fetch GRDF's website data and publish data to a mqtt broker
 
 # Externals/Thanks
 The project has been inspired by job done by [empierre](https://github.com/empierre/domoticz_gaspar) on project domoticz_gazpar and [beufanet](https://github.com/beufanet/gazpar) on project gazinflux availables on Github. I modified a bit the code to work and fit my needs.
+Thanks to [echauvet](https://github.com/echauvet) for his big contribution on GRDF API and the calculation of new sensors.
 
 # Informations
 
@@ -19,6 +20,11 @@ Important :
 
 ## Changelogs :
 
+- v0.6.x :
+  - Implementation of a sqlite database
+  - Addition of converter factor from Grdf
+  - Calculation of aggregated consumptions  for calendar periods (year, month, week and day) and rolling periods (1 year, 1 month, 1 week)
+  - Exponential wait between retries when the application failed to connect to GRDF website
 - v0.5.x :
   - Hard redesign of the application after new GRDF website released on 23/11/2021 . Thanks to **echauvet** for his contribution.
   - Published values are now PCE dependent
@@ -39,9 +45,8 @@ Important :
 
 ## Roadmap :
 
-- Calculation of monthly/weekly consumptions
-- Provide an exemple of Home assistant card
-
+- Retrieve threesolds
+- Home assistant custom entity card
 
 # Requirements
 
@@ -56,12 +61,6 @@ pip3 install -r app/requirement.txt
 ## GRDF Gazpar API
 
 Verify you have gazpar data available on [GRDF Portal](https://monespace.grdf.fr/monespace/connexion)
-
-For each PCE (Point de Comptage et d'Estimation) linked to GRDF account, data provided are :
-- the previous day ~~and the current month consumptions~~ of gas (in m3) and energy (kwh)
-- ~~the consumptions of the previous year for the current month~~
-- ~~the threshold (seuil) of the current month defined in Grdf portal~~
-
 Remember, kWh provided is conversion factor dependant. Please verify it's coherent with your provider bills.
 
 
@@ -82,7 +81,7 @@ Mandatory :
 | **GRDF_PASSWORD** | Your GRDF password |
 | **MQTT_HOST** | Hostname or ip adress of the MQTT broker |
 
-Optionnal :
+Optional :
 
 | Variable | Description | Default value |
 | --- | --- | --- |
@@ -99,6 +98,7 @@ Optionnal :
 | **HASS_DISCOVERY** | Enable Home assistant dicovery mode | False |
 | **HASS_PREFIX** | Home assistant topic prefix | homeassistant |
 | **HASS_DEVICE_NAME** | Home assistant device name | gazpar |
+| **DB_INIT** | Force reinitialization of the database | False |
 | **DEBUG** | Enable debug mode| False |
 
 
@@ -148,17 +148,56 @@ docker run --name app/gazpar2mqtt -e GRDF_USERNAME=gazou@email.com -e GRDF_PASSW
 ## Standalone mode
 
 Default mode, gazpar2mqtt is autonomous and is not dependent of any third-party tool.
-Please note that only GRDF's **last values** are published in the MQTT broker in the topics bellow.
 You can replace the default topic prefix *gazpar* (see mqtt broker requirements chapter)
 
 ### Measures :
 
+Last measures :
+
 | Topic | Description |
 | --- | --- |
-| gazpar/PCE/index | Index in cube meter of the last measure |
-| gazpar/PCE/daily/date | Date of the last measure |
-| gazpar/PCE/daily/kwh | Consumption in kwh of the last measure |
-| gazpar/PCE/daily/mcube | Consumption in cube meter of the last measure  |
+| gazpar/PCE/index | Gas index in m3 of the last measure |
+| gazpar/PCE/date | Date of the last measure |
+| gazpar/PCE/energy | Gas consumption in kWh of the last measure |
+| gazpar/PCE/gas | Gas consumption in m3 of the last measure  |
+| gazpar/PCE/conversion_factor | Conversion factor in kWh/m3 of the last measure  |
+
+Calculated calendar measures :
+
+| Topic | Description |
+| --- | --- |
+| gazpar/PCE/histo/current_year_gas | Gas consumption in m3 of current year |
+| gazpar/PCE/histo/previous_year_gas | Gas consumption in m3 of previous year |
+| gazpar/PCE/histo/current_month_gas | Gas consumption in m3 of current month |
+| gazpar/PCE/histo/previous_month_gas | Gas consumption in m3 of previous month |
+| gazpar/PCE/histo/current_month_previous_year_gas | Gas consumption in m3 of current month, 1 year ago |
+| gazpar/PCE/histo/current_week_gas | Gas consumption in m3 of current week |
+| gazpar/PCE/histo/previous_week_gas | Gas consumption in m3 of previous week |
+| gazpar/PCE/histo/current_week_previous_year | Gas consumption in m3 of current week, 1 year ago |
+| gazpar/PCE/histo/day-1_gas | Gas consumption in m3, 1 day ago |
+| gazpar/PCE/histo/day-2_gas | Gas consumption in m3, 2 day ago |
+| gazpar/PCE/histo/day-3_gas | Gas consumption in m3, 3 day ago |
+| gazpar/PCE/histo/day-4_gas | Gas consumption in m3, 4 day ago |
+| gazpar/PCE/histo/day-5_gas | Gas consumption in m3, 5 day ago |
+| gazpar/PCE/histo/day-6_gas | Gas consumption in m3, 6 day ago |
+| gazpar/PCE/histo/day-7_gas | Gas consumption in m3, 7 day ago |
+
+Calculated rolling measures :
+
+| Topic | Description |
+| --- | --- |
+| gazpar/PCE/histo/rolling_year_gas | Gas consumption in m3 for 1 rolling year |
+| gazpar/PCE/histo/rolling_year_last_year_gas | Gas consumption in m3 for 1 rolling year, 1 year ago |
+| gazpar/PCE/histo/rolling_month_gas | Gas consumption in m3 for 1 rolling month |
+| gazpar/PCE/histo/rolling_month_last_month_gas | Gas consumption in m3 for 1 rolling month, 1 month ago |
+| gazpar/PCE/histo/rolling_month_last_year_gas | Gas consumption in m3 for 1 rolling month, 1 year ago |
+| gazpar/PCE/histo/rolling_month_last_2_year_gas | Gas consumption in m3 for 1 rolling month, 2 years ago |
+| gazpar/PCE/histo/rolling_week_gas | Gas consumption in m3 for 1 rolling week |
+| gazpar/PCE/histo/rolling_week_last_week_gas | Gas consumption in m3 for 1 rolling week, 1 week ago |
+| gazpar/PCE/histo/rolling_week_last_year_gas | Gas consumption in m3 for 1 rolling week, 1 year ago |
+| gazpar/PCE/histo/rolling_week_last_2_year_gas | Gas consumption in m3 for 1 rolling week, 2 years ago |
+
+
 
 ### Status :
 
@@ -182,26 +221,56 @@ Have a look to [Home Assistant Mqtt discovery documentation](https://www.home-as
 
 Note : you can replace the default device name *gazpar* by editing the related parameter.
 
-### List of available sensors :
+### List of entities :
 
-| Sensor name | Component | Device class | Description |
+Last measure entities :
+
+| Entity name | Component | Device class | Description |
 | --- | --- | --- | --- |
 | gazpar_PCE_index | Sensor | Gas | Gas index in m3 of the last measure |
-| gazpar_PCE_daily_gas | Sensor | Gas | Gas consumption in m3 of the last measure |
-| gazpar_PCE_daily_energy | Sensor | Energy | Gas consumption in kWh of the last measure |
+| gazpar_PCE_gas | Sensor | Gas | Gas consumption in m3 of the last measure |
+| gazpar_PCE_energy | Sensor | Energy | Gas consumption in kWh of the last measure |
 | gazpar_PCE_consumption_date | Sensor | Date | Date of the last measure |
 | gazpar_PCE_connectivity | Binary sensor | Connectivity | Binary sensor which indicates if the last gazpar statement succeeded (ON) or failed (OFF) |
 
 
-### List of topics :
-| Topic | Description
-| --- | --- 
-| homeassistant/sensor/gazpar_PCE/config | Sensor's configuration topic |
-| homeassistant/sensor/gazpar_PCE/state | Sensor's state topic |
-| homeassistant/binary_sensor/gazpar_PCE/config | Binary sensor's configuration topic |
-| homeassistant/binary_sensor/gazpar_PCE/state | Binary sensor's state topic |
+Calendar measure entities :
 
-Note : you can replace the default topic prefix *homeasssistant* by editing the related parameter.
+| Entity name | Component | Device class | Description |
+| --- | --- | --- | --- |
+| gazpar_PCE_current_year_gas | Sensor | Gas | Gas consumption in m3 of current year |
+| gazpar_PCE_previous_year_gas | Sensor | Gas | Gas consumption in m3 of previous year |
+| gazpar_PCE_previous_2_year_gas | Sensor | Gas | Gas consumption in m3 of previous 2 years |
+| gazpar_PCE_current_month_gas | Sensor | Gas | Gas consumption in m3 of current month |
+| gazpar_PCE_previous_month_gas | Sensor | Gas | Gas consumption in m3 of previous month |
+| gazpar_PCE_current_month_last_year_gas | Sensor | Gas | Gas consumption in m3 of current month, 1 year ago |
+| gazpar_PCE_current_week_gas | Sensor | Gas | Gas consumption in m3 of current week |
+| gazpar_PCE_previous_week_gas | Sensor | Gas | Gas consumption in m3 of current week |
+| gazpar_PCE_current_week_last_year_gas | Sensor | Gas | Gas consumption in m3 of current week, 1 year ago |
+| gazpar_PCE_current_day_1_gas | Sensor | Gas | Gas consumption in m3 of day -1 |
+| gazpar_PCE_current_day_2_gas | Sensor | Gas | Gas consumption in m3 of day -2 |
+| gazpar_PCE_current_day_3_gas | Sensor | Gas | Gas consumption in m3 of day -3 |
+| gazpar_PCE_current_day_4_gas | Sensor | Gas | Gas consumption in m3 of day -4 |
+| gazpar_PCE_current_day_5_gas | Sensor | Gas | Gas consumption in m3 of day -5 |
+| gazpar_PCE_current_day_6_gas | Sensor | Gas | Gas consumption in m3 of day -6 |
+| gazpar_PCE_current_day_7_gas | Sensor | Gas | Gas consumption in m3 of day -7 |
+
+
+Rolling measure entities :
+
+| Entity name | Component | Device class | Description |
+| --- | --- | --- | --- |
+| gazpar_PCE_rolling_year_gas | Sensor | Gas | Gas consumption in m3 for 1 rolling year |
+| gazpar_PCE_rolling_year_last_year_gas | Sensor | Gas | Gas consumption in m3 for 1 rolling year, 1 year ago |
+| gazpar_PCE_rolling_rolling_month_gas | Sensor | Gas | Gas consumption in m3 for 1 rolling month |
+| gazpar_PCE_rolling_month_last_month_gas | Sensor | Gas | Gas consumption in m3 for 1 rolling month, 1 month ago |
+| gazpar_PCE_rolling_month_last_year_gas | Sensor | Gas | Gas consumption in m3 for 1 rolling month, 1 year ago |
+| gazpar_PCE_rolling_month_last_2_year_gas | Sensor | Gas | Gas consumption in m3 for 1 rolling month, 2 years ago |
+| gazpar_PCE_rolling_rolling_week_gas | Sensor | Gas | Gas consumption in m3 for 1 rolling week |
+| gazpar_PCE_rolling_week_last_week_gas | Sensor | Gas | Gas consumption in m3 for 1 rolling week, 1 week ago |
+| gazpar_PCE_rolling_week_last_year_gas | Sensor | Gas | Gas consumption in m3 for 1 rolling week, 1 year ago |
+| gazpar_PCE_rolling_week_last_2_year_gas | Sensor | Gas | Gas consumption in m3 for 1 rolling week, 2 years ago |
+
 
 
 ### Add-on

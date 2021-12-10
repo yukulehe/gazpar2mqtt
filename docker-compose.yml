@@ -21,7 +21,8 @@ services:
       #MQTT_RETAIN: 'True'
       #MQTT_SSL: 'False'
       #STANDALONE_MODE: 'False'
-      #HASS_DISCOVERY: 'True'
+      #HASS_DISCOVERY: 'False'
       #HASS_PREFIX: 'homeassistant'
       #HASS_DEVICE_NAME: 'gazpar'
+      #DB_INIT: 'False' # force the reinitialization of the database
       #DEBUG: 'True'

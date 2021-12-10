@@ -45,6 +45,9 @@ class Params:
     self.hassPrefix = 'homeassistant'
     self.hassDeviceName = 'gazpar'
     
+    # Databse params
+    self.dbInit = False
+    
     # Debug param
     self.debug = False
     
@@ -96,6 +99,8 @@ class Params:
     self.parser.add_argument(
         "--hass_device_name", help="Home Assistant device name")
     self.parser.add_argument(
+        "--db_init", help="Force database reinitialization : True or False")
+    self.parser.add_argument(
         "--debug",            help="Enable debug mode")
     
     return self.parser.parse_args()
@@ -124,6 +129,8 @@ class Params:
     if "HASS_DISCOVERY" in os.environ: self.hassDiscovery = _isItTrue(os.environ["HASS_DISCOVERY"])
     if "HASS_PREFIX" in os.environ: self.hassPrefix = os.environ["HASS_PREFIX"]
     if "HASS_DEVICE_NAME" in os.environ: self.hassDeviceName = os.environ["HASS_DEVICE_NAME"]
+      
+    if "DB_INIT" in os.environ: self.dbInit = _isItTrue(os.environ["DB_INIT"])
     
     if "DEBUG" in os.environ: self.debug = _isItTrue(os.environ["DEBUG"])
   
@@ -151,6 +158,8 @@ class Params:
     if self.args.hass_prefix is not None: self.hassPrefix = self.args.hass_prefix
     if self.args.hass_device_name is not None: self.hassDeviceName = self.args.hass_device_name
       
+    if self.args.db_init is not None: self.dbInit = _isItTrue(self.args.db_init)
+      
     if self.args.debug is not None: self.debug = _isItTrue(self.args.debug)
     
     
@@ -168,7 +177,7 @@ class Params:
       return False
     else:
       if self.standalone == False and self.hassDiscovery == False:
-        logging.warning("Warning ! Both Standalone mode and Home assistant discovery are disable. No value will be published to MQTT ! Please check your parameters.")
+        logging.warning("Both Standalone mode and Home assistant discovery are disable. No value will be published to MQTT ! Please check your parameters.")
         return True
       else:
         return True
@@ -184,4 +193,5 @@ class Params:
     logging.info("Standlone mode : Enable = %s", self.standalone)
     logging.info("Home Assistant discovery : Enable = %s, Topic prefix = %s, Device name = %s", \
                  self.hassDiscovery, self.hassPrefix, self.hassDeviceName)
+    logging.info("Database options : Force reinitialization = %s", self.dbInit)
     logging.info("Debug mode : Enable = %s", self.debug)

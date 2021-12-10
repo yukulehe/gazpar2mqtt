@@ -3,18 +3,14 @@
 
 # Constants for topics
 
-## Index
-TOPIC_INDEX = "/index"
+## Last measure
+TOPIC_LAST = "/last"
 
-## Daily
-TOPIC_DAILY_DATE = "/daily/date"
-TOPIC_DAILY_KWH = "/daily/kwh"
-TOPIC_DAILY_MCUBE = "/daily/mcube"
-
+## Calculated measure
+TOPIC_HISTO = "/histo"
 
 ## Status
-TOPIC_STATUS_DATE = "/status/date"
-TOPIC_STATUS_VALUE = "/status/value"
+TOPIC_STATUS = "/status"
 
 
 class Standalone:
@@ -24,13 +20,7 @@ class Standalone:
     
     self.prefix = prefix
     
-    self.statusDateTopic = prefix + TOPIC_STATUS_DATE
-    self.statusValueTopic = prefix + TOPIC_STATUS_VALUE
-    
-    self.dailyDateTopic = prefix + TOPIC_DAILY_DATE
-    self.dailyKwhTopic = prefix + TOPIC_DAILY_KWH
-    self.dailyMcubeTopic = prefix + TOPIC_DAILY_MCUBE
-    
-    self.indexTopic = prefix + TOPIC_INDEX
-    
+    self.lastTopic = prefix + TOPIC_LAST + '/'
+    self.histoTopic = prefix + TOPIC_HISTO + '/'
+    self.statusTopic = prefix + TOPIC_STATUS + '/'
     

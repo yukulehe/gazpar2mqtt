@@ -6,13 +6,15 @@ import requests
 import json
 import datetime
 
+import database
+
 global JAVAVXS
 
 # Constants
 GRDF_DATE_FORMAT = "%Y-%m-%d"
 GRDF_DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
-GRDF_API_MAX_RETRIES = 5 # number of retries max to get accurate data from GRDF
-GRDF_API_WAIT_BTW_RETRIES = 10 # number of seconds between two tries
+GRDF_API_MAX_RETRIES = 14 # number of retries max to get accurate data from GRDF
+GRDF_API_WAIT_BTW_RETRIES = 20 # number of seconds between try 1 and try 2 (must not exceed 25s)
 GRDF_API_ERRONEOUS_COUNT = 1 # Erroneous number of results send by GRDF 
 
 #######################################################################
@@ -39,6 +41,11 @@ def _convertDateTime(dateTimeString):
 def _convertGrdfDate(date):
     return date.strftime(GRDF_DATE_FORMAT)
 
+# Get the time sleeping between 2 retries
+def _getRetryTimeSleep(tryNo):
+    
+    # The time to sleep is exponential 
+    return GRDF_API_WAIT_BTW_RETRIES * pow(tryNo,2.5)
 
 #######################################################################
 #### Class GRDF
@@ -55,6 +62,7 @@ class Grdf:
         self.pceList = []
         self.whoiam = None
         self.isConnected = False
+        self.account = None
         self.session = requests.Session()
         self.session.headers = {
             'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Mobile Safari/537.36',
@@ -82,26 +90,37 @@ class Grdf:
             'email': username,
             'password': password,
             'capp': 'meg',
-            'goto': 'https://sofa-connexion.grdf.fr:443/openam/oauth2/externeGrdf/authorize?response_type=code&scope=openid%20profile%20email%20infotravaux%20%2Fv1%2Faccreditation%20%2Fv1%2Faccreditations%20%2Fdigiconso%2Fv1%20%2Fdigiconso%2Fv1%2Fconsommations%20new_meg%20%2FDemande.read%20%2FDemande.write&client_id=prod_espaceclient&state=0&redirect_uri=https%3A%2F%2Fmonespace.grdf.fr%2F_codexch&nonce=' + self.auth_nonce + '&by_pass_okta=1&capp=meg'
+            'goto': 'https://sofa-connexion.grdf.fr:443/openam/oauth2/externeGrdf/authorize'
         }
         
-        # Login step 1
-        logging.debug("Logging step 1...")
-        req = self.session.post('https://login.monespace.grdf.fr/sofit-account-api/api/v1/auth', data=payload, allow_redirects=False)
-        logging.debug("Logging step 1 request : %s",req.text)
-                      
-        if not 'XSRF-TOKEN' in self.session.cookies:
-            raise GazparLoginException("Login unsuccessful. Check your credentials.")
-        else:
-            logging.debug("Login step 1 sucessfull.")
-            
+        # Login
+        logging.debug("Logging ...")
+        try:
+            req = self.session.post('https://login.monespace.grdf.fr/sofit-account-api/api/v1/auth', data=payload, allow_redirects=False)
+        except Exception as e:
+            logging.error("Error while authenticating to https://login.monespace.grdf2.fr/sofit-account-api/api/v1/auth:")
+            logging.error(str(e))
+            return
         
-        # Login step 2
-        logging.debug("Logging step 2...")
-        req = self.session.get('https://sofa-connexion.grdf.fr:443/openam/oauth2/externeGrdf/authorize?response_type=code&scope=openid%20profile%20email%20infotravaux%20%2Fv1%2Faccreditation%20%2Fv1%2Faccreditations%20%2Fdigiconso%2Fv1%20%2Fdigiconso%2Fv1%2Fconsommations%20new_meg%20%2FDemande.read%20%2FDemande.write&client_id=prod_espaceclient&state=0&redirect_uri=https%3A%2F%2Fmonespace.grdf.fr%2F_codexch&nonce=' + self.auth_nonce + '&by_pass_okta=1&capp=meg')
-        logging.debug("Logging step 2 request : %s",req.text)
-        # ! missing a check for step  2!
+        logging.debug("Logging returned : %s",req.text)
+     
+        login_return = json.loads(req.text)
+        if login_return['state'] != 'SUCCESS':
+            logging.info(req)
+            logging.info(self.session.cookies)
+            logging.info("Login unsuccessful. Invalid returned information: %s", req.text)
+            return
         
+        # Display return login
+        logging.debug("Logging return : surname = %s, name = %s, email = %s",login_return['surname'],login_return['name'],login_return['email'])
+
+        # Call whoami, this seems to complete logging. First time it fails then it is working. Don't call ugly things anymore
+        try:
+            req = self.session.get('https://monespace.grdf.fr/api/e-connexion/users/whoami')
+        except Exception as e:
+            logging.error("Error while authenticating when calling https://monespace.grdf.fr/api/e-connexion/users/whoami:")
+            logging.error(str(e))
+            return
         
         # When everything is ok
         self.isConnected = True
@@ -124,20 +143,77 @@ class Grdf:
     def getWhoami(self):
         
         logging.debug("Get whoami...")
-        req = self.session.get('https://monespace.grdf.fr/api/e-connexion/users/whoami')
-        logging.debug("Req whoami : %s",req.text)
-        account = json.loads(req.text)
-        self.account = Account(account)
         
+        try:
+            req = self.session.get('https://monespace.grdf.fr/api/e-connexion/users/whoami')
+        except Exception as e:
+            logging.error("Error while calling Whoami:")
+            logging.error(str(e))
+            self.isConnected = False
+            return None
+
+        logging.debug("Whoami result %s", req.text)
+        
+        # Check returned JSON format
+        try:
+            account = json.loads(req.text)
+        except Exception as e:
+            logging.error("Whoami returned invalid JSON:")
+            logging.error(str(e))
+            logging.info(req.text)
+            self.isConnected = False
+            return None
+        
+        # Check Whoami content
+        if 'code' in account:
+            logging.info(req)
+            logging.info("Whoami unsuccessful. Invalid returned information: %s", req.text)
+            self.isConnected = False
+            return None
+
+        # Check that id is in account
+        if not 'id' in account or account['id'] <= 0:
+            logging.info(req)
+            logging.info("Whoami unsuccessful. Invalid returned information: %s", req.text)
+            self.isConnected = False
+            return None
+        else:
+            # Create account
+            self.account = Account(account)
+            return self.account    
                
     # Get list of PCE
     def getPceList(self):
         
-        logging.debug("Get pce...")
-        req = self.session.get('https://monespace.grdf.fr/api/e-conso/pce')
-        logging.debug("Req pce : %s",req.text)
-        pceList = json.loads(req.text)
+        logging.debug("Get PCEs list...")
         
+        # Get PCEs from website
+        try:
+            req = self.session.get('https://monespace.grdf.fr/api/e-conso/pce')
+        except Exception as e:
+            logging.error("Error while calling pce:")
+            logging.error(str(e))
+            self.isConnected = False
+            
+        logging.debug("Get PCEs list result : %s",req.text)
+        
+        # Check PCEs list
+        try:
+            pceList = json.loads(req.text)
+        except Exception as e:
+            logging.error("PCEs returned invalid JSON:")
+            logging.error(str(e))
+            logging.info(req.text)
+            self.isConnected = False
+            return None
+        
+        if 'code' in pceList:
+            logging.info(req)
+            logging.info("PCEs unsuccessful. Invalid returned information: %s", req.text)
+            self.isConnected = False
+            return None
+        
+        # Ok everything is fine, we can create PCE
         for item in pceList:
             # Create PCE
             myPce = Pce(item)
@@ -177,7 +253,7 @@ class Grdf:
         for measure in measureList[pce.pceId]["releves"]:
             
             # Create the measure
-            myDailyMeasure = DailyMeasure(measure)
+            myDailyMeasure = DailyMeasure(pce,measure)
             
             # Append measure to the PCE's measure list
             pce.addDailyMeasure(myDailyMeasure)
@@ -196,6 +272,16 @@ class Account:
         self.firstName = account["first_name"]
         self.lastName = account["last_name"]
         self.lastName = account["email"]
+        self.json = account
+        
+    # Store in db
+    def store(self,db):
+        
+        if self.json is not None:
+            logging.debug("Store account into database")
+            config_query = f"INSERT OR REPLACE INTO config VALUES (?, ?)"
+            db.cur.execute(config_query, ["whoami", json.dumps(self.json)])
+            
 
 
 #######################################################################
@@ -206,19 +292,39 @@ class Pce:
     # Constructor
     def __init__(self, pce):
         
-        self.alias = pce["alias"]
-        self.pceId = pce["pce"]
-        self.activationDate = pce["dateActivation"]
-        self.freqenceReleve = pce["frequenceReleve"]
-        self.state = pce["etat"]
-        self.ownerName = pce["nomTitulaire"]
-        self.postalCode = pce["codePostal"]
-        
+        # Init attributes
+        self.alias = None
+        self.pceId = None
+        self.activationDate = None
+        self.freqenceReleve = None
+        self.state = None
+        self.ownerName = None
+        self.postalCode = None
+        self.alias = None
         self.dailyMeasureList = []
         self.dailyMeasureStart = None
         self.dailyMeasureEnd = None
         
+        # Set attributes
+        self.alias = pce["alias"]
+        self.pceId = pce["pce"]
+        self.activationDate = _convertDateTime(pce["dateActivation"])
+        self.freqenceReleve = pce["frequenceReleve"]
+        self.state = pce["etat"]
+        self.ownerName = pce["nomTitulaire"]
+        self.postalCode = pce["codePostal"]
+        self.json = pce
         
+        
+    # Store PCE into database
+    def store(self,db):
+        
+        if self.json is not None:
+            logging.debug("Store PCE %s into database",self.pceId)
+            pce_query = f"INSERT OR REPLACE INTO pces VALUES (?, ?, ?)"
+            db.cur.execute(pce_query, [self.pceId, json.dumps(self.json), 0])
+               
+    
     # Add a measure to the PCE    
     def addDailyMeasure(self, measure):
         self.dailyMeasureList.append(measure)
@@ -259,37 +365,214 @@ class Pce:
         
         return measure
     
-    # Return a measure by date
-    def getDailyMeasureByDate(self,date):
+    # Calculated measures from database
+    def calculateMeasures(self,db):
         
-        result = None
-        for measure in self.dailyMeasureList:
-            if measure.gasDate == date:
-                result = measure
-                break
-        return result
-    
-    # Return volume difference for a range of date
-    def getDailyMeasureVolumeDiff(self,startDate,endDate):
+        # Get last valid measure as reference
+        myMeasure = self.getLastMeasureOk()
         
-        # Get the first measure:
-        firstMeasure = self.getDailyMeasureByDate(startDate)
+        # Get current date, week, month and year
+        dateNow = datetime.date.today()
+        monthNow = int(dateNow.strftime("%m"))
+        yearNow = int(dateNow.strftime("%Y"))
+        logging.debug("Today : date %s, month %s, year %s",dateNow,monthNow,yearNow)
+        weekNowFirstDate = dateNow - datetime.timedelta(days=dateNow.weekday() % 7)
+        weekNowFirstDate = weekNowFirstDate
+        monthNowFirstDate = datetime.datetime(yearNow,monthNow, 1).date()
+        yearNowFirstDate = datetime.datetime(yearNow, 1, 1).date()
+        logging.debug("First dates : week %s, month %s, year %s",weekNowFirstDate,monthNowFirstDate,yearNowFirstDate)
         
-        # Get the last measure:
-        lastMeasure = self.getDailyMeasureByDate(endDate)
         
-        if firstMeasure == None or lastMeasure == None:
-            return None
-        elif firstMeasure.isOk() == False or lastMeasure.isOk() == False:
-            return None
-        else:
-            # Calculate the volume difference
-            result = lastMeasure.volume - firstMeasure.volume
-            return result
+        # When db connexion is ok
+        if db.cur and myMeasure:
+        
+            # Calendar measures
             
+            ## Calculate Y0 gas
+            startStr = f"'{dateNow}','start of year','-1 day'"
+            endStr = f"'{dateNow}'"
+            self.gasY0 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("Y0 gas : %s m3",self.gasY0)
+            
+            ## Calculate Y1 gas
+            startStr = f"'{dateNow}','start of year','-1 year','-1 day'"
+            endStr = f"'{dateNow}','start of year','-1 day'"
+            self.gasY1 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("Y1 gas : %s m3",self.gasY1)
+            
+            ## Calculate Y2 gas
+            startStr = f"'{dateNow}','start of year','-2 year','-1 day'"
+            endStr = f"'{dateNow}','start of year','-1 year','-1 day'"
+            self.gasY2 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("Y2 gas : %s m3",self.gasY2)
+            
+            ## Calculate M0Y0 gas
+            startStr = f"'{dateNow}','start of month','-1 day'"
+            endStr = f"'{dateNow}'"
+            self.gasM0Y0 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("M0Y0 gas : %s m3",self.gasM0Y0)
+            
+            ## Calculate M1Y0 gas
+            startStr = f"'{dateNow}','start of month','-1 month','-1 day'"
+            endStr = f"'{dateNow}','start of month','-1 day'"
+            self.gasM1Y0 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("M1Y0 gas : %s m3",self.gasM1Y0)
+            
+            ## Calculate M0Y1 gas
+            startStr = f"'{dateNow}','start of month','-1 year','-1 day'"
+            endStr = f"'{dateNow}','start of month','-11 months','-1 day'"
+            self.gasM0Y1 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("M0Y1 gas : %s m3",self.gasM0Y1)
+            
+            ## Calculate W0Y0 gas
+            startStr = f"'{weekNowFirstDate}','-1 day'"
+            endStr = f"'{dateNow}'"
+            self.gasW0Y0 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("W0Y0 gas : %s m3",self.gasW0Y0)
+            
+            ## Calculate W1Y0 gas
+            startStr = f"'{weekNowFirstDate}','-8 days'"
+            endStr = f"'{weekNowFirstDate}','-1 day'"
+            self.gasW1Y0 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("W1Y0 gas : %s m3",self.gasW1Y0)
+            
+            ## Calculate W0Y1 gas
+            startStr = f"'{weekNowFirstDate}','-1 year','-1 day'"
+            endStr = f"'{weekNowFirstDate}','-1 year','+7 days'"
+            self.gasW0Y1 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("W0Y1 gas : %s m3",self.gasW0Y1)
+            
+            ## Calculate D1 gas
+            startStr = f"'{dateNow}','-2 day'"
+            endStr = f"'{dateNow}','-1 day'"
+            self.gasD1 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("D-1 gas : %s m3",self.gasD1)
+            
+            ## Calculate D2 gas
+            startStr = f"'{dateNow}','-3 day'"
+            endStr = f"'{dateNow}','-2 day'"
+            self.gasD2 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("D-2 gas : %s m3",self.gasD2)
+            
+            ## Calculate D3 gas
+            startStr = f"'{dateNow}','-4 day'"
+            endStr = f"'{dateNow}','-3 day'"
+            self.gasD3 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("D-3 gas : %s m3",self.gasD3)
+            
+            ## Calculate D4 gas
+            startStr = f"'{dateNow}','-5 day'"
+            endStr = f"'{dateNow}','-4 day'"
+            self.gasD4 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("D-4 gas : %s m3",self.gasD4)
+            
+            ## Calculate D5 gas
+            startStr = f"'{dateNow}','-6 day'"
+            endStr = f"'{dateNow}','-5 day'"
+            self.gasD5 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("D-5 gas : %s m3",self.gasD5)
+            
+            ## Calculate D6 gas
+            startStr = f"'{dateNow}','-7 day'"
+            endStr = f"'{dateNow}','-6 day'"
+            self.gasD6 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("D-6 gas : %s m3",self.gasD6)
+            
+            ## Calculate D7 gas
+            startStr = f"'{dateNow}','-8 day'"
+            endStr = f"'{dateNow}','-7 day'"
+            self.gasD7 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("D-7 gas : %s m3",self.gasD7)
+            
+            
+            # Rolling measures
+            
+            ## Calculate R1Y
+            startStr = f"'{dateNow}','-1 year'"
+            endStr = f"'{dateNow}','-1 day'"
+            self.gasR1Y = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("R1Y gas : %s m3",self.gasR1Y)
+            
+            ## Calculate R2Y1Y
+            startStr = f"'{dateNow}','-2 year'"
+            endStr = f"'{dateNow}','-1 year','-1 day'"
+            self.gasR2Y1Y = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("R2Y1Y gas : %s m3",self.gasR2Y1Y)
+            
+            ## Calculate R1M
+            startStr = f"'{dateNow}','-1 month'"
+            endStr = f"'{dateNow}','-1 day'"
+            self.gasR1M = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("R1M gas : %s m3",self.gasR1M)
+            
+            ## Calculate R2M1M
+            startStr = f"'{dateNow}','-2 month'"
+            endStr = f"'{dateNow}','-1 month','-1 day'"
+            self.gasR2M1M = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("R2M1M gas : %s m3",self.gasR2M1M)
+            
+            ## Calculate R1MY1
+            startStr = f"'{dateNow}','-1 month','-1 year'"
+            endStr = f"'{dateNow}','-1 year','-1 day'"
+            self.gasR1MY1 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("R1MY1 gas : %s m3",self.gasR1MY1)
+            
+            ## Calculate R1MY2
+            startStr = f"'{dateNow}','-1 month','-2 year'"
+            endStr = f"'{dateNow}','-2 year','-1 day'"
+            self.gasR1MY2 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("R1MY2 gas : %s m3",self.gasR1MY2)
+            
+            ## Calculate R1W
+            startStr = f"'{dateNow}','-7 days'"
+            endStr = f"'{dateNow}','-1 day'"
+            self.gasR1W = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("R1W gas : %s m3",self.gasR1W)
+            
+            ## Calculate R2W1W
+            startStr = f"'{dateNow}','-14 days'"
+            endStr = f"'{dateNow}','-7 days','-1 day'"
+            self.gasR2W1W = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("R2W1W gas : %s m3",self.gasR2W1W)
+            
+            ## Calculate R1WY1
+            startStr = f"'{dateNow}','-7 days','-1 year'"
+            endStr = f"'{dateNow}','-1 year','-1 day'"
+            self.gasR1WY1 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("R1WY1 gas : %s m3",self.gasR1WY1)
+            
+            ## Calculate R1WY2
+            startStr = f"'{dateNow}','-7 days','-2 year'"
+            endStr = f"'{dateNow}','-2 year','-1 day'"
+            self.gasR1WY2 = self._getDeltaDailyCons(db,startStr,endStr)
+            logging.debug("R1WY2 gas : %s m3",self.gasR1WY2)
+            
+    
+    # Return the index difference between 2 measures 
+    def _getDeltaDailyCons(self,db,startStr,endStr):
         
+        logging.debug("Retrieve delta conso between %s and %s",startStr,endStr)
         
+        # We need to have at least 2 records to measure a delta index
+        query = f"SELECT CASE WHEN COUNT(ALL) > 1 THEN max(end_index) - min(end_index) ELSE NULL END FROM consumption_daily WHERE pce = '{self.pceId}' AND date BETWEEN date({startStr}) AND date({endStr}) GROUP BY pce"
+        db.cur.execute(query)
+        queryResult = db.cur.fetchone()
+        if queryResult is not None:
+            if queryResult[0] is not None:
+                valueResult = int(queryResult[0])
+                if valueResult >= 0:
+                    return valueResult
+                else:
+                    logging.debug("Delta conso value is not valid : %s",valueResult)
+                    return None
+            else:
+                logging.debug("Delta conso could not be calculated because only 1 record has been found.")
+                return None
+        else:
+            logging.debug("Delta conso could not be calculated")
+            return None
         
+ 
         
 #######################################################################
 #### Class Daily Measure
@@ -297,18 +580,59 @@ class Pce:
 class DailyMeasure:
     
     # Constructor
-    def __init__(self, measure):
+    def __init__(self, pce, measure):
         
-        self.startDateTime = _convertDateTime(measure["dateDebutReleve"])
-        self.endDateTime = _convertDateTime(measure["dateFinReleve"])
-        self.gasDate = _convertDate(measure["journeeGaziere"])
-        self.startIndex = measure["indexDebut"]
-        self.endIndex = measure["indexFin"]
-        self.volume = measure["volumeBrutConsomme"]
-        self.energy = measure["energieConsomme"]
-        self.temperature = measure["temperature"]
+        # Init attributes
+        self.startDateTime = None
+        self.endDateTime = None
+        self.gasDate = None
+        self.startIndex = None
+        self.endIndex = None
+        self.volume = None
+        self.volumeInitial = None
+        self.energy = None
+        self.temperature = None
+        self.conversionFactor = None
+        self.pce = None
+        self.isDeltaIndex = False
+
+        # Set attributes
+        if measure["dateDebutReleve"]: self.dateDebutReleve = _convertDateTime(measure["dateDebutReleve"])
+        if measure["dateFinReleve"]: self.endDateTime = _convertDateTime(measure["dateFinReleve"])
+        if measure["journeeGaziere"]: self.gasDate = _convertDate(measure["journeeGaziere"])
+        if measure["indexDebut"]: self.startIndex = int(measure["indexDebut"])
+        if measure["indexFin"]: self.endIndex = int(measure["indexFin"])
+        if measure["volumeBrutConsomme"]: 
+            self.volume = int(measure["volumeBrutConsomme"])
+            self.volumeInitial = self.volume
+        if measure["energieConsomme"]: self.energy = int(measure["energieConsomme"])
+        if measure["temperature"]: self.temperature = float(measure["temperature"])
+        if measure["coeffConversion"]: self.conversionFactor = float(measure["coeffConversion"])
+        self.pce = pce
+        
+        # Fix volume and energy provided when required
+        # When provided volume is not equal to delta index, we replace it by delta index
+        # and we recalculate energy using delta index and conversion factor
+        if self.isOk():
+            deltaIndex = self.endIndex - self.startIndex
+            if deltaIndex != self.volume:
+                logging.debug("Gas consumption (%s m3) of measure %s has been replaced by the delta index (%s m3)",self.volume,self.gasDate,deltaIndex)
+                self.volume = deltaIndex
+                self.isDeltaIndex = True
+                if self.conversionFactor:
+                    self.energy = round(self.volume * self.conversionFactor)
         
         
+        
+    # Store measure to database
+    def store(self,db):
+        
+        if self.isOk():
+            logging.debug("Store measure %s, %s, %s m3, %s kWh, %s kwh/m3",str(self.gasDate),str(self.endIndex), str(self.volume), str(self.energy), str(self.conversionFactor))
+            measure_query = f"INSERT OR REPLACE INTO consumption_daily VALUES (?, ?, ?, ?, ?, ?)"
+            db.cur.execute(measure_query, [self.pce.pceId, self.gasDate, self.endIndex, self.volume, self.energy, self.conversionFactor])
+        
+    
     # Return measure measure quality status
     def isOk(self):
         
@@ -317,5 +641,6 @@ class DailyMeasure:
         elif self.startIndex == None: return False
         elif self.endIndex == None: return False
         else: return True
+        
         
         
