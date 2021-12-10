@@ -580,6 +580,7 @@ class DailyMeasure:
         self.startIndex = None
         self.endIndex = None
         self.volume = None
+        self.volumeInitial = None
         self.energy = None
         self.temperature = None
         self.conversionFactor = None
@@ -592,7 +593,9 @@ class DailyMeasure:
         if measure["journeeGaziere"]: self.gasDate = _convertDate(measure["journeeGaziere"])
         if measure["indexDebut"]: self.startIndex = int(measure["indexDebut"])
         if measure["indexFin"]: self.endIndex = int(measure["indexFin"])
-        if measure["volumeBrutConsomme"]: self.volume = int(measure["volumeBrutConsomme"])
+        if measure["volumeBrutConsomme"]: 
+            self.volume = int(measure["volumeBrutConsomme"])
+            self.volumeInitial = self.volume
         if measure["energieConsomme"]: self.energy = int(measure["energieConsomme"])
         if measure["temperature"]: self.temperature = float(measure["temperature"])
         if measure["coeffConversion"]: self.conversionFactor = float(measure["coeffConversion"])
