@@ -308,6 +308,7 @@ class Pce:
         # Set attributes
         self.alias = pce["alias"]
         self.pceId = pce["pce"]
+        print(pce["dateActivation"])
         self.activationDate = _convertDate(pce["dateActivation"])
         self.freqenceReleve = pce["frequenceReleve"]
         self.state = pce["etat"]
