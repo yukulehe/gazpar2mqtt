@@ -211,6 +211,8 @@ def run(myParams):
                     
                     # Get data
                     myGrdf.getPceDailyMeasures(myPce,startDate,endDate)
+                    
+                    # Analyse data
                     logging.info("Analysis of measures provided by GRDF...")
                     measureCount = myPce.countDailyMeasure()
                     measureOkCount = myPce.countDailyMeasureOk()
@@ -219,13 +221,16 @@ def run(myParams):
                     logging.info("%s measures are ok",measureOkCount)
                     logging.info("Accuracy is %s percent",accuracy)
                     
+                    # Store to database
                     if myPce.dailyMeasureList:
+                        logging.info("Update of database...")
                         for myMeasure in myPce.dailyMeasureList:
                             # Store measure into database
                             myMeasure.store(myDb)
                         
                         # Commmit database
                         myDb.commit()
+                        logging.info("Database updated !")
                         
                         # Get last measure info
                         myMeasure = myPce.getLastMeasureOk()
