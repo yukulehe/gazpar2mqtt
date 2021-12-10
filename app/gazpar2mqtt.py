@@ -190,8 +190,6 @@ def run(myParams):
                     myPce.store(myDb)
                     myDb.commit()
                     
-                    # Get the latest slot
-                    # TO BE COMPLETED IF REQUIRED
 
                     # Set date range
                     startDate = _getYearOfssetDate(datetime.date.today(), 3)
@@ -199,6 +197,7 @@ def run(myParams):
 
                     # Get measures of the PCE
                     logging.info("Get measures of PCE %s alias %s",myPce.pceId,myPce.alias)
+                    logging.info("---------------------------------")
                     logging.info("Range period : from %s to %s...",startDate,endDate)
                     myGrdf.getPceDailyMeasures(myPce,startDate,endDate)
                     logging.info("%s measures retrieved, %s seems ok !",myPce.countDailyMeasure(), myPce.countDailyMeasureOk() )
