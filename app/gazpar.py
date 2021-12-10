@@ -576,12 +576,12 @@ class DailyMeasure:
         self.startDateTime = _convertDateTime(measure["dateDebutReleve"])
         self.endDateTime = _convertDateTime(measure["dateFinReleve"])
         self.gasDate = _convertDate(measure["journeeGaziere"])
-        self.startIndex = measure["indexDebut"]
-        self.endIndex = measure["indexFin"]
-        self.volume = measure["volumeBrutConsomme"]
-        self.energy = measure["energieConsomme"]
-        self.temperature = measure["temperature"]
-        self.conversionFactor = measure["coeffConversion"]
+        self.startIndex = int(measure["indexDebut"])
+        self.endIndex = int(measure["indexFin"])
+        self.volume = int(measure["volumeBrutConsomme"])
+        self.energy = int(measure["energieConsomme"])
+        self.temperature = float(measure["temperature"])
+        self.conversionFactor = float(measure["coeffConversion"])
         self.pce = pce
         
         
