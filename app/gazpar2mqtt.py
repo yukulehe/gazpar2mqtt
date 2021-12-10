@@ -192,7 +192,12 @@ def run(myParams):
                     
 
                     # Set date range
-                    startDate = _getYearOfssetDate(datetime.date.today(), 3)
+                    if myPce.activationDate:
+                        # We take the activation date
+                        startDate = myPce.activationDate
+                    else:
+                        # Default start date : 3 years ago
+                        startDate = _getYearOfssetDate(datetime.date.today(), 3)
                     endDate = datetime.date.today()
 
                     # Get measures of the PCE
