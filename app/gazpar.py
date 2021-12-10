@@ -586,15 +586,15 @@ class DailyMeasure:
         self.pce = None
 
         # Set attributes
-        if measure["dateDebutReleve"] != "null": self.dateDebutReleve = _convertDateTime(measure["dateDebutReleve"])
-        if measure["dateFinReleve"] != "null": self.endDateTime = _convertDateTime(measure["dateFinReleve"])
-        if measure["journeeGaziere"] != "null": self.gasDate = _convertDate(measure["journeeGaziere"])
-        if measure["indexDebut"] != "null": self.startIndex = int(measure["indexDebut"])
-        if measure["indexFin"] != "null": self.endIndex = int(measure["indexFin"])
-        if measure["volumeBrutConsomme"] != "null": self.volume = int(measure["volumeBrutConsomme"])
-        if measure["energieConsomme"] != "null": self.energy = int(measure["energieConsomme"])
-        if measure["temperature"] != "null": self.temperature = float(measure["temperature"])
-        if measure["coeffConversion"] != "null": self.conversionFactor = float(measure["coeffConversion"])
+        if measure["dateDebutReleve"]: self.dateDebutReleve = _convertDateTime(measure["dateDebutReleve"])
+        if measure["dateFinReleve"]: self.endDateTime = _convertDateTime(measure["dateFinReleve"])
+        if measure["journeeGaziere"]: self.gasDate = _convertDate(measure["journeeGaziere"])
+        if measure["indexDebut"]: self.startIndex = int(measure["indexDebut"])
+        if measure["indexFin"]: self.endIndex = int(measure["indexFin"])
+        if measure["volumeBrutConsomme"]: self.volume = int(measure["volumeBrutConsomme"])
+        if measure["energieConsomme"]: self.energy = int(measure["energieConsomme"])
+        if measure["temperature"]: self.temperature = float(measure["temperature"])
+        if measure["coeffConversion"]: self.conversionFactor = float(measure["coeffConversion"])
         self.pce = pce
         
         # Check values and fix it when required
