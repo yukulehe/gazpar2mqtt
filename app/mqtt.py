@@ -68,9 +68,9 @@ class Mqtt:
         self.client.connect(self.host,self.port, 60)
         logging.debug("Wait for conexion callback")
         if self.isSsl:
-            time.sleep(7)
+            time.sleep(15)
         else:
-            time.sleep(4)
+            time.sleep(10)
 
         # Start loop
         self.client.loop_start()
