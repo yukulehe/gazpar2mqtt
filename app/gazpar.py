@@ -597,7 +597,16 @@ class DailyMeasure:
         if measure["coeffConversion"]: self.conversionFactor = float(measure["coeffConversion"])
         self.pce = pce
         
-        # Check values and fix it when required
+        # Fix volume and energy provided when required
+        # When provided volume is not equal to delta index, we replace it by delta index
+        # and we recalculate energy using delta index and conversion factor
+        if self.isOk():
+            deltaIndex = self.endIndex - self.startIndex
+            if deltaIndex != self.volume:
+                logging.debug("Gas consumption (%s m3) of measure %s has been replaced by the delta index (%s m3)",self.volume,self.gasDate,deltaIndex)
+                self.volume = deltaIndex
+                if self.conversionFactor:
+                    self.energy = self.volume * self.conversionFactor
         
         
         
@@ -618,5 +627,6 @@ class DailyMeasure:
         elif self.startIndex == None: return False
         elif self.endIndex == None: return False
         else: return True
+        
         
         
