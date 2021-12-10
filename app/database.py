@@ -105,17 +105,20 @@ class Database:
     else:
       return None
     
-  # Get count of measures
+  # Get measures statistics
   def getMeasuresCount(self):
-    query = f"SELECT count(date) FROM consumption_daily"
+    valueResult = []
+    query = f"SELECT count(date), min(date), max(date) FROM consumption_daily"
     self.cur.execute(query)
     queryResult = self.cur.fetchone()
     if queryResult is not None:
             if queryResult[0] is not None:
-                valueResult = int(queryResult[0])
-                if valueResult >= 0:
-                    return valueResult
-    
+                valueResult["count"] = int(queryResult[0])
+                valueResult["minDate"] = queryResult[1]
+                valueResult["maxDate"] = queryResult[2]
+                return valueResult
+  
+
     
   # Re-initialize the database
   def reInit(self):
