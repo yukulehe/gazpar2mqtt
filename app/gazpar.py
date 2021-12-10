@@ -584,6 +584,7 @@ class DailyMeasure:
         self.temperature = None
         self.conversionFactor = None
         self.pce = None
+        self.isDeltaIndex = False
 
         # Set attributes
         if measure["dateDebutReleve"]: self.dateDebutReleve = _convertDateTime(measure["dateDebutReleve"])
@@ -605,6 +606,7 @@ class DailyMeasure:
             if deltaIndex != self.volume:
                 logging.debug("Gas consumption (%s m3) of measure %s has been replaced by the delta index (%s m3)",self.volume,self.gasDate,deltaIndex)
                 self.volume = deltaIndex
+                self.isDeltaIndex = True
                 if self.conversionFactor:
                     self.energy = self.volume * self.conversionFactor
         
