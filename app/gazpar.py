@@ -573,16 +573,32 @@ class DailyMeasure:
     # Constructor
     def __init__(self, pce, measure):
         
-        self.startDateTime = _convertDateTime(measure["dateDebutReleve"])
-        self.endDateTime = _convertDateTime(measure["dateFinReleve"])
-        self.gasDate = _convertDate(measure["journeeGaziere"])
-        self.startIndex = int(measure["indexDebut"])
-        self.endIndex = int(measure["indexFin"])
-        self.volume = int(measure["volumeBrutConsomme"])
-        self.energy = int(measure["energieConsomme"])
-        self.temperature = float(measure["temperature"])
-        self.conversionFactor = float(measure["coeffConversion"])
+        # Init attributes
+        self.startDateTime = None
+        self.endDateTime = None
+        self.gasDate = None
+        self.startIndex = None
+        self.endIndex = None
+        self.volume = None
+        self.energy = None
+        self.temperature = None
+        self.conversionFactor = None
+        self.pce = None
+
+        # Set attributes
+        dateFinReleveself.dateDebutReleve = _convertDateTime(measure["dateDebutReleve"])
+        if measure["dateFinReleve"] != "null": self.endDateTime = _convertDateTime(measure["dateFinReleve"])
+        if measure["journeeGaziere"] != "null": self.gasDate = _convertDate(measure["journeeGaziere"])
+        if measure["indexDebut"] != "null": self.startIndex = int(measure["indexDebut"])
+        if measure["indexFin"] != "null": self.endIndex = int(measure["indexFin"])
+        if measure["volumeBrutConsomme"] != "null": self.volume = int(measure["volumeBrutConsomme"])
+        if measure["energieConsomme"] != "null": self.energy = int(measure["energieConsomme"])
+        if measure["temperature"] != "null": self.temperature = float(measure["temperature"])
+        if measure["coeffConversion"] != "null": self.conversionFactor = float(measure["coeffConversion"])
         self.pce = pce
+        
+        # Check values and fix it when required
+        
         
         
     # Store measure to database
