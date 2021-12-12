@@ -202,18 +202,17 @@ def run(myParams):
                     logging.info("---------------------------------")
 
                     # Set date range
-                    #minDateTime = _getYearOfssetDate(datetime.date.today(), 3) # GRDF min date is 3 years ago
                     minDateTime = _getYearOfssetDate(datetime.datetime.now(), 3) # GRDF min date is 3 years ago
-                    logging.info("Min date time : %s",minDateTime.date())
+                    logging.info("PCE activation date : %s",startDate)
+                    endDate = datetime.date.today()
                     if myPce.activationDate and myPce.activationDate > minDateTime :
                         # We take the activation date
                         startDate = myPce.activationDate.date()
-                        logging.info("PCE activation date : %s",startDate)
+                        logging.info("Range period : from %s (activation date) to %s...",startDate,endDate)
                     else:
                         # Default start date : 3 years ago
                         startDate = minDate.date()
-                    endDate = datetime.date.today()
-                    logging.info("Range period : from %s to %s...",startDate,endDate)
+                        logging.info("Range period : from %s (3 years ago) to %s...",startDate,endDate)
                     
                     # Get data
                     myGrdf.getPceDailyMeasures(myPce,startDate,endDate)
