@@ -22,7 +22,8 @@ import database
 
 
 # gazpar2mqtt constants
-G2M_VERSION = '0.6.0'
+G2M_VERSION = '0.6.1'
+G2M_DB_VERSION = '0.6.0'
 
 
 #######################################################################
@@ -70,7 +71,7 @@ def run(myParams):
     
     # Create/Update database
     logging.info("Check local database/cache")
-    myDb = database.Database(G2M_VERSION)
+    myDb = database.Database(G2M_DB_VERSION)
     
     
     # Connect to database
@@ -89,11 +90,11 @@ def run(myParams):
     logging.info("Checking database version...")
     dbVersion = myDb.getG2MVersion()
     if dbVersion is not None:
-        if dbVersion == G2M_VERSION:
-            logging.info("Program and database are both at version %s.",G2M_VERSION)
+        if dbVersion == G2M_DB_VERSION:
+            logging.info("Database is already up to date : version %s.",G2M_DB_VERSION)
         else:
-            logging.warning("Program (%s) and database (%s) are not at the same version.",G2M_VERSION,dbVersion)
-            logging.info("Reinitialization of the database...")
+            logging.warning("Database (%s) is not up to date.",dbVersion)
+            logging.info("Reinitialization of the database to version %s...",G2M_DB_VERSION)
             myDb.reInit()
             dbVersion = myDb.getG2MVersion()
             logging.info("Database reinitialized in version %s !",dbVersion)
@@ -201,15 +202,17 @@ def run(myParams):
                     logging.info("---------------------------------")
 
                     # Set date range
-                    if myPce.activationDate:
+                    minDateTime = _getYearOfssetDate(datetime.datetime.now(), 3) # GRDF min date is 3 years ago
+                    endDate = datetime.date.today()
+                    logging.info("PCE activation date : %s",myPce.activationDate.date())
+                    if myPce.activationDate and myPce.activationDate > minDateTime :
                         # We take the activation date
                         startDate = myPce.activationDate.date()
-                        logging.info("PCE activation date : %s",startDate)
+                        logging.info("Range period : from %s (activation date) to %s...",startDate,endDate)
                     else:
                         # Default start date : 3 years ago
-                        startDate = _getYearOfssetDate(datetime.date.today(), 3)
-                    endDate = datetime.date.today()
-                    logging.info("Range period : from %s to %s...",startDate,endDate)
+                        startDate = minDate.date()
+                        logging.info("Range period : from %s (3 years ago) to %s...",startDate,endDate)
                     
                     # Get data
                     myGrdf.getPceDailyMeasures(myPce,startDate,endDate)
@@ -556,7 +559,8 @@ if __name__ == "__main__":
     logging.info("-----------------------------------------------------------")
     logging.info("#               Welcome to gazpar2mqtt                    #")
     logging.info("-----------------------------------------------------------")
-    logging.info("Version " + G2M_VERSION)
+    logging.info("Program version " + G2M_VERSION)
+    logging.info("Database version " + G2M_DB_VERSION)
     logging.info("Please note that the the tool is still under development, various functions may disappear or be modified.")
     logging.debug("If you can read this line, you are in DEBUG mode.")
     
