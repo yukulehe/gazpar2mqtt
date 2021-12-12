@@ -22,7 +22,7 @@ import database
 
 
 # gazpar2mqtt constants
-G2M_VERSION = '0.6.0'
+G2M_VERSION = '0.6.1'
 
 
 #######################################################################
@@ -201,13 +201,14 @@ def run(myParams):
                     logging.info("---------------------------------")
 
                     # Set date range
-                    if myPce.activationDate:
+                    minDate = _getYearOfssetDate(datetime.date.today(), 3) # GRDF min date is 3 years ago
+                    if myPce.activationDate and myPce.activationDate > minDate :
                         # We take the activation date
                         startDate = myPce.activationDate.date()
                         logging.info("PCE activation date : %s",startDate)
                     else:
                         # Default start date : 3 years ago
-                        startDate = _getYearOfssetDate(datetime.date.today(), 3)
+                        startDate = minDate
                     endDate = datetime.date.today()
                     logging.info("Range period : from %s to %s...",startDate,endDate)
                     
