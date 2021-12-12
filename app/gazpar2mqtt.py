@@ -23,6 +23,7 @@ import database
 
 # gazpar2mqtt constants
 G2M_VERSION = '0.6.1'
+G2M_DB_VERSION = '0.6.0'
 
 
 #######################################################################
@@ -70,7 +71,7 @@ def run(myParams):
     
     # Create/Update database
     logging.info("Check local database/cache")
-    myDb = database.Database(G2M_VERSION)
+    myDb = database.Database(G2M_DB_VERSION)
     
     
     # Connect to database
@@ -89,11 +90,11 @@ def run(myParams):
     logging.info("Checking database version...")
     dbVersion = myDb.getG2MVersion()
     if dbVersion is not None:
-        if dbVersion == G2M_VERSION:
-            logging.info("Program and database are both at version %s.",G2M_VERSION)
+        if dbVersion == G2M_DB_VERSION:
+            logging.info("Database is already up to date : version %s.",G2M_DB_VERSION)
         else:
-            logging.warning("Program (%s) and database (%s) are not at the same version.",G2M_VERSION,dbVersion)
-            logging.info("Reinitialization of the database...")
+            logging.warning("Database (%s) is not up to date.",dbVersion)
+            logging.info("Reinitialization of the database to version %s...",G2M_DB_VERSION)
             myDb.reInit()
             dbVersion = myDb.getG2MVersion()
             logging.info("Database reinitialized in version %s !",dbVersion)
