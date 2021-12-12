@@ -559,7 +559,8 @@ if __name__ == "__main__":
     logging.info("-----------------------------------------------------------")
     logging.info("#               Welcome to gazpar2mqtt                    #")
     logging.info("-----------------------------------------------------------")
-    logging.info("Version " + G2M_VERSION)
+    logging.info("Program version " + G2M_VERSION)
+    logging.info("Database version " + G2M_DB_VERSION)
     logging.info("Please note that the the tool is still under development, various functions may disappear or be modified.")
     logging.debug("If you can read this line, you are in DEBUG mode.")
     
