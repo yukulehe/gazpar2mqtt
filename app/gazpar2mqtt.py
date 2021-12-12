@@ -203,8 +203,8 @@ def run(myParams):
 
                     # Set date range
                     minDateTime = _getYearOfssetDate(datetime.datetime.now(), 3) # GRDF min date is 3 years ago
-                    logging.info("PCE activation date : %s",startDate)
                     endDate = datetime.date.today()
+                    logging.info("PCE activation date : %s",myPce.activationDate.date())
                     if myPce.activationDate and myPce.activationDate > minDateTime :
                         # We take the activation date
                         startDate = myPce.activationDate.date()
