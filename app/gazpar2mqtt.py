@@ -211,7 +211,7 @@ def run(myParams):
                         logging.info("Range period : from %s (activation date) to %s...",startDate,endDate)
                     else:
                         # Default start date : 3 years ago
-                        startDate = minDate.date()
+                        startDate = minDateTime.date()
                         logging.info("Range period : from %s (3 years ago) to %s...",startDate,endDate)
                     
                     # Get data
