@@ -22,7 +22,7 @@ import database
 
 
 # gazpar2mqtt constants
-G2M_VERSION = '0.6.2'
+G2M_VERSION = '0.6.3'
 G2M_DB_VERSION = '0.6.0'
 
 
