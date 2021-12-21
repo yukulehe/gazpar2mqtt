@@ -75,10 +75,15 @@ class Grdf:
     # Login
     def login(self,username,password):
         
+        logging.debug("Connexion to GRDF")
+        
         # Get cookie
         req = self.session.get('https://monespace.grdf.fr/client/particulier/accueil')
         
+        logging.debug("Connexion returned: %s",req.text)
+        
         if not 'auth_nonce' in self.session.cookies:
+            logging.error("Cookies error : %s",self.session.cookies)
             raise GazparLoginException("Cannot get auth_nonce.")
         else:
             logging.debug("Cookies ok")
