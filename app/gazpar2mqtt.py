@@ -195,7 +195,7 @@ def run(myParams):
                 myGrdf.isConnected = False
                 logging.info("Unable to get any PCE !")
 
-            # Get measures for each PCE
+            # Loop on PCE
             if myGrdf.pceList:
                 for myPce in myGrdf.pceList:
                     
@@ -213,7 +213,7 @@ def run(myParams):
                     endDate = datetime.date.today()
                     logging.info("Range period : from %s (3 years ago) to %s (today) ...",startDate,endDate)
                     
-                    # Get data
+                    # Get measures
                     myGrdf.getPceDailyMeasures(myPce,startDate,endDate)
                     
                     # Analyse data
@@ -251,6 +251,20 @@ def run(myParams):
                             
                     else:
                         logging.info("Unable to get any measure for PCE !",myPce.pceId)
+                        
+                    
+                    
+                    # Get thresold
+                    try:
+                        logging.info("Get PCE's thresolds from GRDF...")
+                        myGrdf.getPceThresold(myPce)
+                        thresoldCount = myPce.countThresold()
+                        logging.info("%s thresolds found !",thresoldCount)
+                        
+                    
+                    except:
+                        logging.error("Error to get PCE's thresolds")
+                        
                         
                     
             else:
