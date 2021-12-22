@@ -99,8 +99,9 @@ class Grdf:
         }
         
         # Login
-        logging.debug("Logging ...")
         try:
+            logging.debug("Logging ...")
+            logging.debug("Logging payload : %s",payload)
             req = self.session.post('https://login.monespace.grdf.fr/sofit-account-api/api/v1/auth', data=payload, allow_redirects=False)
         except Exception as e:
             logging.error("Error while authenticating to https://login.monespace.grdf2.fr/sofit-account-api/api/v1/auth:")
