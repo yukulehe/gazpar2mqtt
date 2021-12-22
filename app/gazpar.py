@@ -260,7 +260,7 @@ class Grdf:
             pce.addDailyMeasure(myDailyMeasure)
             
     # Get thresold
-    def getThresold(self,pce):
+    def getPceThresold(self,pce):
         
         req = self.session.get('https://monespace.grdf.fr/api/e-conso/pce/'+ pce.pceId + '/seuils?frequence=Mensuel')
         thresoldList = json.loads(req.text)
@@ -316,7 +316,7 @@ class Pce:
         self.postalCode = None
         self.alias = None
         self.dailyMeasureList = []
-        self.dailyThresoldList = []
+        self.thresoldList = []
         self.dailyMeasureStart = None
         self.dailyMeasureEnd = None
         
@@ -346,11 +346,15 @@ class Pce:
         
     # Add a thresold to the PCE    
     def addThresold(self, thresold):
-        self.dailyThresoldList.append(thresold)
+        self.thresoldList.append(thresold)
         
     # Return the number of measure for the PCE
     def countDailyMeasure(self):
         return len(self.dailyMeasureList)
+    
+    # Return the number of thresold for the PCE
+    def countThresold(self):
+        return len(self.thresoldList)
     
     # Return the number of valid measure for the PCE
     def countDailyMeasureOk(self):
