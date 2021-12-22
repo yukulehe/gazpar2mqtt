@@ -75,15 +75,10 @@ class Grdf:
     # Login
     def login(self,username,password):
         
-        logging.debug("Connexion to GRDF")
-        
         # Get cookie
         req = self.session.get('https://monespace.grdf.fr/client/particulier/accueil')
         
-        logging.debug("Connexion returned: %s",req.text)
-        
         if not 'auth_nonce' in self.session.cookies:
-            logging.error("Cookies error : %s",self.session.cookies)
             raise GazparLoginException("Cannot get auth_nonce.")
         else:
             logging.debug("Cookies ok")
@@ -264,6 +259,19 @@ class Grdf:
             # Append measure to the PCE's measure list
             pce.addDailyMeasure(myDailyMeasure)
             
+    # Get thresold
+    def getThresold(self,pce):
+        
+        req = self.session.get('https://monespace.grdf.fr/api/e-conso/pce/'+ pce.pceId + '/seuils?frequence=Mensuel')
+        thresoldList = json.loads(req.text)
+        
+        for thresold in thresoldList["seuils"]:
+            
+            # Create the thresold
+            myThresold = Thresold(pce,thresold)
+            
+            # Append thresold to the PCE's thresold list
+            pce.addThresold(myThresold)
             
 
 #######################################################################
@@ -308,6 +316,7 @@ class Pce:
         self.postalCode = None
         self.alias = None
         self.dailyMeasureList = []
+        self.dailyThresoldList = []
         self.dailyMeasureStart = None
         self.dailyMeasureEnd = None
         
@@ -334,6 +343,10 @@ class Pce:
     # Add a measure to the PCE    
     def addDailyMeasure(self, measure):
         self.dailyMeasureList.append(measure)
+        
+    # Add a thresold to the PCE    
+    def addThresold(self, thresold):
+        self.dailyThresoldList.append(thresold)
         
     # Return the number of measure for the PCE
     def countDailyMeasure(self):
@@ -649,4 +662,29 @@ class DailyMeasure:
         else: return True
         
         
+#######################################################################
+#### Class Daily Measure
+#######################################################################   
+class Thresold:
+    
+    # Constructor
+    def __init__(self, pce, thresold):
+        
+        # Init attributes
+        self.year = None
+        self.month = None
+        self.volume = None
+        
+        # Set attributes
+        if thresold["valeur"]: self.volume = int(thresold["valeur"])
+        if thresold["annee"]: self.year = int(thresold["annee"])
+        if thresold["mois"]: self.year = int(thresold["mois"])
+        self.pce = pce
+        
+    # Store thresold to database
+    def store(self,db):
+        
+        logging.debug("Store measure %s, %s, %s m3",str(self.year),str(self.month), str(self.volume))
+            measure_query = f"INSERT OR REPLACE INTO thresold VALUES (?, ?, ?)"
+            db.cur.execute(measure_query, [self.pce.pceId, self.year, self.month, self.volume])
         
