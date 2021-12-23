@@ -195,7 +195,13 @@ Calculated rolling measures :
 | gazpar/PCE/histo/rolling_week_last_year_gas | Gas consumption in m3 for 1 rolling week, 1 year ago |
 | gazpar/PCE/histo/rolling_week_last_2_year_gas | Gas consumption in m3 for 1 rolling week, 2 years ago |
 
+Calculated thresold measures :
 
+| Topic | Description |
+| --- | --- |
+| gazpar/PCE/thresold/previous_month_thresold | Thresold in kWh of previous month |
+| gazpar/PCE/thresold/previous_month_thresold_percentage | Percentage of energy consumption and thresold of previous month |
+| gazpar/PCE/thresold/previous_month_thresold_problem | Warning when energy consumption is higher than 80% of the thresold of previous month |
 
 ### Status :
 
@@ -269,6 +275,13 @@ Rolling measure entities :
 | gazpar_PCE_rolling_week_last_year_gas | Sensor | Gas | Gas consumption in m3 for 1 rolling week, 1 year ago |
 | gazpar_PCE_rolling_week_last_2_year_gas | Sensor | Gas | Gas consumption in m3 for 1 rolling week, 2 years ago |
 
+Calculated thresold measures :
+
+| Entity name | Component | Device class | Description |
+| --- | --- | --- | --- |
+| gazpar_PCE_previous_month_thresold | Sensor | Energy | Thresold in kWh of previous month |
+| gazpar_PCE_previous_month_thresold | Sensor | None | Percentage of energy consumption and thresold of previous month  |
+| gazpar_PCE_previous_month_thresold | Binary sensor | Problem | Warning when energy consumption is higher than 80% of the thresold of previous month  |
 
 
 ### Add-on
