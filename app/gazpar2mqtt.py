@@ -22,8 +22,8 @@ import database
 
 
 # gazpar2mqtt constants
-G2M_VERSION = '0.6.2'
-G2M_DB_VERSION = '0.6.0'
+G2M_VERSION = '0.6.3'
+G2M_DB_VERSION = '0.6.3'
 
 
 #######################################################################
@@ -174,6 +174,7 @@ def run(myParams):
         # When GRDF is connected
         if myGrdf.isConnected:
 
+            # Sub-step 3A : Get account info
             try:
             
                 # Get account informations and store it to db
@@ -186,7 +187,7 @@ def run(myParams):
                 logging.warning("Unable to get account information from GRDF website.")
                 
             
-            # Get list of PCE
+            # Sub-step 3B : Get list of PCE
             logging.info("Retrieve list of PCEs...")
             try:
                 myGrdf.getPceList()
@@ -195,13 +196,16 @@ def run(myParams):
                 myGrdf.isConnected = False
                 logging.info("Unable to get any PCE !")
 
-            # Get measures for each PCE
+            # Loop on PCE
             if myGrdf.pceList:
                 for myPce in myGrdf.pceList:
                     
                     # Store PCE in database
                     myPce.store(myDb)
                     myDb.commit()
+                    
+                    
+                    # Sub-step 3C : Get measures of the PCE
                     
                     # Get measures of the PCE
                     logging.info("Get measures of PCE %s alias %s",myPce.pceId,myPce.alias)
@@ -213,7 +217,7 @@ def run(myParams):
                     endDate = datetime.date.today()
                     logging.info("Range period : from %s (3 years ago) to %s (today) ...",startDate,endDate)
                     
-                    # Get data
+                    # Get measures
                     myGrdf.getPceDailyMeasures(myPce,startDate,endDate)
                     
                     # Analyse data
@@ -227,7 +231,7 @@ def run(myParams):
                     
                     # Store to database
                     if myPce.dailyMeasureList:
-                        logging.info("Update of database...")
+                        logging.info("Update of database with retrieved measures...")
                         for myMeasure in myPce.dailyMeasureList:
                             # Store measure into database
                             myMeasure.store(myDb)
@@ -245,13 +249,39 @@ def run(myParams):
                         if myMeasure.isDeltaIndex :
                             logging.warning("Inconsistencies detected on the measure : ")
                             logging.warning("Volume provided by Grdf (%s m3) has been replaced by the volume between start index and end index (%s m3)",myMeasure.volumeInitial,myMeasure.volume)
-
-                        # Read calculated measures from database
-                        myPce.calculateMeasures(myDb)
-                            
+                       
                     else:
                         logging.info("Unable to get any measure for PCE !",myPce.pceId)
                         
+                    
+                    # Sub-step 3D : Get thresolds of the PCE
+                    
+                    # Get thresold
+                    try:
+                        logging.info("Get PCE's thresolds from GRDF...")
+                        myGrdf.getPceThresold(myPce)
+                        thresoldCount = myPce.countThresold()
+                        logging.info("%s thresolds found !",thresoldCount)
+                    
+                    except:
+                        logging.error("Error to get PCE's thresolds from GRDF")
+                        
+                    # Update database
+                    if myPce.thresoldList:
+                        # Store thresolds into database
+                        logging.info("Update of database with retrieved thresolds...")
+                        for myThresold in myPce.thresoldList:
+                            myThresold.store(myDb)
+                        # Commmit database
+                        myDb.commit()
+                        logging.info("Database updated !")
+                        
+                    
+                    # Sub-step 3E : Calculate measures of the PCE
+                    
+                    # Calculate measures
+                    myPce.calculateMeasures(myDb,myParams.thresoldPercentage)
+                       
                     
             else:
                 logging.info("No PCE retrieved.")
@@ -353,6 +383,14 @@ def run(myParams):
                     myMqtt.publish(mySa.histoTopic+"rolling_week_last_week_gas", myPce.gasR2W1W)
                     myMqtt.publish(mySa.histoTopic+"rolling_week_last_year_gas", myPce.gasR1WY1)
                     myMqtt.publish(mySa.histoTopic+"rolling_week_last_2_year_gas", myPce.gasR1WY2)
+                    
+                    ### Thresolds
+                    myMqtt.publish(mySa.thresoldTopic+"current_month_treshold", myPce.tshM0)
+                    myMqtt.publish(mySa.thresoldTopic+"current_month_treshold_percentage", myPce.tshM0Pct)
+                    myMqtt.publish(mySa.thresoldTopic+"current_month_treshold_warning", myPce.tshM0Warn)
+                    myMqtt.publish(mySa.thresoldTopic+"previous_month_treshold", myPce.tshM1)
+                    myMqtt.publish(mySa.thresoldTopic+"previous_month_treshold_percentage", myPce.tshM1Pct)
+                    myMqtt.publish(mySa.thresoldTopic+"previous_month_treshold_warning", myPce.tshM1Warn)
                     
                     logging.info("All measures published !")
 
@@ -468,6 +506,14 @@ def run(myParams):
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'rolling_week_last_week_gas','rolling week of last week gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasR2W1W)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'rolling_week_last_year_gas','rolling week of last year',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasR1WY1)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'rolling_week_last_2_year_gas','rolling week of last 2 years',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasR1WY2)
+                    
+                    ### Thresold
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'current_month_thresold','thresold of current month',hass.ENERGY_TYPE,hass.ST_MEAS,'kWh').setValue(myPce.tshM0)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'current_month_thresold_percentage','thresold of current month percentage',hass.NONE_TYPE,hass.ST_MEAS,'%').setValue(myPce.tshM0Pct)
+                    myEntity = hass.Entity(myDevice,hass.BINARY,'current_month_thresold_problem','thresold of current month problem',hass.PROBLEM_TYPE,None,None).setValue(myPce.tshM0Warn) 
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'previous_month_thresold','thresold of previous month',hass.ENERGY_TYPE,hass.ST_MEAS,'kWh').setValue(myPce.tshM1)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'previous_month_thresold_percentage','thresold of previous month percentage',hass.NONE_TYPE,hass.ST_MEAS,'%').setValue(myPce.tshM1Pct)
+                    myEntity = hass.Entity(myDevice,hass.BINARY,'previous_month_thresold_problem','thresold of previous month problem',hass.PROBLEM_TYPE,None,None).setValue(myPce.tshM1Warn) 
                     
                     ## Other
                     logging.debug("Creation of other entities")

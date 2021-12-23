@@ -259,6 +259,19 @@ class Grdf:
             # Append measure to the PCE's measure list
             pce.addDailyMeasure(myDailyMeasure)
             
+    # Get thresold
+    def getPceThresold(self,pce):
+        
+        req = self.session.get('https://monespace.grdf.fr/api/e-conso/pce/'+ pce.pceId + '/seuils?frequence=Mensuel')
+        thresoldList = json.loads(req.text)
+        
+        for thresold in thresoldList["seuils"]:
+            
+            # Create the thresold
+            myThresold = Thresold(pce,thresold)
+            
+            # Append thresold to the PCE's thresold list
+            pce.addThresold(myThresold)
             
 
 #######################################################################
@@ -303,6 +316,7 @@ class Pce:
         self.postalCode = None
         self.alias = None
         self.dailyMeasureList = []
+        self.thresoldList = []
         self.dailyMeasureStart = None
         self.dailyMeasureEnd = None
         
@@ -330,9 +344,17 @@ class Pce:
     def addDailyMeasure(self, measure):
         self.dailyMeasureList.append(measure)
         
+    # Add a thresold to the PCE    
+    def addThresold(self, thresold):
+        self.thresoldList.append(thresold)
+        
     # Return the number of measure for the PCE
     def countDailyMeasure(self):
         return len(self.dailyMeasureList)
+    
+    # Return the number of thresold for the PCE
+    def countThresold(self):
+        return len(self.thresoldList)
     
     # Return the number of valid measure for the PCE
     def countDailyMeasureOk(self):
@@ -367,7 +389,7 @@ class Pce:
         return measure
     
     # Calculated measures from database
-    def calculateMeasures(self,db):
+    def calculateMeasures(self,db,thresoldPercentage):
         
         # Get last valid measure as reference
         myMeasure = self.getLastMeasureOk()
@@ -548,6 +570,57 @@ class Pce:
             self.gasR1WY2 = self._getDeltaDailyCons(db,startStr,endStr)
             logging.debug("R1WY2 gas : %s m3",self.gasR1WY2)
             
+            
+            # Thresolds measures
+            
+            ## Get M0 thresold
+            startStr = f"'{dateNow}','start of month'"
+            endStr = startStr
+            self.tshM0 = self._getThresold(db,startStr)
+            logging.debug("M0 thresold : %s m3",self.tshM0)
+            
+            ## Get M0 conversion factor
+            startStr = f"'{dateNow}','start of month'"
+            endStr = f"'{dateNow}'"
+            self.convM0 = self._getConversion(db,startStr,endStr)
+            logging.debug("M0 factor : %s kwh / m3",self.convM0)
+            
+            ## M0 thresold percentage
+            self.tshM0Pct = None
+            self.tshM0Warn = None
+            if self.tshM0 and self.gasM0Y0 and self.convM0 and thresoldPercentage:
+                if self.tshM0 > 0:
+                    self.tshM0Pct = round(((self.gasM0Y0 * self.convM0) / self.tshM0)*100)
+                    if self.tshM0Pct > thresoldPercentage:
+                        self.tshM0Warn = "ON"
+                    else:
+                        self.tshM0Warn = "OFF"
+            
+            ## Get M1 thresold
+            startStr = f"'{dateNow}','start of month','-1 month'"
+            endStr = startStr
+            self.tshM1 = self._getThresold(db,startStr)
+            logging.debug("M1 thresold : %s m3",self.tshM1)
+            
+            ## Get M1 conversion factor
+            startStr = f"'{dateNow}','start of month','-1 month'"
+            endStr = f"'{dateNow}','start of month','-1 day'"
+            self.convM1 = self._getConversion(db,startStr,endStr)
+            logging.debug("M1 factor : %s kwh / m3",self.convM1)
+            
+            
+            ## M1 thresold percentage
+            self.tshM1Pct = None
+            self.tshM1Warn = None
+            if self.tshM1 and self.gasM1Y0 and self.convM1 and thresoldPercentage:
+                if self.tshM1 > 0:
+                    self.tshM1Pct = round(((self.gasM1Y0 * self.convM1) / self.tshM1)*100)
+                    if self.tshM1Pct > thresoldPercentage:
+                        self.tshM1Warn = "ON"
+                    else:
+                        self.tshM1Warn = "OFF"
+                    
+            
     
     # Return the index difference between 2 measures 
     def _getDeltaDailyCons(self,db,startStr,endStr):
@@ -572,8 +645,52 @@ class Pce:
         else:
             logging.debug("Delta conso could not be calculated")
             return None
+    
+    # Return the conversion factor max between 2 measures 
+    def _getConversion(self,db,startStr,endStr):
         
- 
+        logging.debug("Retrieve conversion factor between %s and %s",startStr,endStr)
+        
+        query = f"SELECT max(conversion) FROM consumption_daily WHERE pce = '{self.pceId}' AND date BETWEEN date({startStr}) AND date({endStr}) GROUP BY pce"
+        db.cur.execute(query)
+        queryResult = db.cur.fetchone()
+        if queryResult is not None:
+            if queryResult[0] is not None:
+                valueResult = int(queryResult[0])
+                if valueResult >= 0:
+                    return valueResult
+                else:
+                    logging.debug("Conversion factor value is not valid : %s",valueResult)
+                    return None
+            else:
+                logging.debug("Conversion factor could not be calculated.")
+                return None
+        else:
+            logging.debug("Conversion factor could not be calculated.")
+            return None
+    
+    # Return the thresold for a particular month 
+    def _getThresold(self,db,startStr):
+        
+        logging.debug("Retrieve thresold at date %s",startStr)
+        
+        query = f"SELECT energy FROM thresold WHERE pce = '{self.pceId}' AND date = date({startStr})"
+        db.cur.execute(query)
+        queryResult = db.cur.fetchone()
+        if queryResult is not None:
+            if queryResult[0] is not None:
+                valueResult = int(queryResult[0])
+                if valueResult >= 0:
+                    return valueResult
+                else:
+                    logging.debug("Thresold value is not valid : %s",valueResult)
+                    return None
+            else:
+                logging.debug("Thresold could not be calculated.")
+                return None
+        else:
+            logging.debug("Thresold could not be calculated")
+            return None
         
 #######################################################################
 #### Class Daily Measure
@@ -644,4 +761,39 @@ class DailyMeasure:
         else: return True
         
         
+#######################################################################
+#### Class Daily Measure
+#######################################################################   
+class Thresold:
+    
+    # Constructor
+    def __init__(self, pce, thresold):
         
+        # Init attributes
+        self.year = None
+        self.month = None
+        self.energy = None
+        self.date = None
+        
+        # Set attributes
+        if thresold["valeur"]: self.energy = int(thresold["valeur"])
+        if thresold["annee"]: self.year = int(thresold["annee"])
+        if thresold["mois"]: self.month = int(thresold["mois"])
+        if self.year and self.month:
+            # Set date to the first day of the month/year
+            self.date = datetime.date(self.year,self.month,1)
+        self.pce = pce
+        
+    # Store thresold to database
+    def store(self,db):
+        
+        if self.isOk():
+            logging.debug("Store thresold %s, %s kWh",str(self.date), str(self.energy))
+            measure_query = f"INSERT OR REPLACE INTO thresold VALUES (?, ?, ?)"
+            db.cur.execute(measure_query, [self.pce.pceId, self.date, self.energy])
+        
+    # Return thresold quality status
+    def isOk(self):
+        if self.date == None: return False
+        elif self.energy == None: return False
+        else: return True

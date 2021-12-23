@@ -12,6 +12,9 @@ TOPIC_HISTO = "/histo"
 ## Status
 TOPIC_STATUS = "/status"
 
+## Thresold
+TOPIC_THRESOLD = "/thresold"
+
 
 class Standalone:
   
@@ -23,4 +26,5 @@ class Standalone:
     self.lastTopic = prefix + TOPIC_LAST + '/'
     self.histoTopic = prefix + TOPIC_HISTO + '/'
     self.statusTopic = prefix + TOPIC_STATUS + '/'
+    self.thresoldTopic = prefix + TOPIC_THRESOLD + '/'
     

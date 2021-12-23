@@ -14,6 +14,7 @@ BINARY = "binary_sensor"
 GAS_TYPE = "gas"
 ENERGY_TYPE = "energy"
 CONNECTIVITY_TYPE = "connectivity"
+PROBLEM_TYPE = "problem"
 NONE_TYPE = None
 
 # Hass state_class

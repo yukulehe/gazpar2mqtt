@@ -20,6 +20,7 @@ Important : the tool is still under development, various functions may disappear
   - Implementation of a sqlite database
   - Addition of converter factor from Grdf
   - Calculation of aggregated consumptions  for calendar periods (year, month, week and day) and rolling periods (1 year, 1 month, 1 week)
+  - Retrieve of GRDF's thresold and warn when a thresold is reached
   - Exponential wait between retries when the application failed to connect to GRDF website
 - v0.5.x :
   - Hard redesign of the application after new GRDF website released on 23/11/2021 . Thanks to **echauvet** for his contribution.
@@ -59,6 +60,13 @@ pip3 install -r app/requirement.txt
 Verify you have gazpar data available on [GRDF Portal](https://monespace.grdf.fr/monespace/connexion)
 Remember, kWh provided is conversion factor dependant. Please verify it's coherent with your provider bills.
 
+### Thresolds
+
+Thresolds (Seuil) can be set on GRDF website for current and future months.
+![image](https://user-images.githubusercontent.com/31646663/147261711-e74beca2-aa2c-49f9-b994-2dc3f013eaa2.png)
+![image](https://user-images.githubusercontent.com/31646663/147261741-5a45c17c-f621-4e1e-86e0-964eef81b435.png)
+
+The script can retrieve those informations and publish a warn when the thresold is close to being reached.
 
 ## MQTT broker
 
@@ -94,6 +102,7 @@ Optional :
 | **HASS_DISCOVERY** | Enable Home assistant dicovery mode | False |
 | **HASS_PREFIX** | Home assistant topic prefix | homeassistant |
 | **HASS_DEVICE_NAME** | Home assistant device name | gazpar |
+| **THRESOLD_PERCENTAGE** | Percentage of the thresold to be reached | 80 |
 | **DB_INIT** | Force reinitialization of the database | False |
 | **DEBUG** | Enable debug mode| False |
 
@@ -193,7 +202,18 @@ Calculated rolling measures :
 | gazpar/PCE/histo/rolling_week_last_year_gas | Gas consumption in m3 for 1 rolling week, 1 year ago |
 | gazpar/PCE/histo/rolling_week_last_2_year_gas | Gas consumption in m3 for 1 rolling week, 2 years ago |
 
+Calculated thresold measures :
 
+| Topic | Description |
+| --- | --- |
+| gazpar/PCE/thresold/current_month_thresold | Thresold in kWh of current month |
+| gazpar/PCE/thresold/current_month_thresold_percentage | Percentage of energy consumption and thresold of current month |
+| gazpar/PCE/thresold/current_month_thresold_problem | Warning when energy consumption is higher than 80% of the thresold of current month |
+| gazpar/PCE/thresold/previous_month_thresold | Thresold in kWh of previous month |
+| gazpar/PCE/thresold/previous_month_thresold_percentage | Percentage of energy consumption and thresold of previous month |
+| gazpar/PCE/thresold/previous_month_thresold_problem | Warning when energy consumption is higher than 80% of the thresold of previous month |
+
+Note : thresold percentage can be editable in environment variable
 
 ### Status :
 
@@ -267,7 +287,18 @@ Rolling measure entities :
 | gazpar_PCE_rolling_week_last_year_gas | Sensor | Gas | Gas consumption in m3 for 1 rolling week, 1 year ago |
 | gazpar_PCE_rolling_week_last_2_year_gas | Sensor | Gas | Gas consumption in m3 for 1 rolling week, 2 years ago |
 
+Calculated thresold measures :
 
+| Entity name | Component | Device class | Description |
+| --- | --- | --- | --- |
+| gazpar_PCE_current_month_thresold | Sensor | Energy | Thresold in kWh of current month |
+| gazpar_PCE_current_month_thresold | Sensor | None | Percentage of energy consumption and thresold of current month  |
+| gazpar_PCE_current_month_thresold | Binary sensor | Problem | Warning when energy consumption is higher than 80% of the thresold of current month  |
+| gazpar_PCE_previous_month_thresold | Sensor | Energy | Thresold in kWh of previous month |
+| gazpar_PCE_previous_month_thresold | Sensor | None | Percentage of energy consumption and thresold of previous month  |
+| gazpar_PCE_previous_month_thresold | Binary sensor | Problem | Warning when energy consumption is higher than 80% of the thresold of previous month  |
+
+Note : thresold percentage can be editable in environment variable. 
 
 ### Add-on
 For Hass.io users, gazpar2mqtt is also available as an add-on provided by [alexbelgium](https://github.com/alexbelgium) (thanks you to him). Please visit the dedicated [repository](https://github.com/alexbelgium/hassio-addons/tree/master/gazpar2mqtt).

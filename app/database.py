@@ -52,6 +52,16 @@ class Database:
     self.cur.execute('''CREATE UNIQUE INDEX IF NOT EXISTS idx_date_consumption
                     ON consumption_daily (date)''')
     
+    # Create table for thresolds
+    logging.debug("Creation of thresold table")
+    self.cur.execute('''CREATE TABLE IF NOT EXISTS thresold (
+                        pce TEXT NOT NULL 
+                        , date TEXT NOT NULL
+                        , energy INTEGER NOT NULL)''')
+    self.cur.execute('''CREATE UNIQUE INDEX IF NOT EXISTS idx_date
+                    ON thresold (date)''')
+    
+    
     # Create table for billing
     #logging.debug("Creation of billing table")
     #self.cur.execute('''CREATE TABLE IF NOT EXISTS billing (
@@ -133,6 +143,9 @@ class Database:
     
     logging.debug("Drop daily consumptions table")
     self.cur.execute('''DROP TABLE IF EXISTS consumption_daily''')
+    
+    logging.debug("Drop thresold table")
+    self.cur.execute('''DROP TABLE IF EXISTS thresold''')
     
     logging.debug("Drop billing table")
     self.cur.execute('''DROP TABLE IF EXISTS billing''')
