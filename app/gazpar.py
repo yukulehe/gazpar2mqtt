@@ -613,7 +613,7 @@ class Pce:
     # Return the thresold for a particular month 
     def _getThresold(self,db,startStr):
         
-        logging.debug("Retrieve thresold at date %s",startStr,endStr)
+        logging.debug("Retrieve thresold at date %s",startStr)
         
         # We need to have at least 2 records to measure a delta index
         query = f"SELECT volume FROM thresold WHERE pce = '{self.pceId}' AND date = date({startStr})"
