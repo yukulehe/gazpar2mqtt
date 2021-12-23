@@ -64,7 +64,11 @@ Remember, kWh provided is conversion factor dependant. Please verify it's cohere
 
 ### Thresolds
 
-To be completed
+Thresolds (Seuil) can be set on GRDF website for current and future months.
+![image](https://user-images.githubusercontent.com/31646663/147261711-e74beca2-aa2c-49f9-b994-2dc3f013eaa2.png)
+![image](https://user-images.githubusercontent.com/31646663/147261741-5a45c17c-f621-4e1e-86e0-964eef81b435.png)
+
+The script can retrieve those informations and publish a warn when the thresold is close to being reached.
 
 ## MQTT broker
 
