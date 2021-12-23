@@ -384,6 +384,12 @@ def run(myParams):
                     myMqtt.publish(mySa.histoTopic+"rolling_week_last_year_gas", myPce.gasR1WY1)
                     myMqtt.publish(mySa.histoTopic+"rolling_week_last_2_year_gas", myPce.gasR1WY2)
                     
+                    ### Thresolds
+                    #myMqtt.publish(mySa.thresoldTopic+"current_month_treshold", myPce.tshM0)
+                    myMqtt.publish(mySa.thresoldTopic+"previous_month_treshold", myPce.tshM1)
+                    myMqtt.publish(mySa.thresoldTopic+"previous_month_treshold_percentage", myPce.tshM1%)
+                    myMqtt.publish(mySa.thresoldTopic+"previous_month_treshold_warning", myPce.tshM1Warning)
+                    
                     logging.info("All measures published !")
 
                     ## Publish status values
@@ -498,6 +504,11 @@ def run(myParams):
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'rolling_week_last_week_gas','rolling week of last week gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasR2W1W)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'rolling_week_last_year_gas','rolling week of last year',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasR1WY1)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'rolling_week_last_2_year_gas','rolling week of last 2 years',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasR1WY2)
+                    
+                    ### Thresold
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'previous_month_thresold','thresold of previous month',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.myPce.tshM1)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'previous_month_thresold_percentage','thresold of previous month percentage',hass.NONE,hass.ST_MEAS,'%').setValue(myPce.myPce.tshM1)
+                    myEntity = hass.Entity(myDevice,hass.BINARY,'previous_month_thresold_problem','thresold of previous month problem',hass.PROBLEM_TYPE,None,None).setValue(myPce.tshM1Warning) 
                     
                     ## Other
                     logging.debug("Creation of other entities")
