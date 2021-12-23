@@ -507,7 +507,7 @@ def run(myParams):
                     
                     ### Thresold
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'previous_month_thresold','thresold of previous month',hass.ENERGY,hass.ST_MEAS,'kWh').setValue(myPce.tshM1)
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'previous_month_thresold_percentage','thresold of previous month percentage',hass.NONE,hass.ST_MEAS,'%').setValue(myPce.tshM1Pct)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'previous_month_thresold_percentage','thresold of previous month percentage',hass.NONE_TYPE,hass.ST_MEAS,'%').setValue(myPce.tshM1Pct)
                     myEntity = hass.Entity(myDevice,hass.BINARY,'previous_month_thresold_problem','thresold of previous month problem',hass.PROBLEM_TYPE,None,None).setValue(myPce.tshM1Warning) 
                     
                     ## Other
