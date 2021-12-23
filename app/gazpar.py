@@ -610,7 +610,29 @@ class Pce:
             logging.debug("Delta conso could not be calculated")
             return None
         
- 
+    # Return the thresold for a particular month 
+    def _getThresold(self,db,startStr):
+        
+        logging.debug("Retrieve thresold at date %s",startStr,endStr)
+        
+        # We need to have at least 2 records to measure a delta index
+        query = f"SELECT volume FROM thresold WHERE pce = '{self.pceId}' AND date = date({startStr})"
+        db.cur.execute(query)
+        queryResult = db.cur.fetchone()
+        if queryResult is not None:
+            if queryResult[0] is not None:
+                valueResult = int(queryResult[0])
+                if valueResult >= 0:
+                    return valueResult
+                else:
+                    logging.debug("Thresold value is not valid : %s",valueResult)
+                    return None
+            else:
+                logging.debug("Thresol could not be calculated.")
+                return None
+        else:
+            logging.debug("Thresold could not be calculated")
+            return None
         
 #######################################################################
 #### Class Daily Measure
