@@ -293,11 +293,12 @@ Calculated thresold measures :
 | --- | --- | --- | --- |
 | gazpar_PCE_current_month_thresold | Sensor | Energy | Thresold in kWh of current month |
 | gazpar_PCE_current_month_thresold | Sensor | None | Percentage of energy consumption and thresold of current month  |
-| gazpar_PCE_current_month_thresold | Binary sensor | Problem | Warning when energy consumption is higher than 80% of the thresold of current month  |
+| gazpar_PCE_current_month_thresold | Binary sensor | Problem | Warning when energy consumption is higher than 80%* of the thresold of current month  |
 | gazpar_PCE_previous_month_thresold | Sensor | Energy | Thresold in kWh of previous month |
 | gazpar_PCE_previous_month_thresold | Sensor | None | Percentage of energy consumption and thresold of previous month  |
-| gazpar_PCE_previous_month_thresold | Binary sensor | Problem | Warning when energy consumption is higher than 80% of the thresold of previous month  |
+| gazpar_PCE_previous_month_thresold | Binary sensor | Problem | Warning when energy consumption is higher than 80%* of the thresold of previous month  |
 
+* 80% can be editable in environment variable. 
 
 ### Add-on
 For Hass.io users, gazpar2mqtt is also available as an add-on provided by [alexbelgium](https://github.com/alexbelgium) (thanks you to him). Please visit the dedicated [repository](https://github.com/alexbelgium/hassio-addons/tree/master/gazpar2mqtt).
