@@ -13,7 +13,7 @@ TOPIC_HISTO = "/histo"
 TOPIC_STATUS = "/status"
 
 ## Thresold
-TOPIC_THRESOLD = "/thresold
+TOPIC_THRESOLD = "/thresold"
 
 
 class Standalone:
