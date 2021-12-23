@@ -570,6 +570,21 @@ class Pce:
             self.gasR1WY2 = self._getDeltaDailyCons(db,startStr,endStr)
             logging.debug("R1WY2 gas : %s m3",self.gasR1WY2)
             
+            
+            # Thresolds measures
+            
+            ## Get M0 thresold
+            startStr = f"'{dateNow}','start of month'"
+            endStr = startStr
+            self.tshM0 = self._getThresold(db,startStr,endStr)
+            logging.debug("M0 thresold : %s m3",self.tshM0)
+            
+            ## Get M1 thresold
+            startStr = f"'{dateNow}','start of month','-1 month'"
+            endStr = startStr
+            self.tshM1 = self._getThresold(db,startStr,endStr)
+            logging.debug("M1 thresold : %s m3",self.tshM1)
+            
     
     # Return the index difference between 2 measures 
     def _getDeltaDailyCons(self,db,startStr,endStr):
