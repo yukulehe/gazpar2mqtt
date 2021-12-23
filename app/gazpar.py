@@ -680,11 +680,13 @@ class Thresold:
         self.volume = None
         self.date = None
         
+        logging.debug("Thresold payload : %s",thresold)
+        
         
         # Set attributes
         if thresold["valeur"]: self.volume = int(thresold["valeur"])
         if thresold["annee"]: self.year = int(thresold["annee"])
-        if thresold["mois"]: self.year = int(thresold["mois"])
+        if thresold["mois"]: self.month = int(thresold["mois"])
         if self.year and self.month:
             self.date = datetime.date(self.year,self.month,1)
             logging.debug("Thresold date : %s",self.date)
