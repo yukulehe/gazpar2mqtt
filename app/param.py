@@ -135,7 +135,7 @@ class Params:
     if "HASS_PREFIX" in os.environ: self.hassPrefix = os.environ["HASS_PREFIX"]
     if "HASS_DEVICE_NAME" in os.environ: self.hassDeviceName = os.environ["HASS_DEVICE_NAME"]
     
-    if "THRESOLD_PERCENTAGE" in os.environ: self.thresoldPercentage = os.environ["THRESOLD_PERCENTAGE"]
+    if "THRESOLD_PERCENTAGE" in os.environ: self.thresoldPercentage = int(os.environ["THRESOLD_PERCENTAGE"])
     
     if "DB_INIT" in os.environ: self.dbInit = _isItTrue(os.environ["DB_INIT"])
     
