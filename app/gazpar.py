@@ -695,7 +695,8 @@ class Thresold:
     # Store thresold to database
     def store(self,db):
         
-        logging.debug("Store thresold %s, %s, %s m3",str(self.year),str(self.month), str(self.volume))
-        measure_query = f"INSERT OR REPLACE INTO thresold VALUES (?, ?, ?)"
-        db.cur.execute(measure_query, [self.pce.pceId, self.date, self.volume])
+        if self.date:
+            logging.debug("Store thresold %s, %s, %s m3",str(self.year),str(self.month), str(self.volume))
+            measure_query = f"INSERT OR REPLACE INTO thresold VALUES (?, ?, ?)"
+            db.cur.execute(measure_query, [self.pce.pceId, self.date, self.volume])
         
