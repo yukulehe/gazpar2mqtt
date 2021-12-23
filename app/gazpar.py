@@ -598,7 +598,7 @@ class Pce:
             if self.tshM1 and self.gasM1Y0 and self.convM1:
                 if self.tshM1 > 0:
                     self.tshM1Pct = round(((self.gasM1Y0 * self.convM1) / self.tshM1)*100)
-                    if self.tshM1Pct > 0.8:
+                    if self.tshM1Pct > 80:
                         self.tshM1Warn = "ON"
                     else:
                         self.tshM1Warn = "OFF"
