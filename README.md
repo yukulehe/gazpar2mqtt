@@ -22,7 +22,7 @@ Important :
   - Implementation of a sqlite database
   - Addition of converter factor from Grdf
   - Calculation of aggregated consumptions  for calendar periods (year, month, week and day) and rolling periods (1 year, 1 month, 1 week)
-  - Publication of thresolds set in Grdf
+  - Warn when a thresold is reached
   - Exponential wait between retries when the application failed to connect to GRDF website
 - v0.5.x :
   - Hard redesign of the application after new GRDF website released on 23/11/2021 . Thanks to **echauvet** for his contribution.
