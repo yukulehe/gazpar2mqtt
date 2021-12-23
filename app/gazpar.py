@@ -592,9 +592,9 @@ class Pce:
                 if self.tshM0 > 0:
                     self.tshM1% = round(self.tshM1 / self.tshM0)
                     if self.tshM1% > 0.8:
-                        self.tshM1Warn = True
+                        self.tshM1Warn = "ON"
                     else:
-                        self.tshM1Warn = False
+                        self.tshM1Warn = "OFF"
                     
             ## M1 thresold 
             
