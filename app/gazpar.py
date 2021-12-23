@@ -795,5 +795,5 @@ class Thresold:
     # Return thresold quality status
     def isOk(self):
         if self.date == None: return False
-        elif self.energy = None: return False
+        elif self.energy == None: return False
         else: return True
