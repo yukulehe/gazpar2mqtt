@@ -22,7 +22,7 @@ Important :
   - Implementation of a sqlite database
   - Addition of converter factor from Grdf
   - Calculation of aggregated consumptions  for calendar periods (year, month, week and day) and rolling periods (1 year, 1 month, 1 week)
-  - Warn when a thresold is reached
+  - Retrieve of GRDF's thresold and warn when a thresold is reached
   - Exponential wait between retries when the application failed to connect to GRDF website
 - v0.5.x :
   - Hard redesign of the application after new GRDF website released on 23/11/2021 . Thanks to **echauvet** for his contribution.
@@ -62,6 +62,9 @@ pip3 install -r app/requirement.txt
 Verify you have gazpar data available on [GRDF Portal](https://monespace.grdf.fr/monespace/connexion)
 Remember, kWh provided is conversion factor dependant. Please verify it's coherent with your provider bills.
 
+### Thresolds
+
+To be completed
 
 ## MQTT broker
 
@@ -200,6 +203,9 @@ Calculated thresold measures :
 
 | Topic | Description |
 | --- | --- |
+| gazpar/PCE/thresold/current_month_thresold | Thresold in kWh of current month |
+| gazpar/PCE/thresold/current_month_thresold_percentage | Percentage of energy consumption and thresold of current month |
+| gazpar/PCE/thresold/current_month_thresold_problem | Warning when energy consumption is higher than 80% of the thresold of current month |
 | gazpar/PCE/thresold/previous_month_thresold | Thresold in kWh of previous month |
 | gazpar/PCE/thresold/previous_month_thresold_percentage | Percentage of energy consumption and thresold of previous month |
 | gazpar/PCE/thresold/previous_month_thresold_problem | Warning when energy consumption is higher than 80% of the thresold of previous month |
@@ -280,6 +286,9 @@ Calculated thresold measures :
 
 | Entity name | Component | Device class | Description |
 | --- | --- | --- | --- |
+| gazpar_PCE_current_month_thresold | Sensor | Energy | Thresold in kWh of current month |
+| gazpar_PCE_current_month_thresold | Sensor | None | Percentage of energy consumption and thresold of current month  |
+| gazpar_PCE_current_month_thresold | Binary sensor | Problem | Warning when energy consumption is higher than 80% of the thresold of current month  |
 | gazpar_PCE_previous_month_thresold | Sensor | Energy | Thresold in kWh of previous month |
 | gazpar_PCE_previous_month_thresold | Sensor | None | Percentage of energy consumption and thresold of previous month  |
 | gazpar_PCE_previous_month_thresold | Binary sensor | Problem | Warning when energy consumption is higher than 80% of the thresold of previous month  |
