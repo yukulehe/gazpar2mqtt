@@ -174,6 +174,7 @@ def run(myParams):
         # When GRDF is connected
         if myGrdf.isConnected:
 
+            # Sub-step 3A : Get account info
             try:
             
                 # Get account informations and store it to db
@@ -186,7 +187,7 @@ def run(myParams):
                 logging.warning("Unable to get account information from GRDF website.")
                 
             
-            # Get list of PCE
+            # Sub-step 3B : Get list of PCE
             logging.info("Retrieve list of PCEs...")
             try:
                 myGrdf.getPceList()
@@ -202,6 +203,9 @@ def run(myParams):
                     # Store PCE in database
                     myPce.store(myDb)
                     myDb.commit()
+                    
+                    
+                    # Sub-step 3C : Get measures of the PCE
                     
                     # Get measures of the PCE
                     logging.info("Get measures of PCE %s alias %s",myPce.pceId,myPce.alias)
@@ -245,14 +249,12 @@ def run(myParams):
                         if myMeasure.isDeltaIndex :
                             logging.warning("Inconsistencies detected on the measure : ")
                             logging.warning("Volume provided by Grdf (%s m3) has been replaced by the volume between start index and end index (%s m3)",myMeasure.volumeInitial,myMeasure.volume)
-
-                        # Read calculated measures from database
-                        myPce.calculateMeasures(myDb)
-                            
+                       
                     else:
                         logging.info("Unable to get any measure for PCE !",myPce.pceId)
                         
                     
+                    # Sub-step 3D : Get thresolds of the PCE
                     
                     # Get thresold
                     try:
@@ -274,7 +276,12 @@ def run(myParams):
                         myDb.commit()
                         logging.info("Database updated !")
                         
-                        
+                    
+                    # Sub-step 3E : Calculate measures of the PCE
+                    
+                    # Calculate measures
+                    myPce.calculateMeasures(myDb)
+                       
                     
             else:
                 logging.info("No PCE retrieved.")
