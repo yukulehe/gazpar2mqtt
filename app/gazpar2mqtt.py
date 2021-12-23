@@ -385,7 +385,9 @@ def run(myParams):
                     myMqtt.publish(mySa.histoTopic+"rolling_week_last_2_year_gas", myPce.gasR1WY2)
                     
                     ### Thresolds
-                    #myMqtt.publish(mySa.thresoldTopic+"current_month_treshold", myPce.tshM0)
+                    myMqtt.publish(mySa.thresoldTopic+"current_month_treshold", myPce.tshM0)
+                    myMqtt.publish(mySa.thresoldTopic+"current_month_treshold_percentage", myPce.tshM0Pct)
+                    myMqtt.publish(mySa.thresoldTopic+"current_month_treshold_warning", myPce.tshM0Warn)
                     myMqtt.publish(mySa.thresoldTopic+"previous_month_treshold", myPce.tshM1)
                     myMqtt.publish(mySa.thresoldTopic+"previous_month_treshold_percentage", myPce.tshM1Pct)
                     myMqtt.publish(mySa.thresoldTopic+"previous_month_treshold_warning", myPce.tshM1Warn)
@@ -506,6 +508,9 @@ def run(myParams):
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'rolling_week_last_2_year_gas','rolling week of last 2 years',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasR1WY2)
                     
                     ### Thresold
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'current_month_thresold','thresold of current month',hass.ENERGY_TYPE,hass.ST_MEAS,'kWh').setValue(myPce.tshM0)
+                    myEntity = hass.Entity(myDevice,hass.SENSOR,'current_month_thresold_percentage','thresold of current month percentage',hass.NONE_TYPE,hass.ST_MEAS,'%').setValue(myPce.tshM0Pct)
+                    myEntity = hass.Entity(myDevice,hass.BINARY,'current_month_thresold_problem','thresold of current month problem',hass.PROBLEM_TYPE,None,None).setValue(myPce.tshM0Warn) 
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'previous_month_thresold','thresold of previous month',hass.ENERGY_TYPE,hass.ST_MEAS,'kWh').setValue(myPce.tshM1)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'previous_month_thresold_percentage','thresold of previous month percentage',hass.NONE_TYPE,hass.ST_MEAS,'%').setValue(myPce.tshM1Pct)
                     myEntity = hass.Entity(myDevice,hass.BINARY,'previous_month_thresold_problem','thresold of previous month problem',hass.PROBLEM_TYPE,None,None).setValue(myPce.tshM1Warn) 
