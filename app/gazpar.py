@@ -582,7 +582,7 @@ class Pce:
             ## Get M0 conversion factor
             startStr = f"'{dateNow}','start of month'"
             endStr = f"'{dateNow}'"
-            self.convM1 = self._getConversion(db,startStr,endStr)
+            self.convM0 = self._getConversion(db,startStr,endStr)
             logging.debug("M0 factor : %s kwh / m3",self.convM0)
             
             ## M0 thresold percentage
