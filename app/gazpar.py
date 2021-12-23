@@ -576,13 +576,13 @@ class Pce:
             ## Get M0 thresold
             startStr = f"'{dateNow}','start of month'"
             endStr = startStr
-            self.tshM0 = self._getThresold(db,startStr,endStr)
+            self.tshM0 = self._getThresold(db,startStr)
             logging.debug("M0 thresold : %s m3",self.tshM0)
             
             ## Get M1 thresold
             startStr = f"'{dateNow}','start of month','-1 month'"
             endStr = startStr
-            self.tshM1 = self._getThresold(db,startStr,endStr)
+            self.tshM1 = self._getThresold(db,startStr)
             logging.debug("M1 thresold : %s m3",self.tshM1)
             
     
