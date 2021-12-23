@@ -387,7 +387,7 @@ def run(myParams):
                     ### Thresolds
                     #myMqtt.publish(mySa.thresoldTopic+"current_month_treshold", myPce.tshM0)
                     myMqtt.publish(mySa.thresoldTopic+"previous_month_treshold", myPce.tshM1)
-                    myMqtt.publish(mySa.thresoldTopic+"previous_month_treshold_percentage", myPce.tshM1%)
+                    myMqtt.publish(mySa.thresoldTopic+"previous_month_treshold_percentage", myPce.tshM1Pct)
                     myMqtt.publish(mySa.thresoldTopic+"previous_month_treshold_warning", myPce.tshM1Warning)
                     
                     logging.info("All measures published !")
