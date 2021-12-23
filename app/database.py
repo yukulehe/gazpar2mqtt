@@ -57,7 +57,7 @@ class Database:
     self.cur.execute('''CREATE TABLE IF NOT EXISTS thresold (
                         pce TEXT NOT NULL 
                         , date TEXT NOT NULL
-                        , volume INTEGER NOT NULL)''')
+                        , energy INTEGER NOT NULL)''')
     self.cur.execute('''CREATE UNIQUE INDEX IF NOT EXISTS idx_date
                     ON thresold (date)''')
     
