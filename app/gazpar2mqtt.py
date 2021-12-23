@@ -388,7 +388,7 @@ def run(myParams):
                     #myMqtt.publish(mySa.thresoldTopic+"current_month_treshold", myPce.tshM0)
                     myMqtt.publish(mySa.thresoldTopic+"previous_month_treshold", myPce.tshM1)
                     myMqtt.publish(mySa.thresoldTopic+"previous_month_treshold_percentage", myPce.tshM1Pct)
-                    myMqtt.publish(mySa.thresoldTopic+"previous_month_treshold_warning", myPce.tshM1Warning)
+                    myMqtt.publish(mySa.thresoldTopic+"previous_month_treshold_warning", myPce.tshM1Warn)
                     
                     logging.info("All measures published !")
 
@@ -508,7 +508,7 @@ def run(myParams):
                     ### Thresold
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'previous_month_thresold','thresold of previous month',hass.ENERGY_TYPE,hass.ST_MEAS,'kWh').setValue(myPce.tshM1)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'previous_month_thresold_percentage','thresold of previous month percentage',hass.NONE_TYPE,hass.ST_MEAS,'%').setValue(myPce.tshM1Pct)
-                    myEntity = hass.Entity(myDevice,hass.BINARY,'previous_month_thresold_problem','thresold of previous month problem',hass.PROBLEM_TYPE,None,None).setValue(myPce.tshM1Warning) 
+                    myEntity = hass.Entity(myDevice,hass.BINARY,'previous_month_thresold_problem','thresold of previous month problem',hass.PROBLEM_TYPE,None,None).setValue(myPce.tshM1Warn) 
                     
                     ## Other
                     logging.debug("Creation of other entities")
