@@ -787,8 +787,13 @@ class Thresold:
     # Store thresold to database
     def store(self,db):
         
-        if self.date:
+        if self.isOk():
             logging.debug("Store thresold %s, %s kWh",str(self.date), str(self.energy))
             measure_query = f"INSERT OR REPLACE INTO thresold VALUES (?, ?, ?)"
             db.cur.execute(measure_query, [self.pce.pceId, self.date, self.energy])
         
+    # Return thresold quality status
+    def isOk(self):
+        if self.date == None: return False
+        elif self.energy = None: return False
+        else: return True
