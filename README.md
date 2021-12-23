@@ -11,9 +11,7 @@ Thanks to [echauvet](https://github.com/echauvet) for his big contribution on GR
 
 # Informations
 
-Important :
-- The tool is still under development, various functions may disappear or be modified.
-- GRDF website has a new design since 23/11/2021. We have redesign the app. A lot of work remains. All previous functionalities could not be performed.
+Important : the tool is still under development, various functions may disappear or be modified.
 
 
 ## Changelogs :
