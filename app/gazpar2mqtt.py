@@ -280,7 +280,7 @@ def run(myParams):
                     # Sub-step 3E : Calculate measures of the PCE
                     
                     # Calculate measures
-                    myPce.calculateMeasures(myDb)
+                    myPce.calculateMeasures(myDb,myParam.thresoldPercentage)
                        
                     
             else:
