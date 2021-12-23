@@ -580,7 +580,7 @@ class Pce:
             logging.debug("M0 thresold : %s m3",self.tshM0)
             
             ## Get M0 conversion factor
-            startStr = f"'{dateNow}','start of month''"
+            startStr = f"'{dateNow}','start of month'"
             endStr = f"'{dateNow}'"
             self.convM1 = self._getConversion(db,startStr,endStr)
             logging.debug("M0 factor : %s kwh / m3",self.convM0)
