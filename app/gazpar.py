@@ -389,7 +389,7 @@ class Pce:
         return measure
     
     # Calculated measures from database
-    def calculateMeasures(self,db):
+    def calculateMeasures(self,db,thresoldPercentage):
         
         # Get last valid measure as reference
         myMeasure = self.getLastMeasureOk()
@@ -588,10 +588,10 @@ class Pce:
             ## M0 thresold percentage
             self.tshM0Pct = None
             self.tshM0Warn = None
-            if self.tshM0 and self.gasM0Y0 and self.convM0:
+            if self.tshM0 and self.gasM0Y0 and self.convM0 and thresoldPercentage:
                 if self.tshM0 > 0:
                     self.tshM0Pct = round(((self.gasM0Y0 * self.convM0) / self.tshM0)*100)
-                    if self.tshM0Pct > 80:
+                    if self.tshM0Pct > thresoldPercentage:
                         self.tshM0Warn = "ON"
                     else:
                         self.tshM0Warn = "OFF"
@@ -612,10 +612,10 @@ class Pce:
             ## M1 thresold percentage
             self.tshM1Pct = None
             self.tshM1Warn = None
-            if self.tshM1 and self.gasM1Y0 and self.convM1:
+            if self.tshM1 and self.gasM1Y0 and self.convM1 and thresoldPercentage:
                 if self.tshM1 > 0:
                     self.tshM1Pct = round(((self.gasM1Y0 * self.convM1) / self.tshM1)*100)
-                    if self.tshM1Pct > 80:
+                    if self.tshM1Pct > thresoldPercentage:
                         self.tshM1Warn = "ON"
                     else:
                         self.tshM1Warn = "OFF"
