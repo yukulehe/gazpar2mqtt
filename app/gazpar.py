@@ -585,12 +585,19 @@ class Pce:
             self.tshM1 = self._getThresold(db,startStr)
             logging.debug("M1 thresold : %s m3",self.tshM1)
             
+            # Get M1 conversion factor
+            startStr = f"'{dateNow}','start of month','-1 month'"
+            endStr = f"'{dateNow}','start of month','-1 day'"
+            self.convM1 = self._getConversion(db,startStr,endStr)
+            logging.debug("M1 factor : %s kwh / m3",self.convM1)
+            
+            
             ## M1 thresold percentage
             self.tshM1Pct = None
             self.tshM1Warn = None
-            if self.tshM1 and self.gasM1Y0:
+            if self.tshM1 and self.gasM1Y0 and self.convM1:
                 if self.tshM1 > 0:
-                    self.tshM1Pct = round((self.gasM1Y0 / self.tshM1)*100)
+                    self.tshM1Pct = round(((self.gasM1Y0 * self.convM1) / self.tshM1)*100)
                     if self.tshM1Pct > 0.8:
                         self.tshM1Warn = "ON"
                     else:
@@ -622,14 +629,36 @@ class Pce:
         else:
             logging.debug("Delta conso could not be calculated")
             return None
+    
+    # Return the conversion factor max between 2 measures 
+    def _getConversion(self,db,startStr,endStr):
         
+        logging.debug("Retrieve conversion factor between %s and %s",startStr,endStr)
+        
+        query = f"SELECT max(conversion) FROM consumption_daily WHERE pce = '{self.pceId}' AND date BETWEEN date({startStr}) AND date({endStr}) GROUP BY pce"
+        db.cur.execute(query)
+        queryResult = db.cur.fetchone()
+        if queryResult is not None:
+            if queryResult[0] is not None:
+                valueResult = int(queryResult[0])
+                if valueResult >= 0:
+                    return valueResult
+                else:
+                    logging.debug("Conversion factor value is not valid : %s",valueResult)
+                    return None
+            else:
+                logging.debug("Conversion factor could not be calculated.")
+                return None
+        else:
+            logging.debug("Conversion factor could not be calculated.")
+            return None
+    
     # Return the thresold for a particular month 
     def _getThresold(self,db,startStr):
         
         logging.debug("Retrieve thresold at date %s",startStr)
         
-        # We need to have at least 2 records to measure a delta index
-        query = f"SELECT volume FROM thresold WHERE pce = '{self.pceId}' AND date = date({startStr})"
+        query = f"SELECT energy FROM thresold WHERE pce = '{self.pceId}' AND date = date({startStr})"
         db.cur.execute(query)
         queryResult = db.cur.fetchone()
         if queryResult is not None:
@@ -641,7 +670,7 @@ class Pce:
                     logging.debug("Thresold value is not valid : %s",valueResult)
                     return None
             else:
-                logging.debug("Thresol could not be calculated.")
+                logging.debug("Thresold could not be calculated.")
                 return None
         else:
             logging.debug("Thresold could not be calculated")
@@ -731,7 +760,7 @@ class Thresold:
         self.date = None
         
         # Set attributes
-        if thresold["valeur"]: self.volume = int(thresold["valeur"])
+        if thresold["valeur"]: self.energy = int(thresold["valeur"])
         if thresold["annee"]: self.year = int(thresold["annee"])
         if thresold["mois"]: self.month = int(thresold["mois"])
         if self.year and self.month:
@@ -743,7 +772,7 @@ class Thresold:
     def store(self,db):
         
         if self.date:
-            logging.debug("Store thresold %s, %s m3",str(self.date), str(self.volume))
+            logging.debug("Store thresold %s, %s kWh",str(self.date), str(self.energy))
             measure_query = f"INSERT OR REPLACE INTO thresold VALUES (?, ?, ?)"
-            db.cur.execute(measure_query, [self.pce.pceId, self.date, self.volume])
+            db.cur.execute(measure_query, [self.pce.pceId, self.date, self.energy])
         
