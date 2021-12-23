@@ -585,6 +585,19 @@ class Pce:
             self.tshM1 = self._getThresold(db,startStr)
             logging.debug("M1 thresold : %s m3",self.tshM1)
             
+            ## M1 thresold percentage
+            self.tshM1% = None
+            self.tshM1Warn = None
+            if self.tshM1 and self.gasM1Y0
+                if self.tshM0 > 0:
+                    self.tshM1% = round(self.tshM1 / self.tshM0)
+                    if self.tshM1% > 0.8:
+                        self.tshM1Warn = True
+                    else:
+                        self.tshM1Warn = False
+                    
+            ## M1 thresold 
+            
     
     # Return the index difference between 2 measures 
     def _getDeltaDailyCons(self,db,startStr,endStr):
