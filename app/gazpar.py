@@ -772,7 +772,7 @@ class Thresold:
         # Init attributes
         self.year = None
         self.month = None
-        self.volume = None
+        self.energy = None
         self.date = None
         
         # Set attributes
