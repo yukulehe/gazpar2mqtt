@@ -23,7 +23,7 @@ import database
 
 # gazpar2mqtt constants
 G2M_VERSION = '0.6.3'
-G2M_DB_VERSION = '0.6.0'
+G2M_DB_VERSION = '0.6.3'
 
 
 #######################################################################
@@ -227,7 +227,7 @@ def run(myParams):
                     
                     # Store to database
                     if myPce.dailyMeasureList:
-                        logging.info("Update of database...")
+                        logging.info("Update of database with retrieved measures...")
                         for myMeasure in myPce.dailyMeasureList:
                             # Store measure into database
                             myMeasure.store(myDb)
@@ -260,10 +260,19 @@ def run(myParams):
                         myGrdf.getPceThresold(myPce)
                         thresoldCount = myPce.countThresold()
                         logging.info("%s thresolds found !",thresoldCount)
-                        
                     
                     except:
-                        logging.error("Error to get PCE's thresolds")
+                        logging.error("Error to get PCE's thresolds from GRDF")
+                        
+                    # Update database
+                    if myPce.thresoldList:
+                        # Store thresolds into database
+                        logging.info("Update of database with retrieved thresolds...")
+                        for myThresold in myPce.thresoldList:
+                            myThresold.store(myDb)
+                        # Commmit database
+                        myDb.commit()
+                        logging.info("Database updated !")
                         
                         
                     
