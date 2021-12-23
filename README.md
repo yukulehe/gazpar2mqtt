@@ -104,6 +104,7 @@ Optional :
 | **HASS_DISCOVERY** | Enable Home assistant dicovery mode | False |
 | **HASS_PREFIX** | Home assistant topic prefix | homeassistant |
 | **HASS_DEVICE_NAME** | Home assistant device name | gazpar |
+| **THRESOLD_PERCENTAGE** | Percentage of the thresold to be reached | 80 |
 | **DB_INIT** | Force reinitialization of the database | False |
 | **DEBUG** | Enable debug mode| False |
 
