@@ -589,7 +589,7 @@ class Pce:
             self.tshM1Pct = None
             self.tshM1Warn = None
             if self.tshM1 and self.gasM1Y0:
-                if self.tshM0 > 0:
+                if self.tshM1 > 0:
                     self.tshM1Pct = round((self.tshM1 / self.tshM0)*100)
                     if self.tshM1Pct > 0.8:
                         self.tshM1Warn = "ON"
