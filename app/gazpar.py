@@ -678,17 +678,22 @@ class Thresold:
         self.year = None
         self.month = None
         self.volume = None
+        self.date = None
+        
         
         # Set attributes
         if thresold["valeur"]: self.volume = int(thresold["valeur"])
         if thresold["annee"]: self.year = int(thresold["annee"])
         if thresold["mois"]: self.year = int(thresold["mois"])
+        if self.year and self.month:
+            self.date = datetime.date(self.year,self.month,1)
+            logging.debug("Thresold date : %s",self.date)
         self.pce = pce
         
     # Store thresold to database
     def store(self,db):
         
-        logging.debug("Store measure %s, %s, %s m3",str(self.year),str(self.month), str(self.volume))
+        logging.debug("Store thresold %s, %s, %s m3",str(self.year),str(self.month), str(self.volume))
         measure_query = f"INSERT OR REPLACE INTO thresold VALUES (?, ?, ?)"
-        db.cur.execute(measure_query, [self.pce.pceId, self.year, self.month, self.volume])
+        db.cur.execute(measure_query, [self.pce.pceId, self.date, self.volume])
         
