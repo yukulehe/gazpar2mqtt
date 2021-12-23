@@ -579,13 +579,30 @@ class Pce:
             self.tshM0 = self._getThresold(db,startStr)
             logging.debug("M0 thresold : %s m3",self.tshM0)
             
+            ## Get M0 conversion factor
+            startStr = f"'{dateNow}','start of month''"
+            endStr = f"'{dateNow}'"
+            self.convM1 = self._getConversion(db,startStr,endStr)
+            logging.debug("M0 factor : %s kwh / m3",self.convM0)
+            
+            ## M0 thresold percentage
+            self.tshM0Pct = None
+            self.tshM0Warn = None
+            if self.tshM0 and self.gasM0Y0 and self.convM0:
+                if self.tshM0 > 0:
+                    self.tshM0Pct = round(((self.gasM0Y0 * self.convM0) / self.tshM0)*100)
+                    if self.tshM0Pct > 80:
+                        self.tshM0Warn = "ON"
+                    else:
+                        self.tshM0Warn = "OFF"
+            
             ## Get M1 thresold
             startStr = f"'{dateNow}','start of month','-1 month'"
             endStr = startStr
             self.tshM1 = self._getThresold(db,startStr)
             logging.debug("M1 thresold : %s m3",self.tshM1)
             
-            # Get M1 conversion factor
+            ## Get M1 conversion factor
             startStr = f"'{dateNow}','start of month','-1 month'"
             endStr = f"'{dateNow}','start of month','-1 day'"
             self.convM1 = self._getConversion(db,startStr,endStr)
@@ -603,7 +620,6 @@ class Pce:
                     else:
                         self.tshM1Warn = "OFF"
                     
-            ## M1 thresold 
             
     
     # Return the index difference between 2 measures 
