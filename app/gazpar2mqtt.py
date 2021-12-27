@@ -22,7 +22,7 @@ import database
 
 
 # gazpar2mqtt constants
-G2M_VERSION = '0.6.3'
+G2M_VERSION = '0.6.4'
 G2M_DB_VERSION = '0.6.3'
 
 
@@ -71,7 +71,7 @@ def run(myParams):
     
     # Create/Update database
     logging.info("Check local database/cache")
-    myDb = database.Database(G2M_DB_VERSION)
+    myDb = database.Database(G2M_DB_VERSION,myParams.dbPath)
     
     
     # Connect to database

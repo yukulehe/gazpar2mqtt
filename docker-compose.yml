@@ -26,4 +26,5 @@ services:
       #HASS_DEVICE_NAME: 'gazpar'
       #THRESOLD_PERCENTAGE: 80 # warn when consumptions is above this percentage of the thresold
       #DB_INIT: 'False' # force the reinitialization of the database
+      #DB_PATH: '/data' # database path
       #DEBUG: 'True'
