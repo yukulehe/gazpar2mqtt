@@ -22,6 +22,7 @@ Important : the tool is still under development, various functions may disappear
   - Calculation of aggregated consumptions  for calendar periods (year, month, week and day) and rolling periods (1 year, 1 month, 1 week)
   - Retrieve of GRDF's thresold and warn when a thresold is reached
   - Exponential wait between retries when the application failed to connect to GRDF website
+  - Database path editable as parameter
 - v0.5.x :
   - Hard redesign of the application after new GRDF website released on 23/11/2021 . Thanks to **echauvet** for his contribution.
   - Published values are now PCE dependent
