@@ -36,6 +36,7 @@ class Params:
     self.mqttRetain = False
     self.mqttSsl = False
     
+    
     # Run params
     self.scheduleTime = None
     
@@ -47,6 +48,7 @@ class Params:
     
     # Databse params
     self.dbInit = False
+    self.dbPath = '/data'
     
     # Debug param
     self.debug = False
@@ -106,6 +108,8 @@ class Params:
     self.parser.add_argument(
         "--db_init", help="Force database reinitialization : True or False")
     self.parser.add_argument(
+        "--db_path", help="Database path (default : /data")
+    self.parser.add_argument(
         "--debug",            help="Enable debug mode")
     
     return self.parser.parse_args()
@@ -138,6 +142,7 @@ class Params:
     if "THRESOLD_PERCENTAGE" in os.environ: self.thresoldPercentage = int(os.environ["THRESOLD_PERCENTAGE"])
     
     if "DB_INIT" in os.environ: self.dbInit = _isItTrue(os.environ["DB_INIT"])
+    if "DB_PATH" in os.environ: self.dbPath = os.environ["DB_PATH"]
     
     if "DEBUG" in os.environ: self.debug = _isItTrue(os.environ["DEBUG"])
   
@@ -168,6 +173,7 @@ class Params:
     if self.args.thresold_percentage is not None: self.thresoldPercentage = int(self.args.thresold_percentage)
       
     if self.args.db_init is not None: self.dbInit = _isItTrue(self.args.db_init)
+    if self.args.db_path is not None: self.db_path = self.args.db_path
       
     if self.args.debug is not None: self.debug = _isItTrue(self.args.debug)
     
@@ -204,5 +210,5 @@ class Params:
     logging.info("Home Assistant discovery : Enable = %s, Topic prefix = %s, Device name = %s", \
                  self.hassDiscovery, self.hassPrefix, self.hassDeviceName)
     logging.info("Thresold options : Warning percentage = %s", self.thresoldPercentage)
-    logging.info("Database options : Force reinitialization = %s", self.dbInit)
+    logging.info("Database options : Force reinitialization = %s, Path = %s ), self.dbInit, self.dbPath)
     logging.info("Debug mode : Enable = %s", self.debug)
