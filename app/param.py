@@ -210,5 +210,5 @@ class Params:
     logging.info("Home Assistant discovery : Enable = %s, Topic prefix = %s, Device name = %s", \
                  self.hassDiscovery, self.hassPrefix, self.hassDeviceName)
     logging.info("Thresold options : Warning percentage = %s", self.thresoldPercentage)
-    logging.info("Database options : Force reinitialization = %s, Path = %s ), self.dbInit, self.dbPath)
+    logging.info("Database options : Force reinitialization = %s, Path = %s"), self.dbInit, self.dbPath)
     logging.info("Debug mode : Enable = %s", self.debug)
