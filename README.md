@@ -104,6 +104,7 @@ Optional :
 | **HASS_DEVICE_NAME** | Home assistant device name | gazpar |
 | **THRESOLD_PERCENTAGE** | Percentage of the thresold to be reached | 80 |
 | **DB_INIT** | Force reinitialization of the database | False |
+| **DB_PATH** | Database path | /data |
 | **DEBUG** | Enable debug mode| False |
 
 
