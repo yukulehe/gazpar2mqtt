@@ -7,18 +7,18 @@ import json
 
 # Constants
 DATABASE_NAME = "gazpar2mqtt.db"
-DATABASE_PATH = '/data'
 DATABASE_TIMEOUT = 10
 
 # Class database
 class Database:
   
   # Constructor
-  def __init__(self,g2mVersion):
+  def __init__(self,g2mVersion,path):
   
     self.con = None
     self.cur = None
     self.version = g2mVersion
+    self.path = path
   
   # Database initialization
   def init(self):
@@ -89,19 +89,19 @@ class Database:
   def connect(self):
     
     # Create directory if not exists
-    if not os.path.exists(DATABASE_PATH):
-        os.mkdir(DATABASE_PATH)
-        logging.debug("Directory %s created",DATABASE_PATH)
+    if not os.path.exists(self.path):
+        os.mkdir(self.path)
+        logging.debug("Directory %s created",self.path)
     
     # Initialize database if not exists
-    if not os.path.exists(DATABASE_PATH + "/" + DATABASE_NAME):
+    if not os.path.exists(self.path + "/" + DATABASE_NAME):
         logging.debug("Initialization of the SQLite database...")
-        self.con = sqlite3.connect(DATABASE_PATH + "/" + DATABASE_NAME, timeout=DATABASE_TIMEOUT)
+        self.con = sqlite3.connect(self.path + "/" + DATABASE_NAME, timeout=DATABASE_TIMEOUT)
         self.cur = self.con.cursor()
         self.init()
     else:
         logging.debug("Connexion to database")
-        self.con = sqlite3.connect(DATABASE_PATH + "/" + DATABASE_NAME, timeout=DATABASE_TIMEOUT)
+        self.con = sqlite3.connect(self.path + "/" + DATABASE_NAME, timeout=DATABASE_TIMEOUT)
         self.cur = self.con.cursor()
 
   # Get current G2M version
