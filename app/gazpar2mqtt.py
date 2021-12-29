@@ -218,7 +218,10 @@ def run(myParams):
                     logging.info("Range period : from %s (3 years ago) to %s (today) ...",startDate,endDate)
                     
                     # Get measures
-                    myGrdf.getPceDailyMeasures(myPce,startDate,endDate)
+                    try:
+                        myGrdf.getPceDailyMeasures(myPce,startDate,endDate)
+                    except:
+                        logging.error("Error during measures collection")
                     
                     # Analyse data
                     logging.info("Analysis of measures provided by GRDF...")
