@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 
-import sys
+
 import logging
 import requests
 import json
 import datetime
-
-import database
 
 global JAVAVXS
 
@@ -79,9 +77,9 @@ class Grdf:
         req = self.session.get('https://monespace.grdf.fr/client/particulier/accueil')
         
         if not 'auth_nonce' in self.session.cookies:
-            raise GazparLoginException("Cannot get auth_nonce.")
+            logging.error("Cannot get auth_nonce.")
         else:
-            logging.debug("Cookies ok")
+            logging.debug("Cookies ok.")
             
         self.auth_nonce = self.session.cookies.get('auth_nonce')
         logging.debug("auth_nonce: " + self.auth_nonce)

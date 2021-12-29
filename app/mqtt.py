@@ -3,7 +3,6 @@
 import paho.mqtt.client as mqtt
 import time
 import logging
-import sys
 import ssl
 
 class Mqtt:

@@ -3,7 +3,6 @@
 import argparse
 import os
 import logging
-from envparse import env
 
 def _isItTrue(val):
   
@@ -202,12 +201,12 @@ class Params:
     
     logging.info("GRDF config : username = %s, password = %s", "******@****.**", "******")
     logging.debug("GRDF config : username = %s, password = %s", self.grdfUsername, self.grdfPassword)
-    logging.info("MQTT broker config : host = %s, port = %s, clientId = %s, qos = %s, topic = %s, retain = %s, ssl = %s", \
-                 self.mqttHost, self.mqttPort, self.mqttClientId, \
-                 self.mqttQos,self.mqttTopic,self.mqttRetain, \
+    logging.info("MQTT broker config : host = %s, port = %s, clientId = %s, qos = %s, topic = %s, retain = %s, ssl = %s",
+                 self.mqttHost, self.mqttPort, self.mqttClientId,
+                 self.mqttQos,self.mqttTopic,self.mqttRetain,
                  self.mqttSsl),
     logging.info("Standlone mode : Enable = %s", self.standalone)
-    logging.info("Home Assistant discovery : Enable = %s, Topic prefix = %s, Device name = %s", \
+    logging.info("Home Assistant discovery : Enable = %s, Topic prefix = %s, Device name = %s",
                  self.hassDiscovery, self.hassPrefix, self.hassDeviceName)
     logging.info("Thresold options : Warning percentage = %s", self.thresoldPercentage)
     logging.info("Database options : Force reinitialization = %s, Path = %s", self.dbInit, self.dbPath)

@@ -3,7 +3,6 @@
 # More info on HA discovery : https://www.home-assistant.io/docs/mqtt/discovery
 
 import json
-from importlib import import_module
 import logging
 
 # Constants
