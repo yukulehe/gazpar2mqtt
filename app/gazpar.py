@@ -251,13 +251,18 @@ class Grdf:
         pce.dailyMeasureStart = startDate
         pce.dailyMeasureEnd = endDate
         
-        for measure in measureList[pce.pceId]["releves"]:
-            
-            # Create the measure
-            myDailyMeasure = DailyMeasure(pce,measure)
-            
-            # Append measure to the PCE's measure list
-            pce.addDailyMeasure(myDailyMeasure)
+        if measureList:
+
+            for measure in measureList[pce.pceId]["releves"]:
+
+                # Create the measure
+                myDailyMeasure = DailyMeasure(pce,measure)
+
+                # Append measure to the PCE's measure list
+                pce.addDailyMeasure(myDailyMeasure)
+
+        else:
+            logging.error("Measure list provided by GRDF is empty")
             
     # Get thresold
     def getPceThresold(self,pce):
