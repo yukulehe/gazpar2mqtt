@@ -22,7 +22,7 @@ import database
 
 
 # gazpar2mqtt constants
-G2M_VERSION = '0.6.4'
+G2M_VERSION = '0.6.5'
 G2M_DB_VERSION = '0.6.3'
 
 
@@ -224,13 +224,14 @@ def run(myParams):
                         logging.error("Error during measures collection")
                     
                     # Analyse data
-                    logging.info("Analysis of measures provided by GRDF...")
                     measureCount = myPce.countDailyMeasure()
-                    measureOkCount = myPce.countDailyMeasureOk()
-                    if measureCount != 0: accuracy = round((measureOkCount/measureCount)*100)
-                    logging.info("%s measures provided by Grdf",measureCount)
-                    logging.info("%s measures are ok",measureOkCount)
-                    logging.info("Accuracy is %s percent",accuracy)
+                    if measureCount > 0:
+                        logging.info("Analysis of measures provided by GRDF...")
+                        logging.info("%s measures provided by Grdf", measureCount)
+                        measureOkCount = myPce.countDailyMeasureOk()
+                        logging.info("%s measures are ok", measureOkCount)
+                        accuracy = round((measureOkCount/measureCount)*100)
+                        logging.info("Accuracy is %s percent",accuracy)
                     
                     # Store to database
                     if myPce.dailyMeasureList:
