@@ -3,7 +3,6 @@
 # More info on HA discovery : https://www.home-assistant.io/docs/mqtt/discovery
 
 import json
-from importlib import import_module
 import logging
 
 # Constants
@@ -77,7 +76,7 @@ class Device:
         # Append value to list in the corresponding state topic
         for myEntity in self.entityList:
             payload[myEntity.configTopic] = myEntity.getConfigPayloadJson()
-            if myEntity.value:
+            if myEntity.value is not None:
                 payload[myEntity.stateTopic]  = myEntity.value
             if myEntity.attributes:
                 payload[myEntity.attributesTopic] = myEntity.attributes

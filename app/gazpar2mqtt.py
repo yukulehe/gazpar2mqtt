@@ -3,15 +3,13 @@
 
 # Work in progress...
 
-import os
+
 import sys
 import datetime
 import schedule
 import time
 from dateutil.relativedelta import relativedelta
-import json
 import logging
-import sqlite3
 
 import gazpar
 import mqtt
@@ -22,21 +20,13 @@ import database
 
 
 # gazpar2mqtt constants
-G2M_VERSION = '0.6.5'
+G2M_VERSION = '0.6.6'
 G2M_DB_VERSION = '0.6.3'
 
 
 #######################################################################
 #### Functions
 #######################################################################
-
-# Sub to get date with day offset
-def _getDayOfssetDate(day, number):
-    return day - relativedelta(days=number)
-
-# Sub to get date with month offset
-def _getMonthOfssetDate(day, number):
-    return _dayToStr(day - relativedelta(months=number))
 
 # Sub to get date with year offset
 def _getYearOfssetDate(day, number):
@@ -323,7 +313,7 @@ def run(myParams):
                     ## Publish status values
                     logging.info("Publishing to Mqtt status values...")
                     myMqtt.publish(mySa.statusTopic+"date", dtn)
-                    myMqtt.publish(mySa.statusValueTopic+"connectivity", "OFF")
+                    myMqtt.publish(mySa.statusTopic+"connectivity", "OFF")
                     logging.info("Status values published !")
 
 
@@ -640,7 +630,6 @@ if __name__ == "__main__":
         while True:
             schedule.run_pending()
             time.sleep(1)
-        logging.info("End of gazpar2mqtt. See u...")
         
     else:
         
