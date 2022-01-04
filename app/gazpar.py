@@ -641,13 +641,13 @@ class Pce:
                     return valueResult
                 else:
                     logging.debug("Delta conso value is not valid : %s",valueResult)
-                    return None
+                    return 0
             else:
                 logging.debug("Delta conso could not be calculated because only 1 record has been found.")
-                return None
+                return 0
         else:
             logging.debug("Delta conso could not be calculated")
-            return None
+            return 0
     
     # Return the conversion factor max between 2 measures 
     def _getConversion(self,db,startStr,endStr):
@@ -687,13 +687,13 @@ class Pce:
                     return valueResult
                 else:
                     logging.debug("Thresold value is not valid : %s",valueResult)
-                    return None
+                    return 0
             else:
                 logging.debug("Thresold could not be calculated.")
-                return None
+                return 0
         else:
             logging.debug("Thresold could not be calculated")
-            return None
+            return 0
         
 #######################################################################
 #### Class Daily Measure
