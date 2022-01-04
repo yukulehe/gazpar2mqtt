@@ -591,13 +591,13 @@ class Pce:
             ## M0 thresold percentage
             self.tshM0Pct = None
             self.tshM0Warn = None
+            self.tshM0Pct = 0 # initial value
+            self.tshM0Warn = "OFF" # initial value
             if self.tshM0 and self.gasM0Y0 and self.convM0 and thresoldPercentage:
                 if self.tshM0 > 0:
                     self.tshM0Pct = round(((self.gasM0Y0 * self.convM0) / self.tshM0)*100)
                     if self.tshM0Pct > thresoldPercentage:
                         self.tshM0Warn = "ON"
-                    else:
-                        self.tshM0Warn = "OFF"
             
             ## Get M1 thresold
             startStr = f"'{dateNow}','start of month','-1 month'"
