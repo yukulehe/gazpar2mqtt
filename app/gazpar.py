@@ -763,7 +763,8 @@ class DailyMeasure:
         elif self.endIndex == None: return False
         else: return True
         
-        
+
+
 #######################################################################
 #### Class Daily Measure
 #######################################################################   
