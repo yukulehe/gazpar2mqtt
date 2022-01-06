@@ -13,7 +13,9 @@ GRDF_DATE_FORMAT = "%Y-%m-%d"
 GRDF_DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 GRDF_API_MAX_RETRIES = 14 # number of retries max to get accurate data from GRDF
 GRDF_API_WAIT_BTW_RETRIES = 20 # number of seconds between try 1 and try 2 (must not exceed 25s)
-GRDF_API_ERRONEOUS_COUNT = 1 # Erroneous number of results send by GRDF 
+GRDF_API_ERRONEOUS_COUNT = 1 # Erroneous number of results send by GRDF
+TYPE_I = 'informative' # type of measure Informative
+TYPE_P = 'published' # type of measure Published
 
 #######################################################################
 #### Usefull functions
@@ -236,32 +238,42 @@ class Grdf:
         return i
     
     # Get measures of a single PCE for a period range
-    def getPceDailyMeasures(self,pce, startDate, endDate):
+    def getPceMeasures(self,pce, startDate, endDate, type):
         
         # Convert date
         myStartDate = _convertGrdfDate(startDate)
         myEndDate = _convertGrdfDate(endDate)
-        
-        req = self.session.get('https://monespace.grdf.fr/api/e-conso/pce/consommation/informatives?dateDebut=' + myStartDate + '&dateFin=' + myEndDate + '&pceList%5B%5D=' + pce.pceId)
+
+        if type == TYPE_I:
+            req = self.session.get('https://monespace.grdf.fr/api/e-conso/pce/consommation/informatives?dateDebut=' + myStartDate + '&dateFin=' + myEndDate + '&pceList%5B%5D=' + pce.pceId)
+        elif type == TYPE_P:
+            req = self.session.get('https://monespace.grdf.fr/api/e-conso/pce/consommation/publiees?dateDebut=' + myStartDate + '&dateFin=' + myEndDate + '&pceList%5B%5D=' + pce.pceId)
+        else:
+            logging.error("Type of measures must be informative or published.")
+            exit()
+
+
         measureList = json.loads(req.text)
         
         # Update PCE range of date
-        pce.dailyMeasureStart = startDate
-        pce.dailyMeasureEnd = endDate
+        #pce.dailyMeasureStart = startDate
+        #pce.dailyMeasureEnd = endDate
         
         if measureList:
 
             for measure in measureList[pce.pceId]["releves"]:
 
                 # Create the measure
-                myDailyMeasure = DailyMeasure(pce,measure)
+                myMeasure = Measure(pce,measure,type)
 
                 # Append measure to the PCE's measure list
-                pce.addDailyMeasure(myDailyMeasure)
+                pce.addMeasure(myMeasure)
 
         else:
-            logging.error("Measure list provided by GRDF is empty")
-            
+            logging.error("Daily measure list provided by GRDF is empty")
+
+
+
     # Get thresold
     def getPceThresold(self,pce):
         
@@ -318,7 +330,7 @@ class Pce:
         self.ownerName = None
         self.postalCode = None
         self.alias = None
-        self.dailyMeasureList = []
+        self.measureList = []
         self.thresoldList = []
         self.dailyMeasureStart = None
         self.dailyMeasureEnd = None
@@ -344,58 +356,64 @@ class Pce:
                
     
     # Add a measure to the PCE    
-    def addDailyMeasure(self, measure):
-        self.dailyMeasureList.append(measure)
+    def addMeasure(self, measure):
+        self.measureList.append(measure)
         
     # Add a thresold to the PCE    
     def addThresold(self, thresold):
         self.thresoldList.append(thresold)
         
-    # Return the number of measure for the PCE
-    def countDailyMeasure(self):
-        return len(self.dailyMeasureList)
+    # Return the number of measure for the PCE and a type
+    def countMeasure(self,type):
+        i = 0
+        for myMeasure in self.measureList:
+            if type is None:
+                i += 1
+            elif myMeasure.type == type:
+                i += 1
+        return i
     
     # Return the number of thresold for the PCE
     def countThresold(self):
         return len(self.thresoldList)
     
     # Return the number of valid measure for the PCE
-    def countDailyMeasureOk(self):
+    def countMeasureOk(self,type):
         i = 0
-        for myMeasure in self.dailyMeasureList:
-            if myMeasure.isOk() == True:
+        for myMeasure in self.measureList:
+            if myMeasure.type == type and myMeasure.isOk() == True:
                 i += 1
         return i
     
     # Return PCE quality status
     def isOk(self):
-         # To be ok, the PCE must contains at least one valid measure
-         if self.countDailyMeasure() == 0 or self.countDailyMeasure() is None:
+         # To be ok, the PCE must contains at least one valid informative measure
+         if not self.countMeasure(TYPE_I):
             return False
-         elif self.countDailyMeasureOk() == 0 or self.countDailyMeasureOk() is None:
+         elif not self.countMeasureOk(TYPE_I):
             return False
          else:
             return True 
     
-    # Return the last valid measure for the PCE
-    def getLastMeasureOk(self):
+    # Return the last valid measure for the PCE and a type
+    def getLastMeasureOk(self,type):
         
-        i = self.countDailyMeasure() - 1
+        i = self.countMeasure(None) - 1
         measure = None
         
         while i>=0:
-            if self.dailyMeasureList[i].isOk() == True:
-                measure = self.dailyMeasureList[i]
+            if self.measureList[i].isOk() == True and self.measureList[i].type == type:
+                measure = self.measureList[i]
                 break;
             i -= 1
         
         return measure
     
     # Calculated measures from database
-    def calculateMeasures(self,db,thresoldPercentage):
+    def calculateMeasures(self,db,thresoldPercentage,type):
         
         # Get last valid measure as reference
-        myMeasure = self.getLastMeasureOk()
+        myMeasure = self.getLastMeasureOk(type)
         
         # Get current date, week, month and year
         dateNow = datetime.date.today()
@@ -417,97 +435,97 @@ class Pce:
             ## Calculate Y0 gas
             startStr = f"'{dateNow}','start of year','-1 day'"
             endStr = f"'{dateNow}'"
-            self.gasY0 = self._getDeltaDailyCons(db,startStr,endStr)
+            self.gasY0 = self._getDeltaCons(db,startStr,endStr,type)
             logging.debug("Y0 gas : %s m3",self.gasY0)
             
             ## Calculate Y1 gas
             startStr = f"'{dateNow}','start of year','-1 year','-1 day'"
             endStr = f"'{dateNow}','start of year','-1 day'"
-            self.gasY1 = self._getDeltaDailyCons(db,startStr,endStr)
+            self.gasY1 = self._getDeltaCons(db,startStr,endStr,type)
             logging.debug("Y1 gas : %s m3",self.gasY1)
             
             ## Calculate Y2 gas
             startStr = f"'{dateNow}','start of year','-2 year','-1 day'"
             endStr = f"'{dateNow}','start of year','-1 year','-1 day'"
-            self.gasY2 = self._getDeltaDailyCons(db,startStr,endStr)
+            self.gasY2 = self._getDeltaCons(db,startStr,endStr,type)
             logging.debug("Y2 gas : %s m3",self.gasY2)
             
             ## Calculate M0Y0 gas
             startStr = f"'{dateNow}','start of month','-1 day'"
             endStr = f"'{dateNow}'"
-            self.gasM0Y0 = self._getDeltaDailyCons(db,startStr,endStr)
+            self.gasM0Y0 = self._getDeltaCons(db,startStr,endStr,type)
             logging.debug("M0Y0 gas : %s m3",self.gasM0Y0)
             
             ## Calculate M1Y0 gas
             startStr = f"'{dateNow}','start of month','-1 month','-1 day'"
             endStr = f"'{dateNow}','start of month','-1 day'"
-            self.gasM1Y0 = self._getDeltaDailyCons(db,startStr,endStr)
+            self.gasM1Y0 = self._getDeltaCons(db,startStr,endStr,type)
             logging.debug("M1Y0 gas : %s m3",self.gasM1Y0)
             
             ## Calculate M0Y1 gas
             startStr = f"'{dateNow}','start of month','-1 year','-1 day'"
             endStr = f"'{dateNow}','start of month','-11 months','-1 day'"
-            self.gasM0Y1 = self._getDeltaDailyCons(db,startStr,endStr)
+            self.gasM0Y1 = self._getDeltaCons(db,startStr,endStr,type)
             logging.debug("M0Y1 gas : %s m3",self.gasM0Y1)
             
             ## Calculate W0Y0 gas
             startStr = f"'{weekNowFirstDate}','-1 day'"
             endStr = f"'{dateNow}'"
-            self.gasW0Y0 = self._getDeltaDailyCons(db,startStr,endStr)
+            self.gasW0Y0 = self._getDeltaCons(db,startStr,endStr,type)
             logging.debug("W0Y0 gas : %s m3",self.gasW0Y0)
             
             ## Calculate W1Y0 gas
             startStr = f"'{weekNowFirstDate}','-8 days'"
             endStr = f"'{weekNowFirstDate}','-1 day'"
-            self.gasW1Y0 = self._getDeltaDailyCons(db,startStr,endStr)
+            self.gasW1Y0 = self._getDeltaCons(db,startStr,endStr,type)
             logging.debug("W1Y0 gas : %s m3",self.gasW1Y0)
             
             ## Calculate W0Y1 gas
             startStr = f"'{weekNowFirstDate}','-1 year','-1 day'"
             endStr = f"'{weekNowFirstDate}','-1 year','+7 days'"
-            self.gasW0Y1 = self._getDeltaDailyCons(db,startStr,endStr)
+            self.gasW0Y1 = self._getDeltaCons(db,startStr,endStr,type)
             logging.debug("W0Y1 gas : %s m3",self.gasW0Y1)
             
             ## Calculate D1 gas
             startStr = f"'{dateNow}','-2 day'"
             endStr = f"'{dateNow}','-1 day'"
-            self.gasD1 = self._getDeltaDailyCons(db,startStr,endStr)
+            self.gasD1 = self._getDeltaCons(db,startStr,endStr,type)
             logging.debug("D-1 gas : %s m3",self.gasD1)
             
             ## Calculate D2 gas
             startStr = f"'{dateNow}','-3 day'"
             endStr = f"'{dateNow}','-2 day'"
-            self.gasD2 = self._getDeltaDailyCons(db,startStr,endStr)
+            self.gasD2 = self._getDeltaCons(db,startStr,endStr,type)
             logging.debug("D-2 gas : %s m3",self.gasD2)
             
             ## Calculate D3 gas
             startStr = f"'{dateNow}','-4 day'"
             endStr = f"'{dateNow}','-3 day'"
-            self.gasD3 = self._getDeltaDailyCons(db,startStr,endStr)
+            self.gasD3 = self._getDeltaCons(db,startStr,endStr,type)
             logging.debug("D-3 gas : %s m3",self.gasD3)
             
             ## Calculate D4 gas
             startStr = f"'{dateNow}','-5 day'"
             endStr = f"'{dateNow}','-4 day'"
-            self.gasD4 = self._getDeltaDailyCons(db,startStr,endStr)
+            self.gasD4 = self._getDeltaCons(db,startStr,endStr,type)
             logging.debug("D-4 gas : %s m3",self.gasD4)
             
             ## Calculate D5 gas
             startStr = f"'{dateNow}','-6 day'"
             endStr = f"'{dateNow}','-5 day'"
-            self.gasD5 = self._getDeltaDailyCons(db,startStr,endStr)
+            self.gasD5 = self._getDeltaCons(db,startStr,endStr,type)
             logging.debug("D-5 gas : %s m3",self.gasD5)
             
             ## Calculate D6 gas
             startStr = f"'{dateNow}','-7 day'"
             endStr = f"'{dateNow}','-6 day'"
-            self.gasD6 = self._getDeltaDailyCons(db,startStr,endStr)
+            self.gasD6 = self._getDeltaCons(db,startStr,endStr,type)
             logging.debug("D-6 gas : %s m3",self.gasD6)
             
             ## Calculate D7 gas
             startStr = f"'{dateNow}','-8 day'"
             endStr = f"'{dateNow}','-7 day'"
-            self.gasD7 = self._getDeltaDailyCons(db,startStr,endStr)
+            self.gasD7 = self._getDeltaCons(db,startStr,endStr,type)
             logging.debug("D-7 gas : %s m3",self.gasD7)
             
             
@@ -516,61 +534,61 @@ class Pce:
             ## Calculate R1Y
             startStr = f"'{dateNow}','-1 year'"
             endStr = f"'{dateNow}','-1 day'"
-            self.gasR1Y = self._getDeltaDailyCons(db,startStr,endStr)
+            self.gasR1Y = self._getDeltaCons(db,startStr,endStr,type)
             logging.debug("R1Y gas : %s m3",self.gasR1Y)
             
             ## Calculate R2Y1Y
             startStr = f"'{dateNow}','-2 year'"
             endStr = f"'{dateNow}','-1 year','-1 day'"
-            self.gasR2Y1Y = self._getDeltaDailyCons(db,startStr,endStr)
+            self.gasR2Y1Y = self._getDeltaCons(db,startStr,endStr,type)
             logging.debug("R2Y1Y gas : %s m3",self.gasR2Y1Y)
             
             ## Calculate R1M
             startStr = f"'{dateNow}','-1 month'"
             endStr = f"'{dateNow}','-1 day'"
-            self.gasR1M = self._getDeltaDailyCons(db,startStr,endStr)
+            self.gasR1M = self._getDeltaCons(db,startStr,endStr,type)
             logging.debug("R1M gas : %s m3",self.gasR1M)
             
             ## Calculate R2M1M
             startStr = f"'{dateNow}','-2 month'"
             endStr = f"'{dateNow}','-1 month','-1 day'"
-            self.gasR2M1M = self._getDeltaDailyCons(db,startStr,endStr)
+            self.gasR2M1M = self._getDeltaCons(db,startStr,endStr,type)
             logging.debug("R2M1M gas : %s m3",self.gasR2M1M)
             
             ## Calculate R1MY1
             startStr = f"'{dateNow}','-1 month','-1 year'"
             endStr = f"'{dateNow}','-1 year','-1 day'"
-            self.gasR1MY1 = self._getDeltaDailyCons(db,startStr,endStr)
+            self.gasR1MY1 = self._getDeltaCons(db,startStr,endStr,type)
             logging.debug("R1MY1 gas : %s m3",self.gasR1MY1)
             
             ## Calculate R1MY2
             startStr = f"'{dateNow}','-1 month','-2 year'"
             endStr = f"'{dateNow}','-2 year','-1 day'"
-            self.gasR1MY2 = self._getDeltaDailyCons(db,startStr,endStr)
+            self.gasR1MY2 = self._getDeltaCons(db,startStr,endStr,type)
             logging.debug("R1MY2 gas : %s m3",self.gasR1MY2)
             
             ## Calculate R1W
             startStr = f"'{dateNow}','-7 days'"
             endStr = f"'{dateNow}','-1 day'"
-            self.gasR1W = self._getDeltaDailyCons(db,startStr,endStr)
+            self.gasR1W = self._getDeltaCons(db,startStr,endStr,type)
             logging.debug("R1W gas : %s m3",self.gasR1W)
             
             ## Calculate R2W1W
             startStr = f"'{dateNow}','-14 days'"
             endStr = f"'{dateNow}','-7 days','-1 day'"
-            self.gasR2W1W = self._getDeltaDailyCons(db,startStr,endStr)
+            self.gasR2W1W = self._getDeltaCons(db,startStr,endStr,type)
             logging.debug("R2W1W gas : %s m3",self.gasR2W1W)
             
             ## Calculate R1WY1
             startStr = f"'{dateNow}','-7 days','-1 year'"
             endStr = f"'{dateNow}','-1 year','-1 day'"
-            self.gasR1WY1 = self._getDeltaDailyCons(db,startStr,endStr)
+            self.gasR1WY1 = self._getDeltaCons(db,startStr,endStr,type)
             logging.debug("R1WY1 gas : %s m3",self.gasR1WY1)
             
             ## Calculate R1WY2
             startStr = f"'{dateNow}','-7 days','-2 year'"
             endStr = f"'{dateNow}','-2 year','-1 day'"
-            self.gasR1WY2 = self._getDeltaDailyCons(db,startStr,endStr)
+            self.gasR1WY2 = self._getDeltaCons(db,startStr,endStr,type)
             logging.debug("R1WY2 gas : %s m3",self.gasR1WY2)
             
             
@@ -585,7 +603,7 @@ class Pce:
             ## Get M0 conversion factor
             startStr = f"'{dateNow}','start of month'"
             endStr = f"'{dateNow}'"
-            self.convM0 = self._getConversion(db,startStr,endStr)
+            self.convM0 = self._getConversion(db,startStr,endStr,type)
             logging.debug("M0 factor : %s kwh / m3",self.convM0)
             
             ## M0 thresold percentage
@@ -608,7 +626,7 @@ class Pce:
             ## Get M1 conversion factor
             startStr = f"'{dateNow}','start of month','-1 month'"
             endStr = f"'{dateNow}','start of month','-1 day'"
-            self.convM1 = self._getConversion(db,startStr,endStr)
+            self.convM1 = self._getConversion(db,startStr,endStr,type)
             logging.debug("M1 factor : %s kwh / m3",self.convM1)
             
             
@@ -626,12 +644,12 @@ class Pce:
             
     
     # Return the index difference between 2 measures 
-    def _getDeltaDailyCons(self,db,startStr,endStr):
+    def _getDeltaCons(self,db,startStr,endStr,type):
         
         logging.debug("Retrieve delta conso between %s and %s",startStr,endStr)
         
         # We need to have at least 2 records to measure a delta index
-        query = f"SELECT CASE WHEN COUNT(ALL) > 1 THEN max(end_index) - min(end_index) ELSE NULL END FROM consumption_daily WHERE pce = '{self.pceId}' AND date BETWEEN date({startStr}) AND date({endStr}) GROUP BY pce"
+        query = f"SELECT CASE WHEN COUNT(ALL) > 1 THEN max(end_index) - min(end_index) ELSE NULL END FROM measures WHERE pce = '{self.pceId}' AND type = '{type}' AND date BETWEEN date({startStr}) AND date({endStr}) GROUP BY pce"
         db.cur.execute(query)
         queryResult = db.cur.fetchone()
         if queryResult is not None:
@@ -650,11 +668,11 @@ class Pce:
             return 0
     
     # Return the conversion factor max between 2 measures 
-    def _getConversion(self,db,startStr,endStr):
+    def _getConversion(self,db,startStr,endStr,type):
         
         logging.debug("Retrieve conversion factor between %s and %s",startStr,endStr)
         
-        query = f"SELECT max(conversion) FROM consumption_daily WHERE pce = '{self.pceId}' AND date BETWEEN date({startStr}) AND date({endStr}) GROUP BY pce"
+        query = f"SELECT max(conversion) FROM measures WHERE pce = '{self.pceId}' AND type = '{type}' AND date BETWEEN date({startStr}) AND date({endStr}) GROUP BY pce, type"
         db.cur.execute(query)
         queryResult = db.cur.fetchone()
         if queryResult is not None:
@@ -696,14 +714,15 @@ class Pce:
             return 0
         
 #######################################################################
-#### Class Daily Measure
+#### Class Measure
 #######################################################################                
-class DailyMeasure:
+class Measure:
     
     # Constructor
-    def __init__(self, pce, measure):
+    def __init__(self, pce, measure,type):
         
         # Init attributes
+        self.type = type # Daily, Published
         self.startDateTime = None
         self.endDateTime = None
         self.gasDate = None
@@ -718,9 +737,11 @@ class DailyMeasure:
         self.isDeltaIndex = False
 
         # Set attributes
-        if measure["dateDebutReleve"]: self.dateDebutReleve = _convertDateTime(measure["dateDebutReleve"])
+        if measure["dateDebutReleve"]: self.startDateTime = _convertDateTime(measure["dateDebutReleve"])
         if measure["dateFinReleve"]: self.endDateTime = _convertDateTime(measure["dateFinReleve"])
         if measure["journeeGaziere"]: self.gasDate = _convertDate(measure["journeeGaziere"])
+        elif self.startDateTime:
+            self.gasDate = self.startDateTime.date()
         if measure["indexDebut"]: self.startIndex = int(measure["indexDebut"])
         if measure["indexFin"]: self.endIndex = int(measure["indexFin"])
         if measure["volumeBrutConsomme"]: 
@@ -731,12 +752,12 @@ class DailyMeasure:
         if measure["coeffConversion"]: self.conversionFactor = float(measure["coeffConversion"])
         self.pce = pce
         
-        # Fix volume and energy provided when required
+        # Fix informative volume and energy provided when required
         # When provided volume is not equal to delta index, we replace it by delta index
         # and we recalculate energy using delta index and conversion factor
         if self.isOk():
             deltaIndex = self.endIndex - self.startIndex
-            if deltaIndex != self.volume:
+            if deltaIndex != self.volume and self.type == TYPE_I:
                 logging.debug("Gas consumption (%s m3) of measure %s has been replaced by the delta index (%s m3)",self.volume,self.gasDate,deltaIndex)
                 self.volume = deltaIndex
                 self.isDeltaIndex = True
@@ -747,11 +768,17 @@ class DailyMeasure:
         
     # Store measure to database
     def store(self,db):
-        
-        if self.isOk():
-            logging.debug("Store measure %s, %s, %s m3, %s kWh, %s kwh/m3",str(self.gasDate),str(self.endIndex), str(self.volume), str(self.energy), str(self.conversionFactor))
-            measure_query = f"INSERT OR REPLACE INTO consumption_daily VALUES (?, ?, ?, ?, ?, ?)"
-            db.cur.execute(measure_query, [self.pce.pceId, self.gasDate, self.endIndex, self.volume, self.energy, self.conversionFactor])
+
+        dbTable = None
+        if self.type == "informative":
+            dbTable = "consumption_daily"
+        elif self.type == "published":
+            dbTable = "consumption_published"
+
+        if self.isOk() and dbTable:
+            logging.debug("Store measure type %s, %s, %s, %s m3, %s kWh, %s kwh/m3",self.type,str(self.gasDate),str(self.endIndex), str(self.volume), str(self.energy), str(self.conversionFactor))
+            measure_query = f"INSERT OR REPLACE INTO measures VALUES (?, ?, ?, ?, ?, ?, ?)"
+            db.cur.execute(measure_query, [self.pce.pceId, self.type, self.gasDate, self.endIndex, self.volume, self.energy, self.conversionFactor])
         
     
     # Return measure measure quality status
@@ -761,12 +788,12 @@ class DailyMeasure:
         elif self.energy == None: return False
         elif self.startIndex == None: return False
         elif self.endIndex == None: return False
+        elif self.gasDate == None: return False
         else: return True
-        
 
 
 #######################################################################
-#### Class Daily Measure
+#### Class Thresold
 #######################################################################   
 class Thresold:
     
@@ -793,7 +820,7 @@ class Thresold:
         
         if self.isOk():
             logging.debug("Store thresold %s, %s kWh",str(self.date), str(self.energy))
-            measure_query = f"INSERT OR REPLACE INTO thresold VALUES (?, ?, ?)"
+            measure_query = f"INSERT OR REPLACE INTO thresolds VALUES (?, ?, ?)"
             db.cur.execute(measure_query, [self.pce.pceId, self.date, self.energy])
         
     # Return thresold quality status

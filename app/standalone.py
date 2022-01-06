@@ -2,18 +2,11 @@
 ### Define Standalone functionality. ###
 
 # Constants for topics
-
-## Last measure
-TOPIC_LAST = "/last"
-
-## Calculated measure
-TOPIC_HISTO = "/histo"
-
-## Status
-TOPIC_STATUS = "/status"
-
-## Thresold
-TOPIC_THRESOLD = "/thresold"
+TOPIC_LAST = "/last" # Last
+TOPIC_PUBLISHED = "/published" # published
+TOPIC_HISTO = "/histo" # Histo
+TOPIC_STATUS = "/status" # status
+TOPIC_THRESOLD = "/thresold" # Thresold
 
 
 class Standalone:
@@ -24,6 +17,7 @@ class Standalone:
     self.prefix = prefix
     
     self.lastTopic = prefix + TOPIC_LAST + '/'
+    self.publishedTopic = prefix + TOPIC_PUBLISHED + '/'
     self.histoTopic = prefix + TOPIC_HISTO + '/'
     self.statusTopic = prefix + TOPIC_STATUS + '/'
     self.thresoldTopic = prefix + TOPIC_THRESOLD + '/'

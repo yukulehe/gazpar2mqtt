@@ -20,8 +20,8 @@ import database
 
 
 # gazpar2mqtt constants
-G2M_VERSION = '0.6.7'
-G2M_DB_VERSION = '0.6.3'
+G2M_VERSION = '0.7.0'
+G2M_DB_VERSION = '0.7.0'
 
 
 #######################################################################
@@ -93,7 +93,7 @@ def run(myParams):
         
     # Display current database statistics
     logging.info("Calculate database statistics..")
-    dbStats = myDb.getMeasuresCount()
+    dbStats = myDb.getMeasuresCount(gazpar.TYPE_I)
     logging.info("%s measures stored",dbStats["count"])
     logging.info("First measure %s",dbStats["minDate"])
     logging.info("Last measure %s",dbStats["maxDate"])
@@ -198,8 +198,9 @@ def run(myParams):
                     # Sub-step 3C : Get measures of the PCE
                     
                     # Get measures of the PCE
-                    logging.info("Get measures of PCE %s alias %s",myPce.pceId,myPce.alias)
                     logging.info("---------------------------------")
+                    logging.info("Get measures of PCE %s alias %s",myPce.pceId,myPce.alias)
+
 
                     # Set date range
                     minDateTime = _getYearOfssetDate(datetime.datetime.now(), 3) # GRDF min date is 3 years ago
@@ -207,52 +208,100 @@ def run(myParams):
                     endDate = datetime.date.today()
                     logging.info("Range period : from %s (3 years ago) to %s (today) ...",startDate,endDate)
                     
-                    # Get measures
+                    # Get informative measures
+                    logging.info("---------------")
+                    logging.info("Retrieve informative measures...")
                     try:
-                        myGrdf.getPceDailyMeasures(myPce,startDate,endDate)
+                        myGrdf.getPceMeasures(myPce,startDate,endDate,gazpar.TYPE_I)
+                        logging.info("Informative measures found !")
                     except:
-                        logging.error("Error during measures collection")
+                        logging.error("Error during informative measures collection")
+
                     
                     # Analyse data
-                    measureCount = myPce.countDailyMeasure()
+                    measureCount = myPce.countMeasure(gazpar.TYPE_I)
                     if measureCount > 0:
-                        logging.info("Analysis of measures provided by GRDF...")
-                        logging.info("%s measures provided by Grdf", measureCount)
-                        measureOkCount = myPce.countDailyMeasureOk()
-                        logging.info("%s measures are ok", measureOkCount)
+                        logging.info("Analysis of informative measures provided by GRDF...")
+                        logging.info("%s informative measures provided by Grdf", measureCount)
+                        measureOkCount = myPce.countMeasureOk(gazpar.TYPE_I)
+                        logging.info("%s informative measures are ok", measureOkCount)
                         accuracy = round((measureOkCount/measureCount)*100)
                         logging.info("Accuracy is %s percent",accuracy)
+
+                        # Get last informative measure
+                        myMeasure = myPce.getLastMeasureOk(gazpar.TYPE_I)
+                        if myMeasure:
+                            logging.info("Last valid informative measure provided by GRDF : ")
+                            logging.info("Date = %s", myMeasure.gasDate)
+                            logging.info("Start index = %s, End index = %s", myMeasure.startIndex, myMeasure.endIndex)
+                            logging.info("Volume = %s m3, Energy = %s kWh, Factor = %s", myMeasure.volume, myMeasure.energy,
+                                         myMeasure.conversionFactor)
+                            if myMeasure.isDeltaIndex:
+                                logging.warning("Inconsistencies detected on the measure : ")
+                                logging.warning(
+                                    "Volume provided by Grdf (%s m3) has been replaced by the volume between start index and end index (%s m3)",
+                                    myMeasure.volumeInitial, myMeasure.volume)
+                        else:
+                            logging.warning("Unable to find the last informative measure.")
+
+
+                    # Get published measures
+                    logging.info("---------------")
+                    logging.info("Retrieve published measures...")
+                    #try:
+                    myGrdf.getPceMeasures(myPce, startDate, endDate, gazpar.TYPE_P)
+                    logging.info("Published measures found !")
+                    #except:
+                    #    logging.error("Error during published measures collection")
+
+                    # Analyse data
+                    measureCount = myPce.countMeasure(gazpar.TYPE_P)
+                    if measureCount > 0:
+                        logging.info("Analysis of published measures provided by GRDF...")
+                        logging.info("%s published measures provided by Grdf", measureCount)
+                        measureOkCount = myPce.countMeasureOk(gazpar.TYPE_P)
+                        logging.info("%s published measures are ok", measureOkCount)
+                        accuracy = round((measureOkCount / measureCount) * 100)
+                        logging.info("Accuracy is %s percent", accuracy)
+
+                        # Get last published measure
+                        myMeasure = myPce.getLastMeasureOk(gazpar.TYPE_P)
+                        if myMeasure:
+                            logging.info("Last valid published measure provided by GRDF : ")
+                            logging.info("Start date = %s, End date = %s", myMeasure.startDateTime, myMeasure.endDateTime)
+                            logging.info("Start index = %s, End index = %s", myMeasure.startIndex, myMeasure.endIndex)
+                            logging.info("Volume = %s m3, Energy = %s kWh, Factor = %s", myMeasure.volume, myMeasure.energy,
+                                         myMeasure.conversionFactor)
+                            if myMeasure.isDeltaIndex:
+                                logging.warning("Inconsistencies detected on the measure : ")
+                                logging.warning(
+                                    "Volume provided by Grdf (%s m3) has been replaced by the volume between start index and end index (%s m3)",
+                                    myMeasure.volumeInitial, myMeasure.volume)
+                        else:
+                            logging.warning("Unable to find the last published measure.")
                     
                     # Store to database
-                    if myPce.dailyMeasureList:
+                    logging.info("---------------")
+                    if myPce.measureList:
                         logging.info("Update of database with retrieved measures...")
-                        for myMeasure in myPce.dailyMeasureList:
+                        for myMeasure in myPce.measureList:
                             # Store measure into database
                             myMeasure.store(myDb)
                         
                         # Commmit database
                         myDb.commit()
                         logging.info("Database updated !")
-                        
-                        # Get last measure info
-                        myMeasure = myPce.getLastMeasureOk()
-                        logging.info("Last valid measure provided by GRDF : ")
-                        logging.info("Date = %s",myMeasure.gasDate)
-                        logging.info("Start index = %s, End index = %s",myMeasure.startIndex,myMeasure.endIndex)
-                        logging.info("Volume = %s m3, Energy = %s kWh, Factor = %s",myMeasure.volume,myMeasure.energy,myMeasure.conversionFactor)
-                        if myMeasure.isDeltaIndex :
-                            logging.warning("Inconsistencies detected on the measure : ")
-                            logging.warning("Volume provided by Grdf (%s m3) has been replaced by the volume between start index and end index (%s m3)",myMeasure.volumeInitial,myMeasure.volume)
-                       
+
                     else:
-                        logging.info("Unable to get any measure for PCE !",myPce.pceId)
+                        logging.info("Unable to store any measure for PCE to database !",myPce.pceId)
                         
                     
                     # Sub-step 3D : Get thresolds of the PCE
                     
                     # Get thresold
+                    logging.info("---------------")
+                    logging.info("Retrieve PCE's thresolds from GRDF...")
                     try:
-                        logging.info("Get PCE's thresolds from GRDF...")
                         myGrdf.getPceThresold(myPce)
                         thresoldCount = myPce.countThresold()
                         logging.info("%s thresolds found !",thresoldCount)
@@ -273,8 +322,8 @@ def run(myParams):
                     
                     # Sub-step 3E : Calculate measures of the PCE
                     
-                    # Calculate measures
-                    myPce.calculateMeasures(myDb,myParams.thresoldPercentage)
+                    # Calculate informative measures
+                    myPce.calculateMeasures(myDb,myParams.thresoldPercentage,gazpar.TYPE_I)
                        
                     
             else:
@@ -286,7 +335,7 @@ def run(myParams):
         and myParams.standalone \
         and myGrdf.isConnected:   
 
-        try:
+        #try:
 
             logging.info("-----------------------------------------------------------")
             logging.info("#           Stand alone publication mode                  #")
@@ -319,19 +368,29 @@ def run(myParams):
 
                 else: # Values when Grdf succeeded
 
-                    myMeasure = myPce.getLastMeasureOk()
-                    logging.debug("Date %s, Energy = %s, Volume %s",myMeasure.gasDate,myMeasure.energy,myMeasure.volume)
 
-                    # Publish daily values
+
+                    # Publish informative values
                     logging.info("Publishing to Mqtt...")
 
-                    ## Last measures
-                    logging.debug("Creation of last measures")
+                    ## Last informative measure
+                    myMeasure = myPce.getLastMeasureOk(gazpar.TYPE_I)
+                    logging.debug("Creation of last informative measures")
                     myMqtt.publish(mySa.lastTopic+"date", myMeasure.gasDate)
                     myMqtt.publish(mySa.lastTopic+"energy", myMeasure.energy)
                     myMqtt.publish(mySa.lastTopic+"gas", myMeasure.volume)
                     myMqtt.publish(mySa.lastTopic+"index", myMeasure.endIndex)
                     myMqtt.publish(mySa.lastTopic+"conversion_Factor", myMeasure.conversionFactor)
+
+                    ## Last published measure
+                    myMeasure = myPce.getLastMeasureOk(gazpar.TYPE_P)
+                    logging.debug("Creation of last published measures")
+                    myMqtt.publish(mySa.publishedTopic + "start_date", myMeasure.startDateTime)
+                    myMqtt.publish(mySa.publishedTopic + "end_date", myMeasure.endDateTime)
+                    myMqtt.publish(mySa.publishedTopic + "energy", myMeasure.energy)
+                    myMqtt.publish(mySa.publishedTopic + "gas", myMeasure.volume)
+                    myMqtt.publish(mySa.publishedTopic + "index", myMeasure.endIndex)
+                    myMqtt.publish(mySa.publishedTopic + "conversion_Factor", myMeasure.conversionFactor)
 
                     ## Calculated calendar measures
                     logging.debug("Creation of calendar measures")
@@ -394,15 +453,15 @@ def run(myParams):
                     myMqtt.publish(mySa.statusTopic+"connectivity", "ON")
                     logging.info("Status values published !")
 
-        except:
-            logging.error("Standalone mode : unable to publish value to mqtt broker")
+        #except:
+        #    logging.error("Standalone mode : unable to publish value to mqtt broker")
 
     # STEP 4B : Home Assistant discovery mode
     if myMqtt.isConnected \
         and myParams.hassDiscovery \
         and myGrdf.isConnected:
 
-        #try:
+        try:
 
             logging.info("-----------------------------------------------------------")
             logging.info("#           Home assistant publication mode               #")
@@ -442,18 +501,39 @@ def run(myParams):
 
                 else: # Values when PCE is correct   
 
-                    # Get last daily measure
-                    myMeasure = myPce.getLastMeasureOk()
 
                     # Create entities and set values
                     
-                    ## Last GRDF measure
-                    logging.debug("Creation of current entities")
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'index','index',hass.GAS_TYPE,hass.ST_TTI,'m³').setValue(myMeasure.endIndex)
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'conversion_factor','conversion factor',hass.GAS_TYPE,hass.ST_MEAS,'kWh/m³').setValue(myMeasure.conversionFactor)
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'gas','gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myMeasure.volume)
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'energy','energy',hass.ENERGY_TYPE,hass.ST_MEAS,'kWh').setValue(myMeasure.energy)
-                    myEntity = hass.Entity(myDevice,hass.SENSOR,'consumption_date','consumption date',hass.NONE_TYPE,None,None).setValue(str(myMeasure.gasDate))
+                    ## Last informative measure
+                    logging.debug("Creation of last informative measures entities")
+                    myMeasure = myPce.getLastMeasureOk(gazpar.TYPE_I)
+                    myEntity = hass.Entity(myDevice, hass.SENSOR, 'index', 'index', hass.GAS_TYPE, hass.ST_TTI,
+                                           'm³').setValue(myMeasure.endIndex)
+                    myEntity = hass.Entity(myDevice, hass.SENSOR, 'conversion_factor', 'conversion factor',
+                                           hass.GAS_TYPE, hass.ST_MEAS, 'kWh/m³').setValue(myMeasure.conversionFactor)
+                    myEntity = hass.Entity(myDevice, hass.SENSOR, 'gas', 'gas', hass.GAS_TYPE, hass.ST_MEAS,
+                                           'm³').setValue(myMeasure.volume)
+                    myEntity = hass.Entity(myDevice, hass.SENSOR, 'energy', 'energy', hass.ENERGY_TYPE, hass.ST_MEAS,
+                                           'kWh').setValue(myMeasure.energy)
+                    myEntity = hass.Entity(myDevice, hass.SENSOR, 'consumption_date', 'consumption date',
+                                           hass.NONE_TYPE, None, None).setValue(str(myMeasure.gasDate))
+
+                    ## Last published measure
+                    logging.debug("Creation of last published measures entities")
+                    myMeasure = myPce.getLastMeasureOk(gazpar.TYPE_P)
+                    myEntity = hass.Entity(myDevice, hass.SENSOR, 'published_index', 'published index', hass.GAS_TYPE, hass.ST_TTI,
+                                           'm³').setValue(myMeasure.endIndex)
+                    myEntity = hass.Entity(myDevice, hass.SENSOR, 'published_conversion_factor', 'published conversion factor',
+                                           hass.GAS_TYPE, hass.ST_MEAS, 'kWh/m³').setValue(myMeasure.conversionFactor)
+                    myEntity = hass.Entity(myDevice, hass.SENSOR, 'published_gas', 'published gas', hass.GAS_TYPE, hass.ST_MEAS,
+                                           'm³').setValue(myMeasure.volume)
+                    myEntity = hass.Entity(myDevice, hass.SENSOR, 'published_energy', 'published energy', hass.ENERGY_TYPE, hass.ST_MEAS,
+                                           'kWh').setValue(myMeasure.energy)
+                    myEntity = hass.Entity(myDevice, hass.SENSOR, 'published_consumption_start_date', 'published consumption start date',
+                                           hass.NONE_TYPE, None, None).setValue(str(myMeasure.startDateTime))
+                    myEntity = hass.Entity(myDevice, hass.SENSOR, 'published_consumption_end_date',
+                                           'published consumption end date',
+                                           hass.NONE_TYPE, None, None).setValue(str(myMeasure.endDateTime))
                     
                     ## Calculated calendar measures
                     logging.debug("Creation of calendar entities")
@@ -523,8 +603,8 @@ def run(myParams):
 
 
 
-        #except:
-            #logging.error("Home Assistant discovery mode : unable to publish value to mqtt broker")
+        except:
+            logging.error("Home Assistant discovery mode : unable to publish value to mqtt broker")
 
 
     # STEP 5 : Disconnect mqtt broker
