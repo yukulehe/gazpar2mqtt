@@ -39,38 +39,29 @@ class Database:
     self.cur.execute('''CREATE UNIQUE INDEX IF NOT EXISTS idx_pces_pce
                     ON pces (pce)''')
 
-    # Create table for daily consumptions
-    logging.debug("Creation of daily consumptions table")
-    self.cur.execute('''CREATE TABLE IF NOT EXISTS consumption_daily (
-                        pce TEXT NOT NULL 
+    # Create table for measures
+    logging.debug("Creation of measures table")
+    self.cur.execute('''CREATE TABLE IF NOT EXISTS measures (
+                        pce TEXT NOT NULL
+                        , type TEXT NOT NULL
                         , date TEXT NOT NULL
                         , end_index INTEGER NOT NULL
                         , volume INTEGER NOT NULL
                         , energy INTEGER NOT NULL
                         , conversion REAL)''')
-    self.cur.execute('''CREATE UNIQUE INDEX IF NOT EXISTS idx_date_consumption
-                    ON consumption_daily (date)''')
+    self.cur.execute('''CREATE UNIQUE INDEX IF NOT EXISTS idx_measures_measure
+                    ON measures (pce,type,date)''')
+
     
     # Create table for thresolds
-    logging.debug("Creation of thresold table")
-    self.cur.execute('''CREATE TABLE IF NOT EXISTS thresold (
+    logging.debug("Creation of thresolds table")
+    self.cur.execute('''CREATE TABLE IF NOT EXISTS thresolds (
                         pce TEXT NOT NULL 
                         , date TEXT NOT NULL
                         , energy INTEGER NOT NULL)''')
-    self.cur.execute('''CREATE UNIQUE INDEX IF NOT EXISTS idx_date
-                    ON thresold (date)''')
-    
-    
-    # Create table for billing
-    #logging.debug("Creation of billing table")
-    #self.cur.execute('''CREATE TABLE IF NOT EXISTS billing (
-    #                    pce TEXT NOT NULL 
-    #                    , start_date TEXT NOT NULL
-    #                    , end_date TEXT NOT NULL
-    #                    , end_index  INTEGER NOT NULL
-    #                    , conversion REAL NOT NULL)''')
-    #self.cur.execute('''CREATE UNIQUE INDEX IF NOT EXISTS idx_start_date_billing
-    #                ON billing (start_date)''')
+    self.cur.execute('''CREATE UNIQUE INDEX IF NOT EXISTS idx_tresholds_thresold
+                    ON thresolds (pce,date)''')
+
 
     # Set default configuration
     logging.debug("Store default configuration")
@@ -115,9 +106,9 @@ class Database:
       return None
     
   # Get measures statistics
-  def getMeasuresCount(self):
+  def getMeasuresCount(self,type):
     valueResult = {}
-    query = f"SELECT count(date), min(date), max(date) FROM consumption_daily"
+    query = f"SELECT count(date), min(date), max(date) FROM measures WHERE type = '{type}'"
     self.cur.execute(query)
     queryResult = self.cur.fetchone()
     if queryResult is not None:
@@ -141,13 +132,10 @@ class Database:
     self.cur.execute('''DROP TABLE IF EXISTS pces''')
     
     logging.debug("Drop daily consumptions table")
-    self.cur.execute('''DROP TABLE IF EXISTS consumption_daily''')
+    self.cur.execute('''DROP TABLE IF EXISTS measures''')
     
     logging.debug("Drop thresold table")
-    self.cur.execute('''DROP TABLE IF EXISTS thresold''')
-    
-    logging.debug("Drop billing table")
-    self.cur.execute('''DROP TABLE IF EXISTS billing''')
+    self.cur.execute('''DROP TABLE IF EXISTS thresolds''')
     
     # Commit work
     self.commit()

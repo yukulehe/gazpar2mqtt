@@ -16,6 +16,8 @@ Important : the tool is still under development, various functions may disappear
 
 ## Changelogs :
 
+- v0.7.x :
+  - Retrieve published measures to supplier 
 - v0.6.x :
   - Implementation of a sqlite database
   - Addition of converter factor from Grdf
@@ -60,6 +62,20 @@ pip3 install -r app/requirement.txt
 
 Verify you have gazpar data available on [GRDF Portal](https://monespace.grdf.fr/monespace/connexion)
 Remember, kWh provided is conversion factor dependant. Please verify it's coherent with your provider bills.
+
+Gazpar2mqtt request the API and retrieve 4 groups of data :
+
+### Account informations
+
+It corresponds to the customer profile, the list of PCE (Point de Comptage et d'Estimation) and its attributes (address, state, activation date)  
+
+### Informative measures
+
+GRDF provides informative measures at day level. The tool returns the last measure and several calculated indicators. 
+
+### Published measures
+
+GRDF provides published measures. It corresponds to consumptions measured by GRDF and transmitted to your gas supplier. Consequently, it should correspond to the consumption that the supplier invoices to the consumer.
 
 ### Thresolds
 
@@ -143,9 +159,9 @@ python3 app/gazpar2mqtt.py --help
 
 ![docker_logo](https://s1.qwant.com/thumbr/0x0/2/d/05170a4d28c2e2d0c394367d6db2e6f73292e9fbc305c087b51ee8b689e257/120px-Docker_(container_engine)_logo.png?u=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fthumb%2Farchive%2F7%2F79%2F20140516082115!Docker_(container_engine)_logo.png%2F120px-Docker_(container_engine)_logo.png&q=0&b=1&p=0&a=0)
 
-Have a look the [docker repository](https://hub.docker.com/r/yukulehe/gazpar2mqtt) 
+Have a look the [docker repository](https://hub.docker.com/r/yukulehe/gazpar2mqtt).
 
-Example of docker run command with environment variables :
+Example of docker run command with some environment variables :
 
 ``` 
 docker run --name app/gazpar2mqtt -e GRDF_USERNAME=gazou@email.com -e GRDF_PASSWORD=password -e MQTT_HOST=192.168.1.99 -e MQTT_PORT=1883 -e MQTT_CLIENTID=gazou -e MQTT_QOS=1 -e MQTT_TOPIC=gazpar -e MQTT_RETAIN=False --tty yukulehe/gazpar2mqtt:latest
@@ -161,13 +177,25 @@ You can replace the default topic prefix *gazpar* (see mqtt broker requirements 
 
 Last measures :
 
-| Topic | Description |
-| --- | --- |
-| gazpar/PCE/index | Gas index in m3 of the last measure |
-| gazpar/PCE/date | Date of the last measure |
-| gazpar/PCE/energy | Gas consumption in kWh of the last measure |
-| gazpar/PCE/gas | Gas consumption in m3 of the last measure  |
-| gazpar/PCE/conversion_factor | Conversion factor in kWh/m3 of the last measure  |
+| Topic                        | Description |
+|------------------------------| --- |
+| gazpar/PCE/last/index        | Gas index in m3 of the last measure |
+| gazpar/PCE/last/date              | Date of the last measure |
+| gazpar/PCE/last/energy            | Gas consumption in kWh of the last measure |
+| gazpar/PCE/last/gas               | Gas consumption in m3 of the last measure  |
+| gazpar/PCE/last/conversion_factor | Conversion factor in kWh/m3 of the last measure  |
+
+Published  measures :
+
+| Topic                                  | Description                                               |
+|----------------------------------------|-----------------------------------------------------------|
+| gazpar/PCE/published/index             | Gas index in m3 of the last published measure             |
+| gazpar/PCE/published/start_date        | Start date of the period of the last published measure    |
+| gazpar/PCE/published/end_date          | End date of the period of the last published measure                                   |
+| gazpar/PCE/published/energy            | Gas consumption in kWh of the last published measure      |
+| gazpar/PCE/published/gas               | Gas consumption in m3 of the last published measure       |
+| gazpar/PCE/published/conversion_factor | Conversion factor in kWh/m3 of the last published measure |
+
 
 Calculated calendar measures :
 
@@ -241,7 +269,7 @@ Note : you can replace the default device name *gazpar* by editing the related p
 
 ### List of entities :
 
-Last measure entities :
+Last informative measure entities :
 
 | Entity name | Component | Device class | Description |
 | --- | --- | --- | --- |
@@ -251,6 +279,15 @@ Last measure entities :
 | gazpar_PCE_consumption_date | Sensor | Date | Date of the last measure |
 | gazpar_PCE_connectivity | Binary sensor | Connectivity | Binary sensor which indicates if the last gazpar statement succeeded (ON) or failed (OFF) |
 
+Last published measure entities :
+
+| Entity name                                 | Component | Device class | Description                                                                               |
+|---------------------------------------------| --- | --- |-------------------------------------------------------------------------------------------|
+| gazpar_PCE_published_index                  | Sensor | Gas | Gas index in m3 of the last published measure                                             |
+| gazpar_PCE_published_gas                    | Sensor | Gas | Gas consumption in m3 of the last published measure                                       |
+| gazpar_PCE_published_energy                 | Sensor | Energy | Gas consumption in kWh of the last published measure                                      |
+| gazpar_PCE_published_consumption_start_date | Sensor | Date | Start date of the last published measure                                                  |
+| gazpar_PCE_published_consumption_end_date   | Sensor | Date | End date of the last published measure                                                    |
 
 Calendar measure entities :
 
