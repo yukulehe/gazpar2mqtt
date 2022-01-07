@@ -108,6 +108,20 @@ class Params:
         "--db_init", help="Force database reinitialization : True or False")
     self.parser.add_argument(
         "--db_path", help="Database path (default : /data")
+
+    self.parser.add_argument(
+      "--influxdb_enable", help="Enable Influxdb : True or False (default : false)")
+    self.parser.add_argument(
+      "--influxdb_host", help="Influxdb host")
+    self.parser.add_argument(
+      "--influxdb_port", help="Influxdb port (default 8086)")
+    self.parser.add_argument(
+      "--influxdb_org", help="Influxdb organization")
+    self.parser.add_argument(
+      "--influxdb_bucket", help="Influxdb bucket")
+    self.parser.add_argument(
+      "--influxdb_token", help="Influxdb token")
+
     self.parser.add_argument(
         "--debug",            help="Enable debug mode")
     
@@ -142,6 +156,13 @@ class Params:
     
     if "DB_INIT" in os.environ: self.dbInit = _isItTrue(os.environ["DB_INIT"])
     if "DB_PATH" in os.environ: self.dbPath = os.environ["DB_PATH"]
+
+    if "INFLUXDB_ENABLE" in os.environ: self.influxEnable = _isItTrue(os.environ["INFLUXDB_ENABLE"])
+    if "INFLUXDB_HOST" in os.environ: self.influxHost = os.environ["INFLUXDB_HOST"]
+    if "INFLUXDB_PORT" in os.environ: self.influxPort = int(os.environ["INFLUXDB_PORT"])
+    if "INFLUXDB_ORG" in os.environ: self.influxOrg = os.environ["INFLUXDB_ORG"]
+    if "INFLUXDB_BUCKET" in os.environ: self.influxBucket = os.environ["INFLUXDB_BUCKET"]
+    if "INFLUXDB_TOKEN" in os.environ: self.influxToken = os.environ["INFLUXDB_TOKEN"]
     
     if "DEBUG" in os.environ: self.debug = _isItTrue(os.environ["DEBUG"])
   
@@ -173,6 +194,13 @@ class Params:
       
     if self.args.db_init is not None: self.dbInit = _isItTrue(self.args.db_init)
     if self.args.db_path is not None: self.db_path = self.args.db_path
+
+    if self.args.influxdb_enable is not None: self.influxEnable = _isItTrue(self.args.influxdb_enable)
+    if self.args.influxdb_host is not None: self.influxHost = self.args.influxdb_host
+    if self.args.influxdb_port is not None: self.influxPort = int(self.args.influxdb_port)
+    if self.args.influxdb_org is not None: self.influxOrg = self.args.influxdb_org
+    if self.args.influxdb_bucket is not None: self.influxBucket = self.args.influxdb_bucket
+    if self.args.influxdb_token is not None: self.influxToken = self.args.influxdb_token
       
     if self.args.debug is not None: self.debug = _isItTrue(self.args.debug)
     
@@ -193,6 +221,12 @@ class Params:
       if self.standalone == False and self.hassDiscovery == False:
         logging.warning("Both Standalone mode and Home assistant discovery are disable. No value will be published to MQTT ! Please check your parameters.")
         return True
+      elif self.influxEnable:
+        if self.influxHost == None or self.influxOrg == None or self.influxBucket == None or self.influxToken == None:
+          logging.error("At least one parameters of Influxdb is missing (host, org, bucket or token)")
+          return False
+        else:
+          return True
       else:
         return True
   

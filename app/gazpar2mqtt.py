@@ -17,12 +17,13 @@ import standalone
 import hass
 import param
 import database
+import influxdb
 
 
 # gazpar2mqtt constants
-G2M_VERSION = '0.7.0'
+G2M_VERSION = '0.7.1'
 G2M_DB_VERSION = '0.7.0'
-
+G2M_INFLUXDB_VERSION = '0.7.1'
 
 #######################################################################
 #### Functions
@@ -605,6 +606,64 @@ def run(myParams):
 
         except:
             logging.error("Home Assistant discovery mode : unable to publish value to mqtt broker")
+
+
+    # STEP 5 : Influxdb
+
+    if myParams.influxEnable:
+
+        logging.info("-----------------------------------------------------------")
+        logging.info("#            Write to Influxdb v2                         #")
+        logging.info("-----------------------------------------------------------")
+
+        myInflux = influxdb.InfluxDb('v2')
+        myInflux.connect(myParams.influxHost, myParams.influxPort, myParams.influxOrg, myParams.influxBucket, myParams.influxToken )
+
+        logging.info("Writing to bucket %s.",myParams.influxBucket)
+
+        # Loop on PCEs
+        for myPce in myGrdf.pceList:
+
+            # Write measures of the pCE
+            logging.info("Writing informative measures of PCE %s alias %s...",myPce.pceId,myPce.alias)
+
+            errorCount = 0
+            for myMeasure in myPce.measureList:
+                if myMeasure.isOk() and myMeasure.type == gazpar.TYPE_I:
+                    # Set point
+                    point = myInflux.setMeasurePoint(myMeasure)
+                    # Write
+                    if not myInflux.write(point):
+                        errorCount += 1
+                    # Check number of error
+                    if errorCount > 100:
+                        logging.warning("Writing stopped because of too many errors.")
+                        break
+            logging.info("Measures of PCE %s alias %s written successfully !", myPce.pceId, myPce.alias)
+
+            # Write thresolds of the pCE
+            logging.info("Writing thresolds of PCE %s alias %s...", myPce.pceId, myPce.alias)
+
+            errorCount = 0
+            for myThresold in myPce.thresoldList:
+                if myThresold.isOk():
+                    # Set point
+                    point = myInflux.setThresoldPoint(myThresold)
+                    # Write
+                    if not myInflux.write(point):
+                        errorCount += 1
+                    # Check number of error
+                    if errorCount > 100:
+                        logging.warning("Writing stopped because of too many errors.")
+                        break
+            logging.info("Thresolds of PCE %s alias %s written successfully !", myPce.pceId, myPce.alias)
+
+
+
+
+
+
+
 
 
     # STEP 5 : Disconnect mqtt broker
