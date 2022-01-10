@@ -695,7 +695,7 @@ class Pce:
         
         logging.debug("Retrieve thresold at date %s",startStr)
         
-        query = f"SELECT energy FROM thresold WHERE pce = '{self.pceId}' AND date = date({startStr})"
+        query = f"SELECT energy FROM thresolds WHERE pce = '{self.pceId}' AND date = date({startStr})"
         db.cur.execute(query)
         queryResult = db.cur.fetchone()
         if queryResult is not None:
