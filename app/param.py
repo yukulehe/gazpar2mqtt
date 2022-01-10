@@ -54,7 +54,15 @@ class Params:
     
     # Thresold param
     self.thresoldPercentage = 80
-    
+
+    # Influx db
+    self.influxEnable = False
+    self.influxHost = None
+    self.influxPort = 8086
+    self.influxBucket = None
+    self.influxOrg = None
+    self.influxToken = None
+
     # Step 2 : Init arguments for command line
     self.args = self.initArg()
     
