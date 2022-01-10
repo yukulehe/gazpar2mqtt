@@ -248,8 +248,16 @@ class Params:
                  self.mqttQos,self.mqttTopic,self.mqttRetain,
                  self.mqttSsl),
     logging.info("Standlone mode : Enable = %s", self.standalone)
-    logging.info("Home Assistant discovery : Enable = %s, Topic prefix = %s, Device name = %s",
-                 self.hassDiscovery, self.hassPrefix, self.hassDeviceName)
+    if self.hassDiscovery:
+      logging.info("Home Assistant discovery : Enable = %s, Topic prefix = %s, Device name = %s",
+                   self.hassDiscovery, self.hassPrefix, self.hassDeviceName)
+    else:
+      logging.info("Home Assistant discovery : Enable = %s",self.hassDiscovery)
     logging.info("Thresold options : Warning percentage = %s", self.thresoldPercentage)
+    if self.influxEnable:
+      logging.info("Influxdb config : Enable = %s, Host = %s, Port = %s, Org = %s, Bucket = %s, Token = ***",
+                   self.influxEnable, self.influxHost, self.influxPort, self.influxOrg, self.influxBucket)
+    else:
+      logging.info("Influxdb config : Enable = %s",self.influxEnable)
     logging.info("Database options : Force reinitialization = %s, Path = %s", self.dbInit, self.dbPath)
     logging.info("Debug mode : Enable = %s", self.debug)
