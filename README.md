@@ -17,7 +17,8 @@ Important : the tool is still under development, various functions may disappear
 ## Changelogs :
 
 - v0.7.x :
-  - Retrieve published measures to supplier 
+  - Retrieve published measures to supplier
+  - Write to Influxdb v2
 - v0.6.x :
   - Implementation of a sqlite database
   - Addition of converter factor from Grdf
@@ -104,25 +105,31 @@ Mandatory :
 
 Optional :
 
-| Variable | Description | Default value |
-| --- | --- | --- |
-| **SCHEDULE_TIME** | Time for refreshing data everyday | None (format : 14:30) |
-| **MQTT_PORT** | Port of the MQTT broker | 1883 |
-| **MQTT_TOPIC** | Topic used as prefix | gazpar |
-| **MQTT_CLIENTID** | Client id to be used for connexion to the MQTT broker | gazou |
-| **MQTT_USERNAME** | Username to be used for connexion to the MQTT brokerr |  |
-| **MQTT_PASSWORD** | Password to be used for connexion to the MQTT broker |  |
-| **MQTT_QOS** | QOS for message publishing (0, 1 or 2) | 1 |
-| **MQTT_RETAIN** | Retain flag| False |
-| **MQTT_SSL** | Enable MQTT SSL connexion | False |
-| **STANDALONE_MODE** | Enable standalone publication mode | True |
-| **HASS_DISCOVERY** | Enable Home assistant dicovery mode | False |
-| **HASS_PREFIX** | Home assistant topic prefix | homeassistant |
-| **HASS_DEVICE_NAME** | Home assistant device name | gazpar |
-| **THRESOLD_PERCENTAGE** | Percentage of the thresold to be reached | 80 |
-| **DB_INIT** | Force reinitialization of the database | False |
-| **DB_PATH** | Database path | /data |
-| **DEBUG** | Enable debug mode| False |
+| Variable                | Description                                           | Default value         |
+|-------------------------|-------------------------------------------------------|-----------------------|
+| **SCHEDULE_TIME**       | Time for refreshing data everyday                     | None (format : 14:30) |
+| **MQTT_PORT**           | Port of the MQTT broker                               | 1883                  |
+| **MQTT_TOPIC**          | Topic used as prefix                                  | gazpar                |
+| **MQTT_CLIENTID**       | Client id to be used for connexion to the MQTT broker | gazou                 |
+| **MQTT_USERNAME**       | Username to be used for connexion to the MQTT brokerr |                       |
+| **MQTT_PASSWORD**       | Password to be used for connexion to the MQTT broker  |                       |
+| **MQTT_QOS**            | QOS for message publishing (0, 1 or 2)                | 1                     |
+| **MQTT_RETAIN**         | Retain flag                                           | False                 |
+| **MQTT_SSL**            | Enable MQTT SSL connexion                             | False                 |
+| **STANDALONE_MODE**     | Enable standalone publication mode                    | True                  |
+| **HASS_DISCOVERY**      | Enable Home assistant dicovery mode                   | False                 |
+| **HASS_PREFIX**         | Home assistant topic prefix                           | homeassistant         |
+| **HASS_DEVICE_NAME**    | Home assistant device name                            | gazpar                |
+| **THRESOLD_PERCENTAGE** | Percentage of the thresold to be reached              | 80                    |
+| **INFLUXDB_ENABLE**     | Activate export to Influxdb v2                        | False                 |
+| **INFLUXDB_HOST**       | Host of influxdb                                      |                  |
+| **INFLUXDB_PORT**       | Port of influxdb                                      |   8086               |
+| **INFLUXDB_ORG**        | Influxdb organization                                 |                  |
+| **INFLUXDB_BUCKET**     | Influxdb bucket                                       |                  |
+| **INFLUXDB_TOKEN**      | Influxdb token with read access to the bucket         |                  |
+| **DB_INIT**             | Force reinitialization of the database                | False                 |
+| **DB_PATH**             | Database path                                         | /data                 |
+| **DEBUG**               | Enable debug mode                                     | False                 |
 
 
 # Usage
