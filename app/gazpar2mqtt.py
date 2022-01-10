@@ -80,7 +80,7 @@ def run(myParams):
     else:
         # Compare dabase version
         logging.info("Checking database version...")
-        dbVersion = myDb.getDbVersion()
+        dbVersion = myDb.getVersion("db_version")
         if dbVersion is not None:
             if dbVersion == G2M_DB_VERSION:
                 logging.info("Database is already up to date : version %s.",G2M_DB_VERSION)
@@ -95,7 +95,7 @@ def run(myParams):
                 logging.warning("Database (%s) is not up to date.",dbVersion)
                 logging.info("Reinitialization of the database to version %s...",G2M_DB_VERSION)
                 myDb.reInit()
-                dbVersion = myDb.getG2MVersion()
+                dbVersion = myDb.getVersion("g2m_version")
                 logging.info("Database reinitialized in version %s !",dbVersion)
         else:
             logging.warning("Unable to get database version.")
@@ -617,6 +617,14 @@ def run(myParams):
         logging.info("#            Write to Influxdb v2                         #")
         logging.info("-----------------------------------------------------------")
 
+        # Check Influxdb version
+        influxDbVersion = myDb.getVersion("influx_version")
+        if influxDbVersion == G2M_INFLUXDB_VERSION:
+            logging.info("Influxdb version is up to date %s",G2M_INFLUXDB_VERSION)
+        else:
+            logging.warning("Influxdb version (%s) is not up to date %s", influxDbVersion, G2M_INFLUXDB_VERSION)
+            logging.warning("Inconsistencies data could be performed. You should recreate the bucket to delete old data.")
+
         myInflux = influxdb.InfluxDb('v2')
         myInflux.connect(myParams.influxHost, myParams.influxPort, myParams.influxOrg, myParams.influxBucket, myParams.influxToken )
 
@@ -651,16 +659,6 @@ def run(myParams):
                         break
 
             logging.info("Informative measures of PCE %s alias %s written successfully !", myPce.pceId, myPce.alias)
-
-
-
-
-
-
-
-
-
-
 
 
 

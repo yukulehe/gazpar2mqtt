@@ -108,8 +108,9 @@ class Database:
         self.cur = self.con.cursor()
 
   # Get current G2M version
-  def getG2MVersion(self):
-    query = f"SELECT g2m_version FROM config"
+  def getVersion(self,type):
+
+    query = f"SELECT {type} FROM config"
     queryResult = None
     try:
       self.cur.execute(query)
