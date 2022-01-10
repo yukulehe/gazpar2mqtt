@@ -135,6 +135,9 @@ class Database:
     self.cur.execute('''DROP TABLE IF EXISTS measures''')
     
     logging.debug("Drop thresold table")
+    self.cur.execute('''DROP TABLE IF EXISTS thresold''')
+    
+    logging.debug("Drop thresolds table")
     self.cur.execute('''DROP TABLE IF EXISTS thresolds''')
     
     # Commit work
