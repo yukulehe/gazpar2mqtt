@@ -250,11 +250,11 @@ def run(myParams):
                     # Get published measures
                     logging.info("---------------")
                     logging.info("Retrieve published measures...")
-                    #try:
-                    myGrdf.getPceMeasures(myPce, startDate, endDate, gazpar.TYPE_P)
-                    logging.info("Published measures found !")
-                    #except:
-                    #    logging.error("Error during published measures collection")
+                    try:
+                        myGrdf.getPceMeasures(myPce, startDate, endDate, gazpar.TYPE_P)
+                        logging.info("Published measures found !")
+                    except:
+                        logging.error("Error during published measures collection")
 
                     # Analyse data
                     measureCount = myPce.countMeasure(gazpar.TYPE_P)
@@ -325,7 +325,10 @@ def run(myParams):
                     # Sub-step 3E : Calculate measures of the PCE
                     
                     # Calculate informative measures
-                    myPce.calculateMeasures(myDb,myParams.thresoldPercentage,gazpar.TYPE_I)
+                    try:
+                        myPce.calculateMeasures(myDb,myParams.thresoldPercentage,gazpar.TYPE_I)
+                    except:
+                        logging.error("Unable to calculate informative measures")
                        
                     
             else:
@@ -608,9 +611,22 @@ def run(myParams):
         except:
             logging.error("Home Assistant discovery mode : unable to publish value to mqtt broker")
 
+    # STEP 5 : Disconnect mqtt broker
+    if myMqtt.isConnected:
 
-    # STEP 5 : Influxdb
+        logging.info("-----------------------------------------------------------")
+        logging.info("#               Disconnexion from MQTT                    #")
+        logging.info("-----------------------------------------------------------")
 
+        try:
+            myMqtt.disconnect()
+            logging.info("Mqtt broker disconnected")
+        except:
+            logging.error("Unable to disconnect mqtt broker")
+            sys.exit(1)
+
+
+    # STEP 6 : Influxdb
     if myParams.influxEnable:
 
         logging.info("-----------------------------------------------------------")
@@ -640,8 +656,8 @@ def run(myParams):
 
         # Loop on PCEs
         for myPce in myDb.pceList:
-            logging.info("Writing informative of PCE %s alias %s...", myPce.pceId, myPce.alias)
 
+            logging.info("Writing measures of PCE %s alias %s...", myPce.pceId, myPce.alias)
             # Loop on measures of the PCE
             for myMeasure in myPce.measureList:
                 if myMeasure.type == gazpar.TYPE_I:
@@ -658,26 +674,29 @@ def run(myParams):
                         logging.warning("Writing stopped because of too many errors.")
                         break
 
-            logging.info("Informative measures of PCE %s alias %s written successfully !", myPce.pceId, myPce.alias)
+            logging.info("Measures of PCE %s alias %s written successfully !", myPce.pceId, myPce.alias)
+
+            logging.info("Writing thresolds of PCE %s alias %s...", myPce.pceId, myPce.alias)
+            # Loop on thresolds of the PCE
+            for myThresold in myPce.thresoldList:
+
+                # Set point
+                point = myInflux.setThresoldPoint(myThresold)
+
+                # Write
+                if not myInflux.write(point):
+                    errorCount += 1
+
+                # Check number of error
+                if errorCount > 100:
+                    logging.warning("Writing stopped because of too many errors.")
+                    break
+
+            logging.info("Thresolds measures of PCE %s alias %s written successfully !", myPce.pceId, myPce.alias)
 
 
 
-    # STEP 5 : Disconnect mqtt broker
-    if myMqtt.isConnected:
-        
-        logging.info("-----------------------------------------------------------")
-        logging.info("#               Disconnexion from MQTT                    #")
-        logging.info("-----------------------------------------------------------")
-        
-        try:
-            myMqtt.disconnect()
-            logging.info("Mqtt broker disconnected")
-        except:
-            logging.error("Unable to disconnect mqtt broker")
-            sys.exit(1)
-    
-    
-    # STEP 6 : Disconnect from database
+    # STEP 7 : Disconnect from database
     logging.info("-----------------------------------------------------------")
     logging.info("#          Disconnexion from SQLite database              #")
     logging.info("-----------------------------------------------------------")

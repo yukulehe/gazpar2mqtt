@@ -204,6 +204,11 @@ class Database:
     for myPce in self.pceList:
       self._loadMeasures(myPce)
 
+    # Load thresolds
+    for myPce in self.pceList:
+      self._loadThresolds(myPce)
+
+
 
   # Load PCEs
   def _loadPce(self):
@@ -230,6 +235,18 @@ class Database:
       myMeasure = Measure(pce,result)
       pce.measureList.append(myMeasure)
 
+  # Load thresolds
+  def _loadThresolds(self, pce):
+
+    query = f"SELECT * FROM thresolds WHERE pce = '{pce.pceId}'"
+    self.cur.execute(query)
+    queryResult = self.cur.fetchall()
+
+    # Create object measure
+    for result in queryResult:
+      myThresold = Thresold(pce, result)
+      pce.thresoldList.append(myThresold)
+
 
 # Class PCE
 class Pce():
@@ -241,6 +258,7 @@ class Pce():
     info = json.loads(result[1])
     self.alias = info["alias"]
     self.measureList = []
+    self.thresoldList = []
 
 # Class Measure
 class Measure():
@@ -255,6 +273,15 @@ class Measure():
     self.volume = result[5]
     self.energy = result[6]
     self.conversionFactor = result[7]
+
+# Class Measure
+class Thresold():
+
+  def __init__(self,pce,result):
+
+    self.pce = pce
+    self.date = _convertDateTime(result[1])
+    self.energy = result[2]
 
 
     

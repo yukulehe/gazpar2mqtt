@@ -75,7 +75,7 @@ class InfluxDb:
     def setThresoldPoint(self, thresold):
 
 
-        myDate = datetime.combine(thresold.date, datetime.min.time())
+        myDate = thresold.date
 
         point = [{
             "measurement": "gazpar_thresold_measure",  # container of tags
@@ -85,6 +85,7 @@ class InfluxDb:
                 "pce_alias": thresold.pce.alias,
                 "year": myDate.strftime("%Y"),
                 "month": myDate.strftime("%m"),
+                "month_name": myDate.strftime("%b"),
             },
             "fields": {
                 "energy_kWh": thresold.energy,
