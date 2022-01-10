@@ -169,6 +169,7 @@ class Database:
     self.cur.execute('''DROP TABLE IF EXISTS measures''')
     
     logging.debug("Drop thresold table")
+    self.cur.execute('''DROP TABLE IF EXISTS thresold''') # issue #59 on v0.7.0
     self.cur.execute('''DROP TABLE IF EXISTS thresolds''')
     
     # Commit work
