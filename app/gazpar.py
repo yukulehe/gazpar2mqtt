@@ -776,9 +776,9 @@ class Measure:
             dbTable = "consumption_published"
 
         if self.isOk() and dbTable:
-            logging.debug("Store measure type %s, %s, %s, %s m3, %s kWh, %s kwh/m3",self.type,str(self.gasDate),str(self.endIndex), str(self.volume), str(self.energy), str(self.conversionFactor))
-            measure_query = f"INSERT OR REPLACE INTO measures VALUES (?, ?, ?, ?, ?, ?, ?)"
-            db.cur.execute(measure_query, [self.pce.pceId, self.type, self.gasDate, self.endIndex, self.volume, self.energy, self.conversionFactor])
+            logging.debug("Store measure type %s, %s, %s, %s, %s m3, %s kWh, %s kwh/m3",self.type,str(self.gasDate),str(self.startIndex),str(self.endIndex), str(self.volume), str(self.energy), str(self.conversionFactor))
+            measure_query = f"INSERT OR REPLACE INTO measures VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+            db.cur.execute(measure_query, [self.pce.pceId, self.type, self.gasDate, self.startIndex, self.endIndex, self.volume, self.energy, self.conversionFactor])
         
     
     # Return measure measure quality status

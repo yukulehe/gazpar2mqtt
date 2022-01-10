@@ -62,7 +62,7 @@ def run(myParams):
     
     # Create/Update database
     logging.info("Check local database/cache")
-    myDb = database.Database(G2M_DB_VERSION,myParams.dbPath)
+    myDb = database.Database(G2M_DB_VERSION,G2M_DB_VERSION,G2M_INFLUXDB_VERSION,myParams.dbPath)
     
     
     # Connect to database
@@ -76,29 +76,30 @@ def run(myParams):
     if myParams.dbInit:
         logging.info("Reinitialization of the database...")
         myDb.reInit()
-    
-    # Compare G2M version
-    logging.info("Checking database version...")
-    dbVersion = myDb.getG2MVersion()
-    if dbVersion is not None:
-        if dbVersion == G2M_DB_VERSION:
-            logging.info("Database is already up to date : version %s.",G2M_DB_VERSION)
-        else:
-            logging.warning("Database (%s) is not up to date.",dbVersion)
-            logging.info("Reinitialization of the database to version %s...",G2M_DB_VERSION)
-            myDb.reInit()
-            dbVersion = myDb.getG2MVersion()
-            logging.info("Database reinitialized in version %s !",dbVersion)
+        logging.info("Database reinitialized to version %s",G2M_DB_VERSION)
     else:
-        logging.warning("Unable to get database version.")
-        
-    # Display current database statistics
-    logging.info("Calculate database statistics..")
-    dbStats = myDb.getMeasuresCount(gazpar.TYPE_I)
-    logging.info("%s measures stored",dbStats["count"])
-    logging.info("First measure %s",dbStats["minDate"])
-    logging.info("Last measure %s",dbStats["maxDate"])
-    
+        # Compare dabase version
+        logging.info("Checking database version...")
+        dbVersion = myDb.getDbVersion()
+        if dbVersion is not None:
+            if dbVersion == G2M_DB_VERSION:
+                logging.info("Database is already up to date : version %s.",G2M_DB_VERSION)
+
+                # Display current database statistics
+                logging.info("Calculate database statistics..")
+                dbStats = myDb.getMeasuresCount(gazpar.TYPE_I)
+                logging.info("%s measures stored", dbStats["count"])
+                logging.info("First measure %s", dbStats["minDate"])
+                logging.info("Last measure %s", dbStats["maxDate"])
+            else:
+                logging.warning("Database (%s) is not up to date.",dbVersion)
+                logging.info("Reinitialization of the database to version %s...",G2M_DB_VERSION)
+                myDb.reInit()
+                dbVersion = myDb.getG2MVersion()
+                logging.info("Database reinitialized in version %s !",dbVersion)
+        else:
+            logging.warning("Unable to get database version.")
+
     
     # STEP 2 : Log to MQTT broker
     logging.info("-----------------------------------------------------------")
@@ -621,42 +622,39 @@ def run(myParams):
 
         logging.info("Writing to bucket %s.",myParams.influxBucket)
 
+
+        # Write measures of the pCE
+
+        errorCount = 0
+
+        # Load database in cache
+        myDb.load()
+
         # Loop on PCEs
-        for myPce in myGrdf.pceList:
+        for myPce in myDb.pceList:
+            logging.info("Writing informative of PCE %s alias %s...", myPce.pceId, myPce.alias)
 
-            # Write measures of the pCE
-            logging.info("Writing informative measures of PCE %s alias %s...",myPce.pceId,myPce.alias)
-
-            errorCount = 0
+            # Loop on measures of the PCE
             for myMeasure in myPce.measureList:
-                if myMeasure.isOk() and myMeasure.type == gazpar.TYPE_I:
+                if myMeasure.type == gazpar.TYPE_I:
+
                     # Set point
                     point = myInflux.setMeasurePoint(myMeasure)
+
                     # Write
                     if not myInflux.write(point):
                         errorCount += 1
+
                     # Check number of error
                     if errorCount > 100:
                         logging.warning("Writing stopped because of too many errors.")
                         break
-            logging.info("Measures of PCE %s alias %s written successfully !", myPce.pceId, myPce.alias)
 
-            # Write thresolds of the pCE
-            logging.info("Writing thresolds of PCE %s alias %s...", myPce.pceId, myPce.alias)
+            logging.info("Informative measures of PCE %s alias %s written successfully !", myPce.pceId, myPce.alias)
 
-            errorCount = 0
-            for myThresold in myPce.thresoldList:
-                if myThresold.isOk():
-                    # Set point
-                    point = myInflux.setThresoldPoint(myThresold)
-                    # Write
-                    if not myInflux.write(point):
-                        errorCount += 1
-                    # Check number of error
-                    if errorCount > 100:
-                        logging.warning("Writing stopped because of too many errors.")
-                        break
-            logging.info("Thresolds of PCE %s alias %s written successfully !", myPce.pceId, myPce.alias)
+
+
+
 
 
 
@@ -738,7 +736,6 @@ if __name__ == "__main__":
     logging.info("#               Welcome to gazpar2mqtt                    #")
     logging.info("-----------------------------------------------------------")
     logging.info("Program version " + G2M_VERSION)
-    logging.info("Database version " + G2M_DB_VERSION)
     logging.info("Please note that the the tool is still under development, various functions may disappear or be modified.")
     logging.debug("If you can read this line, you are in DEBUG mode.")
     

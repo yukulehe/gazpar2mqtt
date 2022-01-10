@@ -3,21 +3,34 @@ import os
 import logging
 import datetime
 import json
+from gazpar import TYPE_I,TYPE_P
 
 # Constants
 DATABASE_NAME = "gazpar2mqtt.db"
 DATABASE_TIMEOUT = 10
+DATABASE_DATE_FORMAT = "%Y-%m-%d"
+
+# Convert datetime string to datetime
+def _convertDateTime(dateString):
+    if dateString == None: return None
+    else:
+        myDateTime = datetime.datetime.strptime(dateString,DATABASE_DATE_FORMAT)
+        return myDateTime
 
 # Class database
 class Database:
   
   # Constructor
-  def __init__(self,g2mVersion,path):
+  def __init__(self,g2mVersion,dbVersion,influxVersion,path):
   
     self.con = None
     self.cur = None
-    self.version = g2mVersion
+    self.date = datetime.datetime.now().strftime('%Y-%m-%d')
+    self.g2mVersion = g2mVersion
+    self.dbVersion = dbVersion
+    self.influxVersion = influxVersion
     self.path = path
+    self.pceList = []
   
   # Database initialization
   def init(self):
@@ -25,10 +38,12 @@ class Database:
     # Create table config
     logging.debug("Creation of configuration table")
     self.cur.execute('''CREATE TABLE IF NOT EXISTS config (
-                        key TEXT PRIMARY KEY,
-                        value json NOT NULL)''')
-    self.cur.execute('''CREATE UNIQUE INDEX IF NOT EXISTS idx_config_key
-                    ON config (key)''')
+                        date TEXT PRIMARY KEY,
+                        g2m_version TEXT NOT NULL,
+                        db_version TEXT NOT NULL,
+                        influx_version TEXT NOT NULL)''')
+    self.cur.execute('''CREATE UNIQUE INDEX IF NOT EXISTS idx_config_date
+                    ON config (date)''')
 
     ## Create table of PCEs
     logging.debug("Creation of PCEs table")
@@ -45,6 +60,7 @@ class Database:
                         pce TEXT NOT NULL
                         , type TEXT NOT NULL
                         , date TEXT NOT NULL
+                        , start_index INTEGER NOT NULL
                         , end_index INTEGER NOT NULL
                         , volume INTEGER NOT NULL
                         , energy INTEGER NOT NULL
@@ -64,14 +80,11 @@ class Database:
 
 
     # Set default configuration
-    logging.debug("Store default configuration")
-    config_query = f"INSERT OR REPLACE INTO config VALUES (?, ?)"
-    config = {
-        "day": datetime.datetime.now().strftime('%Y-%m-%d'),
-        "version": self.version
-    }
-    logging.debug("Database new config : %s", json.dumps(config))
-    self.cur.execute(config_query, ["config", json.dumps(config)])
+    logging.debug("Store configuration")
+
+    config_query = f"INSERT OR REPLACE INTO config VALUES (?, ?, ?, ?)"
+    self.cur.execute(config_query, [self.date, self.g2mVersion, self.dbVersion, self.influxVersion])
+    logging.debug("Database new config : date = %s, g2m version = %s, database version = %s, influxdb version = %s", self.date,self.g2mVersion, self.dbVersion, self.influxVersion)
     self.commit()
   
   
@@ -96,14 +109,34 @@ class Database:
 
   # Get current G2M version
   def getG2MVersion(self):
-    query = f"SELECT value FROM config"
-    self.cur.execute(query)
-    queryResult = self.cur.fetchone()
-    if queryResult is not None:
-      resultValue = json.loads(queryResult[0])
-      return resultValue["version"]
-    else:
-      return None
+    query = f"SELECT g2m_version FROM config"
+    queryResult = None
+    try:
+      self.cur.execute(query)
+      queryResult = self.cur.fetchone()
+      if queryResult is not None:
+        return queryResult[0]
+      else:
+        return None
+    except Exception as e:
+      logging.warning("Error retrieving g2m version in config: %s",e)
+      return queryResult
+
+  # Get current db version
+  def getDbVersion(self):
+    query = f"SELECT db_version FROM config"
+    queryResult = None
+    try:
+      self.cur.execute(query)
+      queryResult = self.cur.fetchone()
+      if queryResult is not None:
+        return queryResult[0]
+      else:
+        return None
+    except Exception as e:
+      logging.warning("Error retrieving db version in config: %s", e)
+      return queryResult
+
     
   # Get measures statistics
   def getMeasuresCount(self,type):
@@ -158,6 +191,70 @@ class Database:
   # Commit work
   def commit(self):
     self.con.commit()
+
+  # Load
+  def load(self):
+
+    # Load PCEs
+    self._loadPce()
+
+    # Load measures
+    for myPce in self.pceList:
+      self._loadMeasures(myPce)
+
+
+  # Load PCEs
+  def _loadPce(self):
+
+    query = "SELECT * FROM pces"
+    self.cur.execute(query)
+    queryResult = self.cur.fetchall()
+
+    # Create object PCE
+    for result in queryResult:
+      myPce = Pce(result)
+      self.pceList.append(myPce)
+
+
+  # Load measures
+  def _loadMeasures(self,pce):
+
+    query = f"SELECT * FROM measures WHERE pce = '{pce.pceId}'"
+    self.cur.execute(query)
+    queryResult = self.cur.fetchall()
+
+    # Create object measure
+    for result in queryResult:
+      myMeasure = Measure(pce,result)
+      pce.measureList.append(myMeasure)
+
+
+# Class PCE
+class Pce():
+
+  def __init__(self,result):
+
+    self.pceId = result[0]
+    self.pceJson = result[1]
+    info = json.loads(result[1])
+    self.alias = info["alias"]
+    self.measureList = []
+
+# Class Measure
+class Measure():
+
+  def __init__(self,pce,result):
+
+    self.pce = pce
+    self.type = result[1]
+    self.date = _convertDateTime(result[2])
+    self.startIndex = result[3]
+    self.endIndex = result[4]
+    self.volume = result[5]
+    self.energy = result[6]
+    self.conversionFactor = result[7]
+
+
     
     
   
