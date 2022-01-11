@@ -1,9 +1,8 @@
 # gazpar2mqtt
 Python script to fetch GRDF's website data and publish data to a mqtt broker
 
-![Gazpar logo](https://s2.qwant.com/thumbr/474x266/d/6/5f73ca2a6a6ad456cee493bb73bc9bf24662ded76a98c4eb0a117e16d666d2/th.jpg?u=https%3A%2F%2Ftse2.explicit.bing.net%2Fth%3Fid%3DOIP.Y_lVygaMR2JQYgTvLVvc5wHaEK%26pid%3DApi&q=0&b=1&p=0&a=0)
-
-![MQTT logo](https://s2.qwant.com/thumbr/474x266/e/b/0bb1caaf35b0ed78b567ce4ba21cffd3d22f8bc4a7c82a3ba331cc0dd88a23/th.jpg?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.eK8FAO1DnuuVt6wYA1WOmAHaEK%26pid%3DApi&q=0&b=1&p=0&a=0)
+![Gazpar logo](https://raw.githubusercontent.com/yukulehe/gazpar2mqtt/0.7.1/res/gazpar.png)
+<img src="https://github.com/yukulehe/gazpar2mqtt/blob/0.7.1/res/mqtt.png?raw=true" width="250" height="250">
 
 # Externals/Thanks
 The project has been inspired by job done by [empierre](https://github.com/empierre/domoticz_gaspar) on project domoticz_gazpar and [beufanet](https://github.com/beufanet/gazpar) on project gazinflux availables on Github. I modified a bit the code to work and fit my needs.
@@ -46,7 +45,7 @@ Important : the tool is still under development, various functions may disappear
 
 ## Roadmap :
 
-- Retrieve threesolds
+- Add DJU18 to influxdb
 - Home assistant custom entity card
 
 # Requirements
