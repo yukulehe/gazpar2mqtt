@@ -45,7 +45,7 @@ Important : the tool is still under development, various functions may disappear
 
 ## Roadmap :
 
-- Retrieve threesolds
+- InfluxDb v2 + grafana dashoard
 - Home assistant custom entity card
 
 # Requirements
