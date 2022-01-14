@@ -31,7 +31,7 @@ services:
       #INFLUXDB_ORG: 'myOrg'
       #INFLUXDB_BUCKET: 'gazpar'
       #INFLUXDB_TOKEN: 'myToken'
-      #INFLUXDB_TOKEN: '0' # Number of days in the past to be written to influx
+      #INFLUXDB_HORIZON: '0' # Number of days in the past to be written to influx
       #PRICE_PATH: '/data'
       #PRICE_KWH_DEFAULT: '0.04' # price in € per kWh
       #PRICE_FIX_DEFAULT: '0.5' # fix price in € per day
