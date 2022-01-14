@@ -311,7 +311,7 @@ def run(myParams):
                         logging.info("Database updated !")
 
                     else:
-                        logging.info("Unable to store any measure for PCE to database !",myPce.pceId)
+                        logging.info("Unable to store any measure for PCE %s to database !",myPce.pceId)
 
 
                     # Sub-step 3D : Get thresolds of the PCE
@@ -702,7 +702,7 @@ def run(myParams):
         # Loop on PCEs
         for myPce in myDb.pceList:
 
-            # Step 6A : Write PCE informations
+            # Sub-step A : Write PCE informations
             logging.info("Writing informations of PCE %s alias %s...", myPce.pceId, myPce.alias)
             point = myInflux.setPcePoint(myPce)
             if not myInflux.write(point):
@@ -710,13 +710,15 @@ def run(myParams):
             else:
                 logging.info("Informations of PCE written successfully !")
 
-            # Sub-step A : Write current price of the PCE
+            # Sub-step B : Write current price of the PCE
+            logging.info("Writing prices of PCE %s alias %s...", myPce.pceId, myPce.alias)
             myPcePrices = myPrices.getPricesByPce(myPce.pceId)
             if myPcePrices:
 
-                logging.info("Writing prices of PCE %s alias %s...", myPce.pceId, myPce.alias)
+
                 # Loop on prices of the PCE and write the current price
                 errorCount = 0
+                writeCount = 0
                 for myPrice in myPcePrices:
 
                     myDate = datetime.today()
@@ -728,17 +730,24 @@ def run(myParams):
                         # Write
                         if not myInflux.write(point):
                             logging.error("Unable to write price !")
+                        else:
+                            writeCount += 1
 
 
-                logging.info("Prices of PCE written successfully !")
+                logging.info("%s price(s) written successfully !",writeCount)
             else:
                 logging.warning("No prices found, use of the default price (%s €/kWh and %s €/day).", myParams.priceKwhDefault, myParams.priceFixDefault)
                 myInflux.setPricePoint(myPce, None, True, myPrices.defaultKwhPrice,myPrices.defaultFixPrice)
+                if not myInflux.write(point):
+                    logging.error("Unable to write price !")
+                else:
+                    logging.info("Default price written successfully !")
 
 
             # Sub-step B : Write measures of the PCE
             logging.info("Writing measures of PCE %s alias %s...", myPce.pceId, myPce.alias)
             errorCount = 0
+            writeCount = 0
             for myMeasure in myPce.measureList:
                 if myMeasure.type == gazpar.TYPE_I:
 
@@ -748,17 +757,20 @@ def run(myParams):
                     # Write
                     if not myInflux.write(point):
                         errorCount += 1
+                    else:
+                        writeCount += 1
 
                     # Check number of error
                     if errorCount > influxdb.WRITE_MAX_ERROR:
                         logging.warning("Writing stopped because of too many errors.")
                         break
-            logging.info("Measures of PCE written successfully !")
+            logging.info("%s measure(s) of PCE written successfully !",writeCount)
 
 
             # Sub-step C : Write thresolds of the PCE
             logging.info("Writing thresolds of PCE %s alias %s...", myPce.pceId, myPce.alias)
             errorCount = 0
+            writeCount = 0
             for myThresold in myPce.thresoldList:
 
                 # Set point
@@ -767,12 +779,14 @@ def run(myParams):
                 # Write
                 if not myInflux.write(point):
                     errorCount += 1
+                else:
+                    writeCount += 1
 
                 # Check number of error
                 if errorCount > influxdb.WRITE_MAX_ERROR:
                     logging.warning("Writing stopped because of too many errors.")
                     break
-            logging.info("Thresolds measures of PCE written successfully !")
+            logging.info("%s thresold(s) of PCE written successfully !",writeCount)
 
         # Release memory
         del myInflux
