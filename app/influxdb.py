@@ -11,7 +11,7 @@ import price
 
 # Constants
 WRITE_MAX_ERROR = 20 # maximum number of write errors accepted before abort
-
+WRITE_SLEEP = 0.02 # time to sleep between two write
 
 # Class influx DB
 class InfluxDb:
@@ -173,7 +173,7 @@ class InfluxDb:
 
         try:
             self.writeApi.write(bucket=self.bucket, org=self.org, record=point)
-            time.sleep(0.005)
+            time.sleep(WRITE_SLEEP)
             logging.debug("Point written successfully: %s",point)
             return True
 
