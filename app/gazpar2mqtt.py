@@ -71,7 +71,7 @@ def run(myParams):
 
 
     # Connect to database
-    myDb.connect()
+    myDb.connect(G2M_VERSION,G2M_DB_VERSION,G2M_INFLUXDB_VERSION)
     if myDb.isConnected() :
         logging.info("SQLite database connected !")
     else:

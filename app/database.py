@@ -155,7 +155,7 @@ class Database:
 
 
   # Connexion to database
-  def connect(self):
+  def connect(self,g2mVersion,dbVersion,influxVersion):
     
     # Create directory if not exists
     if not os.path.exists(self.path):
@@ -167,7 +167,7 @@ class Database:
         logging.debug("Initialization of the SQLite database...")
         self.con = sqlite3.connect(self.path + "/" + DATABASE_NAME, timeout=DATABASE_TIMEOUT)
         self.cur = self.con.cursor()
-        self.init()
+        self.init(g2mVersion,dbVersion,influxVersion)
     else:
         logging.debug("Connexion to database")
         self.con = sqlite3.connect(self.path + "/" + DATABASE_NAME, timeout=DATABASE_TIMEOUT)
