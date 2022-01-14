@@ -366,12 +366,10 @@ Note : thresold percentage can be editable in environment variable.
 For Hass.io users, gazpar2mqtt is also available as an add-on provided by [alexbelgium](https://github.com/alexbelgium) (thanks you to him). Please visit the dedicated [repository](https://github.com/alexbelgium/hassio-addons/tree/master/gazpar2mqtt).
 
 
-## InfluxDb
+## InfluxDb & Grafana
 
-To be completed
+You can activate export of data to your InfluxDb v2 database. InfluxDb v1 is currently not supported.
 
-## Grafana
-
-
-
+Example of a Grafana dashboard using InfluxDb v2 :
+<img src="https://github.com/yukulehe/gazpar2mqtt/blob/0.7.1/res/grafana_sample.png?raw=true" width="70%">
 
