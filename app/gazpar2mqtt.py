@@ -737,7 +737,7 @@ def run(myParams):
                 logging.info("%s price(s) written successfully !",writeCount)
             else:
                 logging.warning("No prices found, use of the default price (%s €/kWh and %s €/day).", myParams.priceKwhDefault, myParams.priceFixDefault)
-                myInflux.setPricePoint(myPce, None, True, myPrices.defaultKwhPrice,myPrices.defaultFixPrice)
+                point = myInflux.setPricePoint(myPce, None, True, myPrices.defaultKwhPrice,myPrices.defaultFixPrice)
                 if not myInflux.write(point):
                     logging.error("Unable to write price !")
                 else:

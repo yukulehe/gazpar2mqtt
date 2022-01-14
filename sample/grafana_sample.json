@@ -22,7 +22,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 2,
-  "iteration": 1642177005907,
+  "iteration": 1642185217794,
   "links": [],
   "panels": [
     {
@@ -1773,7 +1773,7 @@
       "pluginVersion": "8.1.2",
       "targets": [
         {
-          "query": "import \"date\"\r\nfrom(bucket: \"gazpar\")\r\n  |> range(start: -3y, stop: -0d)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_price_measure\")\r\n  |> keep(columns:[\"_time\",\"_value\",\"_field\"])\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"days\")\r\n  ",
+          "query": "import \"date\"\r\nfrom(bucket: \"gazpar\")\r\n  |> range(start: -1y, stop: 1d)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_price_measure\")\r\n  |> keep(columns:[\"_time\",\"_value\",\"_field\"])\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"days\")\r\n  ",
           "refId": "A"
         }
       ],
@@ -2662,5 +2662,5 @@
   "timezone": "browser",
   "title": "Gaz",
   "uid": "5tpNcjA7k",
-  "version": 254
+  "version": 255
 }
