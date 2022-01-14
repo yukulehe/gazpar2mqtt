@@ -733,7 +733,7 @@ def run(myParams):
 
                 logging.info("Prices of PCE written successfully !")
             else:
-                logging.warning("No prices found, use of the default price (%s €/kWh).", myParams.priceDefault)
+                logging.warning("No prices found, use of the default price (%s €/kWh and %s €/day).", myParams.priceKwhDefault, myParams.priceFixDefault)
 
             # Step 6 B : Write measures of the PCE
             logging.info("Writing measures of PCE %s alias %s...", myPce.pceId, myPce.alias)
