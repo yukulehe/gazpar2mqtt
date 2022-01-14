@@ -370,6 +370,6 @@ For Hass.io users, gazpar2mqtt is also available as an add-on provided by [alexb
 
 You can activate export of data to your InfluxDb v2 database. InfluxDb v1 is currently not supported.
 
-Example of a Grafana dashboard using InfluxDb v2 :
+Example of a Grafana dashboard using InfluxDb v2 and gazpar2mqtt measures :
 <img src="https://github.com/yukulehe/gazpar2mqtt/blob/0.7.1/res/grafana_sample.png?raw=true" width="70%">
 
