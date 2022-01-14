@@ -25,12 +25,16 @@ services:
       #HASS_PREFIX: 'homeassistant'
       #HASS_DEVICE_NAME: 'gazpar'
       #THRESOLD_PERCENTAGE: 80 # warn when consumptions is above this percentage of the thresold
-      #INFLUXDB_ENABLE=False
-      #INFLUXDB_HOST=influxdb
-      #INFLUXDB_PORT=8086
-      #INFLUXDB_ORG=myOrg
-      #INFLUXDB_BUCKET=gazpar
-      #INFLUXDB_TOKEN=myToken
+      #INFLUXDB_ENABLE: 'True'
+      #INFLUXDB_HOST: 'influxdb'
+      #INFLUXDB_PORT: '8086'
+      #INFLUXDB_ORG: 'myOrg'
+      #INFLUXDB_BUCKET: 'gazpar'
+      #INFLUXDB_TOKEN: 'myToken'
+      #INFLUXDB_TOKEN: '0' # Number of days in the past to be written to influx
+      #PRICE_PATH: '/data'
+      #PRICE_KWH_DEFAULT: '0.04' # price in € per kWh
+      #PRICE_FIX_DEFAULT: '0.5' # fix price in € per day
       #DB_INIT: 'False' # force the reinitialization of the database
       #DB_PATH: '/data' # database path
       #DEBUG: 'True'
