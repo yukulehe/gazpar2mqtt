@@ -54,7 +54,7 @@ class InfluxDb:
         myKwhPrice = prices.defaultKwhPrice
         myFixPrice = prices.defaultFixPrice
 
-        for myPrice in prices.pricesList:
+        for myPrice in prices.getPricesByPce(measure.pce.pceId):
             if myDate >= myPrice.startDate and myDate <= myPrice.endDate:
                 myKwhPrice = myPrice.kwhPrice
                 myFixPrice = myPrice.fixPrice

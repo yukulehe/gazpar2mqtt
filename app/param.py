@@ -189,8 +189,8 @@ class Params:
     if "INFLUXDB_HORIZON" in os.environ: self.influxHorizon = os.environ["INFLUXDB_HORIZON"]
 
     if "PRICE_PATH" in os.environ: self.pricePath = os.environ["PRICE_PATH"]
-    if "PRICE_KWH_DEFAULT" in os.environ: self.priceKwhDefault = os.environ["PRICE_KWH_DEFAULT"]
-    if "PRICE_FIX_DEFAULT" in os.environ: self.priceFixDefault = os.environ["PRICE_FIX_DEFAULT"]
+    if "PRICE_KWH_DEFAULT" in os.environ: self.priceKwhDefault = float(os.environ["PRICE_KWH_DEFAULT"])
+    if "PRICE_FIX_DEFAULT" in os.environ: self.priceFixDefault = float(os.environ["PRICE_FIX_DEFAULT"])
     
     if "DEBUG" in os.environ: self.debug = _isItTrue(os.environ["DEBUG"])
   
@@ -231,8 +231,8 @@ class Params:
     if self.args.influxdb_token is not None: self.influxToken = self.args.influxdb_token
     if self.args.influxdb_horizon is not None: self.influxHorizon = self.args.influxdb_horizon
 
-    if self.args.price_kwh_default is not None: self.priceKwhDefault = self.args.price_kwh_default
-    if self.args.price_fix_default is not None: self.priceFixDefault = self.args.price_fix_default
+    if self.args.price_kwh_default is not None: self.priceKwhDefault = float(self.args.price_kwh_default)
+    if self.args.price_fix_default is not None: self.priceFixDefault = float(self.args.price_fix_default)
     if self.args.price_path is not None: self.pricePath = self.args.price_path
       
     if self.args.debug is not None: self.debug = _isItTrue(self.args.debug)
