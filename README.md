@@ -373,3 +373,4 @@ You can activate export of data to your InfluxDb v2 database. InfluxDb v1 is cur
 Example of a Grafana dashboard using InfluxDb v2 and gazpar2mqtt measures :
 <img src="https://github.com/yukulehe/gazpar2mqtt/blob/0.7.1/res/grafana_sample.png?raw=true" width="70%">
 
+To integrate this dashboard into Grafana, copy/paste content of file [grafana_sample.json](https://github.com/yukulehe/gazpar2mqtt/blob/0.7.1/sample/grafana_sample.json).
