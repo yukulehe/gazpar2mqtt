@@ -49,10 +49,10 @@ class Params:
     self.dbInit = False
     self.dbPath = '/data'
     
-    # Debug param
+    # Debug params
     self.debug = False
     
-    # Thresold param
+    # Thresold params
     self.thresoldPercentage = 80
 
     # Influx db
@@ -62,6 +62,12 @@ class Params:
     self.influxBucket = None
     self.influxOrg = None
     self.influxToken = None
+    self.influxHorizon = None
+
+    # Price params
+    self.priceKwhDefault = 0.04
+    self.priceFixDefault = 0
+    self.pricePath = '/data'
 
     # Step 2 : Init arguments for command line
     self.args = self.initArg()
@@ -129,6 +135,15 @@ class Params:
       "--influxdb_bucket", help="Influxdb bucket")
     self.parser.add_argument(
       "--influxdb_token", help="Influxdb token")
+    self.parser.add_argument(
+      "--influxdb_horizon", help="Influxdb horizon in days ")
+
+    self.parser.add_argument(
+      "--price_kwh_default", help="Default price in €/kWh (default : 0.04)")
+    self.parser.add_argument(
+      "--price_fix_default", help="Default daily fix price in € (default : 0.00)")
+    self.parser.add_argument(
+      "--price_path", help="Path to the price.csv file (default : /data)")
 
     self.parser.add_argument(
         "--debug",            help="Enable debug mode")
@@ -171,6 +186,11 @@ class Params:
     if "INFLUXDB_ORG" in os.environ: self.influxOrg = os.environ["INFLUXDB_ORG"]
     if "INFLUXDB_BUCKET" in os.environ: self.influxBucket = os.environ["INFLUXDB_BUCKET"]
     if "INFLUXDB_TOKEN" in os.environ: self.influxToken = os.environ["INFLUXDB_TOKEN"]
+    if "INFLUXDB_HORIZON" in os.environ: self.influxHorizon = os.environ["INFLUXDB_HORIZON"]
+
+    if "PRICE_PATH" in os.environ: self.pricePath = os.environ["PRICE_PATH"]
+    if "PRICE_KWH_DEFAULT" in os.environ: self.priceKwhDefault = os.environ["PRICE_KWH_DEFAULT"]
+    if "PRICE_FIX_DEFAULT" in os.environ: self.priceFixDefault = os.environ["PRICE_FIX_DEFAULT"]
     
     if "DEBUG" in os.environ: self.debug = _isItTrue(os.environ["DEBUG"])
   
@@ -209,6 +229,11 @@ class Params:
     if self.args.influxdb_org is not None: self.influxOrg = self.args.influxdb_org
     if self.args.influxdb_bucket is not None: self.influxBucket = self.args.influxdb_bucket
     if self.args.influxdb_token is not None: self.influxToken = self.args.influxdb_token
+    if self.args.influxdb_horizon is not None: self.influxHorizon = self.args.influxdb_horizon
+
+    if self.args.price_kwh_default is not None: self.priceKwhDefault = self.args.price_kwh_default
+    if self.args.price_fix_default is not None: self.priceFixDefault = self.args.price_fix_default
+    if self.args.price_path is not None: self.pricePath = self.args.price_path
       
     if self.args.debug is not None: self.debug = _isItTrue(self.args.debug)
     
@@ -259,5 +284,8 @@ class Params:
                    self.influxEnable, self.influxHost, self.influxPort, self.influxOrg, self.influxBucket)
     else:
       logging.info("Influxdb config : Enable = %s",self.influxEnable)
+    logging.info("Price config : Default price = %s €/kWh, default fix price = %s €/day, path to file = %s"
+                 ,self.priceKwhDefault,self.priceFixDefault,self.pricePath)
     logging.info("Database options : Force reinitialization = %s, Path = %s", self.dbInit, self.dbPath)
     logging.info("Debug mode : Enable = %s", self.debug)
+

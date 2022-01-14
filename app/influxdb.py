@@ -7,6 +7,10 @@ from database import Pce, Measure
 from datetime import datetime, timedelta
 from influxdb_client import Point,InfluxDBClient
 from influxdb_client.client.write_api import SYNCHRONOUS
+import price
+
+# Constants
+WRITE_MAX_ERROR = 20 # maximum number of write errors accepted before abort
 
 
 # Class influx DB
@@ -42,9 +46,21 @@ class InfluxDb:
             print(e)
 
     # Set measure point
-    def setMeasurePoint(self,measure):
+    def setMeasurePoint(self,measure,prices):
 
         myDate = measure.date
+
+        # Retrieve the corresponding prices, if not found use the default price
+        myKwhPrice = prices.defaultKwhPrice
+        myFixPrice = prices.defaultFixPrice
+
+        for myPrice in prices.pricesList:
+            if myDate >= myPrice.startDate and myDate <= myPrice.endDate:
+                myKwhPrice = myPrice.kwhPrice
+                myFixPrice = myPrice.fixPrice
+
+        # Calculate the cost in Eur
+        myCost = ( myKwhPrice * measure.energy ) + myFixPrice
 
         point = [{
             "measurement": "gazpar_informative_measure", # container of tags
@@ -61,9 +77,10 @@ class InfluxDb:
             "fields": {
                 "start_index": measure.startIndex,
                 "end_index" : measure.endIndex,
-                "gas_mcube": measure.volume,
-                "energy_kWh" : measure.energy,
-                "conversion_factor": measure.conversionFactor
+                "gas_mcube": float(measure.volume),
+                "energy_kWh" : float(measure.energy),
+                "conversion_factor": float(measure.conversionFactor),
+                "cost_eur" : float(myCost)
             },
             "time": myDate
         }]
@@ -71,9 +88,37 @@ class InfluxDb:
         logging.debug("Point : %s",point)
         return point
 
+    # Set PCE point
+    def setPcePoint(self,pce):
+
+        myDate = datetime.today()
+
+        point = [{
+            "measurement": "gazpar_pce_measure",  # container of tags
+            "tags": {
+                "pce": pce.pceId,
+                "type": "pce",
+                "pce_alias": pce.alias,
+                "year": myDate.strftime("%Y"),
+                "month": myDate.strftime("%m"),
+                "month_name": myDate.strftime("%b"),
+                "owner_name": pce.ownerName,
+                "postal_code": pce.postalCode,
+                "activation_date": pce.activationDate,
+                "frequence_releve": pce.frequenceReleve,
+                "state": pce.state,
+            },
+            "fields": {
+                "pce_count": 1,
+            },
+            "time": myDate
+        }]
+
+        logging.debug("Point : %s", point)
+        return point
+
     # Set measure point
     def setThresoldPoint(self, thresold):
-
 
         myDate = thresold.date
 
@@ -88,7 +133,34 @@ class InfluxDb:
                 "month_name": myDate.strftime("%b"),
             },
             "fields": {
-                "energy_kWh": thresold.energy,
+                "energy_kWh": float(thresold.energy),
+            },
+            "time": myDate
+        }]
+
+        logging.debug("Point : %s", point)
+        return point
+
+    # Set price point
+    def setPricePoint(self, pce, price):
+
+        myDate = price.startDate
+
+        point = [{
+            "measurement": "gazpar_price_measure",  # container of tags
+            "tags": {
+                "pce": pce.pceId,
+                "pce_alias": pce.alias,
+                "type": "price",
+                "year": myDate.strftime("%Y"),
+                "month": int(myDate.strftime("%m")),
+                "month_name": myDate.strftime("%b"),
+                "weekday_name": myDate.strftime("%A"),
+                "weekday_no": myDate.weekday()
+            },
+            "fields": {
+                "price_kwh_eur": float(price.kwhPrice),
+                "price_fix_eur": float(price.fixPrice)
             },
             "time": myDate
         }]
@@ -102,7 +174,7 @@ class InfluxDb:
         try:
             self.writeApi.write(bucket=self.bucket, org=self.org, record=point)
             time.sleep(0.005)
-            logging.debug("Point writed successfully: %s",point)
+            logging.debug("Point written successfully: %s",point)
             return True
 
         except Exception as e:

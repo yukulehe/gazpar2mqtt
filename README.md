@@ -17,7 +17,9 @@ Important : the tool is still under development, various functions may disappear
 
 - v0.7.x :
   - Retrieve published measures to supplier
-  - Write to Influxdb v2
+  - Export to Influxdb v2
+  - Grafana dashboard template
+  - Cost calculation from prices file
 - v0.6.x :
   - Implementation of a sqlite database
   - Addition of converter factor from Grdf
@@ -85,6 +87,17 @@ Thresolds (Seuil) can be set on GRDF website for current and future months.
 
 The script can retrieve those informations and publish a warn when the thresold is close to being reached.
 
+## Prices
+
+Gazpar2mqtt can ingest your own energy prices to estimate your costs. Download and complete the sample file prices.csv using the following format :
+``` 
+pce;startDate;endDate;kwhPrice;fixPrice
+XXXX;2019-11-28;2020-12-27;0.03713;0.25
+XXXX;2020-12-28;2021-01-25;0.03472;0.30
+XXXX;2021-01-26;2099-12-31;0.03733;0.35
+``` 
+Then precise in parameters the path to the file prices.csv.
+
 ## MQTT broker
 
 A MQTT broker is required. Please check its configuration (hostname, port, remote access allowed, username & password if needed).
@@ -104,31 +117,35 @@ Mandatory :
 
 Optional :
 
-| Variable                | Description                                           | Default value         |
-|-------------------------|-------------------------------------------------------|-----------------------|
+| Variable                | Description                                           | Default value        |
+|-------------------------|-------------------------------------------------------|----------------------|
 | **SCHEDULE_TIME**       | Time for refreshing data everyday                     | None (format : 14:30) |
-| **MQTT_PORT**           | Port of the MQTT broker                               | 1883                  |
-| **MQTT_TOPIC**          | Topic used as prefix                                  | gazpar                |
-| **MQTT_CLIENTID**       | Client id to be used for connexion to the MQTT broker | gazou                 |
-| **MQTT_USERNAME**       | Username to be used for connexion to the MQTT brokerr |                       |
-| **MQTT_PASSWORD**       | Password to be used for connexion to the MQTT broker  |                       |
-| **MQTT_QOS**            | QOS for message publishing (0, 1 or 2)                | 1                     |
-| **MQTT_RETAIN**         | Retain flag                                           | False                 |
-| **MQTT_SSL**            | Enable MQTT SSL connexion                             | False                 |
-| **STANDALONE_MODE**     | Enable standalone publication mode                    | True                  |
-| **HASS_DISCOVERY**      | Enable Home assistant dicovery mode                   | False                 |
-| **HASS_PREFIX**         | Home assistant topic prefix                           | homeassistant         |
-| **HASS_DEVICE_NAME**    | Home assistant device name                            | gazpar                |
-| **THRESOLD_PERCENTAGE** | Percentage of the thresold to be reached              | 80                    |
-| **INFLUXDB_ENABLE**     | Activate export to Influxdb v2                        | False                 |
-| **INFLUXDB_HOST**       | Host of influxdb                                      |                  |
-| **INFLUXDB_PORT**       | Port of influxdb                                      |   8086               |
-| **INFLUXDB_ORG**        | Influxdb organization                                 |                  |
-| **INFLUXDB_BUCKET**     | Influxdb bucket                                       |                  |
-| **INFLUXDB_TOKEN**      | Influxdb token with read access to the bucket         |                  |
-| **DB_INIT**             | Force reinitialization of the database                | False                 |
-| **DB_PATH**             | Database path                                         | /data                 |
-| **DEBUG**               | Enable debug mode                                     | False                 |
+| **MQTT_PORT**           | Port of the MQTT broker                               | 1883                 |
+| **MQTT_TOPIC**          | Topic used as prefix                                  | gazpar               |
+| **MQTT_CLIENTID**       | Client id to be used for connexion to the MQTT broker | gazou                |
+| **MQTT_USERNAME**       | Username to be used for connexion to the MQTT brokerr |                      |
+| **MQTT_PASSWORD**       | Password to be used for connexion to the MQTT broker  |                      |
+| **MQTT_QOS**            | QOS for message publishing (0, 1 or 2)                | 1                    |
+| **MQTT_RETAIN**         | Retain flag                                           | False                |
+| **MQTT_SSL**            | Enable MQTT SSL connexion                             | False                |
+| **STANDALONE_MODE**     | Enable standalone publication mode                    | True                 |
+| **HASS_DISCOVERY**      | Enable Home assistant dicovery mode                   | False                |
+| **HASS_PREFIX**         | Home assistant topic prefix                           | homeassistant        |
+| **HASS_DEVICE_NAME**    | Home assistant device name                            | gazpar               |
+| **THRESOLD_PERCENTAGE** | Percentage of the thresold to be reached              | 80                   |
+| **PRICE_PATH**          | Path to price.csv file                                | /data                |
+| **PRICE_KWH_DEFAULT**   | Energy price in € per kWh                             | 0.04                 |
+| **PRICE_FIX_DEFAULT**   | Fix price in € per day                                | 0.0                  |
+| **INFLUXDB_ENABLE**     | Activate export to Influxdb v2                        | False                |
+| **INFLUXDB_HOST**       | Host of influxdb                                      |                      |
+| **INFLUXDB_PORT**       | Port of influxdb                                      | 8086                 |
+| **INFLUXDB_ORG**        | Influxdb organization                                 |                      |
+| **INFLUXDB_BUCKET**     | Influxdb bucket                                       |                      |
+| **INFLUXDB_TOKEN**      | Influxdb token with read access to the bucket         |                      |
+| **INFLUXDB_HORIZON**    | Number of days in the past to be write to Influxdb    | 0 (= all data)       |
+| **DB_INIT**             | Force reinitialization of the database                | False                |
+| **DB_PATH**             | Database path                                         | /data                |
+| **DEBUG**               | Enable debug mode                                     | False                |
 
 
 # Usage
@@ -347,3 +364,14 @@ Note : thresold percentage can be editable in environment variable.
 
 ### Add-on
 For Hass.io users, gazpar2mqtt is also available as an add-on provided by [alexbelgium](https://github.com/alexbelgium) (thanks you to him). Please visit the dedicated [repository](https://github.com/alexbelgium/hassio-addons/tree/master/gazpar2mqtt).
+
+
+## InfluxDb
+
+To be completed
+
+## Grafana
+
+
+
+
