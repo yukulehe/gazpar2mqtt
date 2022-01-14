@@ -11,7 +11,7 @@ import price
 
 # Constants
 WRITE_MAX_ERROR = 20 # maximum number of write errors accepted before abort
-WRITE_SLEEP = 0.02 # time to sleep between two write
+WRITE_SLEEP = 0.005 # time to sleep between two write
 
 # Class influx DB
 class InfluxDb:
