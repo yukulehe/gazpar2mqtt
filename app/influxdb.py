@@ -142,9 +142,16 @@ class InfluxDb:
         return point
 
     # Set price point
-    def setPricePoint(self, pce, price):
+    def setPricePoint(self, pce, price,isDefault,defaultKwh,defaultFix):
 
-        myDate = price.startDate
+        myDate = datetime.today()
+
+        if isDefault:
+            myKwh = defaultKwh
+            myFix = defaultFix
+        else:
+            myKwh = price.kwhPrice
+            myFix = price.fixPrice
 
         point = [{
             "measurement": "gazpar_price_measure",  # container of tags
@@ -159,8 +166,8 @@ class InfluxDb:
                 "weekday_no": myDate.weekday()
             },
             "fields": {
-                "price_kwh_eur": float(price.kwhPrice),
-                "price_fix_eur": float(price.fixPrice)
+                "price_kwh_eur": float(myKwh),
+                "price_fix_eur": float(myFix)
             },
             "time": myDate
         }]

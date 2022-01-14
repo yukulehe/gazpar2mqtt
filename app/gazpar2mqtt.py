@@ -367,7 +367,7 @@ def run(myParams):
 
 
     ####################################################################################################################
-    # STEP 4A : Standalone mode
+    # STEP 5A : Standalone mode
     ####################################################################################################################
     if myMqtt.isConnected \
         and myParams.standalone \
@@ -498,7 +498,7 @@ def run(myParams):
             logging.error("Standalone mode : unable to publish value to mqtt broker")
 
     ####################################################################################################################
-    # STEP 4B : Home Assistant discovery mode
+    # STEP 5B : Home Assistant discovery mode
     ####################################################################################################################
     if myMqtt.isConnected \
         and myParams.hassDiscovery \
@@ -651,7 +651,7 @@ def run(myParams):
             logging.error("Home Assistant discovery mode : unable to publish value to mqtt broker")
 
     ####################################################################################################################
-    # STEP 5 : Disconnect mqtt broker
+    # STEP 6 : Disconnect mqtt broker
     ####################################################################################################################
     if myMqtt.isConnected:
 
@@ -672,7 +672,7 @@ def run(myParams):
 
 
     ####################################################################################################################
-    # STEP 6 : Influxdb
+    # STEP 7 : Influxdb
     ####################################################################################################################
     if myParams.influxEnable:
 
@@ -710,32 +710,33 @@ def run(myParams):
             else:
                 logging.info("Informations of PCE written successfully !")
 
-            # Step 6A : Write prices of the PCE
+            # Sub-step A : Write current price of the PCE
             myPcePrices = myPrices.getPricesByPce(myPce.pceId)
             if myPcePrices:
 
                 logging.info("Writing prices of PCE %s alias %s...", myPce.pceId, myPce.alias)
-                # Loop on prices of the PCE
+                # Loop on prices of the PCE and write the current price
                 errorCount = 0
                 for myPrice in myPcePrices:
 
-                    # Set point
-                    point = myInflux.setPricePoint(myPce,myPrice)
+                    myDate = datetime.today()
+                    if myDate >= myPrice.startDate and myDate <= myPrice.endDate:
 
-                    # Write
-                    if not myInflux.write(point):
-                        errorCount += 1
+                        # Set point
+                        point = myInflux.setPricePoint(myPce,myPrice,False,None,None)
 
-                    # Check number of error
-                    if errorCount > influxdb.WRITE_MAX_ERROR:
-                        logging.warning("Writing stopped because of too many errors.")
-                        break
+                        # Write
+                        if not myInflux.write(point):
+                            logging.error("Unable to write price !")
+
 
                 logging.info("Prices of PCE written successfully !")
             else:
                 logging.warning("No prices found, use of the default price (%s €/kWh and %s €/day).", myParams.priceKwhDefault, myParams.priceFixDefault)
+                myInflux.setPricePoint(myPce, None, True, myPrices.defaultKwhPrice,myPrices.defaultFixPrice)
 
-            # Step 6 B : Write measures of the PCE
+
+            # Sub-step B : Write measures of the PCE
             logging.info("Writing measures of PCE %s alias %s...", myPce.pceId, myPce.alias)
             errorCount = 0
             for myMeasure in myPce.measureList:
@@ -755,7 +756,7 @@ def run(myParams):
             logging.info("Measures of PCE written successfully !")
 
 
-            # Step 6C : Write thresolds of the PCE
+            # Sub-step C : Write thresolds of the PCE
             logging.info("Writing thresolds of PCE %s alias %s...", myPce.pceId, myPce.alias)
             errorCount = 0
             for myThresold in myPce.thresoldList:
