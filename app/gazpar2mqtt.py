@@ -23,7 +23,7 @@ import price
 
 # gazpar2mqtt constants
 G2M_VERSION = '0.7.1'
-G2M_DB_VERSION = '0.7.2'
+G2M_DB_VERSION = '0.7.1'
 G2M_INFLUXDB_VERSION = '0.7.1'
 
 #######################################################################
