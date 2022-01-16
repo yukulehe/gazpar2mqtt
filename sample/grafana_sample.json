@@ -22,7 +22,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 2,
-  "iteration": 1642185217794,
+  "iteration": 1642350765482,
   "links": [],
   "panels": [
     {
@@ -36,7 +36,7 @@
       },
       "id": 11,
       "panels": [],
-      "title": "Réalisé",
+      "title": "Mesuré",
       "type": "row"
     },
     {
@@ -424,13 +424,13 @@
       "pluginVersion": "8.1.2",
       "targets": [
         {
-          "query": "import \"date\"\r\nfrom(bucket: \"gazpar\")\r\n  |> range(start: -7d, stop: -6d)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> keep(columns:[\"_time\",\"_value\",\"_field\",\"weekday_name\"])\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"actual\")\r\n  ",
+          "query": "import \"date\"\r\nfrom(bucket: \"gazpar\")\r\n  |> range(start: -6d, stop: -5d)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> keep(columns:[\"_time\",\"_value\",\"_field\",\"weekday_name\"])\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"actual\")\r\n  ",
           "refId": "A"
         }
       ],
       "timeFrom": null,
       "timeShift": null,
-      "title": "J-7",
+      "title": "J-6",
       "transparent": true,
       "type": "stat"
     },
@@ -2531,6 +2531,7 @@
         }
       ],
       "timeFrom": null,
+      "timeShift": null,
       "title": "Consommation (kwh) et coût (€) par mois",
       "transparent": true,
       "type": "timeseries"
@@ -2662,5 +2663,5 @@
   "timezone": "browser",
   "title": "Gaz",
   "uid": "5tpNcjA7k",
-  "version": 255
+  "version": 260
 }
