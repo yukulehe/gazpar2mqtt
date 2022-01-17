@@ -714,26 +714,19 @@ def run(myParams):
             logging.info("Writing prices of PCE %s alias %s...", myPce.pceId, myPce.alias)
             myPcePrices = myPrices.getPricesByPce(myPce.pceId)
             if myPcePrices:
-
-
                 # Loop on prices of the PCE and write the current price
                 errorCount = 0
                 writeCount = 0
                 for myPrice in myPcePrices:
-
-                    myDate = datetime.today()
+                    myDate = datetime.date.today()
                     if myDate >= myPrice.startDate and myDate <= myPrice.endDate:
-
                         # Set point
                         point = myInflux.setPricePoint(myPce,myPrice,False,None,None)
-
                         # Write
                         if not myInflux.write(point):
                             logging.error("Unable to write price !")
                         else:
                             writeCount += 1
-
-
                 logging.info("%s price(s) written successfully !",writeCount)
             else:
                 logging.warning("No prices found, use of the default price (%s €/kWh and %s €/day).", myParams.priceKwhDefault, myParams.priceFixDefault)
