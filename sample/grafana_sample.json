@@ -22,7 +22,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 2,
-  "iteration": 1642407547576,
+  "iteration": 1642442608331,
   "links": [],
   "panels": [
     {
@@ -43,14 +43,14 @@
       "datasource": null,
       "description": "",
       "gridPos": {
-        "h": 8,
+        "h": 9,
         "w": 3,
         "x": 0,
         "y": 1
       },
       "id": 9,
       "options": {
-        "content": "# Gazpar $pce\n\n  Status : $state\n  \n  Date d'activation : $activation_date\n  \n  <img src=\"https://raw.githubusercontent.com/yukulehe/gazpar2mqtt/0.7.1/res/gazpar.png\" width=\"50%\">\n\n           ",
+        "content": "# Gazpar\n\n  PCE : $pce\n\n  Status : $state\n  \n  Date d'activation : $activation_date\n  \n  <img src=\"https://raw.githubusercontent.com/yukulehe/gazpar2mqtt/0.7.1/res/gazpar.png\" width=\"30%\">\n\n           ",
         "mode": "markdown"
       },
       "pluginVersion": "8.1.2",
@@ -65,7 +65,7 @@
       "type": "text"
     },
     {
-      "datasource": null,
+      "datasource": "${datasource}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -239,7 +239,7 @@
       "pluginVersion": "8.1.2",
       "targets": [
         {
-          "query": "import \"date\"\r\nfrom(bucket: \"gazpar\")\r\n  |> range(start: -7d, stop: -6d)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> keep(columns:[\"_time\",\"_value\",\"_field\",\"weekday_name\"])\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"actual\")\r\n  ",
+          "query": "import \"date\"\r\nfrom(bucket: \"$bucket\")\r\n  |> range(start: -7d, stop: -6d)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> keep(columns:[\"_time\",\"_value\",\"_field\",\"weekday_name\"])\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"actual\")\r\n  ",
           "refId": "A"
         }
       ],
@@ -250,7 +250,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${datasource}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -424,7 +424,7 @@
       "pluginVersion": "8.1.2",
       "targets": [
         {
-          "query": "import \"date\"\r\nfrom(bucket: \"gazpar\")\r\n  |> range(start: -6d, stop: -5d)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> keep(columns:[\"_time\",\"_value\",\"_field\",\"weekday_name\"])\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"actual\")\r\n  ",
+          "query": "import \"date\"\r\nfrom(bucket: \"$bucket\")\r\n  |> range(start: -6d, stop: -5d)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> keep(columns:[\"_time\",\"_value\",\"_field\",\"weekday_name\"])\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"actual\")\r\n  ",
           "refId": "A"
         }
       ],
@@ -435,7 +435,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${datasource}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -609,7 +609,7 @@
       "pluginVersion": "8.1.2",
       "targets": [
         {
-          "query": "import \"date\"\r\nfrom(bucket: \"gazpar\")\r\n  |> range(start: -5d, stop: -4d)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> keep(columns:[\"_time\",\"_value\",\"_field\",\"weekday_name\"])\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"actual\")\r\n  ",
+          "query": "import \"date\"\r\nfrom(bucket: \"$bucket\")\r\n  |> range(start: -5d, stop: -4d)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> keep(columns:[\"_time\",\"_value\",\"_field\",\"weekday_name\"])\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"actual\")\r\n  ",
           "refId": "A"
         }
       ],
@@ -620,7 +620,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${datasource}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -794,7 +794,7 @@
       "pluginVersion": "8.1.2",
       "targets": [
         {
-          "query": "import \"date\"\r\nfrom(bucket: \"gazpar\")\r\n  |> range(start: -4d, stop: -3d)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> keep(columns:[\"_time\",\"_value\",\"_field\",\"weekday_name\"])\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"actual\")\r\n  ",
+          "query": "import \"date\"\r\nfrom(bucket: \"$bucket\")\r\n  |> range(start: -4d, stop: -3d)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> keep(columns:[\"_time\",\"_value\",\"_field\",\"weekday_name\"])\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"actual\")\r\n  ",
           "refId": "A"
         }
       ],
@@ -805,7 +805,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${datasource}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -979,7 +979,7 @@
       "pluginVersion": "8.1.2",
       "targets": [
         {
-          "query": "import \"date\"\r\nfrom(bucket: \"gazpar\")\r\n  |> range(start: -3d, stop: -2d)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> keep(columns:[\"_time\",\"_value\",\"_field\",\"weekday_name\"])\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"actual\")\r\n  ",
+          "query": "import \"date\"\r\nfrom(bucket: \"$bucket\")\r\n  |> range(start: -3d, stop: -2d)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> keep(columns:[\"_time\",\"_value\",\"_field\",\"weekday_name\"])\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"actual\")\r\n  ",
           "refId": "A"
         }
       ],
@@ -990,7 +990,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${datasource}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1164,7 +1164,7 @@
       "pluginVersion": "8.1.2",
       "targets": [
         {
-          "query": "import \"date\"\r\nfrom(bucket: \"gazpar\")\r\n  |> range(start: -2d, stop: -1d)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> keep(columns:[\"_time\",\"_value\",\"_field\",\"weekday_name\"])\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"actual\")\r\n  ",
+          "query": "import \"date\"\r\nfrom(bucket: \"$bucket\")\r\n  |> range(start: -2d, stop: -1d)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> keep(columns:[\"_time\",\"_value\",\"_field\",\"weekday_name\"])\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"actual\")\r\n  ",
           "refId": "A"
         }
       ],
@@ -1350,7 +1350,7 @@
       "pluginVersion": "8.1.2",
       "targets": [
         {
-          "query": "import \"date\"\r\nfrom(bucket: \"gazpar\")\r\n  |> range(start: -1d, stop: -0d)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> keep(columns:[\"_time\",\"_value\",\"_field\",\"weekday_name\"])\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"actual\")\r\n  ",
+          "query": "import \"date\"\r\nfrom(bucket: \"$bucket\")\r\n  |> range(start: -1d, stop: -0d)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> keep(columns:[\"_time\",\"_value\",\"_field\",\"weekday_name\"])\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"actual\")\r\n  ",
           "refId": "A"
         }
       ],
@@ -1361,7 +1361,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${datasource}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1563,7 +1563,7 @@
         ]
       },
       "gridPos": {
-        "h": 3,
+        "h": 4,
         "w": 3,
         "x": 3,
         "y": 4
@@ -1588,7 +1588,7 @@
       "pluginVersion": "8.1.2",
       "targets": [
         {
-          "query": "import \"date\"\r\n\r\nfrom(bucket: \"gazpar\")\r\n  |> range(start: -1y, stop: -1d)\r\n  |> filter(fn: (r) => r[\"month\"] == string(v: date.month(t: -1d)))\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> drop(columns:[\"year\",\"weekday_name\",\"weekday_no\",\"pce\",\"pce_alias\",\"month\",\"_measurement\",\"type\"])\r\n  |> aggregateWindow(every: 1mo, fn: sum, createEmpty: false)\r\n  |> yield(name: \"sum\")",
+          "query": "import \"date\"\r\n\r\nfrom(bucket: \"$bucket\")\r\n  |> range(start: -1y, stop: -1d)\r\n  |> filter(fn: (r) => r[\"month\"] == string(v: date.month(t: -1d)))\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> drop(columns:[\"year\",\"weekday_name\",\"weekday_no\",\"pce\",\"pce_alias\",\"month\",\"_measurement\",\"type\"])\r\n  |> aggregateWindow(every: 1mo, fn: sum, createEmpty: false)\r\n  |> yield(name: \"sum\")",
           "refId": "A"
         }
       ],
@@ -1597,7 +1597,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${datasource}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1656,7 +1656,7 @@
         ]
       },
       "gridPos": {
-        "h": 3,
+        "h": 4,
         "w": 3,
         "x": 6,
         "y": 4
@@ -1681,7 +1681,7 @@
       "pluginVersion": "8.1.2",
       "targets": [
         {
-          "query": "import \"date\"\r\n\r\nfrom(bucket: \"gazpar\")\r\n  |> range(start: -2y, stop: -1d)\r\n  |> filter(fn: (r) => r[\"year\"] == string(v: date.year(t: -1d)))\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> drop(columns:[\"weekday_name\",\"weekday_no\",\"month_name\",\"pce\",\"pce_alias\",\"month\",\"_measurement\",\"type\"])\r\n  |> aggregateWindow(every: 1y, fn: sum, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+          "query": "import \"date\"\r\n\r\nfrom(bucket: \"$bucket\")\r\n  |> range(start: -2y, stop: -1d)\r\n  |> filter(fn: (r) => r[\"year\"] == string(v: date.year(t: -1d)))\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> drop(columns:[\"weekday_name\",\"weekday_no\",\"month_name\",\"pce\",\"pce_alias\",\"month\",\"_measurement\",\"type\"])\r\n  |> aggregateWindow(every: 1y, fn: sum, createEmpty: false)\r\n  |> yield(name: \"mean\")",
           "refId": "A"
         }
       ],
@@ -1690,7 +1690,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${datasource}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1720,41 +1720,16 @@
           },
           "unit": "€"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "price_kwh_eur"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Prix au kWh"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "price_fix_eur"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Prix fixe journalier"
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
-        "h": 5,
-        "w": 2,
+        "h": 3,
+        "w": 3,
         "x": 9,
         "y": 4
       },
       "hideTimeOverride": true,
-      "id": 31,
+      "id": 38,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
@@ -1768,23 +1743,23 @@
           "values": false
         },
         "text": {},
-        "textMode": "value_and_name"
+        "textMode": "value"
       },
       "pluginVersion": "8.1.2",
       "targets": [
         {
-          "query": "import \"date\"\r\nfrom(bucket: \"gazpar\")\r\n  |> range(start: v.timeRangeStart, stop: 1d)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_price_measure\")\r\n  |> keep(columns:[\"_time\",\"_value\",\"_field\"])\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"days\")\r\n  ",
+          "query": "from(bucket: \"$bucket\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_price_measure\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"price_fix_eur\")\r\n  |> keep(columns:[\"_time\",\"_value\",\"_field\"])\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"days\")\r\n  ",
           "refId": "A"
         }
       ],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Tarifs",
+      "title": "Prix fixe journalier",
       "transparent": true,
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${datasource}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1860,9 +1835,9 @@
         ]
       },
       "gridPos": {
-        "h": 5,
+        "h": 6,
         "w": 6,
-        "x": 11,
+        "x": 12,
         "y": 4
       },
       "hideTimeOverride": true,
@@ -1884,7 +1859,7 @@
       "pluginVersion": "8.1.2",
       "targets": [
         {
-          "query": "data = from(bucket: \"gazpar\")\r\n  |> range(start: -1mo, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> keep(columns:[\"_time\",\"_value\",\"_field\"])\r\n  |> aggregateWindow(every: 1d, fn: last, createEmpty: false)\r\n  |> yield(name: \"data\")\r\n  \r\n\r\nminData = data\r\n|> min()\r\n|> yield(name: \"min\")\r\n\r\n\r\nmaxData = data\r\n|> max()\r\n|> yield(name: \"max\")\r\n",
+          "query": "data = from(bucket: \"$bucket\")\r\n  |> range(start: -1mo, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> keep(columns:[\"_time\",\"_value\",\"_field\"])\r\n  |> aggregateWindow(every: 1d, fn: last, createEmpty: false)\r\n  |> yield(name: \"data\")\r\n  \r\n\r\nminData = data\r\n|> min()\r\n|> yield(name: \"min\")\r\n\r\n\r\nmaxData = data\r\n|> max()\r\n|> yield(name: \"max\")\r\n",
           "refId": "A"
         }
       ],
@@ -1896,7 +1871,76 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
+      "datasource": "${datasource}",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "semi-dark-blue",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "max": 5000,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 500
+              },
+              {
+                "color": "red",
+                "value": 2000
+              }
+            ]
+          },
+          "unit": "€"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 9,
+        "y": 7
+      },
+      "hideTimeOverride": true,
+      "id": 39,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "8.1.2",
+      "targets": [
+        {
+          "query": "from(bucket: \"$bucket\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_price_measure\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"price_kwh_eur\")\r\n  |> keep(columns:[\"_time\",\"_value\",\"_field\"])\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"days\")\r\n  ",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Prix au kWh",
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": "${datasource}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -2100,7 +2144,7 @@
         "h": 2,
         "w": 2,
         "x": 3,
-        "y": 7
+        "y": 8
       },
       "hideTimeOverride": true,
       "id": 23,
@@ -2122,7 +2166,7 @@
       "pluginVersion": "8.1.2",
       "targets": [
         {
-          "query": "import \"date\"\r\n\r\nfrom(bucket: \"gazpar\")\r\n  |> range(start: -1y, stop: -0mo)\r\n  |> filter(fn: (r) => r[\"month\"] == string(v: date.month(t: -1mo)))\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> drop(columns:[\"year\",\"weekday_name\",\"weekday_no\",\"month\",\"pce\",\"pce_alias\",\"_measurement\",\"type\"])\r\n  |> aggregateWindow(every: 1mo, fn: sum, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+          "query": "import \"date\"\r\n\r\nfrom(bucket: \"$bucket\")\r\n  |> range(start: -1y, stop: -0mo)\r\n  |> filter(fn: (r) => r[\"month\"] == string(v: date.month(t: -1mo)))\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> drop(columns:[\"year\",\"weekday_name\",\"weekday_no\",\"month\",\"pce\",\"pce_alias\",\"_measurement\",\"type\"])\r\n  |> aggregateWindow(every: 1mo, fn: sum, createEmpty: false)\r\n  |> yield(name: \"mean\")",
           "refId": "A"
         }
       ],
@@ -2131,7 +2175,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${datasource}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -2164,7 +2208,7 @@
         "h": 2,
         "w": 1,
         "x": 5,
-        "y": 7
+        "y": 8
       },
       "hideTimeOverride": true,
       "id": 34,
@@ -2186,7 +2230,7 @@
       "pluginVersion": "8.1.2",
       "targets": [
         {
-          "query": "import \"date\"\r\n\r\ndata = from(bucket: \"gazpar\")\r\n  |> range(start: -2mo, stop: -0mo)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> drop(columns:[\"year\",\"weekday_name\",\"month_name\",\"weekday_no\",\"pce\",\"pce_alias\",\"_measurement\",\"type\"])\r\n  |> aggregateWindow(every: 1mo, fn: sum, createEmpty: false)\r\n  |> group()\r\n  \r\nm1 = data\r\n|> filter(fn: (r) => r[\"month\"] == string(v: date.month(t: -1mo)))\r\n|> map(fn: (r) => ({ r with m1: r._value }))\r\n|> map(fn: (r) => ({ r with key: \"A\" }))\r\n|> keep(columns:[\"m1\",\"key\"])\r\n\r\nm2 = data\r\n|> filter(fn: (r) => r[\"month\"] == string(v: date.month(t: now())))\r\n|> map(fn: (r) => ({ r with m2: r._value }))\r\n|> map(fn: (r) => ({ r with key: \"A\" }))\r\n|> keep(columns:[\"m2\",\"key\"])\r\n\r\njoin(\r\n  tables: {m1: m1, m2: m2},\r\n  on: [\"key\"],\r\n  method: \"inner\"\r\n)\r\n|> map(fn: (r) => ({ r with \r\n  trend:  \r\n  if not exists r[\"m1\"] or r[\"m1\"] == 0.0 then 0.0\r\n  else ((r[\"m2\"]-r[\"m1\"]) / r[\"m1\"] )*100.0\r\n  }))\r\n|> keep(columns:[\"trend\"])\r\n|> yield(name: \"percent\")",
+          "query": "import \"date\"\r\n\r\ndata = from(bucket: \"$bucket\")\r\n  |> range(start: -2mo, stop: -0mo)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> drop(columns:[\"year\",\"weekday_name\",\"month_name\",\"weekday_no\",\"pce\",\"pce_alias\",\"_measurement\",\"type\"])\r\n  |> aggregateWindow(every: 1mo, fn: sum, createEmpty: false)\r\n  |> group()\r\n  \r\nm1 = data\r\n|> filter(fn: (r) => r[\"month\"] == string(v: date.month(t: -1mo)))\r\n|> map(fn: (r) => ({ r with m1: r._value }))\r\n|> map(fn: (r) => ({ r with key: \"A\" }))\r\n|> keep(columns:[\"m1\",\"key\"])\r\n\r\nm2 = data\r\n|> filter(fn: (r) => r[\"month\"] == string(v: date.month(t: now())))\r\n|> map(fn: (r) => ({ r with m2: r._value }))\r\n|> map(fn: (r) => ({ r with key: \"A\" }))\r\n|> keep(columns:[\"m2\",\"key\"])\r\n\r\njoin(\r\n  tables: {m1: m1, m2: m2},\r\n  on: [\"key\"],\r\n  method: \"inner\"\r\n)\r\n|> map(fn: (r) => ({ r with \r\n  trend:  \r\n  if not exists r[\"m1\"] or r[\"m1\"] == 0.0 then 0.0\r\n  else ((r[\"m2\"]-r[\"m1\"]) / r[\"m1\"] )*100.0\r\n  }))\r\n|> keep(columns:[\"trend\"])\r\n|> yield(name: \"percent\")",
           "refId": "A"
         }
       ],
@@ -2196,7 +2240,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${datasource}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -2257,7 +2301,7 @@
         "h": 2,
         "w": 2,
         "x": 6,
-        "y": 7
+        "y": 8
       },
       "hideTimeOverride": true,
       "id": 25,
@@ -2279,7 +2323,7 @@
       "pluginVersion": "8.1.2",
       "targets": [
         {
-          "query": "import \"date\"\r\n\r\nfrom(bucket: \"gazpar\")\r\n  |> range(start: -2y, stop: -1d)\r\n  |> filter(fn: (r) => r[\"year\"] == string(v: date.year(t: -1y)))\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> drop(columns:[\"weekday_name\",\"weekday_no\",\"month_name\",\"pce\",\"pce_alias\",\"month\",\"_measurement\",\"type\"])\r\n  |> aggregateWindow(every: 1y, fn: sum, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+          "query": "import \"date\"\r\n\r\nfrom(bucket: \"$bucket\")\r\n  |> range(start: -2y, stop: -1d)\r\n  |> filter(fn: (r) => r[\"year\"] == string(v: date.year(t: -1y)))\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> drop(columns:[\"weekday_name\",\"weekday_no\",\"month_name\",\"pce\",\"pce_alias\",\"month\",\"_measurement\",\"type\"])\r\n  |> aggregateWindow(every: 1y, fn: sum, createEmpty: false)\r\n  |> yield(name: \"mean\")",
           "refId": "A"
         }
       ],
@@ -2288,7 +2332,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${datasource}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -2321,7 +2365,7 @@
         "h": 2,
         "w": 1,
         "x": 8,
-        "y": 7
+        "y": 8
       },
       "hideTimeOverride": true,
       "id": 36,
@@ -2343,7 +2387,7 @@
       "pluginVersion": "8.1.2",
       "targets": [
         {
-          "query": "import \"date\"\r\n\r\ndata = from(bucket: \"gazpar\")\r\n  |> range(start: -2y, stop: -0mo)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> drop(columns:[\"month\",\"weekday_name\",\"month_name\",\"weekday_no\",\"pce\",\"pce_alias\",\"_measurement\",\"type\"])\r\n  |> aggregateWindow(every: 1y, fn: sum, createEmpty: false)\r\n  |> group()\r\n  \r\nm1 = data\r\n|> filter(fn: (r) => r[\"year\"] == string(v: date.year(t: -1y)))\r\n|> map(fn: (r) => ({ r with m1: r._value }))\r\n|> map(fn: (r) => ({ r with key: \"A\" }))\r\n|> keep(columns:[\"m1\",\"key\"])\r\n\r\nm2 = data\r\n|> filter(fn: (r) => r[\"year\"] == string(v: date.year(t: now())))\r\n|> map(fn: (r) => ({ r with m2: r._value }))\r\n|> map(fn: (r) => ({ r with key: \"A\" }))\r\n|> keep(columns:[\"m2\",\"key\"])\r\n\r\njoin(\r\n  tables: {m1: m1, m2: m2},\r\n  on: [\"key\"],\r\n  method: \"inner\"\r\n)\r\n|> map(fn: (r) => ({ r with \r\n  trend:  \r\n  if not exists r[\"m1\"] or r[\"m1\"] == 0.0 then 0.0\r\n  else ((r[\"m2\"]-r[\"m1\"]) / r[\"m1\"] )*100.0\r\n  }))\r\n|> keep(columns:[\"trend\"])\r\n|> yield(name: \"percent\")",
+          "query": "import \"date\"\r\n\r\ndata = from(bucket: \"$bucket\")\r\n  |> range(start: -2y, stop: -0mo)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> drop(columns:[\"month\",\"weekday_name\",\"month_name\",\"weekday_no\",\"pce\",\"pce_alias\",\"_measurement\",\"type\"])\r\n  |> aggregateWindow(every: 1y, fn: sum, createEmpty: false)\r\n  |> group()\r\n  \r\nm1 = data\r\n|> filter(fn: (r) => r[\"year\"] == string(v: date.year(t: -1y)))\r\n|> map(fn: (r) => ({ r with m1: r._value }))\r\n|> map(fn: (r) => ({ r with key: \"A\" }))\r\n|> keep(columns:[\"m1\",\"key\"])\r\n\r\nm2 = data\r\n|> filter(fn: (r) => r[\"year\"] == string(v: date.year(t: now())))\r\n|> map(fn: (r) => ({ r with m2: r._value }))\r\n|> map(fn: (r) => ({ r with key: \"A\" }))\r\n|> keep(columns:[\"m2\",\"key\"])\r\n\r\njoin(\r\n  tables: {m1: m1, m2: m2},\r\n  on: [\"key\"],\r\n  method: \"inner\"\r\n)\r\n|> map(fn: (r) => ({ r with \r\n  trend:  \r\n  if not exists r[\"m1\"] or r[\"m1\"] == 0.0 then 0.0\r\n  else ((r[\"m2\"]-r[\"m1\"]) / r[\"m1\"] )*100.0\r\n  }))\r\n|> keep(columns:[\"trend\"])\r\n|> yield(name: \"percent\")",
           "refId": "A"
         }
       ],
@@ -2359,7 +2403,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 9
+        "y": 10
       },
       "id": 13,
       "panels": [],
@@ -2367,7 +2411,7 @@
       "type": "row"
     },
     {
-      "datasource": null,
+      "datasource": "${datasource}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -2506,9 +2550,9 @@
       },
       "gridPos": {
         "h": 10,
-        "w": 17,
+        "w": 18,
         "x": 0,
-        "y": 10
+        "y": 11
       },
       "hideTimeOverride": true,
       "id": 35,
@@ -2526,7 +2570,7 @@
       },
       "targets": [
         {
-          "query": "from(bucket: \"gazpar\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\" or r[\"_measurement\"] == \"gazpar_thresold_measure\" )\r\n  |> filter(fn: (r) => r[\"_field\"] == \"energy_kWh\" or r[\"_field\"] == \"cost_eur\")\r\n  |> drop(columns:[\"month\",\"year\",\"weekday_no\",\"weekday_name\",\"pce\",\"pce_alias\",\"month_name\",\"_measurement\"])\r\n  |> aggregateWindow(every: 1mo, fn: sum, createEmpty: false)\r\n  |> yield(name: \"sum\")\r\n  ",
+          "query": "from(bucket: \"$bucket\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\" or r[\"_measurement\"] == \"gazpar_thresold_measure\" )\r\n  |> filter(fn: (r) => r[\"_field\"] == \"energy_kWh\" or r[\"_field\"] == \"cost_eur\")\r\n  |> drop(columns:[\"month\",\"year\",\"weekday_no\",\"weekday_name\",\"pce\",\"pce_alias\",\"month_name\",\"_measurement\"])\r\n  |> aggregateWindow(every: 1mo, fn: sum, createEmpty: false)\r\n  |> yield(name: \"sum\")\r\n  ",
           "refId": "A"
         }
       ],
@@ -2544,14 +2588,59 @@
   "templating": {
     "list": [
       {
+        "current": {
+          "selected": false,
+          "text": "InfluxDB",
+          "value": "InfluxDB"
+        },
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": "Datasource",
+        "multi": false,
+        "name": "datasource",
+        "options": [],
+        "query": "influxdb",
+        "queryValue": "",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": false,
+          "text": "gazpar",
+          "value": "gazpar"
+        },
+        "datasource": "${datasource}",
+        "definition": "buckets()",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": "Bucket",
+        "multi": false,
+        "name": "bucket",
+        "options": [],
+        "query": "buckets()",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
         "allValue": null,
         "current": {
           "selected": false,
           "text": "Maison",
           "value": "Maison"
         },
-        "datasource": null,
-        "definition": "import \"date\"\r\nfrom(bucket: \"gazpar\")\r\n  |> range(start: v.timeRangeStart, stop: 1d)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_pce_measure\")\r\n  |> keep(columns:[\"pce_alias\"])\r\n  |> group()",
+        "datasource": "${datasource}",
+        "definition": "import \"date\"\r\nfrom(bucket: \"$bucket\")\r\n  |> range(start: v.timeRangeStart, stop: 1d)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_pce_measure\")\r\n  |> keep(columns:[\"pce_alias\"])\r\n  |> group()",
         "description": null,
         "error": null,
         "hide": 0,
@@ -2560,7 +2649,7 @@
         "multi": false,
         "name": "pce",
         "options": [],
-        "query": "import \"date\"\r\nfrom(bucket: \"gazpar\")\r\n  |> range(start: v.timeRangeStart, stop: 1d)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_pce_measure\")\r\n  |> keep(columns:[\"pce_alias\"])\r\n  |> group()",
+        "query": "import \"date\"\r\nfrom(bucket: \"$bucket\")\r\n  |> range(start: v.timeRangeStart, stop: 1d)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_pce_measure\")\r\n  |> keep(columns:[\"pce_alias\"])\r\n  |> group()",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -2610,8 +2699,8 @@
           "text": "Active",
           "value": "Active"
         },
-        "datasource": null,
-        "definition": "import \"date\"\r\nfrom(bucket: \"gazpar\")\r\n  |> range(start: v.timeRangeStart, stop: 1d)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_pce_measure\")\r\n  |> keep(columns:[\"state\"])\r\n  |> group()",
+        "datasource": "${datasource}",
+        "definition": "import \"date\"\r\nfrom(bucket: \"$bucket\")\r\n  |> range(start: v.timeRangeStart, stop: 1d)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_pce_measure\")\r\n  |> keep(columns:[\"state\"])\r\n  |> group()",
         "description": null,
         "error": null,
         "hide": 2,
@@ -2620,7 +2709,7 @@
         "multi": false,
         "name": "state",
         "options": [],
-        "query": "import \"date\"\r\nfrom(bucket: \"gazpar\")\r\n  |> range(start: v.timeRangeStart, stop: 1d)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_pce_measure\")\r\n  |> keep(columns:[\"state\"])\r\n  |> group()",
+        "query": "import \"date\"\r\nfrom(bucket: \"$bucket\")\r\n  |> range(start: v.timeRangeStart, stop: 1d)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_pce_measure\")\r\n  |> keep(columns:[\"state\"])\r\n  |> group()",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -2634,8 +2723,8 @@
           "text": "2019-09-08 21:24:53",
           "value": "2019-09-08 21:24:53"
         },
-        "datasource": null,
-        "definition": "import \"date\"\r\nfrom(bucket: \"gazpar\")\r\n  |> range(start: v.timeRangeStart, stop: 1d)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_pce_measure\")\r\n  |> keep(columns:[\"activation_date\"])\r\n  |> group()",
+        "datasource": "${datasource}",
+        "definition": "import \"date\"\r\nfrom(bucket: \"$bucket\")\r\n  |> range(start: v.timeRangeStart, stop: 1d)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_pce_measure\")\r\n  |> keep(columns:[\"activation_date\"])\r\n  |> group()",
         "description": null,
         "error": null,
         "hide": 2,
@@ -2644,7 +2733,7 @@
         "multi": false,
         "name": "activation_date",
         "options": [],
-        "query": "import \"date\"\r\nfrom(bucket: \"gazpar\")\r\n  |> range(start: v.timeRangeStart, stop: 1d)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_pce_measure\")\r\n  |> keep(columns:[\"activation_date\"])\r\n  |> group()",
+        "query": "import \"date\"\r\nfrom(bucket: \"$bucket\")\r\n  |> range(start: v.timeRangeStart, stop: 1d)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_pce_measure\")\r\n  |> keep(columns:[\"activation_date\"])\r\n  |> group()",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -2663,5 +2752,5 @@
   "timezone": "browser",
   "title": "Gaz",
   "uid": "5tpNcjA7k",
-  "version": 277
+  "version": 331
 }
