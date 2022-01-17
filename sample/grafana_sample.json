@@ -22,7 +22,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 2,
-  "iteration": 1642407436905,
+  "iteration": 1642407547576,
   "links": [],
   "panels": [
     {
@@ -613,7 +613,7 @@
           "refId": "A"
         }
       ],
-      "timeFrom": "7d",
+      "timeFrom": null,
       "timeShift": null,
       "title": "J-5",
       "transparent": true,
@@ -983,7 +983,7 @@
           "refId": "A"
         }
       ],
-      "timeFrom": "7d",
+      "timeFrom": null,
       "timeShift": null,
       "title": "J-3",
       "transparent": true,
@@ -1168,7 +1168,7 @@
           "refId": "A"
         }
       ],
-      "timeFrom": "7d",
+      "timeFrom": null,
       "timeShift": null,
       "title": "J-2",
       "transparent": true,
@@ -1354,7 +1354,7 @@
           "refId": "A"
         }
       ],
-      "timeFrom": "7d",
+      "timeFrom": null,
       "timeShift": null,
       "title": "J-1",
       "transparent": true,
@@ -1592,7 +1592,7 @@
           "refId": "A"
         }
       ],
-      "timeFrom": "1y",
+      "timeFrom": null,
       "transparent": true,
       "type": "stat"
     },
@@ -1685,7 +1685,7 @@
           "refId": "A"
         }
       ],
-      "timeFrom": "1y",
+      "timeFrom": null,
       "transparent": true,
       "type": "stat"
     },
@@ -1773,11 +1773,11 @@
       "pluginVersion": "8.1.2",
       "targets": [
         {
-          "query": "import \"date\"\r\nfrom(bucket: \"gazpar\")\r\n  |> range(start: -1y, stop: 1d)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_price_measure\")\r\n  |> keep(columns:[\"_time\",\"_value\",\"_field\"])\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"days\")\r\n  ",
+          "query": "import \"date\"\r\nfrom(bucket: \"gazpar\")\r\n  |> range(start: v.timeRangeStart, stop: 1d)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_price_measure\")\r\n  |> keep(columns:[\"_time\",\"_value\",\"_field\"])\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"days\")\r\n  ",
           "refId": "A"
         }
       ],
-      "timeFrom": "7d",
+      "timeFrom": null,
       "timeShift": null,
       "title": "Tarifs",
       "transparent": true,
@@ -2283,7 +2283,7 @@
           "refId": "A"
         }
       ],
-      "timeFrom": "1y",
+      "timeFrom": null,
       "transparent": true,
       "type": "stat"
     },
@@ -2526,7 +2526,7 @@
       },
       "targets": [
         {
-          "query": "from(bucket: \"gazpar\")\r\n  |> range(start: -2y, stop: 1y)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\" or r[\"_measurement\"] == \"gazpar_thresold_measure\" )\r\n  |> filter(fn: (r) => r[\"_field\"] == \"energy_kWh\" or r[\"_field\"] == \"cost_eur\")\r\n  |> drop(columns:[\"month\",\"year\",\"weekday_no\",\"weekday_name\",\"pce\",\"pce_alias\",\"month_name\",\"_measurement\"])\r\n  |> aggregateWindow(every: 1mo, fn: sum, createEmpty: false)\r\n  |> yield(name: \"sum\")\r\n  ",
+          "query": "from(bucket: \"gazpar\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\" or r[\"_measurement\"] == \"gazpar_thresold_measure\" )\r\n  |> filter(fn: (r) => r[\"_field\"] == \"energy_kWh\" or r[\"_field\"] == \"cost_eur\")\r\n  |> drop(columns:[\"month\",\"year\",\"weekday_no\",\"weekday_name\",\"pce\",\"pce_alias\",\"month_name\",\"_measurement\"])\r\n  |> aggregateWindow(every: 1mo, fn: sum, createEmpty: false)\r\n  |> yield(name: \"sum\")\r\n  ",
           "refId": "A"
         }
       ],
@@ -2663,5 +2663,5 @@
   "timezone": "browser",
   "title": "Gaz",
   "uid": "5tpNcjA7k",
-  "version": 264
+  "version": 277
 }
