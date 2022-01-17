@@ -270,7 +270,7 @@ class Grdf:
                 pce.addMeasure(myMeasure)
 
         else:
-            logging.error("Daily measure list provided by GRDF is empty")
+            logging.error("Measure list provided by GRDF is empty")
 
 
 

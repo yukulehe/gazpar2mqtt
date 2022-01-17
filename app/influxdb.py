@@ -188,3 +188,12 @@ class InfluxDb:
             logging.error("Unable to write point : %s", e)
             logging.debug("Point : %s", point)
             return False
+
+    # Close client
+    def close(self):
+
+        try:
+            self.client.close()
+            logging.debug("Influxdb disconnected.")
+        except Exception as e:
+            logging.error("Unable to close influx connexion.")

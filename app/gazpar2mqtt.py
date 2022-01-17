@@ -781,6 +781,11 @@ def run(myParams):
                     break
             logging.info("%s thresold(s) of PCE written successfully !",writeCount)
 
+        # Disconnect
+        logging.info("Disconnexion of influxdb...")
+        myInflux.close()
+        logging.info("Influxdb disconnected.")
+
         # Release memory
         del myInflux
 
