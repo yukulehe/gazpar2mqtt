@@ -14,13 +14,15 @@ Important : the tool is still under development, various functions may disappear
 
 
 ## Changelogs :
-
-- v0.7.x :
-  - Retrieve published measures to supplier
+- v0.8.x :
   - Export to Influxdb v2 database
   - Grafana dashboard template
   - Cost calculation from prices file
   - Thanks to [pbranly](https://github.com/pbranly) for the tests
+
+- v0.7.x :
+  - Retrieve published measures to supplier
+
 - v0.6.x :
   - Implementation of a sqlite database
   - Addition of converter factor from Grdf
