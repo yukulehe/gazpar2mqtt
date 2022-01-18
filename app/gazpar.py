@@ -18,7 +18,7 @@ TYPE_I = 'informative' # type of measure Informative
 TYPE_P = 'published' # type of measure Published
 
 #######################################################################
-#### Usefull functions
+#### Useful functions
 #######################################################################
 
 # Convert GRDF datetime string to date
@@ -270,7 +270,7 @@ class Grdf:
                 pce.addMeasure(myMeasure)
 
         else:
-            logging.error("Daily measure list provided by GRDF is empty")
+            logging.error("Measure list provided by GRDF is empty")
 
 
 
@@ -339,7 +339,7 @@ class Pce:
         self.alias = pce["alias"]
         self.pceId = pce["pce"]
         self.activationDate = _convertDateTime(pce["dateActivation"])
-        self.freqenceReleve = pce["frequenceReleve"]
+        self.frequenceReleve = pce["frequenceReleve"]
         self.state = pce["etat"]
         self.ownerName = pce["nomTitulaire"]
         self.postalCode = pce["codePostal"]
@@ -351,8 +351,9 @@ class Pce:
         
         if self.json is not None:
             logging.debug("Store PCE %s into database",self.pceId)
-            pce_query = f"INSERT OR REPLACE INTO pces VALUES (?, ?, ?)"
-            db.cur.execute(pce_query, [self.pceId, json.dumps(self.json), 0])
+            pce_query = f"INSERT OR REPLACE INTO pces VALUES (?, ?, ?, ?, ?, ?, ?)"
+            db.cur.execute(pce_query, [self.pceId, self.alias, self.activationDate, self.frequenceReleve, self.state,
+                                       self.ownerName, self.postalCode])
                
     
     # Add a measure to the PCE    
@@ -776,9 +777,9 @@ class Measure:
             dbTable = "consumption_published"
 
         if self.isOk() and dbTable:
-            logging.debug("Store measure type %s, %s, %s, %s m3, %s kWh, %s kwh/m3",self.type,str(self.gasDate),str(self.endIndex), str(self.volume), str(self.energy), str(self.conversionFactor))
-            measure_query = f"INSERT OR REPLACE INTO measures VALUES (?, ?, ?, ?, ?, ?, ?)"
-            db.cur.execute(measure_query, [self.pce.pceId, self.type, self.gasDate, self.endIndex, self.volume, self.energy, self.conversionFactor])
+            logging.debug("Store measure type %s, %s, %s, %s, %s m3, %s kWh, %s kwh/m3",self.type,str(self.gasDate),str(self.startIndex),str(self.endIndex), str(self.volume), str(self.energy), str(self.conversionFactor))
+            measure_query = f"INSERT OR REPLACE INTO measures VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+            db.cur.execute(measure_query, [self.pce.pceId, self.type, self.gasDate, self.startIndex, self.endIndex, self.volume, self.energy, self.conversionFactor])
         
     
     # Return measure measure quality status

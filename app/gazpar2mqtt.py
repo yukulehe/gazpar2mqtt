@@ -17,12 +17,14 @@ import standalone
 import hass
 import param
 import database
+import influxdb
+import price
 
 
 # gazpar2mqtt constants
-G2M_VERSION = '0.7.0'
-G2M_DB_VERSION = '0.7.0'
-
+G2M_VERSION = '0.7.1'
+G2M_DB_VERSION = '0.7.1'
+G2M_INFLUXDB_VERSION = '0.7.1'
 
 #######################################################################
 #### Functions
@@ -45,67 +47,83 @@ def _waitBeforeRetry(tryCount):
         logging.info("Wait %s minutes before next try",round(waitTime/60))
     time.sleep(waitTime)
 
-#######################################################################
+########################################################################################################################
 #### Running program
-#######################################################################
+########################################################################################################################
 def run(myParams):
-    
-    
+
+    myMqtt = None
+    myGrdf = None
+
     # Store time now
     dtn = _dateTimeToStr(datetime.datetime.now())
-    
+
+
     # STEP 1 : Connect to database
+    ####################################################################################################################
     logging.info("-----------------------------------------------------------")
     logging.info("#        Connexion to SQLite database                     #")
     logging.info("-----------------------------------------------------------")
-    
+
     # Create/Update database
-    logging.info("Check local database/cache")
-    myDb = database.Database(G2M_DB_VERSION,myParams.dbPath)
-    
-    
+    logging.info("Connexion to SQLite database...")
+    myDb = database.Database(myParams.dbPath)
+
+
     # Connect to database
-    myDb.connect()
+    myDb.connect(G2M_VERSION,G2M_DB_VERSION,G2M_INFLUXDB_VERSION)
     if myDb.isConnected() :
         logging.info("SQLite database connected !")
     else:
         logging.error("Unable to connect to SQLite database.")
-    
+
+    # Check program version
+    g2mVersion = myDb.getConfig(database.G2M_KEY)
+    g2mDate = myDb.getConfig(database.LAST_EXEC_KEY)
+    logging.info("Last execution date %s, program was in version %s.",g2mDate,g2mVersion)
+    if g2mVersion != G2M_VERSION:
+        logging.warning("gazpar2mqtt version (%s) has changed since last execution (%s)",G2M_VERSION,g2mVersion)
+        # Update program version
+        myDb.updateVersion(database.G2M_KEY,G2M_VERSION)
+        myDb.commit()
+
+
     # Reinit database when required :
     if myParams.dbInit:
         logging.info("Reinitialization of the database...")
-        myDb.reInit()
-    
-    # Compare G2M version
-    logging.info("Checking database version...")
-    dbVersion = myDb.getG2MVersion()
-    if dbVersion is not None:
-        if dbVersion == G2M_DB_VERSION:
-            logging.info("Database is already up to date : version %s.",G2M_DB_VERSION)
-        else:
-            logging.warning("Database (%s) is not up to date.",dbVersion)
-            logging.info("Reinitialization of the database to version %s...",G2M_DB_VERSION)
-            myDb.reInit()
-            dbVersion = myDb.getG2MVersion()
-            logging.info("Database reinitialized in version %s !",dbVersion)
+        myDb.reInit(G2M_VERSION,G2M_DB_VERSION,G2M_INFLUXDB_VERSION)
+        logging.info("Database reinitialized to version %s",G2M_DB_VERSION)
     else:
-        logging.warning("Unable to get database version.")
-        
-    # Display current database statistics
-    logging.info("Calculate database statistics..")
-    dbStats = myDb.getMeasuresCount(gazpar.TYPE_I)
-    logging.info("%s measures stored",dbStats["count"])
-    logging.info("First measure %s",dbStats["minDate"])
-    logging.info("Last measure %s",dbStats["maxDate"])
-    
-    
+        # Compare dabase version
+        logging.info("Checking database version...")
+        dbVersion = myDb.getConfig(database.DB_KEY)
+        if dbVersion == G2M_DB_VERSION:
+            logging.info("Your database is already up to date : version %s.",G2M_DB_VERSION)
+
+            # Display current database statistics
+            logging.info("Retrieve database statistics...")
+            dbStats = myDb.getMeasuresCount(gazpar.TYPE_I)
+            logging.info("%s informatives measures stored", dbStats["rows"])
+            logging.info("%s PCE(s)", dbStats["pce"])
+            logging.info("First measure : %s", dbStats["minDate"])
+            logging.info("Last measure : %s", dbStats["maxDate"])
+
+        else:
+            logging.warning("Your database (version %s) is not up to date.",dbVersion)
+            logging.info("Reinitialization of your database to version %s...",G2M_DB_VERSION)
+            myDb.reInit(G2M_VERSION,G2M_DB_VERSION,G2M_INFLUXDB_VERSION)
+            dbVersion = myDb.getConfig(database.DB_KEY)
+            logging.info("Database reinitialized to version %s !",dbVersion)
+
+
     # STEP 2 : Log to MQTT broker
+    ####################################################################################################################
     logging.info("-----------------------------------------------------------")
     logging.info("#              Connexion to Mqtt broker                   #")
     logging.info("-----------------------------------------------------------")
-    
+
     try:
-        
+
         logging.info("Connect to Mqtt broker...")
 
         # Create mqtt client
@@ -113,22 +131,22 @@ def run(myParams):
 
         # Connect mqtt broker
         myMqtt.connect(myParams.mqttHost,myParams.mqttPort)
-        
+
         # Wait for connexion callback
         time.sleep(2)
 
         if myMqtt.isConnected:
             logging.info("Mqtt broker connected !")
-        
+
     except:
         logging.error("Unable to connect to Mqtt broker. Please check that broker is running, or check broker configuration.")
-        
-    
-     
+
+
+
     # STEP 3 : Get data from GRDF website
-    
+    ####################################################################################################################
     if myMqtt.isConnected:
-    
+
         logging.info("-----------------------------------------------------------")
         logging.info("#            Get data from GRDF website                   #")
         logging.info("-----------------------------------------------------------")
@@ -137,16 +155,16 @@ def run(myParams):
         # Connexion
         while tryCount < gazpar.GRDF_API_MAX_RETRIES :
             try:
-                
+
                 tryCount += 1
-                
+
                 # Create Grdf instance
                 logging.info("Connexion to GRDF, try %s/%s...",tryCount,gazpar.GRDF_API_MAX_RETRIES)
                 myGrdf = gazpar.Grdf()
 
                 # Connect to Grdf website
                 myGrdf.login(myParams.grdfUsername,myParams.grdfPassword)
-                
+
                 # Check connexion
                 if myGrdf.isConnected:
                     logging.info("GRDF connected !")
@@ -159,24 +177,24 @@ def run(myParams):
                 myGrdf.isConnected = False
                 logging.info("Unable to login to GRDF website")
                 _waitBeforeRetry(tryCount)
-            
+
 
         # When GRDF is connected
         if myGrdf.isConnected:
 
             # Sub-step 3A : Get account info
             try:
-            
+
                 # Get account informations and store it to db
                 logging.info("Retrieve account informations")
                 myAccount = myGrdf.getWhoami()
                 myAccount.store(myDb)
                 myDb.commit()
-            
+
             except:
                 logging.warning("Unable to get account information from GRDF website.")
-                
-            
+
+
             # Sub-step 3B : Get list of PCE
             logging.info("Retrieve list of PCEs...")
             try:
@@ -189,14 +207,14 @@ def run(myParams):
             # Loop on PCE
             if myGrdf.pceList:
                 for myPce in myGrdf.pceList:
-                    
+
                     # Store PCE in database
                     myPce.store(myDb)
                     myDb.commit()
-                    
-                    
+
+
                     # Sub-step 3C : Get measures of the PCE
-                    
+
                     # Get measures of the PCE
                     logging.info("---------------------------------")
                     logging.info("Get measures of PCE %s alias %s",myPce.pceId,myPce.alias)
@@ -207,7 +225,7 @@ def run(myParams):
                     startDate = minDateTime.date()
                     endDate = datetime.date.today()
                     logging.info("Range period : from %s (3 years ago) to %s (today) ...",startDate,endDate)
-                    
+
                     # Get informative measures
                     logging.info("---------------")
                     logging.info("Retrieve informative measures...")
@@ -217,7 +235,7 @@ def run(myParams):
                     except:
                         logging.error("Error during informative measures collection")
 
-                    
+
                     # Analyse data
                     measureCount = myPce.countMeasure(gazpar.TYPE_I)
                     if measureCount > 0:
@@ -248,11 +266,11 @@ def run(myParams):
                     # Get published measures
                     logging.info("---------------")
                     logging.info("Retrieve published measures...")
-                    #try:
-                    myGrdf.getPceMeasures(myPce, startDate, endDate, gazpar.TYPE_P)
-                    logging.info("Published measures found !")
-                    #except:
-                    #    logging.error("Error during published measures collection")
+                    try:
+                        myGrdf.getPceMeasures(myPce, startDate, endDate, gazpar.TYPE_P)
+                        logging.info("Published measures found !")
+                    except:
+                        logging.error("Error during published measures collection")
 
                     # Analyse data
                     measureCount = myPce.countMeasure(gazpar.TYPE_P)
@@ -279,7 +297,7 @@ def run(myParams):
                                     myMeasure.volumeInitial, myMeasure.volume)
                         else:
                             logging.warning("Unable to find the last published measure.")
-                    
+
                     # Store to database
                     logging.info("---------------")
                     if myPce.measureList:
@@ -287,17 +305,17 @@ def run(myParams):
                         for myMeasure in myPce.measureList:
                             # Store measure into database
                             myMeasure.store(myDb)
-                        
+
                         # Commmit database
                         myDb.commit()
                         logging.info("Database updated !")
 
                     else:
-                        logging.info("Unable to store any measure for PCE to database !",myPce.pceId)
-                        
-                    
+                        logging.info("Unable to store any measure for PCE %s to database !",myPce.pceId)
+
+
                     # Sub-step 3D : Get thresolds of the PCE
-                    
+
                     # Get thresold
                     logging.info("---------------")
                     logging.info("Retrieve PCE's thresolds from GRDF...")
@@ -305,10 +323,10 @@ def run(myParams):
                         myGrdf.getPceThresold(myPce)
                         thresoldCount = myPce.countThresold()
                         logging.info("%s thresolds found !",thresoldCount)
-                    
+
                     except:
                         logging.error("Error to get PCE's thresolds from GRDF")
-                        
+
                     # Update database
                     if myPce.thresoldList:
                         # Store thresolds into database
@@ -318,24 +336,44 @@ def run(myParams):
                         # Commmit database
                         myDb.commit()
                         logging.info("Database updated !")
-                        
-                    
+
+
                     # Sub-step 3E : Calculate measures of the PCE
-                    
+
                     # Calculate informative measures
-                    myPce.calculateMeasures(myDb,myParams.thresoldPercentage,gazpar.TYPE_I)
-                       
-                    
+                    try:
+                        myPce.calculateMeasures(myDb,myParams.thresoldPercentage,gazpar.TYPE_I)
+                    except:
+                        logging.error("Unable to calculate informative measures")
+
+
             else:
                 logging.info("No PCE retrieved.")
-        
-    
-    # STEP 4A : Standalone mode
+
+
+    ####################################################################################################################
+    # STEP 4 : Prices
+    ####################################################################################################################
+
+    logging.info("-----------------------------------------------------------")
+    logging.info("#                    Load prices                           #")
+    logging.info("-----------------------------------------------------------")
+
+    # Load data from prices file
+    logging.info("Loading prices from file %s of directory %s", price.FILE_NAME, myParams.pricePath)
+    myPrices = price.Prices(myParams.pricePath, myParams.priceKwhDefault, myParams.priceFixDefault)
+    if len(myPrices.pricesList):
+        logging.info("%s range(s) of prices found !", len(myPrices.pricesList))
+
+
+    ####################################################################################################################
+    # STEP 5A : Standalone mode
+    ####################################################################################################################
     if myMqtt.isConnected \
         and myParams.standalone \
-        and myGrdf.isConnected:   
+        and myGrdf.isConnected:
 
-        #try:
+        try:
 
             logging.info("-----------------------------------------------------------")
             logging.info("#           Stand alone publication mode                  #")
@@ -349,7 +387,7 @@ def run(myParams):
 
                 # Set parameters
                 prefix = myParams.mqttTopic + '/' + myPce.pceId
-                
+
                 # Display topic root
                 logging.info("You can retrieve published values subscribing topic %s/#",prefix)
 
@@ -394,7 +432,7 @@ def run(myParams):
 
                     ## Calculated calendar measures
                     logging.debug("Creation of calendar measures")
-                    
+
                     ### Year
                     myMqtt.publish(mySa.histoTopic+"current_year_gas", myPce.gasY0)
                     myMqtt.publish(mySa.histoTopic+"previous_year_gas", myPce.gasY1)
@@ -417,26 +455,26 @@ def run(myParams):
                     myMqtt.publish(mySa.histoTopic+"day-5_gas", myPce.gasD5)
                     myMqtt.publish(mySa.histoTopic+"day-6_gas", myPce.gasD6)
                     myMqtt.publish(mySa.histoTopic+"day-7_gas", myPce.gasD7)
-                    
+
                     ## Calculated rolling measures
                     logging.debug("Creation of rolling measures")
-                    
+
                     ### Rolling year
                     myMqtt.publish(mySa.histoTopic+"rolling_year_gas", myPce.gasR1Y)
                     myMqtt.publish(mySa.histoTopic+"rolling_year_last_year_gas", myPce.gasR2Y1Y)
-                    
+
                     ### Rolling month
                     myMqtt.publish(mySa.histoTopic+"rolling_month_gas", myPce.gasR1M)
                     myMqtt.publish(mySa.histoTopic+"rolling_month_last_month_gas", myPce.gasR2M1M)
                     myMqtt.publish(mySa.histoTopic+"rolling_month_last_year_gas", myPce.gasR1MY1)
                     myMqtt.publish(mySa.histoTopic+"rolling_month_last_2_year_gas", myPce.gasR1MY2)
-                    
+
                     ### Rolling week
                     myMqtt.publish(mySa.histoTopic+"rolling_week_gas", myPce.gasR1W)
                     myMqtt.publish(mySa.histoTopic+"rolling_week_last_week_gas", myPce.gasR2W1W)
                     myMqtt.publish(mySa.histoTopic+"rolling_week_last_year_gas", myPce.gasR1WY1)
                     myMqtt.publish(mySa.histoTopic+"rolling_week_last_2_year_gas", myPce.gasR1WY2)
-                    
+
                     ### Thresolds
                     myMqtt.publish(mySa.thresoldTopic+"current_month_treshold", myPce.tshM0)
                     myMqtt.publish(mySa.thresoldTopic+"current_month_treshold_percentage", myPce.tshM0Pct)
@@ -444,7 +482,7 @@ def run(myParams):
                     myMqtt.publish(mySa.thresoldTopic+"previous_month_treshold", myPce.tshM1)
                     myMqtt.publish(mySa.thresoldTopic+"previous_month_treshold_percentage", myPce.tshM1Pct)
                     myMqtt.publish(mySa.thresoldTopic+"previous_month_treshold_warning", myPce.tshM1Warn)
-                    
+
                     logging.info("All measures published !")
 
                     ## Publish status values
@@ -453,10 +491,15 @@ def run(myParams):
                     myMqtt.publish(mySa.statusTopic+"connectivity", "ON")
                     logging.info("Status values published !")
 
-        #except:
-        #    logging.error("Standalone mode : unable to publish value to mqtt broker")
+                # Release memory
+                del mySa
 
-    # STEP 4B : Home Assistant discovery mode
+        except:
+            logging.error("Standalone mode : unable to publish value to mqtt broker")
+
+    ####################################################################################################################
+    # STEP 5B : Home Assistant discovery mode
+    ####################################################################################################################
     if myMqtt.isConnected \
         and myParams.hassDiscovery \
         and myGrdf.isConnected:
@@ -481,7 +524,7 @@ def run(myParams):
                 deviceId = myParams.hassDeviceName.replace(" ","_") + "_" +  myPce.pceId
                 deviceName = myParams.hassDeviceName + " " +  myPce.alias
                 myDevice = hass.Device(myHass,myPce.pceId,deviceId,deviceName)
-                
+
                 # Create entity PCE
                 logging.debug("Creation of the PCE entity")
                 myEntity = hass.Entity(myDevice,hass.SENSOR,'pce_state','pce_state',hass.NONE_TYPE,None,None)
@@ -499,11 +542,11 @@ def run(myParams):
                     # Create entities and set values
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'connectivity','Connectivity',hass.CONNECTIVITY_TYPE,None,None).setValue('OFF')
 
-                else: # Values when PCE is correct   
+                else: # Values when PCE is correct
 
 
                     # Create entities and set values
-                    
+
                     ## Last informative measure
                     logging.debug("Creation of last informative measures entities")
                     myMeasure = myPce.getLastMeasureOk(gazpar.TYPE_I)
@@ -534,25 +577,25 @@ def run(myParams):
                     myEntity = hass.Entity(myDevice, hass.SENSOR, 'published_consumption_end_date',
                                            'published consumption end date',
                                            hass.NONE_TYPE, None, None).setValue(str(myMeasure.endDateTime))
-                    
+
                     ## Calculated calendar measures
                     logging.debug("Creation of calendar entities")
-                    
+
                     ### Year
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'current_year_gas','current year gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasY0)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'previous_year_gas','previous year gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasY1)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'previous_2_year_gas','previous 2 years gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasY2)
-                    
+
                     ### Month
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'current_month_gas','current month gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasM0Y0)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'previous_month_gas','previous month gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasM1Y0)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'current_month_last_year_gas','current month of last year gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasM0Y1)
-                    
+
                     ### Week
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'current_week_gas','current week gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasW0Y0)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'previous_week_gas','previous week gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasW1Y0)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'current_week_last_year_gas','current week of last year gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasW0Y1)
-                    
+
                     ### Day
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'day_1_gas','day-1 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasD1)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'day_2_gas','day-2 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasD2)
@@ -561,34 +604,34 @@ def run(myParams):
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'day_5_gas','day-5 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasD5)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'day_6_gas','day-6 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasD6)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'day_7_gas','day-7 gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasD7)
-                    
+
                     ## Calculated rolling measures
                     logging.debug("Creation of rolling entities")
-                    
+
                     ### Rolling year
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'rolling_year_gas','rolling year gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasR1Y)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'rolling_year_last_year_gas','rolling year of last year gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasR2Y1Y)
-                    
+
                     ### Rolling month
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'rolling_month_gas','rolling month gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasR1M)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'rolling_month_last_month_gas','rolling month of last month gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasR2M1M)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'rolling_month_last_year_gas','rolling month of last year gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasR1MY1)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'rolling_month_last_2_year_gas','rolling month of last 2 years gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasR1MY2)
-                    
+
                     ### Rolling week
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'rolling_week_gas','rolling week gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasR1W)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'rolling_week_last_week_gas','rolling week of last week gas',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasR2W1W)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'rolling_week_last_year_gas','rolling week of last year',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasR1WY1)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'rolling_week_last_2_year_gas','rolling week of last 2 years',hass.GAS_TYPE,hass.ST_MEAS,'m³').setValue(myPce.gasR1WY2)
-                    
+
                     ### Thresold
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'current_month_thresold','thresold of current month',hass.ENERGY_TYPE,hass.ST_MEAS,'kWh').setValue(myPce.tshM0)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'current_month_thresold_percentage','thresold of current month percentage',hass.NONE_TYPE,hass.ST_MEAS,'%').setValue(myPce.tshM0Pct)
-                    myEntity = hass.Entity(myDevice,hass.BINARY,'current_month_thresold_problem','thresold of current month problem',hass.PROBLEM_TYPE,None,None).setValue(myPce.tshM0Warn) 
+                    myEntity = hass.Entity(myDevice,hass.BINARY,'current_month_thresold_problem','thresold of current month problem',hass.PROBLEM_TYPE,None,None).setValue(myPce.tshM0Warn)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'previous_month_thresold','thresold of previous month',hass.ENERGY_TYPE,hass.ST_MEAS,'kWh').setValue(myPce.tshM1)
                     myEntity = hass.Entity(myDevice,hass.SENSOR,'previous_month_thresold_percentage','thresold of previous month percentage',hass.NONE_TYPE,hass.ST_MEAS,'%').setValue(myPce.tshM1Pct)
-                    myEntity = hass.Entity(myDevice,hass.BINARY,'previous_month_thresold_problem','thresold of previous month problem',hass.PROBLEM_TYPE,None,None).setValue(myPce.tshM1Warn) 
-                    
+                    myEntity = hass.Entity(myDevice,hass.BINARY,'previous_month_thresold_problem','thresold of previous month problem',hass.PROBLEM_TYPE,None,None).setValue(myPce.tshM1Warn)
+
                     ## Other
                     logging.debug("Creation of other entities")
                     myEntity = hass.Entity(myDevice,hass.BINARY,'connectivity','connectivity',hass.CONNECTIVITY_TYPE,None,None).setValue('ON')
@@ -601,37 +644,166 @@ def run(myParams):
                     myMqtt.publish(topic,payload)
                 logging.info("Devices published !")
 
-
+            # Release memory
+            del myHass
 
         except:
             logging.error("Home Assistant discovery mode : unable to publish value to mqtt broker")
 
-
-    # STEP 5 : Disconnect mqtt broker
+    ####################################################################################################################
+    # STEP 6 : Disconnect mqtt broker
+    ####################################################################################################################
     if myMqtt.isConnected:
-        
+
         logging.info("-----------------------------------------------------------")
         logging.info("#               Disconnexion from MQTT                    #")
         logging.info("-----------------------------------------------------------")
-        
+
         try:
             myMqtt.disconnect()
             logging.info("Mqtt broker disconnected")
         except:
             logging.error("Unable to disconnect mqtt broker")
             sys.exit(1)
-    
-    
-    # STEP 6 : Disconnect from database
+
+    # Release memory
+    del myMqtt
+    del myGrdf
+
+
+    ####################################################################################################################
+    # STEP 7 : Influxdb
+    ####################################################################################################################
+    if myParams.influxEnable:
+
+        logging.info("-----------------------------------------------------------")
+        logging.info("#            Write to Influxdb v2                         #")
+        logging.info("-----------------------------------------------------------")
+
+        # Check Influxdb version
+        influxDbVersion = myDb.getConfig(database.INFLUX_KEY)
+        if influxDbVersion == G2M_INFLUXDB_VERSION:
+            logging.info("Your influxdb version is up to date %s",G2M_INFLUXDB_VERSION)
+        else:
+            logging.warning("Influxdb version (%s) is not up to date %s", influxDbVersion, G2M_INFLUXDB_VERSION)
+            logging.warning("Inconsistencies data could be performed. You should recreate the bucket to delete old data.")
+            # Update version
+            myDb.updateVersion(database.INFLUX_KEY,G2M_INFLUXDB_VERSION)
+            myDb.commit()
+
+        myInflux = influxdb.InfluxDb('v2')
+        myInflux.connect(myParams.influxHost, myParams.influxPort, myParams.influxOrg, myParams.influxBucket, myParams.influxToken )
+
+        logging.info("Bucket %s.",myParams.influxBucket)
+
+        # Load database in cache
+        myDb.load()
+
+        # Loop on PCEs
+        for myPce in myDb.pceList:
+
+            # Sub-step A : Write PCE informations
+            logging.info("Writing informations of PCE %s alias %s...", myPce.pceId, myPce.alias)
+            point = myInflux.setPcePoint(myPce)
+            if not myInflux.write(point):
+                logging.warning("Unable to write informations of the PCE.")
+            else:
+                logging.info("Informations of PCE written successfully !")
+
+            # Sub-step B : Write current price of the PCE
+            logging.info("Writing prices of PCE %s alias %s...", myPce.pceId, myPce.alias)
+            myPcePrices = myPrices.getPricesByPce(myPce.pceId)
+            if myPcePrices:
+                # Loop on prices of the PCE and write the current price
+                errorCount = 0
+                writeCount = 0
+                for myPrice in myPcePrices:
+                    myDate = datetime.date.today()
+                    if myDate >= myPrice.startDate and myDate <= myPrice.endDate:
+                        # Set point
+                        point = myInflux.setPricePoint(myPce,myPrice,False,None,None)
+                        # Write
+                        if not myInflux.write(point):
+                            logging.error("Unable to write price !")
+                        else:
+                            writeCount += 1
+                logging.info("%s price(s) written successfully !",writeCount)
+            else:
+                logging.warning("No prices found, use of the default price (%s €/kWh and %s €/day).", myParams.priceKwhDefault, myParams.priceFixDefault)
+                point = myInflux.setPricePoint(myPce, None, True, myPrices.defaultKwhPrice,myPrices.defaultFixPrice)
+                if not myInflux.write(point):
+                    logging.error("Unable to write price !")
+                else:
+                    logging.info("Default price written successfully !")
+
+
+            # Sub-step B : Write measures of the PCE
+            logging.info("Writing measures of PCE %s alias %s...", myPce.pceId, myPce.alias)
+            errorCount = 0
+            writeCount = 0
+            for myMeasure in myPce.measureList:
+                if myMeasure.type == gazpar.TYPE_I:
+
+                    # Set point
+                    point = myInflux.setMeasurePoint(myMeasure,myPrices)
+
+                    # Write
+                    if not myInflux.write(point):
+                        errorCount += 1
+                    else:
+                        writeCount += 1
+
+                    # Check number of error
+                    if errorCount > influxdb.WRITE_MAX_ERROR:
+                        logging.warning("Writing stopped because of too many errors.")
+                        break
+            logging.info("%s measure(s) of PCE written successfully !",writeCount)
+
+
+            # Sub-step C : Write thresolds of the PCE
+            logging.info("Writing thresolds of PCE %s alias %s...", myPce.pceId, myPce.alias)
+            errorCount = 0
+            writeCount = 0
+            for myThresold in myPce.thresoldList:
+
+                # Set point
+                point = myInflux.setThresoldPoint(myThresold)
+
+                # Write
+                if not myInflux.write(point):
+                    errorCount += 1
+                else:
+                    writeCount += 1
+
+                # Check number of error
+                if errorCount > influxdb.WRITE_MAX_ERROR:
+                    logging.warning("Writing stopped because of too many errors.")
+                    break
+            logging.info("%s thresold(s) of PCE written successfully !",writeCount)
+
+        # Disconnect
+        logging.info("Disconnexion of influxdb...")
+        myInflux.close()
+        logging.info("Influxdb disconnected.")
+
+        # Release memory
+        del myInflux
+
+    ####################################################################################################################
+    # STEP 7 : Disconnect from database
+    ####################################################################################################################
     logging.info("-----------------------------------------------------------")
     logging.info("#          Disconnexion from SQLite database              #")
     logging.info("-----------------------------------------------------------")
-      
+
     if myDb.isConnected() :
         myDb.close()
         logging.info("SQLite database disconnected")
-    
-    # STEP 7 : Display next run info and end of program
+    del myDb
+
+    ####################################################################################################################
+    # STEP 8 : Display next run info and end of program
+    ####################################################################################################################
     logging.info("-----------------------------------------------------------")
     logging.info("#                Next run                                 #")
     logging.info("-----------------------------------------------------------")
@@ -639,27 +811,17 @@ def run(myParams):
         logging.info("gazpar2mqtt next run scheduled at %s",myParams.scheduleTime)
     else:
         logging.info("No schedule defined.")
-    
-    # Release objects
-    logging.debug("Release instance objects.")
-    myDb = None
-    myMqtt = None
-    myGrdf = None
-    myHass = None
-    mySa = None
-    myPce = None
-    myDailyMeasure = None
-    myDevice = None
-    myEntity = None
-    
+
+
     logging.info("-----------------------------------------------------------")
     logging.info("#                  End of program                         #")
     logging.info("-----------------------------------------------------------")
-        
-        
-#######################################################################
+
+
+
+########################################################################################################################
 #### Main
-#######################################################################                
+########################################################################################################################
 if __name__ == "__main__":
     
     # Load params
@@ -678,8 +840,9 @@ if __name__ == "__main__":
     logging.info("-----------------------------------------------------------")
     logging.info("#               Welcome to gazpar2mqtt                    #")
     logging.info("-----------------------------------------------------------")
-    logging.info("Program version " + G2M_VERSION)
-    logging.info("Database version " + G2M_DB_VERSION)
+    logging.info("Program version : %s",G2M_VERSION)
+    logging.info("Database version : %s", G2M_DB_VERSION)
+    logging.info("Influxdb version : %s", G2M_INFLUXDB_VERSION)
     logging.info("Please note that the the tool is still under development, various functions may disappear or be modified.")
     logging.debug("If you can read this line, you are in DEBUG mode.")
     
@@ -696,8 +859,7 @@ if __name__ == "__main__":
     else:
         logging.error("Error on parameters. End of program.")
         quit()
-       
-    
+
     
     # Run
     if myParams.scheduleTime is not None:
