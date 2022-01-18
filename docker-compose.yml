@@ -38,3 +38,9 @@ services:
       #DB_INIT: 'False' # force the reinitialization of the database
       #DB_PATH: '/data' # database path
       #DEBUG: 'True'
+    # Optional :
+    #volumes:     # highly recommanded
+    #  - ./gazpar2mqtt:/data
+    #depends_on:  # to link influxdb
+    #  - mqtt     # name of your mqtt container
+    #  - influxdb # name of your influxdb container

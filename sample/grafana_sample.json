@@ -22,7 +22,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 2,
-  "iteration": 1642442608331,
+  "iteration": 1642499110969,
   "links": [],
   "panels": [
     {
@@ -50,7 +50,7 @@
       },
       "id": 9,
       "options": {
-        "content": "# Gazpar\n\n  PCE : $pce\n\n  Status : $state\n  \n  Date d'activation : $activation_date\n  \n  <img src=\"https://raw.githubusercontent.com/yukulehe/gazpar2mqtt/0.7.1/res/gazpar.png\" width=\"30%\">\n\n           ",
+        "content": "# Gazpar\n\n  $pce\n  \n  <img src=\"https://raw.githubusercontent.com/yukulehe/gazpar2mqtt/0.7.1/res/gazpar.png\" width=\"50%\">\n\n           ",
         "mode": "markdown"
       },
       "pluginVersion": "8.1.2",
@@ -1563,7 +1563,7 @@
         ]
       },
       "gridPos": {
-        "h": 4,
+        "h": 3,
         "w": 3,
         "x": 3,
         "y": 4
@@ -1656,7 +1656,7 @@
         ]
       },
       "gridPos": {
-        "h": 4,
+        "h": 3,
         "w": 3,
         "x": 6,
         "y": 4
@@ -1876,75 +1876,6 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "fixedColor": "semi-dark-blue",
-            "mode": "fixed"
-          },
-          "mappings": [],
-          "max": 5000,
-          "min": 0,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "#EAB839",
-                "value": 500
-              },
-              {
-                "color": "red",
-                "value": 2000
-              }
-            ]
-          },
-          "unit": "€"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 3,
-        "x": 9,
-        "y": 7
-      },
-      "hideTimeOverride": true,
-      "id": 39,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "value"
-      },
-      "pluginVersion": "8.1.2",
-      "targets": [
-        {
-          "query": "from(bucket: \"$bucket\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_price_measure\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"price_kwh_eur\")\r\n  |> keep(columns:[\"_time\",\"_value\",\"_field\"])\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"days\")\r\n  ",
-          "refId": "A"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Prix au kWh",
-      "transparent": true,
-      "type": "stat"
-    },
-    {
-      "datasource": "${datasource}",
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
             "mode": "thresholds"
           },
           "mappings": [],
@@ -2141,10 +2072,10 @@
         ]
       },
       "gridPos": {
-        "h": 2,
+        "h": 3,
         "w": 2,
         "x": 3,
-        "y": 8
+        "y": 7
       },
       "hideTimeOverride": true,
       "id": 23,
@@ -2205,10 +2136,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 2,
+        "h": 3,
         "w": 1,
         "x": 5,
-        "y": 8
+        "y": 7
       },
       "hideTimeOverride": true,
       "id": 34,
@@ -2298,10 +2229,10 @@
         ]
       },
       "gridPos": {
-        "h": 2,
+        "h": 3,
         "w": 2,
         "x": 6,
-        "y": 8
+        "y": 7
       },
       "hideTimeOverride": true,
       "id": 25,
@@ -2362,10 +2293,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 2,
+        "h": 3,
         "w": 1,
         "x": 8,
-        "y": 8
+        "y": 7
       },
       "hideTimeOverride": true,
       "id": 36,
@@ -2393,6 +2324,75 @@
       ],
       "timeFrom": null,
       "transformations": [],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": "${datasource}",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "semi-dark-blue",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "max": 5000,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 500
+              },
+              {
+                "color": "red",
+                "value": 2000
+              }
+            ]
+          },
+          "unit": "€"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 9,
+        "y": 7
+      },
+      "hideTimeOverride": true,
+      "id": 39,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "8.1.2",
+      "targets": [
+        {
+          "query": "from(bucket: \"$bucket\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_price_measure\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"price_kwh_eur\")\r\n  |> keep(columns:[\"_time\",\"_value\",\"_field\"])\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"days\")\r\n  ",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Prix au kWh",
       "transparent": true,
       "type": "stat"
     },
@@ -2660,8 +2660,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "€",
-          "value": "€"
+          "text": "M3",
+          "value": "M3"
         },
         "description": "Unité du relevé",
         "error": null,
@@ -2672,7 +2672,7 @@
         "name": "measure_unit",
         "options": [
           {
-            "selected": false,
+            "selected": true,
             "text": "M3",
             "value": "M3"
           },
@@ -2682,7 +2682,7 @@
             "value": "kWh"
           },
           {
-            "selected": true,
+            "selected": false,
             "text": "€",
             "value": "€"
           }
@@ -2747,10 +2747,10 @@
     "to": "now+1y"
   },
   "timepicker": {
-    "hidden": true
+    "hidden": false
   },
   "timezone": "browser",
   "title": "Gaz",
   "uid": "5tpNcjA7k",
-  "version": 331
+  "version": 336
 }
