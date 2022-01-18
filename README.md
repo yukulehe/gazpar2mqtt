@@ -2,7 +2,7 @@
 Python script to fetch GRDF's website data and publish data to a mqtt broker
 
 ![Gazpar logo](https://raw.githubusercontent.com/yukulehe/gazpar2mqtt/0.7.1/res/gazpar.png)
-<img src="https://github.com/yukulehe/gazpar2mqtt/blob/0.7.1/res/mqtt.png?raw=true" width="250" height="250">
+<img src="https://github.com/yukulehe/gazpar2mqtt/blob/main/res/mqtt.png?raw=true" width="250" height="250">
 
 # Externals/Thanks
 The project has been inspired by job done by [empierre](https://github.com/empierre/domoticz_gaspar) on project domoticz_gazpar and [beufanet](https://github.com/beufanet/gazpar) on project gazinflux availables on Github. I modified a bit the code to work and fit my needs.
