@@ -22,7 +22,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 2,
-  "iteration": 1642520981386,
+  "iteration": 1642528926021,
   "links": [],
   "panels": [
     {
@@ -50,7 +50,7 @@
       },
       "id": 9,
       "options": {
-        "content": "# Gazpar\n\n  $pce\n  \n  <img src=\"https://raw.githubusercontent.com/yukulehe/gazpar2mqtt/0.7.1/res/gazpar.png\" width=\"60%\">\n\n           ",
+        "content": "# Gazpar\n\n  $pce\n  \n  <img src=\"https://raw.githubusercontent.com/yukulehe/gazpar2mqtt/main/res/gazpar.png\" width=\"60%\">\n\n           ",
         "mode": "markdown"
       },
       "pluginVersion": "8.1.2",
@@ -2663,8 +2663,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "kWh",
-          "value": "kWh"
+          "text": "€",
+          "value": "€"
         },
         "description": "Unité du relevé",
         "error": null,
@@ -2680,12 +2680,12 @@
             "value": "M3"
           },
           {
-            "selected": true,
+            "selected": false,
             "text": "kWh",
             "value": "kWh"
           },
           {
-            "selected": false,
+            "selected": true,
             "text": "€",
             "value": "€"
           }
@@ -2755,5 +2755,5 @@
   "timezone": "browser",
   "title": "Gaz",
   "uid": "5tpNcjA7k",
-  "version": 354
+  "version": 355
 }
