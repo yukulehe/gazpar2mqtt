@@ -22,7 +22,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 2,
-  "iteration": 1642499110969,
+  "iteration": 1642499110971,
   "links": [],
   "panels": [
     {
@@ -1859,7 +1859,7 @@
       "pluginVersion": "8.1.2",
       "targets": [
         {
-          "query": "data = from(bucket: \"$bucket\")\r\n  |> range(start: -1mo, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> keep(columns:[\"_time\",\"_value\",\"_field\"])\r\n  |> aggregateWindow(every: 1d, fn: last, createEmpty: false)\r\n  |> yield(name: \"data\")\r\n  \r\n\r\nminData = data\r\n|> min()\r\n|> yield(name: \"min\")\r\n\r\n\r\nmaxData = data\r\n|> max()\r\n|> yield(name: \"max\")\r\n",
+          "query": "data = from(bucket: \"$bucket\")\r\n  |> range(start: -1mo, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> keep(columns:[\"_time\",\"_value\",\"_field\"])\r\n  |> aggregateWindow(every: 1d, fn: last, createEmpty: false)\r\n  |> timeShift(duration: -1d, columns: [\"_time\"])\r\n  |> yield(name: \"data\")\r\n  \r\n\r\nminData = data\r\n|> min()\r\n|> yield(name: \"min\")\r\n\r\n\r\nmaxData = data\r\n|> max()\r\n|> yield(name: \"max\")\r\n",
           "refId": "A"
         }
       ],
@@ -2570,7 +2570,7 @@
       },
       "targets": [
         {
-          "query": "from(bucket: \"$bucket\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\" or r[\"_measurement\"] == \"gazpar_thresold_measure\" )\r\n  |> filter(fn: (r) => r[\"_field\"] == \"energy_kWh\" or r[\"_field\"] == \"cost_eur\")\r\n  |> drop(columns:[\"month\",\"year\",\"weekday_no\",\"weekday_name\",\"pce\",\"pce_alias\",\"month_name\",\"_measurement\"])\r\n  |> aggregateWindow(every: 1mo, fn: sum, createEmpty: false)\r\n  |> yield(name: \"sum\")\r\n  ",
+          "query": "from(bucket: \"$bucket\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\" or r[\"_measurement\"] == \"gazpar_thresold_measure\" )\r\n  |> filter(fn: (r) => r[\"_field\"] == \"energy_kWh\" or r[\"_field\"] == \"cost_eur\")\r\n  |> drop(columns:[\"month\",\"year\",\"weekday_no\",\"weekday_name\",\"pce\",\"pce_alias\",\"month_name\",\"_measurement\"])\r\n  |> aggregateWindow(every: 1mo, fn: sum, createEmpty: false)\r\n  |> timeShift(duration: -1mo, columns: [\"_time\"])\r\n  |> yield(name: \"sum\")\r\n  ",
           "refId": "A"
         }
       ],
@@ -2659,9 +2659,9 @@
       {
         "allValue": null,
         "current": {
-          "selected": false,
-          "text": "M3",
-          "value": "M3"
+          "selected": true,
+          "text": "kWh",
+          "value": "kWh"
         },
         "description": "Unité du relevé",
         "error": null,
@@ -2672,12 +2672,12 @@
         "name": "measure_unit",
         "options": [
           {
-            "selected": true,
+            "selected": false,
             "text": "M3",
             "value": "M3"
           },
           {
-            "selected": false,
+            "selected": true,
             "text": "kWh",
             "value": "kWh"
           },
@@ -2752,5 +2752,5 @@
   "timezone": "browser",
   "title": "Gaz",
   "uid": "5tpNcjA7k",
-  "version": 336
+  "version": 342
 }
