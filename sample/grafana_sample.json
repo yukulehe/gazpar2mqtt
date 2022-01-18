@@ -22,7 +22,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 2,
-  "iteration": 1642499110971,
+  "iteration": 1642520981386,
   "links": [],
   "panels": [
     {
@@ -50,7 +50,7 @@
       },
       "id": 9,
       "options": {
-        "content": "# Gazpar\n\n  $pce\n  \n  <img src=\"https://raw.githubusercontent.com/yukulehe/gazpar2mqtt/0.7.1/res/gazpar.png\" width=\"50%\">\n\n           ",
+        "content": "# Gazpar\n\n  $pce\n  \n  <img src=\"https://raw.githubusercontent.com/yukulehe/gazpar2mqtt/0.7.1/res/gazpar.png\" width=\"60%\">\n\n           ",
         "mode": "markdown"
       },
       "pluginVersion": "8.1.2",
@@ -1598,6 +1598,72 @@
     },
     {
       "datasource": "${datasource}",
+      "description": "Tendance par rapport au mois passé sur la même période",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": -100
+              },
+              {
+                "color": "red",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "%"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 2,
+        "x": 6,
+        "y": 4
+      },
+      "hideTimeOverride": true,
+      "id": 34,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "8.1.2",
+      "targets": [
+        {
+          "query": "import \"date\"\r\n\r\n// Get last measure date of the current month\r\nyesterday = date.truncate(t: -1d, unit: 1d)\r\nyesterday_m1 = date.truncate(t: -1mo, unit: 1d)\r\n\r\n// Get data\r\ndata = from(bucket: \"$bucket\")\r\n  |> range(start: -2mo, stop: -0mo)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> drop(columns:[\"year\",\"weekday_name\",\"month_name\",\"weekday_no\",\"pce\",\"pce_alias\",\"_measurement\",\"type\"])\r\n  |> group()\r\n\r\n// Set dataset based on current month\r\nm0 = data\r\n  |> filter(fn: (r) => r[\"month\"] == string(v: date.month(t: yesterday)))\r\n  |> aggregateWindow(every: 1mo, fn: sum, createEmpty: false)\r\n  |> map(fn: (r) => ({ r with m0: r._value }))\r\n  |> map(fn: (r) => ({ r with key: \"A\" }))\r\n  |> keep(columns:[\"m0\",\"key\"])\r\n  //|> yield(name: \"current\")\r\n\r\n// Set dataset based on previous month\r\nm1 = data\r\n  |> range(start: -2mo, stop: yesterday_m1)\r\n  |> filter(fn: (r) => r[\"month\"] == string(v: date.month(t: yesterday_m1)))\r\n  |> aggregateWindow(every: 1mo, fn: sum, createEmpty: false)\r\n  |> map(fn: (r) => ({ r with m1: r._value }))\r\n  |> map(fn: (r) => ({ r with key: \"A\" }))\r\n  |> keep(columns:[\"m1\",\"key\"])\r\n  //|> yield(name: \"previous\")\r\n\r\n// Join datasets and calculate percentage\r\njoin(\r\n  tables: {m1: m1, m0: m0},\r\n  on: [\"key\"],\r\n  method: \"inner\"\r\n)\r\n|> map(fn: (r) => ({ r with \r\n  trend:  \r\n  if not exists r[\"m1\"] or r[\"m1\"] == 0.0 then 0.0\r\n  else ((r[\"m0\"]-r[\"m1\"]) / r[\"m1\"] )*100.0\r\n  }))\r\n|> keep(columns:[\"trend\"])\r\n|> yield(name: \"trend\")",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "title": "Tendance",
+      "transformations": [],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": "${datasource}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1658,7 +1724,7 @@
       "gridPos": {
         "h": 3,
         "w": 3,
-        "x": 6,
+        "x": 8,
         "y": 4
       },
       "hideTimeOverride": true,
@@ -1686,6 +1752,72 @@
         }
       ],
       "timeFrom": null,
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": "${datasource}",
+      "description": "Tendance par rapport à l'année dernière sur la même période",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": -100
+              },
+              {
+                "color": "red",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "%"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 2,
+        "x": 11,
+        "y": 4
+      },
+      "hideTimeOverride": true,
+      "id": 36,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "8.1.2",
+      "targets": [
+        {
+          "query": "import \"date\"\r\n\r\n// Get last measure date of the current month\r\nyesterday = date.truncate(t: -1d, unit: 1d)\r\nyesterday_m1 = date.truncate(t: -1y, unit: 1d)\r\n\r\n// Get data\r\ndata = from(bucket: \"$bucket\")\r\n  |> range(start: -2y, stop: -0mo)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> drop(columns:[\"month\",\"weekday_name\",\"month_name\",\"weekday_no\",\"pce\",\"pce_alias\",\"_measurement\",\"type\"])\r\n  |> group()\r\n\r\n// Set dataset based on current year\r\nm0 = data\r\n  |> filter(fn: (r) => r[\"year\"] == string(v: date.year(t: yesterday)))\r\n  |> aggregateWindow(every: 1y, fn: sum, createEmpty: false)\r\n  |> map(fn: (r) => ({ r with m0: r._value }))\r\n  |> map(fn: (r) => ({ r with key: \"A\" }))\r\n  |> keep(columns:[\"m0\",\"key\"])\r\n  //|> yield(name: \"current\")\r\n\r\n// Set dataset based on previous year\r\nm1 = data\r\n  |> range(start: -2y, stop: yesterday_m1)\r\n  |> filter(fn: (r) => r[\"year\"] == string(v: date.year(t: yesterday_m1)))\r\n  |> aggregateWindow(every: 1y, fn: sum, createEmpty: false)\r\n  |> map(fn: (r) => ({ r with m1: r._value }))\r\n  |> map(fn: (r) => ({ r with key: \"A\" }))\r\n  |> keep(columns:[\"m1\",\"key\"])\r\n  //|> yield(name: \"previous\")\r\n\r\n// Join datasets and calculate percentage\r\njoin(\r\n  tables: {m1: m1, m0: m0},\r\n  on: [\"key\"],\r\n  method: \"inner\"\r\n)\r\n|> map(fn: (r) => ({ r with \r\n  trend:  \r\n  if not exists r[\"m1\"] or r[\"m1\"] == 0.0 then 0.0\r\n  else ((r[\"m0\"]-r[\"m1\"]) / r[\"m1\"] )*100.0\r\n  }))\r\n|> keep(columns:[\"trend\"])\r\n|> yield(name: \"trend\")",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "title": "Tendance",
+      "transformations": [],
       "transparent": true,
       "type": "stat"
     },
@@ -1725,7 +1857,7 @@
       "gridPos": {
         "h": 3,
         "w": 3,
-        "x": 9,
+        "x": 13,
         "y": 4
       },
       "hideTimeOverride": true,
@@ -1757,118 +1889,6 @@
       "title": "Prix fixe journalier",
       "transparent": true,
       "type": "stat"
-    },
-    {
-      "datasource": "${datasource}",
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "fixedColor": "dark-yellow",
-            "mode": "continuous-BlYlRd"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "bars",
-            "fillOpacity": 37,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 0,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "kwatth"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "gas_mcube"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "m3"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "cost_eur"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "€"
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 6,
-        "x": 12,
-        "y": 4
-      },
-      "hideTimeOverride": true,
-      "id": 33,
-      "options": {
-        "legend": {
-          "calcs": [
-            "min",
-            "max",
-            "mean"
-          ],
-          "displayMode": "hidden",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single"
-        }
-      },
-      "pluginVersion": "8.1.2",
-      "targets": [
-        {
-          "query": "data = from(bucket: \"$bucket\")\r\n  |> range(start: -1mo, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> keep(columns:[\"_time\",\"_value\",\"_field\"])\r\n  |> aggregateWindow(every: 1d, fn: last, createEmpty: false)\r\n  |> timeShift(duration: -1d, columns: [\"_time\"])\r\n  |> yield(name: \"data\")\r\n  \r\n\r\nminData = data\r\n|> min()\r\n|> yield(name: \"min\")\r\n\r\n\r\nmaxData = data\r\n|> max()\r\n|> yield(name: \"max\")\r\n",
-          "refId": "A"
-        }
-      ],
-      "timeFrom": "30d",
-      "timeShift": null,
-      "title": "Consommation journalière (30 derniers jours)",
-      "transformations": [],
-      "transparent": true,
-      "type": "timeseries"
     },
     {
       "datasource": "${datasource}",
@@ -2073,7 +2093,7 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 2,
+        "w": 3,
         "x": 3,
         "y": 7
       },
@@ -2102,71 +2122,6 @@
         }
       ],
       "timeFrom": null,
-      "transparent": true,
-      "type": "stat"
-    },
-    {
-      "datasource": "${datasource}",
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "green",
-                "value": -100
-              },
-              {
-                "color": "red",
-                "value": 0
-              }
-            ]
-          },
-          "unit": "%"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 1,
-        "x": 5,
-        "y": 7
-      },
-      "hideTimeOverride": true,
-      "id": 34,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "value"
-      },
-      "pluginVersion": "8.1.2",
-      "targets": [
-        {
-          "query": "import \"date\"\r\n\r\ndata = from(bucket: \"$bucket\")\r\n  |> range(start: -2mo, stop: -0mo)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> drop(columns:[\"year\",\"weekday_name\",\"month_name\",\"weekday_no\",\"pce\",\"pce_alias\",\"_measurement\",\"type\"])\r\n  |> aggregateWindow(every: 1mo, fn: sum, createEmpty: false)\r\n  |> group()\r\n  \r\nm1 = data\r\n|> filter(fn: (r) => r[\"month\"] == string(v: date.month(t: -1mo)))\r\n|> map(fn: (r) => ({ r with m1: r._value }))\r\n|> map(fn: (r) => ({ r with key: \"A\" }))\r\n|> keep(columns:[\"m1\",\"key\"])\r\n\r\nm2 = data\r\n|> filter(fn: (r) => r[\"month\"] == string(v: date.month(t: now())))\r\n|> map(fn: (r) => ({ r with m2: r._value }))\r\n|> map(fn: (r) => ({ r with key: \"A\" }))\r\n|> keep(columns:[\"m2\",\"key\"])\r\n\r\njoin(\r\n  tables: {m1: m1, m2: m2},\r\n  on: [\"key\"],\r\n  method: \"inner\"\r\n)\r\n|> map(fn: (r) => ({ r with \r\n  trend:  \r\n  if not exists r[\"m1\"] or r[\"m1\"] == 0.0 then 0.0\r\n  else ((r[\"m2\"]-r[\"m1\"]) / r[\"m1\"] )*100.0\r\n  }))\r\n|> keep(columns:[\"trend\"])\r\n|> yield(name: \"percent\")",
-          "refId": "A"
-        }
-      ],
-      "timeFrom": null,
-      "transformations": [],
       "transparent": true,
       "type": "stat"
     },
@@ -2230,8 +2185,8 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 2,
-        "x": 6,
+        "w": 3,
+        "x": 8,
         "y": 7
       },
       "hideTimeOverride": true,
@@ -2259,71 +2214,6 @@
         }
       ],
       "timeFrom": null,
-      "transparent": true,
-      "type": "stat"
-    },
-    {
-      "datasource": "${datasource}",
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "green",
-                "value": -100
-              },
-              {
-                "color": "red",
-                "value": 0
-              }
-            ]
-          },
-          "unit": "%"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 1,
-        "x": 8,
-        "y": 7
-      },
-      "hideTimeOverride": true,
-      "id": 36,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "value"
-      },
-      "pluginVersion": "8.1.2",
-      "targets": [
-        {
-          "query": "import \"date\"\r\n\r\ndata = from(bucket: \"$bucket\")\r\n  |> range(start: -2y, stop: -0mo)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> drop(columns:[\"month\",\"weekday_name\",\"month_name\",\"weekday_no\",\"pce\",\"pce_alias\",\"_measurement\",\"type\"])\r\n  |> aggregateWindow(every: 1y, fn: sum, createEmpty: false)\r\n  |> group()\r\n  \r\nm1 = data\r\n|> filter(fn: (r) => r[\"year\"] == string(v: date.year(t: -1y)))\r\n|> map(fn: (r) => ({ r with m1: r._value }))\r\n|> map(fn: (r) => ({ r with key: \"A\" }))\r\n|> keep(columns:[\"m1\",\"key\"])\r\n\r\nm2 = data\r\n|> filter(fn: (r) => r[\"year\"] == string(v: date.year(t: now())))\r\n|> map(fn: (r) => ({ r with m2: r._value }))\r\n|> map(fn: (r) => ({ r with key: \"A\" }))\r\n|> keep(columns:[\"m2\",\"key\"])\r\n\r\njoin(\r\n  tables: {m1: m1, m2: m2},\r\n  on: [\"key\"],\r\n  method: \"inner\"\r\n)\r\n|> map(fn: (r) => ({ r with \r\n  trend:  \r\n  if not exists r[\"m1\"] or r[\"m1\"] == 0.0 then 0.0\r\n  else ((r[\"m2\"]-r[\"m1\"]) / r[\"m1\"] )*100.0\r\n  }))\r\n|> keep(columns:[\"trend\"])\r\n|> yield(name: \"percent\")",
-          "refId": "A"
-        }
-      ],
-      "timeFrom": null,
-      "transformations": [],
       "transparent": true,
       "type": "stat"
     },
@@ -2363,7 +2253,7 @@
       "gridPos": {
         "h": 3,
         "w": 3,
-        "x": 9,
+        "x": 13,
         "y": 7
       },
       "hideTimeOverride": true,
@@ -2397,13 +2287,126 @@
       "type": "stat"
     },
     {
+      "datasource": "${datasource}",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "dark-yellow",
+            "mode": "continuous-BlYlRd",
+            "seriesBy": "last"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "bars",
+            "fillOpacity": 37,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 0,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "kwatth"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "gas_mcube"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "m3"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "cost_eur"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "€"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 14,
+        "x": 3,
+        "y": 10
+      },
+      "hideTimeOverride": true,
+      "id": 33,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "8.1.2",
+      "targets": [
+        {
+          "query": "data = from(bucket: \"$bucket\")\r\n  |> range(start: -1mo, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> keep(columns:[\"_time\",\"_value\",\"_field\"])\r\n  |> aggregateWindow(every: 1d, fn: last, createEmpty: false)\r\n  |> timeShift(duration: -1d, columns: [\"_time\"])\r\n  |> yield(name: \"data\")\r\n  \r\n\r\nminData = data\r\n|> min()\r\n|> yield(name: \"min\")\r\n\r\n\r\nmaxData = data\r\n|> max()\r\n|> yield(name: \"max\")\r\n",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": "30d",
+      "timeShift": null,
+      "title": "Consommation journalière (30 derniers jours)",
+      "transformations": [],
+      "transparent": true,
+      "type": "timeseries"
+    },
+    {
       "collapsed": false,
       "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 10
+        "y": 16
       },
       "id": 13,
       "panels": [],
@@ -2552,7 +2555,7 @@
         "h": 10,
         "w": 18,
         "x": 0,
-        "y": 11
+        "y": 17
       },
       "hideTimeOverride": true,
       "id": 35,
@@ -2659,7 +2662,7 @@
       {
         "allValue": null,
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "kWh",
           "value": "kWh"
         },
@@ -2752,5 +2755,5 @@
   "timezone": "browser",
   "title": "Gaz",
   "uid": "5tpNcjA7k",
-  "version": 342
+  "version": 354
 }

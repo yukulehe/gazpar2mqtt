@@ -17,9 +17,10 @@ Important : the tool is still under development, various functions may disappear
 
 - v0.7.x :
   - Retrieve published measures to supplier
-  - Export to Influxdb v2
+  - Export to Influxdb v2 database
   - Grafana dashboard template
   - Cost calculation from prices file
+  - Thanks to [pbranly](https://github.com/pbranly) for the tests
 - v0.6.x :
   - Implementation of a sqlite database
   - Addition of converter factor from Grdf
@@ -47,7 +48,6 @@ Important : the tool is still under development, various functions may disappear
 
 ## Roadmap :
 
-- Add DJU18 to influxdb
 - Home assistant custom entity card
 
 # Requirements
