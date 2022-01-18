@@ -65,8 +65,8 @@ class Params:
     self.influxHorizon = None
 
     # Price params
-    self.priceKwhDefault = 0.04
-    self.priceFixDefault = 0
+    self.priceKwhDefault = 0.07
+    self.priceFixDefault = 0.9
     self.pricePath = '/data'
 
     # Step 2 : Init arguments for command line
