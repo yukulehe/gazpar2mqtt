@@ -22,7 +22,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 2,
-  "iteration": 1642528926021,
+  "iteration": 1642626528596,
   "links": [],
   "panels": [
     {
@@ -245,7 +245,7 @@
       ],
       "timeFrom": null,
       "timeShift": null,
-      "title": "J-7",
+      "title": "J-6",
       "transparent": true,
       "type": "stat"
     },
@@ -430,7 +430,7 @@
       ],
       "timeFrom": null,
       "timeShift": null,
-      "title": "J-6",
+      "title": "J-5",
       "transparent": true,
       "type": "stat"
     },
@@ -615,7 +615,7 @@
       ],
       "timeFrom": null,
       "timeShift": null,
-      "title": "J-5",
+      "title": "J-4",
       "transparent": true,
       "type": "stat"
     },
@@ -800,7 +800,7 @@
       ],
       "timeFrom": "7d",
       "timeShift": null,
-      "title": "J-4",
+      "title": "J-3",
       "transparent": true,
       "type": "stat"
     },
@@ -985,7 +985,7 @@
       ],
       "timeFrom": null,
       "timeShift": null,
-      "title": "J-3",
+      "title": "J-2",
       "transparent": true,
       "type": "stat"
     },
@@ -995,7 +995,8 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "fixedColor": "dark-yellow",
+            "mode": "fixed"
           },
           "mappings": [],
           "max": 5000,
@@ -1165,192 +1166,6 @@
       "targets": [
         {
           "query": "import \"date\"\r\nfrom(bucket: \"$bucket\")\r\n  |> range(start: -2d, stop: -1d)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> keep(columns:[\"_time\",\"_value\",\"_field\",\"weekday_name\"])\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"actual\")\r\n  ",
-          "refId": "A"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "J-2",
-      "transparent": true,
-      "type": "stat"
-    },
-    {
-      "datasource": null,
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "fixedColor": "dark-yellow",
-            "mode": "fixed"
-          },
-          "mappings": [],
-          "max": 5000,
-          "min": 0,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "#EAB839",
-                "value": 500
-              },
-              {
-                "color": "red",
-                "value": 2000
-              }
-            ]
-          },
-          "unit": "kwatth"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "gas_mcube"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "m3"
-              },
-              {
-                "id": "mappings",
-                "value": []
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "cost_eur"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "€"
-              },
-              {
-                "id": "mappings",
-                "value": []
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byRegexp",
-              "options": "/(Monday)/"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Lundi"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byRegexp",
-              "options": "/(Tuesday)/"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Mardi"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byRegexp",
-              "options": "/(Wednesday)/"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Mercredi"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byRegexp",
-              "options": "/(Thursday)/"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Jeudi"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byRegexp",
-              "options": "/(Friday)/"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Vendredi"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byRegexp",
-              "options": "/(Saturday)/"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Samedi"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byRegexp",
-              "options": "/(Sunday)/"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Dimanche"
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 2,
-        "x": 15,
-        "y": 1
-      },
-      "hideTimeOverride": true,
-      "id": 16,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "value_and_name"
-      },
-      "pluginVersion": "8.1.2",
-      "targets": [
-        {
-          "query": "import \"date\"\r\nfrom(bucket: \"$bucket\")\r\n  |> range(start: -1d, stop: -0d)\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> keep(columns:[\"_time\",\"_value\",\"_field\",\"weekday_name\"])\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"actual\")\r\n  ",
           "refId": "A"
         }
       ],
@@ -2365,8 +2180,8 @@
       },
       "gridPos": {
         "h": 6,
-        "w": 14,
-        "x": 3,
+        "w": 16,
+        "x": 0,
         "y": 10
       },
       "hideTimeOverride": true,
@@ -2552,8 +2367,8 @@
         ]
       },
       "gridPos": {
-        "h": 10,
-        "w": 18,
+        "h": 9,
+        "w": 16,
         "x": 0,
         "y": 17
       },
@@ -2663,8 +2478,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "€",
-          "value": "€"
+          "text": "M3",
+          "value": "M3"
         },
         "description": "Unité du relevé",
         "error": null,
@@ -2675,7 +2490,7 @@
         "name": "measure_unit",
         "options": [
           {
-            "selected": false,
+            "selected": true,
             "text": "M3",
             "value": "M3"
           },
@@ -2685,7 +2500,7 @@
             "value": "kWh"
           },
           {
-            "selected": true,
+            "selected": false,
             "text": "€",
             "value": "€"
           }
@@ -2755,5 +2570,5 @@
   "timezone": "browser",
   "title": "Gaz",
   "uid": "5tpNcjA7k",
-  "version": 355
+  "version": 363
 }
