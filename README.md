@@ -93,6 +93,13 @@ The script can retrieve those informations and publish a warn when the thresold 
 ## Prices
 
 Gazpar2mqtt can ingest your own energy prices to estimate your costs. Download and complete the sample file prices.csv using the following format :
+
+- PCE : your PCE id
+- startDate : starting date of the price
+- endDate : end date of the price (put a far far end date at the last row of the file, ie : 2999-12-31)
+- kwhPrice : the price per kWh (don't forget to apply the TVA to this cost, and to add the french energy tax per kwh)
+- fixPrice : the fix price per day (it corresponds for example to the price of your subscription with your gas provider, don't forget to apply the TVA)
+
 ``` 
 pce;startDate;endDate;kwhPrice;fixPrice
 XXXX;2019-11-28;2020-12-27;0.03713;0.25
