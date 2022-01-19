@@ -18,6 +18,6 @@ ENV TZ=Europe/Paris
 RUN pip3 install --upgrade pip && \
     pip3 install --no-cache-dir -r /app/requirement.txt
 
-RUN apt-get install apt-get install python-pandas
+RUN apt-get install python3-pandas
 
 CMD ["python3", "app/gazpar2mqtt.py"]
