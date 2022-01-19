@@ -1,7 +1,7 @@
 # gazpar2mqtt
 Python script to fetch GRDF's website data and publish data to a mqtt broker
 
-![Gazpar logo](https://raw.githubusercontent.com/yukulehe/gazpar2mqtt/0.7.1/res/gazpar.png)
+![Gazpar logo](res/gazpar.png)
 <img src="https://github.com/yukulehe/gazpar2mqtt/blob/0.7.1/res/mqtt.png?raw=true" width="250" height="250">
 
 # Externals/Thanks
