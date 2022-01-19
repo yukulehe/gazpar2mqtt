@@ -1,8 +1,8 @@
 # gazpar2mqtt
 Python script to fetch GRDF's website data and publish data to a mqtt broker
 
-![Gazpar logo](https://raw.githubusercontent.com/yukulehe/gazpar2mqtt/main/res/gazpar.png)
-<img src="https://github.com/yukulehe/gazpar2mqtt/blob/main/res/mqtt.png?raw=true" width="250" height="250">
+![Gazpar logo](res/gazpar.png)
+<img src="res/mqtt.png?raw=true" width="250" height="250">
 
 # Externals/Thanks
 The project has been inspired by job done by [empierre](https://github.com/empierre/domoticz_gaspar) on project domoticz_gazpar and [beufanet](https://github.com/beufanet/gazpar) on project gazinflux availables on Github. I modified a bit the code to work and fit my needs.
@@ -381,6 +381,6 @@ For Hass.io users, gazpar2mqtt is also available as an add-on provided by [alexb
 You can activate export of data to your InfluxDb v2 database. InfluxDb v1 is currently not supported.
 
 Example of a Grafana dashboard using InfluxDb v2 and gazpar2mqtt measures :
-<img src="https://github.com/yukulehe/gazpar2mqtt/blob/main/res/grafana_sample.png?raw=true" width="70%">
+<img src="res/grafana_sample.png?raw=true" width="70%">
 
 To integrate this dashboard into Grafana, copy/paste content of file [grafana_sample.json](https://github.com/yukulehe/gazpar2mqtt/blob/main/sample/grafana_sample.json).
