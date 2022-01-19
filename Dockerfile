@@ -13,12 +13,11 @@ RUN mkdir -p /data
 ENV LANG fr_FR.UTF-8
 ENV LC_ALL fr_FR.UTF-8
 ENV TZ=Europe/Paris
-
-# Prerequisite for installing package lxml on armv7
-#RUN apt-get install --upgrade -y g++ gcc libxml2-dev libxslt-dev python3-dev
  
 # Install python requirements
 RUN pip3 install --upgrade pip && \
     pip3 install --no-cache-dir -r /app/requirement.txt
+
+RUN apt-get install apt-get install python-pandas
 
 CMD ["python3", "app/gazpar2mqtt.py"]
