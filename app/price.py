@@ -5,9 +5,19 @@ import os
 import logging
 import datetime
 from gazpar import Pce
-import pandas
+#import pandas
+import csv
+
+PRICE_DATE_FORMAT = "%Y-%m-%d"
 
 FILE_NAME = "prices.csv"
+
+# Convert GRDF datetime string to date
+def _convertDate(dateString):
+    if dateString == None: return None
+    else:
+        myDate = datetime.datetime.strptime(dateString,PRICE_DATE_FORMAT).date()
+        return myDate
 
 class Prices():
 
@@ -28,18 +38,19 @@ class Prices():
 
         # Read csv
         try:
-            myDf = pandas.read_csv(self.filePath,sep=";",header=0,parse_dates=[1,2])
+            with open(self.filePath,newline='') as f:
+                myCsv = csv.reader(f,delimiter=';')
+                next(myCsv)
+                for myRow in myCsv:
+                    logging.debug("%s", myRow)
+                    # Create price
+                    myPrice = Price(myRow)
+                    self.pricesList.append(myPrice)
+
         except Exception as e:
             logging.error("Exception when reading unit price file : ",e)
             return
 
-        logging.debug("Unit prices (10 first rows) :")
-        logging.debug("%s",myDf.head(10))
-
-        for myData in myDf.iterrows():
-            # Create price
-            myPrice = Price(myData[1])
-            self.pricesList.append(myPrice)
 
     # Return prices of a single Pce
     def getPricesByPce(self,pceId):
@@ -57,10 +68,10 @@ class Price():
     def __init__(self,data):
 
         self.pceId = str(data[0])
-        self.startDate = data[1]
-        self.endDate = data[2]
-        self.kwhPrice = data[3]
-        self.fixPrice = data[4]
+        self.startDate = _convertDate(data[1])
+        self.endDate = _convertDate(data[2])
+        self.kwhPrice = float(data[3])
+        self.fixPrice = float(data[4])
 
         logging.debug("Add price : pce = %s, startDate = %s, endDate = %s, price = %s", self.pceId, self.startDate,
                       self.endDate, self.kwhPrice, self.fixPrice)
