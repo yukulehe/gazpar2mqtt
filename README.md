@@ -19,7 +19,6 @@ Important : the tool is still under development, various functions may disappear
   - Grafana dashboard template
   - Cost calculation from prices file
   - Thanks to [pbranly](https://github.com/pbranly) for the tests
-  - Docker image ARM/v7 architecture is not supported anymore
 
 - v0.7.x :
   - Retrieve published measures to supplier
