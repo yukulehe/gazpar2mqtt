@@ -300,7 +300,7 @@ class Account:
         self.type = account["type"]
         self.firstName = account["first_name"]
         self.lastName = account["last_name"]
-        self.lastName = account["email"]
+        self.email = account["email"]
         self.json = account
         
     # Store in db
