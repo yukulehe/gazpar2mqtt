@@ -22,7 +22,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 2,
-  "iteration": 1642626528596,
+  "iteration": 1644221490185,
   "links": [],
   "panels": [
     {
@@ -1403,7 +1403,7 @@
       "pluginVersion": "8.1.2",
       "targets": [
         {
-          "query": "import \"date\"\r\n\r\nfrom(bucket: \"$bucket\")\r\n  |> range(start: -1y, stop: -1d)\r\n  |> filter(fn: (r) => r[\"month\"] == string(v: date.month(t: -1d)))\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> drop(columns:[\"year\",\"weekday_name\",\"weekday_no\",\"pce\",\"pce_alias\",\"month\",\"_measurement\",\"type\"])\r\n  |> aggregateWindow(every: 1mo, fn: sum, createEmpty: false)\r\n  |> yield(name: \"sum\")",
+          "query": "import \"date\"\r\n\r\nfrom(bucket: \"$bucket\")\r\n  |> range(start: -3mo, stop: -1d)\r\n  |> filter(fn: (r) => r[\"month\"] == string(v: date.month(t: -1d)))\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> drop(columns:[\"year\",\"weekday_name\",\"weekday_no\",\"pce\",\"pce_alias\",\"month\",\"_measurement\",\"type\"])\r\n  |> aggregateWindow(every: 1mo, fn: sum, createEmpty: false)\r\n  |> yield(name: \"sum\")",
           "refId": "A"
         }
       ],
@@ -1562,7 +1562,7 @@
       "pluginVersion": "8.1.2",
       "targets": [
         {
-          "query": "import \"date\"\r\n\r\nfrom(bucket: \"$bucket\")\r\n  |> range(start: -2y, stop: -1d)\r\n  |> filter(fn: (r) => r[\"year\"] == string(v: date.year(t: -1d)))\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> drop(columns:[\"weekday_name\",\"weekday_no\",\"month_name\",\"pce\",\"pce_alias\",\"month\",\"_measurement\",\"type\"])\r\n  |> aggregateWindow(every: 1y, fn: sum, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+          "query": "import \"date\"\r\n\r\nfrom(bucket: \"$bucket\")\r\n  |> range(start: -13mo, stop: -1d)\r\n  |> filter(fn: (r) => r[\"year\"] == string(v: date.year(t: -1d)))\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> drop(columns:[\"weekday_name\",\"weekday_no\",\"month_name\",\"pce\",\"pce_alias\",\"month\",\"_measurement\",\"type\"])\r\n  |> aggregateWindow(every: 1y, fn: sum, createEmpty: false)\r\n  |> yield(name: \"mean\")",
           "refId": "A"
         }
       ],
@@ -1932,7 +1932,7 @@
       "pluginVersion": "8.1.2",
       "targets": [
         {
-          "query": "import \"date\"\r\n\r\nfrom(bucket: \"$bucket\")\r\n  |> range(start: -1y, stop: -0mo)\r\n  |> filter(fn: (r) => r[\"month\"] == string(v: date.month(t: -1mo)))\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> drop(columns:[\"year\",\"weekday_name\",\"weekday_no\",\"month\",\"pce\",\"pce_alias\",\"_measurement\",\"type\"])\r\n  |> aggregateWindow(every: 1mo, fn: sum, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+          "query": "import \"date\"\r\n\r\nfrom(bucket: \"$bucket\")\r\n  |> range(start: -6mo, stop: -0mo)\r\n  |> filter(fn: (r) => r[\"month\"] == string(v: date.month(t: -1mo)))\r\n  |> filter(fn: (r) => r[\"pce_alias\"] == \"$pce\")\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"gazpar_informative_measure\")\r\n  |> filter(fn: (r) => \r\n    if \"$measure_unit\" == \"kWh\" then r[\"_field\"] == \"energy_kWh\"\r\n    else if  \"$measure_unit\" == \"€\" then r[\"_field\"] == \"cost_eur\"  \r\n    else r[\"_field\"] == \"gas_mcube\"\r\n    )\r\n  |> drop(columns:[\"year\",\"weekday_name\",\"weekday_no\",\"month\",\"pce\",\"pce_alias\",\"_measurement\",\"type\"])\r\n  |> aggregateWindow(every: 1mo, fn: sum, createEmpty: false)\r\n  |> yield(name: \"mean\")",
           "refId": "A"
         }
       ],
@@ -2478,8 +2478,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "M3",
-          "value": "M3"
+          "text": "€",
+          "value": "€"
         },
         "description": "Unité du relevé",
         "error": null,
@@ -2490,7 +2490,7 @@
         "name": "measure_unit",
         "options": [
           {
-            "selected": true,
+            "selected": false,
             "text": "M3",
             "value": "M3"
           },
@@ -2500,7 +2500,7 @@
             "value": "kWh"
           },
           {
-            "selected": false,
+            "selected": true,
             "text": "€",
             "value": "€"
           }
@@ -2570,5 +2570,5 @@
   "timezone": "browser",
   "title": "Gaz",
   "uid": "5tpNcjA7k",
-  "version": 363
+  "version": 367
 }
