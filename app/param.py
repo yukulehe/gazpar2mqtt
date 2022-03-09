@@ -221,7 +221,7 @@ class Params:
     if self.args.thresold_percentage is not None: self.thresoldPercentage = int(self.args.thresold_percentage)
       
     if self.args.db_init is not None: self.dbInit = _isItTrue(self.args.db_init)
-    if self.args.db_path is not None: self.db_path = self.args.db_path
+    if self.args.db_path is not None: self.dbPath = self.args.db_path
 
     if self.args.influxdb_enable is not None: self.influxEnable = _isItTrue(self.args.influxdb_enable)
     if self.args.influxdb_host is not None: self.influxHost = self.args.influxdb_host
