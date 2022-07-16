@@ -16,6 +16,7 @@ GRDF_API_WAIT_BTW_RETRIES = 20 # number of seconds between try 1 and try 2 (must
 GRDF_API_ERRONEOUS_COUNT = 1 # Erroneous number of results send by GRDF
 TYPE_I = 'informative' # type of measure Informative
 TYPE_P = 'published' # type of measure Published
+LOGIN_HEADER = {"domain": "grdf.fr"}
 
 #######################################################################
 #### Useful functions
@@ -57,7 +58,7 @@ class Grdf:
         
         # Initialize instance variables
         
-        self.session = None
+        self.session = requests.Session()
         self.auth_nonce = None
         self.pceList = []
         self.whoiam = None
@@ -76,7 +77,10 @@ class Grdf:
     def login(self,username,password):
         
         # Get cookie
+        self.session.headers.update(LOGIN_HEADER) # issue #69
         req = self.session.get('https://monespace.grdf.fr/client/particulier/accueil')
+        
+        
         
         if not 'auth_nonce' in self.session.cookies:
             logging.error("Cannot get auth_nonce.")
