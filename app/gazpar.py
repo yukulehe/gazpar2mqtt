@@ -77,7 +77,7 @@ class Grdf:
     def login(self,username,password):
         
         # Get cookie
-        self.session.headers.update(LOGIN_HEADER)
+        self.session.headers.update(LOGIN_HEADER) # issue #69
         req = self.session.get('https://monespace.grdf.fr/client/particulier/accueil')
         
         
