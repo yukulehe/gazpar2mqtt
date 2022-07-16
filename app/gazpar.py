@@ -80,7 +80,6 @@ class Grdf:
         self.session.headers.update(LOGIN_HEADER)
         req = self.session.get('https://monespace.grdf.fr/client/particulier/accueil')
         
-        # Update header
         
         
         if not 'auth_nonce' in self.session.cookies:
