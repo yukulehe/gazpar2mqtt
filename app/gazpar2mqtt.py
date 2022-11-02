@@ -560,7 +560,7 @@ def run(myParams):
                         myEntity = hass.Entity(myDevice, hass.SENSOR, 'index', 'index', hass.GAS_TYPE, hass.ST_TTI,
                                                'm³').setValue(myMeasure.endIndex)
                         myEntity = hass.Entity(myDevice, hass.SENSOR, 'conversion_factor', 'conversion factor',
-                                               hass.GAS_TYPE, hass.ST_MEAS, 'kWh/m³').setValue(myMeasure.conversionFactor)
+                                               hass.NONE_TYPE, hass.ST_MEAS, 'kWh/m³').setValue(myMeasure.conversionFactor)
                         myEntity = hass.Entity(myDevice, hass.SENSOR, 'gas', 'gas', hass.GAS_TYPE, hass.ST_MEAS,
                                                'm³').setValue(myMeasure.volume)
                         myEntity = hass.Entity(myDevice, hass.SENSOR, 'energy', 'energy', hass.ENERGY_TYPE, hass.ST_MEAS,
@@ -577,7 +577,7 @@ def run(myParams):
                         myEntity = hass.Entity(myDevice, hass.SENSOR, 'published_index', 'published index', hass.GAS_TYPE, hass.ST_TTI,
                                                'm³').setValue(myMeasure.endIndex)
                         myEntity = hass.Entity(myDevice, hass.SENSOR, 'published_conversion_factor', 'published conversion factor',
-                                               hass.GAS_TYPE, hass.ST_MEAS, 'kWh/m³').setValue(myMeasure.conversionFactor)
+                                               hass.NONE_TYPE, hass.ST_MEAS, 'kWh/m³').setValue(myMeasure.conversionFactor)
                         myEntity = hass.Entity(myDevice, hass.SENSOR, 'published_gas', 'published gas', hass.GAS_TYPE, hass.ST_MEAS,
                                                'm³').setValue(myMeasure.volume)
                         myEntity = hass.Entity(myDevice, hass.SENSOR, 'published_energy', 'published energy', hass.ENERGY_TYPE, hass.ST_MEAS,
