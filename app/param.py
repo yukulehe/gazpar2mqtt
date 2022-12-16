@@ -137,6 +137,8 @@ class Params:
       "--influxdb_token", help="Influxdb token")
     self.parser.add_argument(
       "--influxdb_horizon", help="Influxdb horizon in days ")
+    self.parser.add_argument(
+      "--influxdb_ssl", help="Enable Influxdb SSL : True or False (default : false)")
 
     self.parser.add_argument(
       "--price_kwh_default", help="Default price in €/kWh (default : 0.04)")
@@ -187,6 +189,8 @@ class Params:
     if "INFLUXDB_BUCKET" in os.environ: self.influxBucket = os.environ["INFLUXDB_BUCKET"]
     if "INFLUXDB_TOKEN" in os.environ: self.influxToken = os.environ["INFLUXDB_TOKEN"]
     if "INFLUXDB_HORIZON" in os.environ: self.influxHorizon = os.environ["INFLUXDB_HORIZON"]
+    if "INFLUXDB_SSL" in os.environ: self.influxSsl = _isItTrue(os.environ["INFLUXDB_SSL"])
+
 
     if "PRICE_PATH" in os.environ: self.pricePath = os.environ["PRICE_PATH"]
     if "PRICE_KWH_DEFAULT" in os.environ: self.priceKwhDefault = float(os.environ["PRICE_KWH_DEFAULT"])
@@ -230,6 +234,7 @@ class Params:
     if self.args.influxdb_bucket is not None: self.influxBucket = self.args.influxdb_bucket
     if self.args.influxdb_token is not None: self.influxToken = self.args.influxdb_token
     if self.args.influxdb_horizon is not None: self.influxHorizon = self.args.influxdb_horizon
+    if self.args.influxdb_ssl is not None: self.influxSsl = _isItTrue(self.args.influxdb_ssl)
 
     if self.args.price_kwh_default is not None: self.priceKwhDefault = float(self.args.price_kwh_default)
     if self.args.price_fix_default is not None: self.priceFixDefault = float(self.args.price_fix_default)

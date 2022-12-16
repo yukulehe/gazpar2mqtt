@@ -704,7 +704,8 @@ def run(myParams):
             myDb.commit()
 
         myInflux = influxdb.InfluxDb('v2')
-        myInflux.connect(myParams.influxHost, myParams.influxPort, myParams.influxOrg, myParams.influxBucket, myParams.influxToken )
+        myInflux.connect(myParams.influxHost, myParams.influxPort, myParams.influxOrg, myParams.influxBucket
+                         , myParams.influxToken, myParams.influxSsl )
 
         logging.info("Bucket %s.",myParams.influxBucket)
 

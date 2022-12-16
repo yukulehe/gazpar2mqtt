@@ -28,15 +28,21 @@ class InfluxDb:
         self.writeApi = None
 
     # Connexion
-    def connect(self,host,port, org, bucket, token):
+    def connect(self,host,port, org, bucket, token, ssl):
 
         self.host = host
         self.port = port
         self.org = org
         self.bucket = bucket
         self.token = token
+        self.ssl = ssl
 
-        url = "http://" + host + ":" + str(port)
+        if ssl == True:
+            scheme = "https://"
+        else:
+            scheme = "http://"
+
+        url = scheme + host + ":" + str(port)
 
         try:
             self.client = InfluxDBClient(url=url, token=token, org=org)
