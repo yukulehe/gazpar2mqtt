@@ -1,3 +1,9 @@
+# IMPORTANT NOTE
+
+THIS IS APPLICATION IS OUT OF SERVICE SINCE THE ACTIVATION OF CAPTCHA ON GRDF WEBSITE
+
+
+
 # gazpar2mqtt
 Python script to fetch GRDF's website data and publish data to a mqtt broker
 
